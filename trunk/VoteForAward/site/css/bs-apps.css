@@ -1,0 +1,140 @@
+legend {
+	line-height: 25px;
+	margin-bottom: 10px;
+}
+
+#menu {
+	margin-left: 5px;
+}
+
+#menu .well {
+	background-color: #E0E0E0;
+	border: 2px solid #797979;
+}
+
+#menu .nav-list>li>a,#menu .nav-list .nav-header {
+	text-shadow: none;
+	padding: 3px 9px;
+}
+
+#menu .nav-list .nav-header {
+	color: #666666;
+}
+
+.space-left {
+	padding-left: 20px;
+}
+
+.accordion-toggle.lead {
+	line-height: inherit;
+	margin-bottom: 0;
+}
+
+.accordion-inner ul {
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+
+a.muted:hover {
+	color: #999;
+}
+
+p.inline {
+	margin-right: 20px;
+}
+
+p.inline-max {
+	margin-right: 40px;
+}
+
+.well-white {
+	background-color: white;
+}
+
+.well-small {
+	border-radius: 6px 6px 6px 6px;
+	border: 1px solid #D3D3D3;
+}
+
+.well .table {
+	margin-bottom: 0;
+}
+
+.bd-list img {
+	margin-bottom: 10px;
+	box-shadow: 2px 2px 2px #888;
+}
+
+.bd-thumbnail img {
+	max-height: 150px;
+	margin-bottom: 0px;
+	box-shadow: 2px 2px 2px #888;
+}
+
+.bd-thumbnail .thumbnail {
+	padding: 10px;
+}
+
+.bd-thumbnail p,.bd-thumbnail .btn-group,.bd-thumbnail .bd-thumb {
+	display: table;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.bd-show {
+	padding: 10px;
+}
+
+.bd-show img {
+	min-height: 200px;
+	box-shadow: 6px 6px 10px #666;
+	/* 	margin: 5px; */
+}
+
+.bd-note img {
+	height: 200px;
+	float: left;
+	margin-left: 30px;
+	min-height: 100px;
+	box-shadow: 6px 6px 10px #888;
+}
+
+.bd-note textarea {
+	min-width: 200px;
+}
+
+.bd-note legend.text-only {
+	margin-bottom: 0;
+	border: none;
+}
+
+.nav-tabs .active a,.nav-tabs .active a:hover {
+	background-color: #D9EDF7;
+	font-weight: bold;
+}
+
+.uneditable-input,.uneditable-textarea {
+	color: #555555;
+	font-weight: bold;
+}
+
+.alert-info legend {
+	color: #3a87ad;;
+	border-bottom-color: #3a87ad;
+	margin-bottom: 0;
+}
+
+.inverse dt,dt.inverse {
+	font-weight: normal;
+}
+
+.inverse dd {
+	font-weight: bold;
+}
+
+.table-color td {
+	border-top-color: #000000;
+}
+/* .well dt, .well dd:FIRST-CHILD { */
+/* 	margin-top: 10px; */
+/* } */
