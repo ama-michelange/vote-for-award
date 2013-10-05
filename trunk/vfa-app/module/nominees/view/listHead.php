@@ -15,41 +15,41 @@
 			<tr>
 				<td>
 					<div>
-		      		<p><strong>
-							<?php if(_root::getACL()->permit('nominees::read')):?>
-							<a	href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-								<?php echo $oTitle->toString() ?>
-							</a>
-							<?php else:?>
-								<?php echo $oTitle->toString() ?>
-							<?php endif;?>
-		      		</strong></p>
-					</div>
-					<div>
+						<?php foreach($oTitle->findDocs() as $oDoc):?>
+							<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 pull-left">
+								<img class="img-responsive" src="<?php echo $oDoc->image ?>" alt="">						
+							</div>
+						<?php endforeach;?>
 						<div class="pull-left">
-							<?php foreach($oTitle->findDocs() as $oDoc):?>
-							<img src="<?php echo $oDoc->image ?>" alt="" style="height:70px; margin-left:10px;">
-							<?php endforeach;?>
+							<h4 style="margin-left:10px;">
+								<?php if(_root::getACL()->permit('nominees::read')):?>
+									<a	href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
+										<?php echo $oTitle->toString() ?>
+									</a>
+								<?php else:?>
+									<?php echo $oTitle->toString() ?>
+								<?php endif;?>
+			      		</h4>
+							<?php if(_root::getACL()->permit(array('nominees::update','nominees::delete','nominees::read'))):?>
+		    					<div class="btn-group" style="margin-left:10px;">
+									<?php if(_root::getACL()->permit('nominees::update')):?>
+										<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>" 
+											href="<?php echo $this->getLink('nominees::update',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
+											<i class="glyphicon glyphicon-pencil"></i></a>
+									<?php endif;?>
+									<?php if(_root::getACL()->permit('nominees::delete')):?>
+										<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->toString() ?>" 
+											href="<?php echo $this->getLink('nominees::delete',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
+											<i class="glyphicon glyphicon-trash"></i></a>
+									<?php endif;?>
+									<?php if(_root::getACL()->permit('nominees::read')):?>
+										<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>" 
+											href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
+											<i class="glyphicon glyphicon-eye-open"></i></a>
+									<?php endif;?>
+		    					</div>		      		
+							<?php endif;?>
 						</div>
-						<?php if(_root::getACL()->permit(array('nominees::update','nominees::delete','nominees::read'))):?>
-    					<div class="btn-group btn-group-vertical pull-left" style="margin-left:10px;">
-							<?php if(_root::getACL()->permit('nominees::update')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>" 
-								href="<?php echo $this->getLink('nominees::update',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-								<i class="glyphicon glyphicon-pencil"></i></a>
-							<?php endif;?>
-							<?php if(_root::getACL()->permit('nominees::delete')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->toString() ?>" 
-								href="<?php echo $this->getLink('nominees::delete',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-								<i class="glyphicon glyphicon-trash"></i></a>
-							<?php endif;?>
-							<?php if(_root::getACL()->permit('nominees::read')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>" 
-								href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-								<i class="glyphicon glyphicon-eye-open"></i></a>
-							<?php endif;?>
-    					</div>		      		
-						<?php endif;?>
 		      	</div>
 				</td>
 			</tr>
