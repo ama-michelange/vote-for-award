@@ -20,7 +20,7 @@
 			<label class="control-label">Type</label>
 			<div class="controls">
 				<label class="radio-inline" for="inputTypeLecteur">
-					<input class="inline" type="radio" id="inputTypeLecteur" name="type" value="READER" <?php if('READER'==$this->oGroup->type): echo 'checked'; endif; ?> />
+					<input type="radio" id="inputTypeLecteur" name="type" value="READER" <?php if('READER'==$this->oGroup->type): echo 'checked'; endif; ?> />
 					Groupe de lecteurs
 				</label>
 				<label class="radio-inline" for="inputTypeBoard">

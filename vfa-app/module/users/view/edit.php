@@ -50,7 +50,7 @@
 				<label class="control-label">Genre</label>
 				<div class="controls">
 					<label class="radio-inline" for="inputHomme">
-						<input class="inline" type="radio" id="inputHomme" name="gender" value="M" <?php if('M'==$this->oUser->gender): echo 'checked'; endif; ?> />
+						<input type="radio" id="inputHomme" name="gender" value="M" <?php if('M'==$this->oUser->gender): echo 'checked'; endif; ?> />
 						Homme
 					</label>
 					<label class="radio-inline" for="inputFemme">
