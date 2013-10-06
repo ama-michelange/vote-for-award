@@ -99,13 +99,13 @@ class plugin_validation
 		if (is_array($sFields)) {
 			foreach ($sFields as $field){
 				if (isset($tErrors) and isset($tErrors[$field])) {
-					$sClass = $sClass . ' error';
+					$sClass = $sClass . ' has-error';
 					break;
 				}
 			}
 		} else {
 			if (isset($tErrors) and isset($tErrors[$sFields])) {
-				$sClass = $sClass . ' error';
+				$sClass = $sClass . ' has-error';
 			}
 		}
 		return $sClass;
