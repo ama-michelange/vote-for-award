@@ -3,11 +3,11 @@
 	<input type="hidden" name="award_id" value="<?php echo $this->oAward->award_id ?>" />
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<h3 class="panel-title"><strong><?php echo $this->textTitle ?></strong></h3>
+			<h3 class="panel-title"><?php echo $this->textTitle ?></h3>
 		</div>
 		<div class="panel-body">
 			<?php if(plugin_validation::exist($this->tMessage, 'token')):?> 
-			<div class="alert alert-error">
+			<div class="alert alert-danger">
 				<p><?php echo plugin_validation::show($this->tMessage, 'token')?></p>
 				<p><a class="btn btn-sm btn-danger" href="<?php echo $this->getLink('awards::index') ?>">Fermer</a></p>
 			</div>		

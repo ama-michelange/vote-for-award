@@ -3,16 +3,16 @@
 <!-- <div class="alert alert-info col-md-offset-2 col-md-8"> -->
 <div class="alert alert-info">
 	<?php if(plugin_validation::exist($this->tMessage, 'token')):?>
-	<div class="alert alert-error">
+	<div class="alert alert-danger">
 		<p><?php echo plugin_validation::show($this->tMessage, 'token')?></p>
 		<p><a class="btn btn-sm btn-danger"	href="<?php echo $this->getLink(_root::getParamNav()) ?>">Fermer</a></p>
 	</div>
 	<?php else:?>
 		<?php if (($this->countAwards == 0) || ($this->countGroups == 0)): ?>
-			<div class="alert alert-error">L'inscription n'est pas possible !</div>
+			<div class="alert alert-danger">L'inscription n'est pas possible !</div>
 		<?php endif;?>
 		<?php if(plugin_validation::exist($this->tMessage, 'doublon')):?>
-			<div class="alert alert-error">Cette invitation existe déjà !</div>
+			<div class="alert alert-danger">Cette invitation existe déjà !</div>
 		<?php endif;?>
 		<form class="form-horizontal" action="" method="POST">
 			<input type="hidden" name="token" value="<?php echo $this->token?>" />

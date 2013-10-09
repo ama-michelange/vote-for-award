@@ -24,8 +24,7 @@
 						?>
 						<?php if(false==plugin_vfa::hasParamNav($link)): ?> 
 							<a class="btn btn-primary btn-sm navbar-btn" href="<?php echo $this->getLink($link) ?>">
-								<?php if($icon): ?><i class="<?php echo $icon ?>"></i><?php endif;?> 
-								<?php echo $sLibelle ?>
+								<?php if($icon): ?><i class="<?php echo $icon ?> with-text"></i><?php endif;?><?php echo $sLibelle ?>
 							</a>
 						<?php endif;?>
 					<?php endforeach;?>
