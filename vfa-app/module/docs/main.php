@@ -44,7 +44,8 @@ class module_docs extends abstract_module{
 		$oView = new _view('docs::edit');
 		$oView->oDoc = $oDoc;
 		$oView->tMessage=$tMessage;
-		$oView->textTitle = 'Créer un album';
+		$oView->textTitle = 'Ajouter un album';
+		$oView->iconTitle = 'glyphicon glyphicon-plus';
 
 		$oPluginXsrf=new plugin_xsrf();
 		$oView->token=$oPluginXsrf->getToken();
@@ -68,6 +69,8 @@ class module_docs extends abstract_module{
 		$oView->oDoc = $oDoc;
 		$oView->tMessage=$tMessage;
 		$oView->textTitle = 'Modifier un album';
+		$oView->iconTitle = 'glyphicon glyphicon-pencil';
+		
 
 		$oPluginXsrf=new plugin_xsrf();
 		$oView->token=$oPluginXsrf->getToken();

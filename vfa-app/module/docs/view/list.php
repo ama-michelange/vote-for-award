@@ -1,4 +1,7 @@
 <div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="glyphicon glyphicon-list with-text"></i>Liste des albums</h3>
+	</div>
 	<?php if($this->tDocs):?>
 	<table class="table table-striped">
 		<thead>
@@ -18,17 +21,17 @@
 				<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
 					<div class="btn-group">
 						<?php if(_root::getACL()->permit('docs::update')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oDoc->toString() ?>" 
+							<a rel="tooltip" data-original-title="Modifier <?php echo $oDoc->toString() ?>" 
 								href="<?php echo $this->getLink('docs::update',array('id'=>$oDoc->getId()))?>">
 								<i class="glyphicon glyphicon-pencil"></i></a>
 						<?php endif;?>						
 						<?php if(_root::getACL()->permit('docs::delete')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oDoc->toString() ?>" 
+							<a rel="tooltip" data-original-title="Supprimer <?php echo $oDoc->toString() ?>" 
 								href="<?php echo $this->getLink('docs::delete',array('id'=>$oDoc->getId()))?>">
 								<i class="glyphicon glyphicon-trash"></i></a>
 						<?php endif;?>						
 						<?php if(_root::getACL()->permit('docs::read')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oDoc->toString() ?>" 
+							<a rel="tooltip" data-original-title="Voir <?php echo $oDoc->toString() ?>" 
 								href="<?php echo $this->getLink('docs::read',array('id'=>$oDoc->getId()))?>">
 								<i class="glyphicon glyphicon-eye-open"></i></a>
 						<?php endif;?>						

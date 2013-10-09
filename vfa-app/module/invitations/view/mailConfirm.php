@@ -2,7 +2,7 @@
 <div class="col-md-12">
 <div class="alert alert-info">
 	<?php if(plugin_validation::exist($this->tMessage, 'token')):?>
-		<div class="alert alert-error">
+		<div class="alert alert-danger">
 			<p><?php echo plugin_validation::show($this->tMessage, 'token')?></p>
 			<p><a class="btn btn-sm btn-danger"	href="<?php echo $this->getLink(_root::getParamNav()) ?>">Fermer</a></p>
 		</div>
