@@ -9,6 +9,7 @@
 
 <!-- Le styles -->
 <link href="site/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+<!-- <link href="site/assets/css/bootstrap-theme.css" rel="stylesheet" media="screen"> -->
 <style>
 body {
 	padding-top: 107px;
@@ -23,7 +24,7 @@ body {
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<![endif]-->
 
 <!-- Fav and touch icons -->
 <link rel="shortcut icon" href="site/assets/ico/favicon.ico">
@@ -35,21 +36,6 @@ body {
 
 <?php echo $this->load('bsnav-top') ?>
 <?php echo $this->load('bsnavbar') ?>
-<?php /*
-<div class="visible-lg">
-<div class="container">
-<div class="row">
-<?php echo $this->load('bsnav-top') ?>
-</div>
-</div>
-<?php echo $this->load('bsnavbar') ?>
-</div>
-<div class="visible-md visible-sm">
-<?php echo $this->load('bsnavbar') ?>
-<?php echo $this->load('bsnav-top') ?>
-</div>
-*/ ?>
-
 <div class="container">
 <?php echo $this->load('work') ?>
 </div>

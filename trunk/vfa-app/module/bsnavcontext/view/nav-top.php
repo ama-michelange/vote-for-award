@@ -13,16 +13,24 @@
 				<?php if ($this->exists('tLink')) :?>
 					<?php foreach($this->tLink as $sLibelle => $item): ?>
 						<?php
+						$separator = false;
 						if(is_array($item)) {
 							$link = $item[0];
 							$icon = $item[1];
 						} 
 						else {
-							$link = $item;
-							$icon = false;
+							if ('_separator_' == $item) {
+								$separator = true;
+							}
+							else {
+								$link = $item;
+								$icon = false;
+							}
 						}
 						?>
-						<?php if(false==plugin_vfa::hasParamNav($link)): ?> 
+						<?php if(true==$separator): ?> 
+							&nbsp;
+						<?php elseif(false==plugin_vfa::hasParamNav($link)): ?> 
 							<a class="btn btn-primary btn-sm navbar-btn" href="<?php echo $this->getLink($link) ?>">
 								<?php if($icon): ?><i class="<?php echo $icon ?> with-text"></i><?php endif;?><?php echo $sLibelle ?>
 							</a>

@@ -95,11 +95,11 @@
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
 				<?php if(trim($this->oAward->award_id)==false):?>
-				<a class="btn btn-default" href="<?php echo $this->getLink('awards::index') ?>"><i class="glyphicon glyphicon-remove"></i>&nbsp;&nbsp;Annuler</a>
+				<a class="btn btn-default" href="<?php echo $this->getLink('awards::index') ?>"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<?php else:?>
-				<a class="btn btn-default" href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->award_id)) ?>"><i class="glyphicon glyphicon-remove"></i>&nbsp;&nbsp;Annuler</a>
+				<a class="btn btn-default" href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->award_id)) ?>"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<?php endif;?>
-				<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-ok"></i>&nbsp;&nbsp;Enregistrer</button>
+				<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-ok with-text"></i>Enregistrer</button>
 			</div>
 		</div>
 	</div>
