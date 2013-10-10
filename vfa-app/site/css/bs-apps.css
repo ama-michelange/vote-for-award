@@ -90,3 +90,37 @@
 .table-color td {
 	border-top-color: #000000;
 }
+
+.panel-inner .panel,.panel-inner .table {
+	margin-bottom: 0;
+}
+
+.panel-info>.panel-body {
+	background-color: #EFF8FC;
+}
+
+.panel-info>.panel-footer {
+	background-color: #d9edf7;
+}
+
+.panel-danger>.panel-body {
+	background-color: #F9EDED;
+}
+
+.panel-danger>.panel-footer {
+	color: #b94a48;
+	border-color: #eed3d7;
+	background-color: #f2dede;
+}
+
+.panel-title {
+	font-size: 18px;
+}
+
+.panel-footer {
+	font-size: 16px;
+}
+
+.glyphicon.with-text {
+	padding-right: 0.7em;
+}

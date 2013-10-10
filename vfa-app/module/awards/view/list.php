@@ -1,4 +1,7 @@
-<div class="well well-small well-white">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="glyphicon glyphicon-list with-text"></i>Liste des prix</h3>
+	</div>
 	<?php if($this->tAwards):?>
 	<table class="table table-striped">
 		<thead>
@@ -16,7 +19,7 @@
 			<?php foreach($this->tAwards as $oAward):?>
 			<tr>
 				<?php if(_root::getACL()->permit(array('awards::update','awards::delete','awards::read'))):?>
-					<td class="col-md-1">
+					<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('awards::update')):?>
 							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oAward->getTypeNameString() ?>" 

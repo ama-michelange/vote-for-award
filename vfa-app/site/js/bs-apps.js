@@ -9,7 +9,7 @@ $(document).ready(function() {
 		}
 	});
 	$("[data-rel=popover]").popover({
-		'placement' : 'right',
+		'placement' : 'auto left',
 		'trigger' : 'hover',
 		'delay' : {
 			'show' : 500,

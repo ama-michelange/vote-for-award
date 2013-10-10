@@ -106,44 +106,65 @@ class plugin_vfa_menu
 						'glyphicon glyphicon-list'
 					);
 				}
+				$tLink = array_merge($tLink, self::buildDefaultContextNavLinks());
+				break;
+			case 'awards':
+				$tLink = array_merge($tLink, self::buildDefaultContextNavLinks());
+				$tLink[] = "_separator_";
+				if ($acl->permit('nominees::list')) {
+					$tLink['Titres sélectionnés'] = array(
+						'nominees::list' . '&idAward=' . _root::getParam('id'),
+						'glyphicon glyphicon-new-window'
+					);
+				}
+				break;
 			default:
-				// Vue par défaut
-				if ($acl->permit($sModule . '::list')) {
-					$tLink['Liste'] = array(
-						$sModule . '::list',
-						'glyphicon glyphicon-list'
+				$tLink = array_merge($tLink, self::buildDefaultContextNavLinks());
+		}
+		return $tLink;
+	}
+
+	private static function buildDefaultContextNavLinks()
+	{
+		$acl = _root::getACL();
+		$sModule = _root::getModule();
+		$tLink = array();
+		// Vue par défaut
+		if ($acl->permit($sModule . '::list')) {
+			$tLink['Liste'] = array(
+				$sModule . '::list',
+				'glyphicon glyphicon-list'
+			);
+		}
+		if ($acl->permit($sModule . '::create')) {
+			$tLink['Créer'] = array(
+				$sModule . '::create',
+				'glyphicon glyphicon-plus'
+			);
+		}
+		switch (_root::getAction()) {
+			case 'read':
+			case 'update':
+			case 'delete':
+				if ($acl->permit($sModule . '::read')) {
+					$tLink['Détail'] = array(
+						$sModule . '::read' . '&id=' . _root::getParam('id'),
+						'glyphicon glyphicon-eye-open'
 					);
 				}
-				if ($acl->permit($sModule . '::create')) {
-					$tLink['Créer'] = array(
-						$sModule . '::create',
-						'glyphicon glyphicon-plus'
+				if ($acl->permit($sModule . '::update')) {
+					$tLink['Modifier'] = array(
+						$sModule . '::update' . '&id=' . _root::getParam('id'),
+						'glyphicon glyphicon-pencil'
 					);
 				}
-				switch (_root::getAction()) {
-					case 'read':
-					case 'update':
-					case 'delete':
-						if ($acl->permit($sModule . '::read')) {
-							$tLink['Détail'] = array(
-								$sModule . '::read' . '&id=' . _root::getParam('id'),
-								'glyphicon glyphicon-eye-open'
-							);
-						}
-						if ($acl->permit($sModule . '::update')) {
-							$tLink['Modifier'] = array(
-								$sModule . '::update' . '&id=' . _root::getParam('id'),
-								'glyphicon glyphicon-pencil'
-							);
-						}
-						if ($acl->permit($sModule . '::delete')) {
-							$tLink['Supprimer'] = array(
-								$sModule . '::delete' . '&id=' . _root::getParam('id'),
-								'glyphicon glyphicon-trash'
-							);
-						}
-						break;
+				if ($acl->permit($sModule . '::delete')) {
+					$tLink['Supprimer'] = array(
+						$sModule . '::delete' . '&id=' . _root::getParam('id'),
+						'glyphicon glyphicon-trash'
+					);
 				}
+				break;
 		}
 		return $tLink;
 	}
