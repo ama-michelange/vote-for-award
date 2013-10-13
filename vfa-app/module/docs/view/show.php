@@ -7,7 +7,8 @@ if (true == $bImage) {
 ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Détail de l'album</h3> 
+		<h3 class="panel-title"><?php echo $this->oDoc->toStringNumber() ?></h3> 
+<!-- 		<h3 class="panel-title">Détail de l'album</h3>  -->
 	</div>
 	<div class="panel-body">
 		<?php if(true == $bImage):?>
@@ -24,34 +25,36 @@ if (true == $bImage) {
 			<?php endif;?>	
 			
 			<?php if($this->toAwards):?>
-				<div class="panel panel-default">
+				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
 						<h5 class="panel-title">
 							<a class="accordion-toggle" data-toggle="collapse" href="#awards">Liaisons de l'album</a>
 						</h5>
 					</div>
-	 				<table id="awards" class="table table-stripped table-condensed collapse in">
-						<tbody>
-							<?php foreach($this->toAwards as $oAward):?>
-							<tr>
-								<td>
-									<?php if(_root::getACL()->permit('awards::read')):?>
-										<a href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>"><?php echo $oAward->getTypeNameString() ?></a>
-									<?php else:?>
-										<?php echo $oAward->getTypeNameString() ?>
-									<?php endif;?>
-								</td>
-								<td>
-									<?php if(_root::getACL()->permit('nominees::list')):?>
-										<a href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">Sélectionnés de <?php echo $oAward->getTypeNameString() ?></a>
-									<?php else:?>
-										Sélectionnés de <?php echo $oAward->getTypeNameString() ?>
-									<?php endif;?>
-								</td>
-							</tr>	
-							<?php endforeach;?>
-						</tbody>
-					</table>
+	 				<div id="awards" class="collapse in">
+						<table class="table table-stripped table-condensed">
+							<tbody>
+								<?php foreach($this->toAwards as $oAward):?>
+								<tr>
+									<td>
+										<?php if(_root::getACL()->permit('awards::read')):?>
+											<a href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>"><?php echo $oAward->getTypeNameString() ?></a>
+										<?php else:?>
+											<?php echo $oAward->getTypeNameString() ?>
+										<?php endif;?>
+									</td>
+									<td>
+										<?php if(_root::getACL()->permit('nominees::list')):?>
+											<a href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">Sélectionnés de <?php echo $oAward->getTypeNameString() ?></a>
+										<?php else:?>
+											Sélectionnés de <?php echo $oAward->getTypeNameString() ?>
+										<?php endif;?>
+									</td>
+								</tr>	
+								<?php endforeach;?>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			<?php endif;?>
 		</div>
