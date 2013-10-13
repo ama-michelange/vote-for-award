@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `vfa_users` (
 --
 
 INSERT INTO `vfa_users` (`user_id`, `username`, `password`, `first_name`, `last_name`, `email`, `vote`, `create_date`, `modified_date`) VALUES
-(2, 'ama', 'd8e6e1405e607479c1ce78791f76a05cb6dc01fa', 'michel-ange', 'anton', 'michelange.anton@free.fr', 1, '2012-10-28 21:27:29', NULL),
+(2, 'ama', 'd8e6e1405e607479c1ce78791f76a05cb6dc01fa', 'ama', 'ama', 'ama@gmail.com', 1, '2012-10-28 21:27:29', NULL),
 (3, 'asterix', '35bc6c28bca27fbecc144761d32d09986876438f', 'asterix', 'asterix', NULL, 1, '2012-10-28 21:27:29', NULL),
 (4, 'obelix', 'c9e44795639f0b01c2d7ce02ea1ef83038e0d476', 'obelix', 'obelix', NULL, 0, '2012-10-28 21:27:29', NULL),
 (5, 'cesar', '8eee89c994b90ad49540aa5dcd839138c25e0c96', 'jules', 'cesar', NULL, 0, '2012-10-28 21:27:29', NULL),
