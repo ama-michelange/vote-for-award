@@ -16,10 +16,10 @@ class plugin_vfa_menu
 		return $oView;
 	}
 
-	public static function buildViewNavTopCrud()
+	public static function buildViewNavTopCrud($pDataFlags = NULL)
 	{
 		$oView = new _view('bsnavcontext::nav-top');
-		$oView->tLink = self::buildContextNavLinks();
+		$oView->tLink = self::buildContextNavLinks($pDataFlags);
 		$oView->tButtonGroup = self::buildContextNavButtonGroup();
 		$oView->sTitle = self::buildTopTitle();
 		return $oView;
@@ -51,7 +51,7 @@ class plugin_vfa_menu
 		return $oView;
 	}
 
-	public static function buildContextNavLinks()
+	public static function buildContextNavLinks($pDataFlags = NULL)
 	{
 		$acl = _root::getACL();
 		$sModule = _root::getModule();
@@ -110,12 +110,20 @@ class plugin_vfa_menu
 				break;
 			case 'awards':
 				$tLink = array_merge($tLink, self::buildDefaultContextNavLinks());
-				$tLink[] = "_separator_";
-				if ($acl->permit('nominees::list')) {
-					$tLink['Titres sélectionnés'] = array(
-						'nominees::list' . '&idAward=' . _root::getParam('id'),
-						'glyphicon glyphicon-new-window'
-					);
+				if ($pDataFlags && isset($pDataFlags['titles'])) {
+					$tLink[] = "_separator_";
+					if (true == $pDataFlags['titles'] && $acl->permit('nominees::list')) {
+						$tLink['Titres sélectionnés'] = array(
+							'nominees::list' . '&idAward=' . _root::getParam('id'),
+							'glyphicon glyphicon-new-window'
+						);
+					}
+					if (false == $pDataFlags['titles'] && $acl->permit('nominees::create')) {
+						$tLink['Ajouter un titre'] = array(
+							'nominees::create' . '&idAward=' . _root::getParam('id'),
+							'glyphicon glyphicon-plus'
+						);
+					}
 				}
 				break;
 			default:
