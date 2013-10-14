@@ -7,7 +7,7 @@ if (true == $bImage) {
 ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->oDoc->toStringNumber() ?></h3> 
+		<h3 class="panel-title"><i class="glyphicon glyphicon-eye-open with-text"></i><?php echo $this->oDoc->toStringNumber() ?></h3> 
 <!-- 		<h3 class="panel-title">Détail de l'album</h3>  -->
 	</div>
 	<div class="panel-body">
