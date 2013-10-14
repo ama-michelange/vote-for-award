@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->oAward->getTypeNameString() ?></h3> 
+		<h3 class="panel-title"><i class="glyphicon glyphicon-eye-open with-text"></i><?php echo $this->oAward->getTypeNameString() ?></h3> 
 	</div>
 	<div class="panel-body">
 		<div class="col-sm-6 col-md-6">
@@ -15,12 +15,14 @@
 						<a class="accordion-toggle" data-toggle="collapse" href="#nominees">Titres sélectionnés</a>
 						<?php if($this->toTitles):?>
 							<?php if(_root::getACL()->permit('nominees::list')):?>
-								<a class="pull-right" href="<?php echo $this->getLink('nominees::list',array('idAward'=>$this->oAward->getId()))?>">
+								<a class="pull-right" href="<?php echo $this->getLink('nominees::list',array('idAward'=>$this->oAward->getId()))?>" 
+									rel="tooltip" data-original-title="Liste des titres sélectionnés">
 									<i class="glyphicon glyphicon-new-window with-text"></i></a>
 							<?php endif;?>
 						<?php else :?>
 							<?php if(_root::getACL()->permit('nominees::create')):?>
-								<a class="pull-right" href="<?php echo $this->getLink('nominees::create',array('idAward'=>$this->oAward->getId()))?>">
+								<a class="pull-right" href="<?php echo $this->getLink('nominees::create',array('idAward'=>$this->oAward->getId()))?>"
+									rel="tooltip" data-original-title="Ajouter un titre à la sélection">
 									<i class="glyphicon glyphicon-plus"></i></a>
 							<?php endif;?>
 						<?php endif;?>	

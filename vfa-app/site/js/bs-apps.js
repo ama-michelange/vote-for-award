@@ -8,6 +8,14 @@ $(document).ready(function() {
 			'hide' : 100
 		}
 	});
+	$("[data-rel=tooltip]").tooltip({
+		'placement' : 'auto top',
+		'trigger' : 'hover',
+		'delay' : {
+			'show' : 500,
+			'hide' : 100
+		}
+	});
 	$("[data-rel=popover]").popover({
 		'placement' : 'auto left',
 		'trigger' : 'hover',
@@ -18,7 +26,7 @@ $(document).ready(function() {
 	});
 
 	$(".datepicker").datepicker({
-		//'format' : 'yyyy-mm-dd',
+		// 'format' : 'yyyy-mm-dd',
 		'format' : 'dd/mm/yyyy',
 		'weekStart' : 1
 	});
@@ -26,9 +34,9 @@ $(document).ready(function() {
 	$("#myModal").on('shown', function() {
 		$('input:text:visible:first', this).focus();
 	});
-	
+
 	$("select").select2({
-		// width:"off"
+	// width:"off"
 	});
-	
+
 });

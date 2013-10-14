@@ -12,8 +12,8 @@
 	margin-right: 5px;
 	margin-bottom: 5px;
 	line-height: 1.428571429;
-	background-color: #ffffff;
-	border: 1px solid #dddddd;
+	background-color: #868686;
+	border: 1px solid #000000;
 	border-radius: 4px;
 	-webkit-transition: all 0.2s ease-in-out;
 	transition: all 0.2s ease-in-out;
@@ -30,10 +30,27 @@
 
 .panel-images-body>img {
 	height: auto;
+	border: 1px solid #000000;
 }
 
 .panel-images .caption {
-	padding: 3px;
+	display: block;
+	padding: 7px 0px 0px 0px;
+	color: #FFFFFF;
+	margin-left: auto;
+	margin-right: auto;
+	width: 4em;
+}
+
+.panel-images .caption a {
+	color: #FFFFFF;
+}
+
+.panel-images .caption a:ACTIVE {
+	color: #FFFFFF;
+}
+
+.panel-images .caption a:HOVER {
 	color: #333333;
 }
 
@@ -123,4 +140,18 @@
 
 .glyphicon.with-text {
 	padding-right: 0.7em;
+}
+
+.select2-container.select2-container-multi.form-control {
+	padding: 0;
+}
+
+.select2-container-multi.form-control .select2-choices {
+	min-height: 34px;
+	line-height: 14px;
+}
+
+.select2-container-multi.form-control .select2-choices .select2-search-choice
+	{
+	line-height: 14px;
 }
