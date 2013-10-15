@@ -1,4 +1,8 @@
-<div class="well well-small well-white">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="glyphicon glyphicon-question-sign with-text"></i>Pour quel prix ?</h3>
+	</div>
+
 	<?php if($this->tAwards):?>
 	<table class="table table-striped">
 		<thead>

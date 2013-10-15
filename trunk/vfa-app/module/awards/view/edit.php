@@ -14,7 +14,7 @@
 			<?php else:?>
 				<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'name')?>">
 					<label for="inputName">Nom
-						<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
+						<span class="btn btn-xs btn-link" data-rel="tooltip"
 							data-original-title="Le nom du prix à afficher.">
 							<i class="glyphicon glyphicon-question-sign"></i>
 						</span>
@@ -26,7 +26,7 @@
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'type')?>">
 							<label>Type
-								<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
+								<span class="btn btn-xs btn-link" data-rel="tooltip"
 									data-original-title="Les albums d'un 'Prix' sont destinés aux lecteurs inscris. Les albums d'une 'Présélection' sont destinés au comité de sélection.">
 									<i class="glyphicon glyphicon-question-sign"></i>
 								</span>
@@ -47,7 +47,7 @@
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'public')?>">
 							<label>Visibilité
-								<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body" 
+								<span class="btn btn-xs btn-link" data-rel="tooltip" 
 									data-original-title="En privé, le prix est visible uniquement par les lecteurs inscris à ce prix. En public, les résultats du prix sont, en plus, visibles par tous les internautes visitant le site.">
 									<i class="glyphicon glyphicon-question-sign"></i>
 								</span>
@@ -68,8 +68,8 @@
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'start_date')?>">
 							<label for="inputDateBegin">Date de début
-								<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
-									data-original-title="La date du jour d'ouverture du prix. La date à partir de laquelle on accepte les premiers votes.">
+								<span class="btn btn-xs btn-link" data-rel="tooltip"
+									data-original-title="La date du jour d'ouverture du prix à partir de laquelle les premiers votes sont acceptés.">
 									<i class="glyphicon glyphicon-question-sign"></i>
 								</span>
 							</label>
@@ -80,8 +80,8 @@
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'end_date')?>">
 							<label for="inputDateEnd">Date de fin
-								<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
-									data-original-title="La date du jour de fermeture du prix. Les votes sont acceptés jusqu'à la veillle de ce jour. Ils sont clos ce jour dès minuit.">
+								<span class="btn btn-xs btn-link" data-rel="tooltip"
+									data-original-title="La date du jour de fermeture du prix. Les votes sont acceptés jusqu'à la veille de ce jour. Ils sont clos ce jour dès minuit.">
 									<i class="glyphicon glyphicon-question-sign"></i>
 								</span>
 							</label>

@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><i class="glyphicon glyphicon-eye-open with-text"></i>
+		<h3 class="panel-title"><i class="glyphicon glyphicon-eye-open with-text"></i><?php echo $this->oTitle->toString() ?> :
 				<?php if(_root::getACL()->permit('awards::read')):?>
 					<a	href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->getId()))?>">
 						<?php echo $this->oAward->getTypeNameString() ?>
@@ -8,7 +8,6 @@
 				<?php else:?>
 					<?php echo $this->oAward->getTypeNameString() ?>
 				<?php endif;?>
-				: <?php echo $this->oTitle->toString() ?>
 		</h3>	
 	</div>
 	<div class="panel-body">

@@ -15,7 +15,7 @@
 			<?php else:?>
 			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'title')?>">
 				<label for="inputTitle">Titre
-					<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body" data-original-title="Titre de la série ou du One-Shot">
+					<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Titre de la série ou du One-Shot">
 						<i class="glyphicon glyphicon-question-sign"></i>
 					</span>
 				</label>				
@@ -24,7 +24,7 @@
 			</div>
 			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'number')?>">
 				<label for="inputNumber">Numéro
-					<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
+					<span class="btn btn-xs btn-link" data-rel="tooltip"
 						data-original-title="Si l'album fait partie d'une série, numéro dans la série"><i class="glyphicon glyphicon-question-sign"></i>
 					</span>
 				</label>
@@ -33,7 +33,7 @@
 			</div>
 			<div class="form-group">
 				<label for="inputProperTitle">Titre propre
-					<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
+					<span class="btn btn-xs btn-link" data-rel="tooltip"
 						data-original-title="Si l'album fait partie d'une série, saisir le titre propre à l'album dans la série. Exemple, pour la série Astérix, 'Le combat des Chefs' est le titre propre de l'album."><i class="glyphicon glyphicon-question-sign"></i>
 					</span> 
 				</label>
@@ -42,7 +42,7 @@
 			</div>
 			<div class="form-group">
 				<label for="inputImage">Adresse de l'image
-					<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
+					<span class="btn btn-xs btn-link" data-rel="tooltip"
 						data-original-title="Adresse WEB complète (URL) de l'image de l'album"><i class="glyphicon glyphicon-question-sign"></i>
 					</span>                                                           
 				</label>
@@ -51,7 +51,7 @@
 			</div>
 			<div class="form-group">
 				<label for="inputUrl">Adresse du résumé
-					<span class="btn btn-xs btn-link" data-rel="tooltip" data-container="body"
+					<span class="btn btn-xs btn-link" data-rel="tooltip"
 						data-original-title="Adresse WEB complète (URL) d'accès au résumé de l'album"><i class="glyphicon glyphicon-question-sign"></i>
 					</span> 
 				</label>

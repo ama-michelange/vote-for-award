@@ -1,8 +1,9 @@
 // 
 $(document).ready(function() {
 	$("[rel=tooltip]").tooltip({
-		'placement' : 'top',
+		'placement' : 'auto top',
 		'trigger' : 'hover',
+		'container' : 'body',
 		'delay' : {
 			'show' : 500,
 			'hide' : 100
@@ -11,6 +12,7 @@ $(document).ready(function() {
 	$("[data-rel=tooltip]").tooltip({
 		'placement' : 'auto top',
 		'trigger' : 'hover',
+		'container' : 'body',
 		'delay' : {
 			'show' : 500,
 			'hide' : 100

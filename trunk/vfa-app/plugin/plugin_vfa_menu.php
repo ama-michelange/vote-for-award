@@ -12,7 +12,7 @@ class plugin_vfa_menu
 	public static function buildViewNavTop()
 	{
 		$oView = new _view('bsnavcontext::nav-top');
-		$oView->sTitle = self::buildTopTitle();
+		$oView->tTitles = self::buildTopTitle();
 		return $oView;
 	}
 
@@ -21,7 +21,7 @@ class plugin_vfa_menu
 		$oView = new _view('bsnavcontext::nav-top');
 		$oView->tLink = self::buildContextNavLinks($pDataFlags);
 		$oView->tButtonGroup = self::buildContextNavButtonGroup();
-		$oView->sTitle = self::buildTopTitle();
+		$oView->tTitles = self::buildTopTitle();
 		return $oView;
 	}
 
@@ -186,24 +186,24 @@ class plugin_vfa_menu
 			case 'nominees':
 				switch (_root::getAction()) {
 					case 'list':
-					case 'listHead':
 					case 'listThumbnail':
+					case 'listThumbnailLarge':
 						if ($acl->permit($sModule . '::list')) {
-							$tButtonGroup['Liste Textes'] = array(
+							$tButtonGroup['Liste'] = array(
 								$sModule . '::list' . '&idAward=' . _root::getParam('idAward'),
 								'glyphicon glyphicon-list'
-							);
-						}
-						if ($acl->permit($sModule . '::listHead')) {
-							$tButtonGroup['Liste Vignettes'] = array(
-								$sModule . '::listHead' . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-th-list'
 							);
 						}
 						if ($acl->permit($sModule . '::listThumbnail')) {
 							$tButtonGroup['Vignettes'] = array(
 								$sModule . '::listThumbnail' . '&idAward=' . _root::getParam('idAward'),
 								'glyphicon glyphicon-th'
+							);
+						}
+						if ($acl->permit($sModule . '::listThumbnailLarge')) {
+							$tButtonGroup['Vignettes Larges'] = array(
+								$sModule . '::listThumbnailLarge' . '&idAward=' . _root::getParam('idAward'),
+								'glyphicon glyphicon-th-large'
 							);
 						}
 						break;
@@ -269,7 +269,7 @@ class plugin_vfa_menu
 			$tLink['Prix'] = 'awards::index';
 		}
 		if ($acl->permit('nominees')) {
-			$tLink['Sélectionnés'] = 'nominees::index';
+			$tLink['Titres sélectionnés'] = 'nominees::index';
 		}
 		if (count($tLink) > 0) {
 			$tLink['sep1'] = 'separator';
@@ -313,51 +313,57 @@ class plugin_vfa_menu
 
 	public static function buildTopTitle()
 	{
+		$tTitle = array();
 		switch (_root::getModule()) {
 			case 'awards':
-				$sTitle = 'Prix';
+				$tTitle[] = 'Prix';
+				$tTitle[] = 'awards::index';
 				break;
 			case 'docs':
-				$sTitle = 'Albums';
+				$tTitle[] = 'Albums';
+				$tTitle[] = 'docs::index';
 				break;
 			case 'groups':
-				$sTitle = 'Groupes';
+				$tTitle[] = 'Groupes';
+				$tTitle[] = 'groups::index';
 				break;
 			case 'nominees':
-				$sTitle = 'Sélectionnés';
-				break;
-			case 'titles':
-				$sTitle = 'Titres';
+				$tTitle[] = 'Titres sélectionnés';
+				$tTitle[] = 'nominees::index';
 				break;
 			case 'users':
-				$sTitle = 'Utilisateurs';
+				$tTitle[] = 'Utilisateurs';
+				$tTitle[] = 'users::index';
 				break;
 			case 'roles':
-				$sTitle = 'Rôles';
+				$tTitle[] = 'Rôles';
+				$tTitle[] = 'roles::index';
 				break;
 			case 'invitations':
 				switch (_root::getAction()) {
 					case 'reader':
-						$sTitle = 'Invitation pour inscrire un Lecteur';
+						$tTitle[] = 'Invitation pour inscrire un Lecteur';
 						break;
 					case 'free':
-						$sTitle = 'Electeur libre';
+						$tTitle[] = 'Electeur libre';
 						break;
 					case 'responsible':
-						$sTitle = 'Invitation pour inscrire un Responsable de groupe';
+						$tTitle[] = 'Invitation pour inscrire un Responsable de groupe';
 						break;
 					case 'board':
-						$sTitle = 'Invitation pour inscrire un Membre du comité de sélection';
+						$tTitle[] = 'Invitation pour inscrire un Membre du comité de sélection';
 						break;
 					default:
-						$sTitle = _root::getModule() . '::' . _root::getAction();
+						$tTitle[] = _root::getModule() . '::' . _root::getAction();
 						break;
 				}
+						$tTitle[] = _root::getModule() . '::' . _root::getAction();
 				break;
 			default:
-				$sTitle = _root::getModule();
+				$tTitle[] = _root::getModule();
+				$tTitle[] = _root::getModule() . '::' . _root::getAction();
 				break;
 		}
-		return $sTitle;
+		return $tTitle;
 	}
 }
