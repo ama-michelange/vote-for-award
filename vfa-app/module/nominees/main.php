@@ -114,8 +114,8 @@ class module_nominees extends abstract_module{
 		$this->oLayout->add('work',$oView);
 	}
 	
-	public function _listHead(){
-		$oView = new _view('nominees::listHead');
+	public function _listThumbnailLarge(){
+		$oView = new _view('nominees::listThumbnailLarge');
 		$oAwardModel = new model_award;
 		$oAward = $oAwardModel->findById( _root::getParam('idAward') );
 		$toTitles = $oAward->findTitles();
