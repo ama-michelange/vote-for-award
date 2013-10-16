@@ -329,7 +329,7 @@ class plugin_vfa_menu
 				break;
 			case 'nominees':
 				$tTitle[] = 'Titres sélectionnés';
-				$tTitle[] = 'nominees::index';
+				$tTitle[] = 'nominees::index' . '&idAward=' . _root::getParam('idAward');
 				break;
 			case 'users':
 				$tTitle[] = 'Utilisateurs';
@@ -357,7 +357,7 @@ class plugin_vfa_menu
 						$tTitle[] = _root::getModule() . '::' . _root::getAction();
 						break;
 				}
-						$tTitle[] = _root::getModule() . '::' . _root::getAction();
+				$tTitle[] = _root::getModule() . '::' . _root::getAction();
 				break;
 			default:
 				$tTitle[] = _root::getModule();

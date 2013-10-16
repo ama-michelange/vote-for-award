@@ -1,259 +1,283 @@
-<?php 
-class module_nominees extends abstract_module{
+<?php
 
-	public function before(){
+class module_nominees extends abstract_module
+{
+
+	public function before()
+	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-
+		
 		// Force l'action avant la construction du menu pour n'avoir qu'un seul test dans le menu contextuel
-		if ('index' == _root::getAction()){
-			if (null == _root::getParam('idAward',null)) {
+		if ('index' == _root::getAction()) {
+			if (null == _root::getParam('idAward', null)) {
 				_root::getRequest()->setAction('listAwards');
-			}
-			else {
+			} else {
 				_root::getRequest()->setAction('list');
 			}
 		}
-		$this->oLayout=new _layout('tpl_bs_bar_context');
-		$this->oLayout->addModule('bsnavbar','bsnavbar::index');
-		$this->oLayout->add('bsnav-left',plugin_vfa_menu::buildViewNavLeft());
-		$this->oLayout->add('bsnav-top',plugin_vfa_menu::buildViewNavTopCrud());
+		$this->oLayout = new _layout('tpl_bs_bar_context');
+		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
+		$this->oLayout->add('bsnav-left', plugin_vfa_menu::buildViewNavLeft());
+		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
 	}
 
-	public function _index(){
-		if (null == _root::getParam('idAward',null)) {
+	public function _index()
+	{
+		if (null == _root::getParam('idAward', null)) {
 			$this->_listAwards();
-		}
-		else {
+		} else {
 			$this->_list();
 		}
 	}
 
-	public function _listAwards(){
-		$oAwardModel=new model_award;
-		$tAwards=$oAwardModel->findAll();
-
-		$oView=new _view('nominees::listAwards');
-		$oView->tAwards=$tAwards;
-
-		$this->oLayout->add('work',$oView);
+	public function _listAwards()
+	{
+		$oAwardModel = new model_award();
+		$tAwards = $oAwardModel->findAll();
+		
+		$oView = new _view('nominees::listAwards');
+		$oView->tAwards = $tAwards;
+		
+		$this->oLayout->add('work', $oView);
 	}
 
-	public function _create(){
+	public function _create()
+	{
 		$tMessage = null;
-		$oTitleModel = new model_title;
+		$oTitleModel = new model_title();
 		$tTitleDocs = null;
-
+		
 		$oTitle = $this->save();
 		if (null == $oTitle) {
-			$oTitle = new row_title;
-		}
-		else {
+			$oTitle = new row_title();
+		} else {
 			$tMessage = $oTitle->getMessages();
-			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs',null));
+			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs', null));
 		}
-		$oAwardModel = new model_award;
-		$oAward = $oAwardModel->findById( _root::getParam('idAward') );
-
+		$oAwardModel = new model_award();
+		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
+		
 		$oView = new _view('nominees::edit');
 		$oView->oTitle = $oTitle;
 		$oView->oAward = $oAward;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
-
-		$oView->tMessage=$tMessage;
+		
+		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un titre sélectionné';
 		$oView->iconTitle = 'glyphicon glyphicon-plus';
 		
-		$oPluginXsrf=new plugin_xsrf();
-		$oView->token=$oPluginXsrf->getToken();
-
-		$this->oLayout->add('work',$oView);
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		
+		$this->oLayout->add('work', $oView);
 	}
 
-	public function _update(){
+	public function _update()
+	{
 		$tMessage = null;
 		$tTitleDocs = null;
-		$oTitleModel = new model_title;
-
+		$oTitleModel = new model_title();
+		
 		$oTitle = $this->save();
 		if (null == $oTitle) {
-			$oTitle = $oTitleModel->findById( _root::getParam('id') );
+			$oTitle = $oTitleModel->findById(_root::getParam('id'));
 			$tTitleDocs = $oTitle->getSelectDocs();
-		}
-		else {
+		} else {
 			$tMessage = $oTitle->getMessages();
-			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs',null));
+			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs', null));
 		}
-
-		$oAwardModel = new model_award;
-		$oAward = $oAwardModel->findById( _root::getParam('idAward') );
-
+		
+		$oAwardModel = new model_award();
+		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
+		
 		$oView = new _view('nominees::edit');
 		$oView->oTitle = $oTitle;
 		$oView->oAward = $oAward;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
-		$oView->tMessage=$tMessage;
+		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un titre sélectionné';
 		$oView->iconTitle = 'glyphicon glyphicon-pencil';
-
-		$oPluginXsrf=new plugin_xsrf();
-		$oView->token=$oPluginXsrf->getToken();
-
-		$this->oLayout->add('work',$oView);
+		
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		
+		$this->oLayout->add('work', $oView);
 	}
 
-	public function _list(){
+	public function _list()
+	{
 		$oView = new _view('nominees::list');
-		$oAwardModel = new model_award;
-		$oAward = $oAwardModel->findById( _root::getParam('idAward') );
+		$oAwardModel = new model_award();
+		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
 		$toTitles = $oAward->findTitles();
-
+		
 		$oView->oAward = $oAward;
 		$oView->toTitles = $toTitles;
-
-		$this->oLayout->add('work',$oView);
+		
+		$this->oLayout->add('work', $oView);
 	}
-	
-	public function _listThumbnailLarge(){
+
+	public function _listThumbnailLarge()
+	{
 		$oView = new _view('nominees::listThumbnailLarge');
-		$oAwardModel = new model_award;
-		$oAward = $oAwardModel->findById( _root::getParam('idAward') );
+		$oAwardModel = new model_award();
+		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
 		$toTitles = $oAward->findTitles();
-	
+		
 		$oView->oAward = $oAward;
 		$oView->toTitles = $toTitles;
-	
-		$this->oLayout->add('work',$oView);
+		
+		$this->oLayout->add('work', $oView);
 	}
-	
-	public function _listThumbnail(){
+
+	public function _listThumbnail()
+	{
 		$oView = new _view('nominees::listThumbnail');
-		$oAwardModel = new model_award;
-		$oAward = $oAwardModel->findById( _root::getParam('idAward') );
+		$oAwardModel = new model_award();
+		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
 		$toTitles = $oAward->findTitles();
-	
+		
 		$oView->oAward = $oAward;
 		$oView->toTitles = $toTitles;
-	
-		$this->oLayout->add('work',$oView);
+		
+		$this->oLayout->add('work', $oView);
 	}
-	
-	public function _read(){
+
+	public function _read()
+	{
 		$oView = new _view('nominees::read');
-		$oView->oViewShow=$this->buildViewShow();
-
-		$this->oLayout->add('work',$oView);
+		$oView->oViewShow = $this->buildViewShow();
+		
+		$this->oLayout->add('work', $oView);
 	}
 
+	public function _readWithDoc()
+	{
+		$oTitle = model_title::getInstance()->findByDocIdAwardId(_root::getParam('idDoc'), _root::getParam('idAward'));
+		_root::redirect('nominees::read', array(
+			'id' => $oTitle->getId(),
+			'idAward' => _root::getParam('idAward')
+		));
+	}
 
-	public function buildViewShow(){
-		$oTitleModel=new model_title;
-		$oTitle=$oTitleModel->findById( _root::getParam('id') );
+	public function buildViewShow()
+	{
+		$oTitleModel = new model_title();
+		if (_root::getParam('idDoc')) {
+			$oTitle = $oTitleModel->findByDocIdAwardId(_root::getParam('idDoc'), _root::getParam('idAward'));
+		} else {
+			$oTitle = $oTitleModel->findById(_root::getParam('id'));
+		}
+		
 		$toDocs = $oTitle->findDocs();
-		$oAwardModel = new model_award;
-		$oAward = $oAwardModel->findById( _root::getParam('idAward') );
-
-		$oView=new _view('nominees::show');
-		$oView->oTitle=$oTitle;
+		$oAwardModel = new model_award();
+		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
+		
+		$oView = new _view('nominees::show');
+		$oView->oTitle = $oTitle;
 		$oView->toDocs = $toDocs;
 		$oView->oAward = $oAward;
-
+		
 		return $oView;
 	}
 
-	public function _delete(){
-		$tMessage=$this->delete();
-
+	public function _delete()
+	{
+		$tMessage = $this->delete();
+		
 		$oView = new _view('nominees::delete');
 		$oView->oViewShow = $this->buildViewShow();
-
-		// 		$oView->ok = true;
-		// 		if ($oView->oViewShow->toAwards) {
-		// 			$oView->ok = false;
-		// 		}
-
-		$oPluginXsrf=new plugin_xsrf();
-		$oView->token=$oPluginXsrf->getToken();
-		$oView->tMessage=$tMessage;
-
-		$this->oLayout->add('work',$oView);
+		
+		// $oView->ok = true;
+		// if ($oView->oViewShow->toAwards) {
+		// $oView->ok = false;
+		// }
+		
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$oView->tMessage = $tMessage;
+		
+		$this->oLayout->add('work', $oView);
 	}
 
-	public function save(){
-		if(!_root::getRequest()->isPost() ){ //si ce n'est pas une requete POST on ne soumet pas
+	public function save()
+	{
+		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-
-		$oPluginXsrf=new plugin_xsrf();
-		if(!$oPluginXsrf->checkToken( _root::getParam('token') ) ){ //on verifie que le token est valide
-			$oTitle=new row_title;
-			$oTitle->setMessages(array('token'=>$oPluginXsrf->getMessage()));
+		
+		$oPluginXsrf = new plugin_xsrf();
+		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+			$oTitle = new row_title();
+			$oTitle->setMessages(array(
+				'token' => $oPluginXsrf->getMessage()
+			));
 			return $oTitle;
 		}
-
-		$oTitleModel=new model_title;
-		$iId=_root::getParam('id',null);
-		if($iId==null){
-			$oTitle=new row_title;
-		}
-		else {
-			$oTitle=$oTitleModel->findById( _root::getParam('id',null) );
+		
+		$oTitleModel = new model_title();
+		$iId = _root::getParam('id', null);
+		if ($iId == null) {
+			$oTitle = new row_title();
+		} else {
+			$oTitle = $oTitleModel->findById(_root::getParam('id', null));
 		}
 		// Copie la saisie dans un enregistrement
-		foreach($oTitleModel->getListColumn() as $sColumn){
-			if( in_array($sColumn,$oTitleModel->getIdTab())){
+		foreach ($oTitleModel->getListColumn() as $sColumn) {
+			if (in_array($sColumn, $oTitleModel->getIdTab())) {
 				continue;
 			}
-			if (( _root::getParam($sColumn,null) == null ) && (null != $oTitle->$sColumn)) {
+			if ((_root::getParam($sColumn, null) == null) && (null != $oTitle->$sColumn)) {
 				$oTitle->$sColumn = null;
-			}
-			else {
+			} else {
 				$oTitle->$sColumn = _root::getParam($sColumn, null);
 			}
 		}
 		// Récupère les albums associés
-		$tTitleDocs = _root::getParam('title_docs',null);
-		if ($tTitleDocs){
+		$tTitleDocs = _root::getParam('title_docs', null);
+		if ($tTitleDocs) {
 			// Récupère les enregistrements des albums
 			$tRowDoc = array();
-			$oDocModel=new model_doc;
-			foreach ($tTitleDocs as $idDoc){
+			$oDocModel = new model_doc();
+			foreach ($tTitleDocs as $idDoc) {
 				$tRowDoc[] = $oDocModel->findById($idDoc);
 			}
 			// Vérifie que tous les albums ont le même titre
 			$sDocTitle = $tRowDoc[0]->title;
 			$bOk = true;
-			foreach ($tRowDoc as $oDoc){
+			foreach ($tRowDoc as $oDoc) {
 				$bOk = $bOk && ($sDocTitle == $oDoc->title);
 			}
-			if ($bOk){
+			if ($bOk) {
 				// Force le titre avec le 1er enregistrement des albums
 				$oTitle->title = plugin_vfa::formatTitle($tRowDoc);
 				$oTitle->numbers = plugin_vfa::formatTitleNumbers($tRowDoc);
 				// Champ de tri : déplace l'article à la fin du titre s'il existe
-				$oTitle->order_title = plugin_vfa::pushArticle($oTitle->title).$oTitle->numbers;
+				$oTitle->order_title = plugin_vfa::pushArticle($oTitle->title) . $oTitle->numbers;
 				// Vérifie que le titre n'existe pas déjà
 				$oTitleDoublon = $this->findDoublon($oTitleModel, $oTitle);
 				if (null == $oTitleDoublon) {
 					// Sauvegarde si valide
-					if($oTitle->isValid()){
+					if ($oTitle->isValid()) {
 						$oTitle->save();
 						$oTitleModel->saveTitleDocs($oTitle->title_id, $tTitleDocs);
 						$oTitleModel->saveAwardTitle(_root::getParam('idAward'), $oTitle->title_id);
-						_root::redirect('nominees::list',array('idAward'=>_root::getParam('idAward')));
+						_root::redirect('nominees::list', array(
+							'idAward' => _root::getParam('idAward')
+						));
 					}
-				}
-				else{
+				} else {
 					$oTitleModel->saveAwardTitle(_root::getParam('idAward'), $oTitleDoublon->title_id);
-					_root::redirect('nominees::list',array('idAward'=>_root::getParam('idAward')));
+					_root::redirect('nominees::list', array(
+						'idAward' => _root::getParam('idAward')
+					));
 				}
-			}
-			else{
+			} else {
 				$tMessage['title_docs'][] = 'all-equals';
 				$oTitle->setMessages($tMessage);
 			}
-		}
-		else{
+		} else {
 			$tMessage['title_docs'][] = 'required-selection';
 			$oTitle->setMessages($tMessage);
 		}
@@ -262,54 +286,61 @@ class module_nominees extends abstract_module{
 
 	/**
 	 * Recherche si le titre existe déjà
-	 * @param model_title $poTitleModel
-	 * @param row_title $poTitle
+	 *
+	 * @param model_title $poTitleModel        	
+	 * @param row_title $poTitle        	
 	 * @return row_title Le doublon trouvé ou null sinon
 	 */
-	public function findDoublon($poTitleModel, $poTitle) {
+	public function findDoublon($poTitleModel, $poTitle)
+	{
 		$bDoublon = true;
-		$oTitleDoublon = $poTitleModel->findByTitleAndNumbers($poTitle->title,$poTitle->numbers);
+		$oTitleDoublon = $poTitleModel->findByTitleAndNumbers($poTitle->title, $poTitle->numbers);
 		if ((null == $oTitleDoublon) || (true == $oTitleDoublon->isEmpty())) {
 			$oTitleDoublon = null;
-		}
-		else if ((null != $poTitle->getId()) && ($oTitleDoublon->getId() == $poTitle->getId())) {
-			$oTitleDoublon = null;
-		}
+		} else 
+			if ((null != $poTitle->getId()) && ($oTitleDoublon->getId() == $poTitle->getId())) {
+				$oTitleDoublon = null;
+			}
 		return $oTitleDoublon;
 	}
 
-	public function delete(){
-		if(!_root::getRequest()->isPost() ){ //si ce n'est pas une requete POST on ne soumet pas
+	public function delete()
+	{
+		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-
-		$oPluginXsrf=new plugin_xsrf();
-		if(!$oPluginXsrf->checkToken( _root::getParam('token') ) ){ //on verifie que le token est valide
-			return array('token'=>$oPluginXsrf->getMessage() );
+		
+		$oPluginXsrf = new plugin_xsrf();
+		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+			return array(
+				'token' => $oPluginXsrf->getMessage()
+			);
 		}
-
-		$iId =_root::getParam('id',null);
+		
+		$iId = _root::getParam('id', null);
 		$idAward = _root::getParam('idAward');
-		if(null != $iId){
+		if (null != $iId) {
 			// Supprime la relation avec le Prix
-			$oTitleModel=new model_title;
+			$oTitleModel = new model_title();
 			$oTitleModel->deleteAwardTitle($idAward, $iId);
 			// Supprime le titre si aucun autre Prix ne l'utilise
-			$oAwardModel=new model_award();
+			$oAwardModel = new model_award();
 			$tAwards = $oAwardModel->findAllByTitleId($iId);
 			$count = count($tAwards);
 			if (1 == $count) {
-				$oTitle=$oTitleModel->findById($iId);
+				$oTitle = $oTitleModel->findById($iId);
 				$oTitle->delete();
 				// Supprime la relation avec les documents
 				$oTitleModel->deleteTitleDocs($iId);
 			}
 		}
-		_root::redirect('nominees::list',array('idAward'=>$idAward));
+		_root::redirect('nominees::list', array(
+			'idAward' => $idAward
+		));
 	}
 
-	public function after(){
+	public function after()
+	{
 		$this->oLayout->show();
 	}
-
 }
