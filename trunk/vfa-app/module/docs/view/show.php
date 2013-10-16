@@ -38,17 +38,72 @@ if (true == $bImage) {
 								<tr>
 									<td>
 										<?php if(_root::getACL()->permit('awards::read')):?>
-											<a href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>"><?php echo $oAward->getTypeNameString() ?></a>
+											<a href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>">
+												<?php echo $oAward->getTypeNameString() ?>
+												
+											</a>
 										<?php else:?>
 											<?php echo $oAward->getTypeNameString() ?>
 										<?php endif;?>
 									</td>
 									<td>
-										<?php if(_root::getACL()->permit('nominees::list')):?>
-											<a href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">Sélectionnés de <?php echo $oAward->getTypeNameString() ?></a>
-										<?php else:?>
-											Sélectionnés de <?php echo $oAward->getTypeNameString() ?>
-										<?php endif;?>
+										<div class="btn-group">
+											<?php if(_root::getACL()->permit('awards::read')):?>
+												<a class="btn btn-default btn-link dropdown-toggle" data-toggle="dropdown">
+													<?php echo $oAward->getTypeNameString() ?>
+													<span class="caret"></span>
+												</a>
+											<?php else:?>
+												<?php echo $oAward->getTypeNameString() ?>
+											<?php endif;?>
+											<ul class="dropdown-menu">
+												<?php if(_root::getACL()->permit('awards::read')):?>
+												<li>
+													<a href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>">
+														<i class="glyphicon glyphicon-new-window with-text"></i>Prix</a>
+												</li>
+												<?php endif;?>
+											
+												<?php if(_root::getACL()->permit('nominees::list')):?>
+												<li>
+													<a href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">
+														<i class="glyphicon glyphicon-new-window with-text"></i>Liste des titres sélectionnés</a>
+												</li>
+												<?php endif;?>
+												<?php if(_root::getACL()->permit('nominees::read')):?>
+												<li>
+													<a href="<?php echo $this->getLink('nominees::readWithDoc',array('idAward'=>$oAward->getId(),'idDoc'=>$this->oDoc->getId()))?>">
+														<i class="glyphicon glyphicon-new-window with-text"></i>Titre sélectionné</a>
+												</li>
+												<?php endif;?>
+											</ul>
+										</div>
+									</td>
+									<td>
+										<div class="btn-group">
+											<?php if(_root::getACL()->permit('awards::read')):?>
+												<a class="btn btn-default" href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>"><?php echo $oAward->getTypeNameString() ?></a>
+											<?php else:?>
+												<?php echo $oAward->getTypeNameString() ?>
+											<?php endif;?>
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<?php if(_root::getACL()->permit('nominees::list')):?>
+												<li>
+													<a href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">
+														<i class="glyphicon glyphicon-new-window with-text"></i>Liste des titres sélectionnés</a>
+												</li>
+												<?php endif;?>
+												<?php if(_root::getACL()->permit('nominees::read')):?>
+												<li>
+													<a href="<?php echo $this->getLink('nominees::readWithDoc',array('idAward'=>$oAward->getId(),'idDoc'=>$this->oDoc->getId()))?>">
+														<i class="glyphicon glyphicon-new-window with-text"></i>Titre sélectionné</a>
+												</li>
+												<?php endif;?>
+											</ul>
+										</div>
 									</td>
 								</tr>	
 								<?php endforeach;?>

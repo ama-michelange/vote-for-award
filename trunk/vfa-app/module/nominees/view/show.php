@@ -14,7 +14,12 @@
 		<?php if($this->toDocs):?>
 			<?php foreach($this->toDocs as $oDoc):?>
 				<div class="col-xs-9 col-sm-5 col-md-5 bd-show">
-					<h4><?php echo $oDoc->title ?></h4>
+					
+					<h4><?php if(_root::getACL()->permit('docs::read')):?>
+						<a class="pull-left" href="<?php echo $this->getLink('docs::read',array('id'=>$oDoc->getId()))?>" 
+							rel="tooltip" data-original-title="Accéder à l'album : <?php echo $oDoc->toString() ?>">
+							<i class="glyphicon glyphicon-new-window with-text"></i></a>
+					<?php endif;?><?php echo $oDoc->title ?></h4>
 					<p><?php echo $oDoc->toStringNumberProperTitle() ?></p>
 					<?php if(_root::getACL()->permit('docs::read')):?>
 						<a	href="<?php echo $this->getLink('docs::read',array('id'=>$oDoc->getId()))?>">
