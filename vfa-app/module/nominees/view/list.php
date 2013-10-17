@@ -1,13 +1,10 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><i class="glyphicon glyphicon-list with-text"></i>Les titres sélectionnés :
-			<?php if(_root::getACL()->permit('awards::read')):?>
-				<a href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->award_id))?>">
-					<?php echo $this->oAward->getTypeNameString() ?></a>
-			<?php else:?>
-				<?php echo $this->oAward->getTypeNameString() ?>
-			<?php endif;?>
-		</h3>
+		<h3 class="panel-title">
+			<?php echo $this->oAward->getTypeNameString()?>
+			<small><i class="glyphicon glyphicon-chevron-right"></i></small>
+			Les titres sélectionnés
+		</h3>	
 	</div>
 	<?php if($this->toTitles):?>
 	<table class="table table-striped">
@@ -20,7 +17,7 @@
 						<?php if(_root::getACL()->permit('nominees::update')):?>
 						<a rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>" data-container="body"
 							href="<?php echo $this->getLink('nominees::update',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-							<i class="glyphicon glyphicon-pencil"></i></a>
+							<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('nominees::delete')):?>
 						<a rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->toString() ?>" data-container="body"

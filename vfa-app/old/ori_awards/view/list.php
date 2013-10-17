@@ -14,7 +14,7 @@
 			<td><?php echo $oAward->end_date ?></td>
 			<td>
 				<a class="btn btn-sm" rel="tooltip" data-original-title="Modifier : <?php echo $oAward->name ?>" href="<?php echo $this->getLink('awards::edit',array('id'=>$oAward->getId()))?>">
-					<i class="glyphicon glyphicon-pencil"></i></a>
+					<i class="glyphicon glyphicon-edit"></i></a>
 				<a class="btn btn-sm" href="<?php echo $this->getLink('awards::show',array('id'=>$oAward->getId()))?>"><i class="glyphicon glyphicon-check"></i> Voir</a>
 				<a class="btn btn-sm" rel="tooltip" data-original-title="Supprimer : <?php echo $oAward->name ?>" href="<?php echo $this->getLink('awards::delete',array('id'=>$oAward->getId()))?>">
 					<i class="glyphicon glyphicon-remove"></i></a>

@@ -1,13 +1,9 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><i class="glyphicon glyphicon-eye-open with-text"></i><?php echo $this->oTitle->toString() ?> :
-				<?php if(_root::getACL()->permit('awards::read')):?>
-					<a	href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->getId()))?>">
-						<?php echo $this->oAward->getTypeNameString() ?>
-					</a>
-				<?php else:?>
-					<?php echo $this->oAward->getTypeNameString() ?>
-				<?php endif;?>
+		<h3 class="panel-title">
+			<?php echo $this->oAward->getTypeNameString()?>
+			<small><i class="glyphicon glyphicon-chevron-right"></i></small>
+			<?php echo $this->oTitle->toString() ?>
 		</h3>	
 	</div>
 	<div class="panel-body">
@@ -17,8 +13,8 @@
 					
 					<h4><?php if(_root::getACL()->permit('docs::read')):?>
 						<a class="pull-left" href="<?php echo $this->getLink('docs::read',array('id'=>$oDoc->getId()))?>" 
-							rel="tooltip" data-original-title="Accéder à l'album : <?php echo $oDoc->toString() ?>">
-							<i class="glyphicon glyphicon-new-window with-text"></i></a>
+							rel="tooltip" data-original-title="Voir l'album : <?php echo $oDoc->toString() ?>">
+							<i class="glyphicon glyphicon-eye-open with-text"></i></a>
 					<?php endif;?><?php echo $oDoc->title ?></h4>
 					<p><?php echo $oDoc->toStringNumberProperTitle() ?></p>
 					<?php if(_root::getACL()->permit('docs::read')):?>

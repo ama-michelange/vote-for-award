@@ -25,7 +25,7 @@
 						<?php if(_root::getACL()->permit('users::update')):?>
 						<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oUser->username ?>" 
 							href="<?php echo $this->getLink('users::update',array('id'=>$oUser->getId()))?>">
-							<i class="glyphicon glyphicon-pencil"></i></a>
+							<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('users::delete')):?>
 						<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oUser->username ?>" 

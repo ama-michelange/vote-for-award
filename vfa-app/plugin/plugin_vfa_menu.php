@@ -68,7 +68,7 @@ class plugin_vfa_menu
 						}
 					}
 					if ($acl->permit($sModule . '::create')) {
-						$tLink['Créer'] = array(
+						$tLink['Ajouter'] = array(
 							$sModule . '::create' . '&idAward=' . _root::getParam('idAward'),
 							'glyphicon glyphicon-plus'
 						);
@@ -87,7 +87,7 @@ class plugin_vfa_menu
 						if ($acl->permit($sModule . '::update')) {
 							$tLink['Modifier'] = array(
 								$sModule . '::update' . '&id=' . _root::getParam('id') . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-pencil'
+								'glyphicon glyphicon-edit'
 							);
 						}
 						if ($acl->permit($sModule . '::delete')) {
@@ -97,6 +97,13 @@ class plugin_vfa_menu
 							);
 						}
 						break;
+				}
+				$tLink[] = "_separator_";
+				if ($acl->permit('awards::read')) {
+					$tLink['Prix'] = array(
+						'awards::read' . '&id=' . _root::getParam('idAward'),
+						'glyphicon glyphicon-eye-open'
+					);
 				}
 				break;
 			case 'users':
@@ -115,7 +122,7 @@ class plugin_vfa_menu
 					if (true == $pDataFlags['titles'] && $acl->permit('nominees::list')) {
 						$tLink['Titres sélectionnés'] = array(
 							'nominees::list' . '&idAward=' . _root::getParam('id'),
-							'glyphicon glyphicon-new-window'
+							'glyphicon glyphicon-list'
 						);
 					}
 					if (false == $pDataFlags['titles'] && $acl->permit('nominees::create')) {
@@ -147,7 +154,7 @@ class plugin_vfa_menu
 		if ($acl->permit($sModule . '::create')) {
 			$tLink['Créer'] = array(
 				$sModule . '::create',
-				'glyphicon glyphicon-plus'
+				'glyphicon glyphicon-plus-sign'
 			);
 		}
 		switch (_root::getAction()) {
@@ -163,7 +170,7 @@ class plugin_vfa_menu
 				if ($acl->permit($sModule . '::update')) {
 					$tLink['Modifier'] = array(
 						$sModule . '::update' . '&id=' . _root::getParam('id'),
-						'glyphicon glyphicon-pencil'
+						'glyphicon glyphicon-edit'
 					);
 				}
 				if ($acl->permit($sModule . '::delete')) {

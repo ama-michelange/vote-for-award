@@ -24,7 +24,7 @@
 						<?php if(_root::getACL()->permit('awards::update')):?>
 						<a rel="tooltip" data-original-title="Modifier <?php echo $oAward->getTypeNameString() ?>" data-container="body"
 							href="<?php echo $this->getLink('awards::update',array('id'=>$oAward->getId()))?>">
-							<i class="glyphicon glyphicon-pencil"></i></a>
+							<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('awards::delete')):?>
 						<a rel="tooltip" data-original-title="Supprimer <?php echo $oAward->getTypeNameString() ?>" data-container="body"

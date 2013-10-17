@@ -16,7 +16,7 @@
 					<label for="inputName">Nom
 						<span class="btn btn-xs btn-link" data-rel="tooltip"
 							data-original-title="Le nom du prix à afficher.">
-							<i class="glyphicon glyphicon-question-sign"></i>
+							<i class="glyphicon glyphicon-info-sign"></i>
 						</span>
 					</label>
 					<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oAward->name ?>" />
@@ -28,7 +28,7 @@
 							<label>Type
 								<span class="btn btn-xs btn-link" data-rel="tooltip"
 									data-original-title="Les albums d'un 'Prix' sont destinés aux lecteurs inscris. Les albums d'une 'Présélection' sont destinés au comité de sélection.">
-									<i class="glyphicon glyphicon-question-sign"></i>
+									<i class="glyphicon glyphicon-info-sign"></i>
 								</span>
 							</label>
 							<div>
@@ -49,7 +49,7 @@
 							<label>Visibilité
 								<span class="btn btn-xs btn-link" data-rel="tooltip" 
 									data-original-title="En privé, le prix est visible uniquement par les lecteurs inscris à ce prix. En public, les résultats du prix sont, en plus, visibles par tous les internautes visitant le site.">
-									<i class="glyphicon glyphicon-question-sign"></i>
+									<i class="glyphicon glyphicon-info-sign"></i>
 								</span>
 							</label>
 							<div>
@@ -70,7 +70,7 @@
 							<label for="inputDateBegin">Date de début
 								<span class="btn btn-xs btn-link" data-rel="tooltip"
 									data-original-title="La date du jour d'ouverture du prix à partir de laquelle les premiers votes sont acceptés.">
-									<i class="glyphicon glyphicon-question-sign"></i>
+									<i class="glyphicon glyphicon-info-sign"></i>
 								</span>
 							</label>
 							<input class="form-control datepicker" type="text" id="inputDateBegin" name="start_date" value="<?php echo plugin_vfa::toStringDateShow($this->oAward->start_date) ?>" />
@@ -82,7 +82,7 @@
 							<label for="inputDateEnd">Date de fin
 								<span class="btn btn-xs btn-link" data-rel="tooltip"
 									data-original-title="La date du jour de fermeture du prix. Les votes sont acceptés jusqu'à la veille de ce jour. Ils sont clos ce jour dès minuit.">
-									<i class="glyphicon glyphicon-question-sign"></i>
+									<i class="glyphicon glyphicon-info-sign"></i>
 								</span>
 							</label>
 							<input class="form-control datepicker" type="text" id="inputDateEnd" name="end_date" value="<?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?>" />
