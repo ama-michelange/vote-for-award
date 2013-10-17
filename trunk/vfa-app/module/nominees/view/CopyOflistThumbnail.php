@@ -9,14 +9,14 @@
 	<?php if($this->toTitles):?>
 	<div class="panel-body">
 		<?php foreach($this->toTitles as $oTitle):?>
-			<div class="panel-images">
+			<div class="panel-images panel-images-horizontal">
 				<div class="panel-images-body">
-					<p><?php echo $oTitle->toString() ?></p>
 					<?php foreach($oTitle->findDocs() as $oDoc):?>
 						<img class="img-sm" src="<?php echo $oDoc->image ?>" alt="">
 					<?php endforeach;?>
 				</div>
 				<div class="caption">
+					<p><?php echo $oTitle->toString() ?></p>
 					<?php if(_root::getACL()->permit(array('nominees::update','nominees::delete','nominees::read'))):?>     		
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('nominees::update')):?>

@@ -74,7 +74,7 @@
 				<label class="control-label" for="inputUserGroups">Groupes 
 					<a href="#" class="btn btn-xs btn-link" rel="popover" data-original-title="Groupes" 
 						data-content="Choisir un ou plusieurs groupes pour l'utilisateur.">
-						<i class="glyphicon glyphicon-question-sign glyphicon glyphicon-white"></i>
+						<i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i>
 					</a>
 				</label>
 				<div class="controls" >
@@ -92,7 +92,7 @@
 				<label class="control-label" for="inputUserRoles">Rôles 
 					<a href="#" class="btn btn-xs btn-link" rel="popover" data-original-title="Rôles" 
 						data-content="Choisir un ou plusieurs rôles pour l'utilisateur.">
-						<i class="glyphicon glyphicon-question-sign glyphicon glyphicon-white"></i>
+						<i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i>
 					</a>
 				</label>
 				<div class="controls">

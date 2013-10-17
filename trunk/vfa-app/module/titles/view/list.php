@@ -19,7 +19,7 @@
 							<?php if(_root::getACL()->permit('titles::update')):?>
 							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oTitle->title ?>" 
 								href="<?php echo $this->getLink('titles::update',array('id'=>$oTitle->getId()))?>">
-								<i class="glyphicon glyphicon-pencil"></i></a>
+								<i class="glyphicon glyphicon-edit"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('titles::delete')):?>
 							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->title ?>" 

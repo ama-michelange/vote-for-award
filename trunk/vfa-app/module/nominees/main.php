@@ -64,8 +64,7 @@ class module_nominees extends abstract_module
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 		
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Créer un titre sélectionné';
-		$oView->iconTitle = 'glyphicon glyphicon-plus';
+		$oView->textTitle = 'Ajouter un titre sélectionné';
 		
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -97,7 +96,6 @@ class module_nominees extends abstract_module
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un titre sélectionné';
-		$oView->iconTitle = 'glyphicon glyphicon-pencil';
 		
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();

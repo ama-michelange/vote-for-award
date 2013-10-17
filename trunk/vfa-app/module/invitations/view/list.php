@@ -30,7 +30,7 @@
 							<?php if(_root::getACL()->permit('invitations::update')):?>
 							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oInvitation->group_name ?>" 
 								href="<?php echo $this->getLink('invitations::update',array('id'=>$oInvitation->getId()))?>">
-								<i class="glyphicon glyphicon-pencil"></i></a>
+								<i class="glyphicon glyphicon-edit"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('invitations::delete')):?>
 							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oInvitation->group_name ?>" 

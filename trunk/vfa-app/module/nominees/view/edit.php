@@ -4,15 +4,11 @@
 	<input type="hidden" name="idAward" value="<?php echo $this->oAward->getId() ?>" />
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<h3 class="panel-title"><i class="<?php echo $this->iconTitle ?> with-text"></i><?php echo $this->textTitle ?> :
-				<?php if(_root::getACL()->permit('awards::read')):?>
-					<a	href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->getId()))?>">
-						<?php echo $this->oAward->getTypeNameString() ?>
-					</a>
-				<?php else:?>
-					<?php echo $this->oAward->getTypeNameString() ?>
-				<?php endif;?>
-			</h3>
+			<h3 class="panel-title">
+				<?php echo $this->oAward->getTypeNameString()?>
+				<small><i class="glyphicon glyphicon-chevron-right"></i></small>
+				<?php echo $this->textTitle ?>
+			</h3>	
 		</div>
 		<div class="panel-body">
 			<?php if(plugin_validation::exist($this->tMessage, 'token')):?> 
@@ -25,7 +21,7 @@
 				<label for="inputDocs">Albums
 					<span class="btn btn-xs btn-link" data-rel="tooltip"
 						data-original-title="Choisissez un ou plusieurs albums pour un titre sélectionné. Pour rechercher un album, tapez les premiers caractères de son titre. Pour ouvrir la liste déroulante, cliquez sur la partie vide du champ de saisie. Pour supprimer un album, cliquez sur la croix. Pour ajouter un 2ème album de la même série, faites comme le premier.">
-						<i class="glyphicon glyphicon-question-sign"></i>
+						<i class="glyphicon glyphicon-info-sign"></i>
 					</span>
 				</label>
 				<select id="inputDocs" class="form-control" name="title_docs[]"  size="13" multiple>

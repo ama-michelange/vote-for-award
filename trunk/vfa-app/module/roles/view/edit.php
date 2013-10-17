@@ -14,7 +14,7 @@
 				<label class="control-label" for="inputName">Nom
 					<a href="#" class="btn btn-xs btn-link" rel="popover" data-original-title="Nom" 
 						data-content="Le nom du rôle">
-						<i class="glyphicon glyphicon-question-sign glyphicon glyphicon-white"></i>
+						<i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i>
 					</a>
 				</label>
 				<div class="controls">
@@ -26,7 +26,7 @@
 				<label class="control-label" for="inputDescription">Description
 					<a href="#" class="btn btn-xs btn-link" rel="popover" data-original-title="Description" 
 						data-content="La description du rôle">
-						<i class="glyphicon glyphicon-question-sign glyphicon glyphicon-white"></i>
+						<i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i>
 					</a>
 				</label>
 				<div class="controls">
@@ -39,7 +39,7 @@
 					<a class="accordion-toggle" data-toggle="collapse" href="#acl">Habilitations</a>
 					<a href="#" class="btn btn-xs btn-link" rel="popover" data-original-title="Habilitations" 
 						data-content="Les habilitations du rôle. Cliquez sur le libellé pour fermer ou ouvrir le tableau des habilitations.">
-						<i class="glyphicon glyphicon-question-sign glyphicon glyphicon-white"></i>
+						<i class="glyphicon glyphicon-info-sign glyphicon glyphicon-white"></i>
 					</a>
 					<a class="accordion-toggle" data-toggle="collapse" href="#acl"><i class="glyphicon glyphicon-chevron-right glyphicon glyphicon-white"></i></a>
 				</label>

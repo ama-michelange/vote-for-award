@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><i class="glyphicon glyphicon-list with-text"></i>Liste des albums</h3>
+		<h3 class="panel-title">Liste des albums</h3>
 	</div>
 	<?php if($this->tDocs):?>
 	<table class="table table-striped">
@@ -23,7 +23,7 @@
 						<?php if(_root::getACL()->permit('docs::update')):?>
 							<a rel="tooltip" data-original-title="Modifier <?php echo $oDoc->toString() ?>"
 								href="<?php echo $this->getLink('docs::update',array('id'=>$oDoc->getId()))?>">
-								<i class="glyphicon glyphicon-pencil"></i></a>
+								<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>						
 						<?php if(_root::getACL()->permit('docs::delete')):?>
 							<a rel="tooltip" data-original-title="Supprimer <?php echo $oDoc->toString() ?>"

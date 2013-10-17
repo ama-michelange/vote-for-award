@@ -19,7 +19,7 @@
 							<?php if(_root::getACL()->permit('groups::update')):?>
 							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oGroup->group_name ?>" 
 								href="<?php echo $this->getLink('groups::update',array('id'=>$oGroup->getId()))?>">
-								<i class="glyphicon glyphicon-pencil"></i></a>
+								<i class="glyphicon glyphicon-edit"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('groups::delete')):?>
 							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oGroup->group_name ?>" 
