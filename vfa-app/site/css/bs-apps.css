@@ -1,5 +1,3 @@
-
-
 .panel-images {
 	display: block;
 	height: auto;
@@ -16,6 +14,7 @@
 	transition: all 0.2s ease-in-out;
 	line-height: 1.428571429;
 }
+
 .panel-images-dark {
 	background-color: #868686;
 	border: 1px solid #000000;
@@ -83,6 +82,11 @@
 	.panel-images-body>img.img-md {
 		max-height: 250px;
 	}
+	.panel-images-body>p.img-md {
+		min-height: 250px;
+		max-width: 180px;
+		margin: 0;
+	}
 }
 
 @media ( min-width : 768px) {
@@ -92,6 +96,11 @@
 	.panel-images-body>img.img-md {
 		max-height: 250px;
 	}
+	.panel-images-body>p.img-md {
+		min-height: 250px;
+		max-width: 180px;
+		margin: 0;
+	}
 }
 
 @media ( min-width : 992px) {
@@ -100,6 +109,11 @@
 	}
 	.panel-images-body>img.img-md {
 		max-height: 250px;
+	}
+	.panel-images-body>p.img-md {
+		min-height: 250px;
+		max-width: 180px;
+		margin: 0;
 	}
 }
 
