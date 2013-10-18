@@ -12,7 +12,11 @@
 			<div class="panel-images panel-images-dark">
 				<div class="panel-images-body">
 					<?php foreach($oTitle->findDocs() as $oDoc):?>
-						<img class="img-md" src="<?php echo $oDoc->image ?>" alt="">
+						<?php if ($oDoc->image):?>
+						<img class="img-md" src="<?php echo $oDoc->image ?>" alt="<?php echo $oTitle->toString()?>">
+						<?php else:?>
+						<p class="img-md"><strong><?php echo $oTitle->toString()?></strong></p>
+						<?php endif;?>
 					<?php endforeach;?>
 				</div>
 				<div class="caption">
