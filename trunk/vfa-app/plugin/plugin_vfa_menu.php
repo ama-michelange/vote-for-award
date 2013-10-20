@@ -216,6 +216,32 @@ class plugin_vfa_menu
 						break;
 				}
 				break;
+			case 'docs':
+				switch (_root::getAction()) {
+					case 'list':
+					case 'listThumbnail':
+					case 'listThumbnailLarge':
+						if ($acl->permit($sModule . '::list')) {
+							$tButtonGroup['Liste'] = array(
+								$sModule . '::list',
+								'glyphicon glyphicon-list'
+							);
+						}
+						if ($acl->permit($sModule . '::listThumbnail')) {
+							$tButtonGroup['Vignettes'] = array(
+								$sModule . '::listThumbnail',
+								'glyphicon glyphicon-th'
+							);
+						}
+						if ($acl->permit($sModule . '::listThumbnailLarge')) {
+							$tButtonGroup['Vignettes Larges'] = array(
+								$sModule . '::listThumbnailLarge',
+								'glyphicon glyphicon-th-large'
+							);
+						}
+						break;
+				}
+				break;
 			default:
 				break;
 		}

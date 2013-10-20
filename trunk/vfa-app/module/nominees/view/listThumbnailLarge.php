@@ -23,17 +23,17 @@
 				<?php if(_root::getACL()->permit(array('nominees::update','nominees::delete','nominees::read'))):?>     		
 					<div class="btn-group">
 						<?php if(_root::getACL()->permit('nominees::update')):?>
-						<a rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>" data-container="body"
+						<a rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>" 
 							href="<?php echo $this->getLink('nominees::update',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
 							<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('nominees::delete')):?>
-						<a rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->toString() ?>" data-container="body"
+						<a rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->toString() ?>" 
 							href="<?php echo $this->getLink('nominees::delete',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
 							<i class="glyphicon glyphicon-trash"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('nominees::read')):?>
-						<a rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>" data-container="body"
+						<a rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>" 
 							href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
 							<i class="glyphicon glyphicon-eye-open"></i></a>
 						<?php endif;?>
