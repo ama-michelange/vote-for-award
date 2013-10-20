@@ -7,10 +7,7 @@ class module_docs extends abstract_module
 	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-		
 		$this->oLayout = new _layout('tpl_bs_bar_context');
-		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
 	}
 
 	public function _index()
@@ -33,6 +30,28 @@ class module_docs extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
+	public function _listThumbnailLarge()
+	{
+		$oDocModel = new model_doc();
+		$tDocs = $oDocModel->findAll();
+		
+		$oView = new _view('docs::listThumbnailLarge');
+		$oView->tDocs = $tDocs;
+		
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listThumbnail()
+	{
+		$oDocModel = new model_doc();
+		$tDocs = $oDocModel->findAll();
+		
+		$oView = new _view('docs::listThumbnail');
+		$oView->tDocs = $tDocs;
+		
+		$this->oLayout->add('work', $oView);
+	}
+
 	public function _create()
 	{
 		$tMessage = null;
@@ -49,7 +68,7 @@ class module_docs extends abstract_module
 		$oView->oDoc = $oDoc;
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un album';
-			
+		
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		
@@ -190,6 +209,9 @@ class module_docs extends abstract_module
 
 	public function after()
 	{
+		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
+		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
+		
 		$this->oLayout->show();
 	}
 }
