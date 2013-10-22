@@ -22,7 +22,7 @@
 					</h5>
 				</div>
 				<div id="nominees" class="collapse in">
-				<?php if($this->toTitles):?>
+					<?php if($this->toTitles):?>
 					<table class="table table-striped">
 						<tbody>
 							<?php foreach($this->toTitles as $oTitle):?>
@@ -39,7 +39,9 @@
 							<?php endforeach;?>
 						</tbody>
 					</table>
-				<?php endif;?>	
+					<?php else:?>
+					<div class="panel-body"><h4 class="label label-warning"><i class="glyphicon glyphicon-warning-sign with-text"></i>Aucun titre sélectionné !</h4></div>
+					<?php endif;?>	
 				</div>
 			</div>
 		</div>

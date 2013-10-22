@@ -1,15 +1,23 @@
-<div class="well well-small well-white">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Liste des utilisateurs par groupe</h3>
+	</div>
 	<?php if($this->tGroups):?>
-		<form class="form-inline" action="" method="POST" >
-			<select id="inputGroups" name="selectedGroup" size="13">
-				<?php foreach($this->tGroups as $oGroup):?>
-				<option value="<?php echo $oGroup->group_id ?>" <?php if($this->SelectedIdGroup==$oGroup->group_id): echo 'selected'; endif;?>>
-					<?php echo $oGroup->group_name ?>
-				</option>
-				<?php endforeach;?>
-			</select>
-			<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-refresh"></i></button>
-		</form>
+		<div class="panel-body">
+			<form class="form-inline" action="" method="POST" >
+				<div class="form-group">
+					<label for="inputGroups">Groupe</label>
+					<select id="inputGroups" name="selectedGroup" size="13">
+						<?php foreach($this->tGroups as $oGroup):?>
+						<option value="<?php echo $oGroup->group_id ?>" <?php if($this->SelectedIdGroup==$oGroup->group_id): echo 'selected'; endif;?>>
+							<?php echo $oGroup->group_name ?>
+						</option>
+						<?php endforeach;?>
+					</select>
+				</div>
+				<button type="submit" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-refresh"></i></button>
+			</form>
+		</div>
 	<?php endif;?>
 	<?php if($this->tUsers):?>
 	<table class="table table-striped">
@@ -32,17 +40,17 @@
 				<td class="col-md-1">
 					<div class="btn-group">
 						<?php if(_root::getACL()->permit('users::update')):?>
-						<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oUser->username ?>" 
+						<a rel="tooltip" data-original-title="Modifier <?php echo $oUser->username ?>" 
 							href="<?php echo $this->getLink('users::update',array('id'=>$oUser->getId()))?>">
 							<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('users::delete')):?>
-						<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oUser->username ?>" 
+						<a rel="tooltip" data-original-title="Supprimer <?php echo $oUser->username ?>" 
 							href="<?php echo $this->getLink('users::delete',array('id'=>$oUser->getId()))?>">
 							<i class="glyphicon glyphicon-trash"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('users::read')):?>
-						<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>" 
+						<a rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>" 
 							href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>">
 							<i class="glyphicon glyphicon-eye-open"></i></a>
 						<?php endif;?>
