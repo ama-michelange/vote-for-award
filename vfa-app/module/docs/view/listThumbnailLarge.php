@@ -8,9 +8,9 @@
 			<div class="panel-images panel-images-dark">
 				<div class="panel-images-body">
 					<?php if ($oDoc->image):?>
-						<img class="img-md" src="<?php echo $oDoc->image ?>" alt="<?php echo $oDoc->toString()?>">
+						<img class="img-md" src="<?php echo $oDoc->image ?>" alt="">
 					<?php else:?>
-						<p class="img-md"><strong><?php echo $oDoc->toString()?></strong></p>
+						<p class="img-md"><strong><?php echo $oDoc->toString()?></strong><br /><i class="glyphicon glyphicon-book"></i></p>
 					<?php endif;?>
 				</div>
 				<div class="caption">

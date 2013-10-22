@@ -10,13 +10,15 @@
 				<?php echo $this->textTitle ?>
 			</h3>	
 		</div>
+		<?php if(plugin_validation::exist($this->tMessage, 'token')):?> 
 		<div class="panel-body">
-			<?php if(plugin_validation::exist($this->tMessage, 'token')):?> 
-			<div class="alert alert-danger">
-				<p><?php echo plugin_validation::show($this->tMessage, 'token')?></p>
-				<p><a class="btn btn-sm btn-danger" href="<?php echo $this->getLink('titles::index') ?>">Fermer</a></p>
+			<div class="alert alert-warning clearfix">
+				<p><?php echo plugin_validation::show($this->tMessage, 'token')?>
+					<a class="btn btn-sm btn-warning pull-right" href="<?php echo $this->getLink('nominees::index') ?>">Fermer</a></p>
 			</div>		
-			<?php else:?>
+		</div>
+		<?php else:?>
+		<div class="panel-body">
 			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'title_docs')?>">
 				<label for="inputDocs">Albums
 					<span class="btn btn-xs btn-link" data-rel="tooltip"
@@ -33,7 +35,6 @@
 				</select>
 				<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'title_docs')?></span>
 			</div>
-			<?php endif;?>
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
@@ -45,5 +46,6 @@
 				<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-ok with-text"></i>Enregistrer</button>
 			</div>
 		</div>
+		<?php endif;?>
 	</div>
 </form>

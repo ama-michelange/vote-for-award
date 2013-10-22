@@ -64,7 +64,7 @@ class module_nominees extends abstract_module
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 		
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Ajouter un titre sélectionné';
+		$oView->textTitle = 'Sélectionner un titre';
 		
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();

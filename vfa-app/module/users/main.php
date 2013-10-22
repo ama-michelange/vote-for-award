@@ -165,7 +165,11 @@ class module_users extends abstract_module{
 
 		$oPluginXsrf=new plugin_xsrf();
 		if(!$oPluginXsrf->checkToken( _root::getParam('token') ) ){ //on verifie que le token est valide
-			return array('token'=>$oPluginXsrf->getMessage() );
+			$oDoc = new row_title();
+			$oDoc->setMessages(array(
+				'token' => $oPluginXsrf->getMessage()
+			));
+			return $oDoc;
 		}
 
 		$oUserModel=new model_user;

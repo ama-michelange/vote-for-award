@@ -68,9 +68,9 @@ class plugin_vfa_menu
 						}
 					}
 					if ($acl->permit($sModule . '::create')) {
-						$tLink['Ajouter'] = array(
+						$tLink['Sélectionner'] = array(
 							$sModule . '::create' . '&idAward=' . _root::getParam('idAward'),
-							'glyphicon glyphicon-plus'
+							'glyphicon glyphicon-heart'
 						);
 					}
 				}
@@ -126,9 +126,9 @@ class plugin_vfa_menu
 						);
 					}
 					if (false == $pDataFlags['titles'] && $acl->permit('nominees::create')) {
-						$tLink['Ajouter un titre'] = array(
+						$tLink['Sélectionner un titre'] = array(
 							'nominees::create' . '&idAward=' . _root::getParam('id'),
-							'glyphicon glyphicon-plus'
+							'glyphicon glyphicon-heart'
 						);
 					}
 				}

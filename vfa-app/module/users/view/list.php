@@ -1,4 +1,7 @@
-<div class="well well-small well-white">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Liste des utilisateurs</h3>
+	</div>
 	<?php if($this->tUsers):?>
 	<table class="table table-striped">
 		<thead>
@@ -20,20 +23,20 @@
 			<?php foreach($this->tUsers as $oUser):?>
 			<tr>
 				<?php if(_root::getACL()->permit(array('users::update','users::delete','users::read'))):?>
-				<td class="col-md-1">
+				<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
 					<div class="btn-group">
 						<?php if(_root::getACL()->permit('users::update')):?>
-						<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oUser->username ?>" 
+						<a rel="tooltip" data-original-title="Modifier <?php echo $oUser->username ?>" 
 							href="<?php echo $this->getLink('users::update',array('id'=>$oUser->getId()))?>">
 							<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('users::delete')):?>
-						<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oUser->username ?>" 
+						<a rel="tooltip" data-original-title="Supprimer <?php echo $oUser->username ?>" 
 							href="<?php echo $this->getLink('users::delete',array('id'=>$oUser->getId()))?>">
 							<i class="glyphicon glyphicon-trash"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('users::read')):?>
-						<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>" 
+						<a rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>" 
 							href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>">
 							<i class="glyphicon glyphicon-eye-open"></i></a>
 						<?php endif;?>

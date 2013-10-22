@@ -16,7 +16,7 @@
 					<?php if ($oDoc->image):?>
 						<img class="img-sm" src="<?php echo $oDoc->image ?>" alt="<?php echo $oDoc->toString()?>">
 					<?php else:?>
-						<p class="img-sm">&nbsp;</p>
+						<p class="img-sm"><i class="glyphicon glyphicon-book"></i></p>
 					<?php endif;?>
 				</div>
 				<div class="caption">
