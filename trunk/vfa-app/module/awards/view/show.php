@@ -2,7 +2,7 @@
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo $this->oAward->getTypeNameString() ?></h3>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-condensed">
 		<div class="col-sm-6 col-md-6">
 			<h4><?php echo $this->oAward->getTypeShowString()?></h4>
 			<h4>
@@ -40,7 +40,7 @@
 						</tbody>
 					</table>
 					<?php else:?>
-					<div class="panel-body"><h4 class="label label-warning"><i class="glyphicon glyphicon-warning-sign with-text"></i>Aucun titre sélectionné !</h4></div>
+					<div class="panel-body"><h3><i class="glyphicon glyphicon-warning-sign with-text"></i>Aucun titre sélectionné !</h3></div>
 					<?php endif;?>	
 				</div>
 			</div>
