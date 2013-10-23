@@ -1,4 +1,7 @@
-<div class="well well-small well-white">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Liste des albums</h3>
+	</div>
 	<?php if($this->tGroups):?>
 	<table class="table table-striped">
 		<thead>
@@ -14,20 +17,20 @@
 			<?php foreach($this->tGroups as $oGroup):?>
 			<tr>
 				<?php if(_root::getACL()->permit(array('groups::update','groups::delete','groups::read'))):?>
-					<td class="col-md-1">
+					<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('groups::update')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oGroup->group_name ?>" 
+							<a rel="tooltip" data-original-title="Modifier <?php echo $oGroup->group_name ?>" 
 								href="<?php echo $this->getLink('groups::update',array('id'=>$oGroup->getId()))?>">
 								<i class="glyphicon glyphicon-edit"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('groups::delete')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oGroup->group_name ?>" 
+							<a rel="tooltip" data-original-title="Supprimer <?php echo $oGroup->group_name ?>" 
 								href="<?php echo $this->getLink('groups::delete',array('id'=>$oGroup->getId()))?>">
 								<i class="glyphicon glyphicon-trash"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('groups::read')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oGroup->group_name ?>" 
+							<a rel="tooltip" data-original-title="Voir <?php echo $oGroup->group_name ?>" 
 								href="<?php echo $this->getLink('groups::read',array('id'=>$oGroup->getId()))?>">
 								<i class="glyphicon glyphicon-eye-open"></i></a>
 							<?php endif;?>
