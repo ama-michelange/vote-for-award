@@ -201,7 +201,7 @@
 	border-top-color: #000000;
 }
 
-.panel-inner .panel,.panel-inner .table {
+.panel-inner>.panel,.panel-inner .table {
 	margin-bottom: 0;
 }
 
@@ -221,6 +221,10 @@
 	color: #b94a48;
 	border-color: #eed3d7;
 	background-color: #f2dede;
+}
+
+.panel-body.panel-condensed {
+	padding-bottom: 0;
 }
 
 .panel-title {
@@ -246,18 +250,17 @@
 
 .select2-container-multi.form-control .select2-choices .select2-search-choice
 	{
-	/* 	min-height: 35px; */
 	line-height: 15px;
-	/* 	overflow: auto; */
 }
 
 .view-label {
 	text-align: right;
-	font-size: 80%;
+	/* 	font-size: 80%; */
 	font-weight: bold;
 	padding-right: 0;
-	padding-top: 3px;
+	/* 	padding-top: 3px; */
 	padding-left: 0;
+	margin-bottom: 7px;
 }
 
 .view-value {
@@ -269,5 +272,6 @@
 		text-align: left;
 		padding-right: 15px;
 		padding-left: 15px;
+		margin-bottom: 0;
 	}
 }
