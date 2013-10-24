@@ -1,4 +1,7 @@
-<div class="well well-small well-white">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Liste des rôles</h3>
+	</div>
 	<?php if($this->tRoles):?>
 	<table class="table table-striped">
 		<thead>
@@ -18,17 +21,17 @@
 					<td class="col-md-1">
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('roles::update')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oRole->role_name ?>" 
+							<a rel="tooltip" data-original-title="Modifier <?php echo $oRole->role_name ?>" 
 								href="<?php echo $this->getLink('roles::update',array('id'=>$oRole->getId()))?>">
 								<i class="glyphicon glyphicon-edit"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('roles::delete')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oRole->role_name ?>" 
+							<a rel="tooltip" data-original-title="Supprimer <?php echo $oRole->role_name ?>" 
 								href="<?php echo $this->getLink('roles::delete',array('id'=>$oRole->getId()))?>">
 								<i class="glyphicon glyphicon-trash"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('roles::read')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oRole->role_name ?>" 
+							<a rel="tooltip" data-original-title="Voir <?php echo $oRole->role_name ?>" 
 								href="<?php echo $this->getLink('roles::read',array('id'=>$oRole->getId()))?>">
 								<i class="glyphicon glyphicon-eye-open"></i></a>
 							<?php endif;?>

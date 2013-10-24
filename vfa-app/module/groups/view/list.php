@@ -17,7 +17,7 @@
 			<?php foreach($this->tGroups as $oGroup):?>
 			<tr>
 				<?php if(_root::getACL()->permit(array('groups::update','groups::delete','groups::read'))):?>
-					<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
+					<td class="col-md-1">
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('groups::update')):?>
 							<a rel="tooltip" data-original-title="Modifier <?php echo $oGroup->group_name ?>" 

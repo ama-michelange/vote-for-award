@@ -18,7 +18,7 @@
 			<?php foreach($this->tDocs as $oDoc):?>
 			<tr>
 				<?php if(_root::getACL()->permit(array('docs::update','docs::delete','docs::read'))):?>
-				<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
+				<td class="col-md-1">
 					<div class="btn-group">
 						<?php if(_root::getACL()->permit('docs::update')):?>
 							<a rel="tooltip" data-original-title="Modifier <?php echo $oDoc->toString() ?>"

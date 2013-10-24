@@ -12,7 +12,7 @@
 			<?php foreach($this->toTitles as $oTitle):?>
 			<tr>
 				<?php if(_root::getACL()->permit(array('nominees::update','nominees::delete','nominees::read'))):?>
-				<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
+				<td class="col-md-1">
 					<div class="btn-group">
 						<?php if(_root::getACL()->permit('nominees::update')):?>
 						<a rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>" data-container="body"
