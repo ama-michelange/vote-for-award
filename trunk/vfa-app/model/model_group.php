@@ -73,6 +73,8 @@ class row_group extends abstract_row
 
 	protected $sClassModel = 'model_group';
 
+	protected $tMessages = null;
+
 	public function findUsers()
 	{
 		return model_user::getInstance()->findAllByGroupId($this->group_id);
@@ -94,6 +96,7 @@ class row_group extends abstract_row
 	private function getCheck()
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
+		$oPluginValid->isNotEmpty('group_name');
 		return $oPluginValid;
 	}
 
@@ -105,5 +108,18 @@ class row_group extends abstract_row
 	public function getListError()
 	{
 		return $this->getCheck()->getListError();
+	}
+
+	public function setMessages($ptMessages)
+	{
+		$this->tMessages = $ptMessages;
+	}
+
+	public function getMessages()
+	{
+		if (null != $this->tMessages) {
+			return $this->tMessages;
+		}
+		return $this->getListError();
 	}
 }
