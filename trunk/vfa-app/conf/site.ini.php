@@ -90,7 +90,7 @@ img=data/img/
 i18n=data/i18n/
 cache=data/cache/
 layout=site/layout/
-base=/VoteForAward/
+base=/vfa/vfa-app/
 
 [model]
 ini.var=db

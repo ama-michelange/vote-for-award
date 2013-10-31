@@ -33,12 +33,11 @@
 				<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'description')?></span>
 			</div>
 			<div class="form-group">
-				<label>
-					<a class="accordion-toggle" data-toggle="collapse" href="#acl">Habilitations</a>
-					<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Les habilitations du rôle. Cliquez sur le libellé pour fermer ou ouvrir le tableau des habilitations.">
+				<label>Habilitations
+					<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Les habilitations du rôle">
 						<i class="glyphicon glyphicon-info-sign"></i>
 					</span>
-					<a class="accordion-toggle" data-toggle="collapse" href="#acl"><i class="glyphicon glyphicon-chevron-up"></i></a>
+					<a class="accordion-toggle" data-toggle="collapse" href="#acl"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 				</label>
 				<div id="acl" class="controls collapse in">			
 					<?php if($this->tCompleteAclModules):?>

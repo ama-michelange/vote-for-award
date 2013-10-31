@@ -35,8 +35,8 @@
 			<div class="col-sm-4 col-md-4">
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
-						<h5 class="panel-title">
-							<a class="accordion-toggle" data-toggle="collapse" href="#groups">Groupes</a>
+						<h5 class="panel-title">Groupes
+							<a class="pull-right accordion-toggle" data-toggle="collapse" href="#groups"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 						</h5>
 					</div>
 					<div id="groups" class="collapse in">
@@ -63,8 +63,8 @@
 			<div class="col-sm-4 col-md-4">
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
-						<h5 class="panel-title">
-							<a class="accordion-toggle" data-toggle="collapse" href="#awards">Prix</a>
+						<h5 class="panel-title">Prix
+							<a class="pull-right accordion-toggle" data-toggle="collapse" href="#awards"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 						</h5>
 					</div>
 					<div id="awards" class="collapse in">
@@ -92,8 +92,8 @@
 				<div class="col-sm-4 col-md-4">		
 					<div class="panel panel-default panel-inner">
 						<div class="panel-heading">
-							<h5 class="panel-title">
-								<a class="accordion-toggle" data-toggle="collapse" href="#roles">Roles</a>
+							<h5 class="panel-title">Rôles
+								<a class="pull-right accordion-toggle" data-toggle="collapse" href="#roles"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 							</h5>
 						</div>
 						<div id="roles" class="collapse in">

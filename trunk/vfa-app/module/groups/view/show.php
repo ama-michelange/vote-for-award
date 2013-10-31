@@ -13,7 +13,6 @@
 					<div class="col-sm-2 col-md-1 view-label">Type</div>
 					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->oGroup->getTypeString() ?></div>
 				</div>
-				<?php /*	<h4><?php echo $this->oGroup->getTypeString() ?></h4> */?>
 			</div>
 		</div>
 		<?php if($this->toUsers):?>

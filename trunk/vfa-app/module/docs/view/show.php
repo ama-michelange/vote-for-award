@@ -26,8 +26,8 @@ if (true == $bImage) {
 			<?php if($this->toAwards):?>
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
-						<h5 class="panel-title">
-							<a class="accordion-toggle" data-toggle="collapse" href="#awards">Liaisons de l'album</a>
+						<h5 class="panel-title">Liaisons de l'album
+							<a class="pull-right accordion-toggle" data-toggle="collapse" href="#awards"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 						</h5>
 					</div>
 	 				<div id="awards" class="collapse in">

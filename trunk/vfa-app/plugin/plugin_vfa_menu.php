@@ -374,6 +374,9 @@ class plugin_vfa_menu
 				break;
 			case 'invitations':
 				switch (_root::getAction()) {
+					case 'list':
+						$tTitle[] = 'Invitations';
+						break;
 					case 'reader':
 						$tTitle[] = 'Invitation pour inscrire un Lecteur';
 						break;

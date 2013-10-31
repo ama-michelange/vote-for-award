@@ -1,4 +1,8 @@
-<div class="well well-small well-white">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Invitations d'inscriptions envoyées</h3>
+	</div>
+
 	<?php if($this->tInvitations):?>
 	<table class="table table-hover table-condensed table-color">
 		<thead>
@@ -28,19 +32,16 @@
 					<td class="col-md-1">
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('invitations::update')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Modifier <?php echo $oInvitation->group_name ?>" 
-								href="<?php echo $this->getLink('invitations::update',array('id'=>$oInvitation->getId()))?>">
-								<i class="glyphicon glyphicon-edit"></i></a>
+							<a rel="tooltip" data-original-title="Modifier <?php echo $oInvitation->group_name ?>" 
+								href="<?php echo $this->getLink('invitations::update',array('id'=>$oInvitation->getId()))?>"><i class="glyphicon glyphicon-edit"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('invitations::delete')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Supprimer <?php echo $oInvitation->group_name ?>" 
-								href="<?php echo $this->getLink('invitations::delete',array('id'=>$oInvitation->getId()))?>">
-								<i class="glyphicon glyphicon-trash"></i></a>
+							<a rel="tooltip" data-original-title="Supprimer <?php echo $oInvitation->group_name ?>" 
+								href="<?php echo $this->getLink('invitations::delete',array('id'=>$oInvitation->getId()))?>"><i class="glyphicon glyphicon-trash"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('invitations::read')):?>
-							<a class="btn btn-xs" rel="tooltip" data-original-title="Voir <?php echo $oInvitation->group_name ?>" 
-								href="<?php echo $this->getLink('invitations::read',array('id'=>$oInvitation->getId()))?>">
-								<i class="glyphicon glyphicon-eye-open"></i></a>
+							<a rel="tooltip" data-original-title="Voir <?php echo $oInvitation->group_name ?>" 
+								href="<?php echo $this->getLink('invitations::read',array('id'=>$oInvitation->getId()))?>"><i class="glyphicon glyphicon-eye-open"></i></a>
 							<?php endif;?>
 						</div>
 					</td>
@@ -56,18 +57,7 @@
 				echo '<span class="label '.$label.'">'.$oInvitation->showState().'</span>';
 				?>
 				</td>
-				<td>
-				<?php /*
-				switch ($oInvitation->type){
-					case 'BOARD': $label='label-important'; break;
-					case 'RESPONSIBLE': $label='label-warning'; break;
-					case 'READER': $label='label-info'; break;
-					default: $label=''; break;
-				}				
-				echo '<span class="label '.$label.'">'.$oInvitation->showType().'</span>';
-				*/ ?>
-				<?php echo $oInvitation->showType() ?>
-				</td>
+				<td><?php echo $oInvitation->showType() ?></td>
 				
 				<td>
 				<?php 

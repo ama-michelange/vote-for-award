@@ -19,20 +19,20 @@
 			<?php foreach($this->tAwards as $oAward):?>
 			<tr>
 				<?php if(_root::getACL()->permit(array('awards::update','awards::delete','awards::read'))):?>
-				<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
+				<td class="col-md-1">
 					<div class="btn-group">
 						<?php if(_root::getACL()->permit('awards::update')):?>
-						<a rel="tooltip" data-original-title="Modifier <?php echo $oAward->getTypeNameString() ?>" data-container="body"
+						<a rel="tooltip" data-original-title="Modifier <?php echo $oAward->getTypeNameString() ?>"
 							href="<?php echo $this->getLink('awards::update',array('id'=>$oAward->getId()))?>">
 							<i class="glyphicon glyphicon-edit"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('awards::delete')):?>
-						<a rel="tooltip" data-original-title="Supprimer <?php echo $oAward->getTypeNameString() ?>" data-container="body"
+						<a rel="tooltip" data-original-title="Supprimer <?php echo $oAward->getTypeNameString() ?>"
 							href="<?php echo $this->getLink('awards::delete',array('id'=>$oAward->getId()))?>">
 							<i class="glyphicon glyphicon-trash"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('awards::read')):?>
-						<a rel="tooltip" data-original-title="Voir <?php echo $oAward->getTypeNameString() ?>" data-container="body"
+						<a rel="tooltip" data-original-title="Voir <?php echo $oAward->getTypeNameString() ?>"
 							href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>">
 							<i class="glyphicon glyphicon-eye-open"></i></a>
 						<?php endif;?>

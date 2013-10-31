@@ -10,12 +10,12 @@ class module_invitations extends abstract_module
 		
 		$this->oLayout = new _layout('tpl_bs_bar_context');
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-left', plugin_vfa_menu::buildViewNavLeft());
-		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTop());
 	}
 
 	public function after()
 	{
+		//$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTop());
+		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
 		$this->oLayout->show();
 	}
 
@@ -35,11 +35,11 @@ class module_invitations extends abstract_module
 		
 		$this->oLayout->add('work', $oView);
 	}
-	
+
 	public function _read()
 	{
 		$oView = new _view('invitations::read');
-		$oView->oViewShow = $this->makeViewShow();	
+		$oView->oViewShow = $this->makeViewShow();
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -116,6 +116,20 @@ class module_invitations extends abstract_module
 			$oRegistry->new = true;
 		}
 		$this->dispatch($oRegistry);
+	}
+
+	public function _delete()
+	{
+		$tMessage = $this->delete();
+		
+		$oView = new _view('invitations::delete');
+		$oView->oViewShow = $this->makeViewShow();
+		
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$oView->tMessage = $tMessage;
+		
+		$this->oLayout->add('work', $oView);
 	}
 
 	private function dispatch($poRegistry)
@@ -285,6 +299,7 @@ class module_invitations extends abstract_module
 		$oView->oInvitation = $oInvitation;
 		$oView->tAwards = $oInvitation->findAwards();
 		$oView->oGroup = $oInvitation->findGroup();
+		$oView->oCreatedUser = $oInvitation->findCreatedUser();
 		return $oView;
 	}
 

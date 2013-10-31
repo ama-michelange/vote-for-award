@@ -9,9 +9,11 @@
 
 <!-- Le styles -->
 <link href="site/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+<!-- <link href="site/assets/css/bootstrap-theme.css" rel="stylesheet" media="screen"> -->
 <style>
 body {
-	padding-top: 83px;
+	padding-top: 15px; 
+/* 	padding-top: 83px; */
 	/* 60px to make the container go all the way to the bottom of the topbar */
 }
 </style>
