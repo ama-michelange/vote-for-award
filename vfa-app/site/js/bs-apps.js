@@ -41,4 +41,90 @@ $(document).ready(function() {
 	// width:"off"
 	});
 
+	// $('#acl').on('hidden.bs.collapse', function() {
+	// // do something…
+	// alert("caché");
+	// });
+
+	$("[data-chevron=collapse]").chevron();
+
 });
+
+// ----------------------
+// Chevron
+
++function($) {
+	"use strict";
+
+	var Chevron = function(element) {
+		this.$element = $(element);
+		this.init(element);
+	};
+
+	Chevron.prototype.init = function(element) {
+		this.$element = $(element);
+		var $parent = this.$element.parent();
+		var href = $parent.attr('href');
+		debug('href = ' + href);
+
+		$(href).on('hidden.bs.collapse', $.proxy(this.hidden, this));
+		$(href).on('shown.bs.collapse', $.proxy(this.shown, this));
+	};
+
+	Chevron.prototype.hidden = function() {
+		this.$element.removeClass('glyphicon-chevron-up');
+		this.$element.addClass('glyphicon-chevron-down');
+		// alert("caché");
+	};
+	Chevron.prototype.shown = function() {
+		this.$element.removeClass('glyphicon-chevron-down');
+		this.$element.addClass('glyphicon-chevron-up');
+		// alert("shown");
+	};
+
+	// Private function for debugging.
+	function debug(mess) {
+		if (window.console && window.console.log) {
+			window.console.log(mess);
+		}
+	}
+	;
+	// CHEVRON PLUGIN DEFINITION
+	// ========================
+
+	var old = $.fn.chevron;
+
+	$.fn.chevron = function() {
+		return this.each(function() {
+			var $this = $(this);
+			var data = $this.data('ama.chevron');
+
+			if (!data) {
+				$this.data('ama.chevron', (data = new Chevron(this)));
+			}
+		});
+	};
+
+	$.fn.chevron.Constructor = Chevron;
+
+	// CHEVRON NO CONFLICT
+	// ==================
+
+	$.fn.chevron.noConflict = function() {
+		$.fn.chevron = old;
+		return this;
+	};
+
+	// CHEVRON DATA-API
+	// ===============
+
+	// $(document).on('click.ama.chevron.data-api', '[data-toggle^=button]',
+	// function(e) {
+	// var $btn = $(e.target)
+	// if (!$btn.hasClass('btn'))
+	// $btn = $btn.closest('.btn')
+	// $btn.button('toggle')
+	// e.preventDefault()
+	// })
+
+}(window.jQuery);

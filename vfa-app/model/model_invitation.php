@@ -20,7 +20,9 @@ class model_invitation extends abstract_model
 
 	public function findById($uId)
 	{
-		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE invitation_id=?', $uId);
+		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE invitation_id=' . $uId);
+		// La ligne ci-dessous est commentaire pour se souvenir qu'il peut y avoir une erreur avec le module SGBD
+		// return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE invitation_id=?', $uId);
 	}
 
 	public function findAll()
@@ -46,11 +48,20 @@ class row_invitation extends abstract_row
 
 	public function findGroup()
 	{
-		$Group = null;
+		$oGroup = null;
 		if (null != $this->group_id) {
-			$Group = model_group::getInstance()->findById($this->group_id);
+			$oGroup = model_group::getInstance()->findById($this->group_id);
 		}
-		return $Group;
+		return $oGroup;
+	}
+
+	public function findCreatedUser()
+	{
+		$user = null;
+		if (null != $this->created_user_id) {
+			$user = model_user::getInstance()->findById($this->created_user_id);
+		}
+		return $user;
 	}
 
 	public function findAwards()
@@ -77,13 +88,27 @@ class row_invitation extends abstract_row
 		}
 		return $this->type;
 	}
+
+	public function showFullType()
+	{
+		switch ($this->type) {
+			case 'READER':
+				return 'Lecteur d\'un groupe';
+			case 'BOARD':
+				return 'Membre du comité de sélection';
+			case 'RESPONSIBLE':
+				return 'Responsable d\'un groupe';
+		}
+		return $this->type;
+	}
+
 	public function showState()
 	{
 		switch ($this->state) {
 			case 'OPEN':
-				return 'En attente';
+				return 'Ouverte';
 			case 'CLOSE':
-				return 'Inscrit';
+				return 'Fermée';
 		}
 		return $this->state;
 	}

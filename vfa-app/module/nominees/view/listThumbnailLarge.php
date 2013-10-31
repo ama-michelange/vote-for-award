@@ -33,9 +33,7 @@
 							<i class="glyphicon glyphicon-trash"></i></a>
 						<?php endif;?>
 						<?php if(_root::getACL()->permit('nominees::read')):?>
-						<a rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>" 
-							href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-							<i class="glyphicon glyphicon-eye-open"></i></a>
+						<a rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>" href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>"><i class="glyphicon glyphicon-eye-open"></i></a>
 						<?php endif;?>
 					</div>
 				<?php endif;?>

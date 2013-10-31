@@ -17,8 +17,8 @@
 		</div>
 		<div class="panel panel-default panel-inner">
 			<div class="panel-heading">
-				<h5 class="panel-title">
-					<a class="accordion-toggle" data-toggle="collapse" href="#auths">Habilitations</a>
+				<h5 class="panel-title">Habilitations
+					<a class="pull-right accordion-toggle" data-toggle="collapse" href="#auths"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 				</h5>
 			</div>
 			<div id="auths" class="collapse in">
