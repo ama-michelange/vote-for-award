@@ -245,23 +245,7 @@
 }
 
 .glyphicon.with-text {
-	padding-right: 0.7em;
-}
-
-.select2-container.form-control,.select2-container.select2-container-multi.form-control
-	{
-	max-height: 30px;
-	padding: 0;
-}
-
-.select2-container-multi.form-control .select2-choices {
-	min-height: 35px;
-	line-height: 14px;
-}
-
-.select2-container-multi.form-control .select2-choices .select2-search-choice
-	{
-	line-height: 17px;
+	padding-right: 1.5em;
 }
 
 .view-label {
@@ -301,39 +285,7 @@
 /*!
  * Mon Theme
  */
-.btn-default {
-	color: #333333;
-	/* 	background-color: #ffffff; */
-	/* 	border-color: #cccccc; */
-	background-color: #e9f0f0;
-	border-color: #c0d0d0;
-}
-
-.btn-default:hover,.btn-default:focus,.btn-default:active,.btn-default.active,.open .dropdown-toggle.btn-default
-	{
-	color: #333333;
-	/* 	background-color: #ebebeb; */
-	/* 	border-color: #adadad; */
-	background-color: #c0d0d0;
-	border-color: #a0b0b0;
-}
-
-.navbar-default {
-	background-color: #d0e0e0;
-	border-color: #a0b0b0;
-}
-
-.navbar-default .navbar-brand {
-	color: #777777;
-}
-
-.navbar-default .navbar-brand:hover,.navbar-default .navbar-brand:focus
-	{
-	color: #0e0e5e;
-	background-color: transparent;
-}
-
-.panel-default {
+ .panel-default {
 	border-color: #a0b0b0;
 }
 
@@ -377,3 +329,37 @@ h1 small,h2 small,h3 small,h4 small,h5 small,h6 small,.h1 small,.h2 small,.h3 sm
 	line-height: 1;
 	color: #666666;
 }
+
+.btn-default, a.btn-default {
+	color: #333333;
+	/* 	background-color: #ffffff; */
+	/* 	border-color: #cccccc; */
+	background-color: #e9f0f0;
+	border-color: #c0d0d0;
+}
+
+.btn-default:hover,.btn-default:focus,.btn-default:active,.btn-default.active,.open .dropdown-toggle.btn-default, a.btn-default:hover
+	{
+	color: #333333;
+	/* 	background-color: #ebebeb; */
+	/* 	border-color: #adadad; */
+	background-color: #c0d0d0;
+	border-color: #a0b0b0;
+	text-decoration: none;
+}
+
+.navbar-default {
+	background-color: #d0e0e0;
+	border-color: #a0b0b0;
+}
+
+.navbar-default .navbar-brand {
+	color: #777777;
+}
+
+.navbar-default .navbar-brand:hover,.navbar-default .navbar-brand:focus
+	{
+	color: #0e0e5e;
+	background-color: transparent;
+}
+
