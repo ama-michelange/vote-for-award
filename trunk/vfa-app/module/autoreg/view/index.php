@@ -1,14 +1,22 @@
 <div class="well well-sm">
 	<h1 class="text-center">Bienvenue sur ALICES Award</h1>
 	<h3 class="text-center">Site de vote du Prix de la Bande Dessinée</h3>
-	<!-- 	<h3 class="text-center">Bienvenue</h3> -->
 </div>
+<?php if(plugin_validation::exist($this->tMessage, 'token')):?>
+<div class="alert alert-warning clearfix">
+	<p><?php echo plugin_validation::show($this->tMessage, 'token')?>
+		<a class="btn btn-sm btn-warning pull-right" href="<?php echo $this->getLink(_root::getParamNav(),array('id'=>_root::getParam('id'),'key'=>_root::getParam('key'))) ?>">Fermer</a></p>
+</div>		
+<?php else:?>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<h3 class="panel-title"><?php echo $this->textInvit ?></h3>
+		<h3 class="panel-title"><?php echo $this->oConfirm->textInvit ?></h3>
 	</div>
 </div>
 <form action="" method="POST">
+	<input type="hidden" name="token" value="<?php echo $this->token?>" />
+	<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>" />
+	<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>" /> 
 	<div class="row">
 		<div class="col-md-4">
 			<div class="panel panel-default">
@@ -17,8 +25,8 @@
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
-						<label for="cfIdent">Nom d'utilisateur ou email</label>
-						<input class="form-control" type="text" id="cfIdent" name="cf-login" placeholder="Votre nom d'utilisateur ou email" />
+						<label for="cfLogin">Nom d'utilisateur ou email</label>
+						<input class="form-control" type="text" id="cfLogin" name="cf-login" placeholder="Votre nom d'utilisateur ou email" />
 					</div>
 					<div class="form-group">
 						<label for="cfPassword">Mot de passe</label>
@@ -27,7 +35,7 @@
 				</div>
 				<div class="panel-footer clearfix">
 					<div class="pull-right">
-						<button type="submit" class="btn btn-default" value="ident">
+						<button type="submit" class="btn btn-default" name="action" value="toIdentify">
 							<i class="glyphicon glyphicon-ok with-text"></i>S'identifier
 						</button>
 					</div>
@@ -38,7 +46,7 @@
 		<div class="col-md-8">
 			<div class="panel panel-info">
 				<div class="panel-heading">
-					<h3 class="panel-title">Nouveau sur le site de vote ALICES Award ? <small>Enregistrez-vous</small></h3>
+					<h3 class="panel-title">Nouveau sur ALICES Award ? <small>Enregistrez-vous</small></h3>
 				</div>
 					<div class="panel-body">
 					<div class="form-group">
@@ -117,7 +125,7 @@
 				</div>
 				<div class="panel-footer clearfix">
 					<div class="pull-right">
-						<button type="submit" class="btn btn-info" value="enreg">
+						<button type="submit" class="btn btn-info" name="action" value="toRegistry">
 							<i class="glyphicon glyphicon-ok with-text"></i>S'enregistrer
 						</button>
 					</div>
@@ -126,3 +134,4 @@
 		</div>
 	</div>
 </form>
+<?php endif;?>
