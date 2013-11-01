@@ -10,7 +10,7 @@ class plugin_validation
 {
 
 	/**
-	 * Renvoie les erreurs d'un champ à partir d'un tableau d'erreurs de row_XXX
+	 * Renvoie les erreurs d'un champ à partir d'un tableau d'erreurs d'un objet "row"
 	 *
 	 * @access public
 	 * @param array $tErrors
@@ -29,7 +29,7 @@ class plugin_validation
 	}
 
 	/**
-	 * Renvoie les erreurs d'un champ à partir d'un tableau d'erreurs de row_XXX
+	 * Renvoie les erreurs d'un champ à partir d'un tableau d'erreurs d'un objet "row"
 	 *
 	 * @access public
 	 * @param array $tErrors
@@ -48,7 +48,7 @@ class plugin_validation
 	}
 
 	/**
-	 * Renvoie les erreurs d'un champ à partir d'un tableau d'erreurs de row_XXX
+	 * Renvoie les erreurs d'un champ à partir d'un tableau d'erreurs d'un objet "row"
 	 *
 	 * @access public
 	 * @param array $tErrors
