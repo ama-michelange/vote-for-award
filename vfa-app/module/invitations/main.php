@@ -54,7 +54,7 @@ class module_invitations extends abstract_module
 	{
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
-			$oRegistry = new row_to_registry();
+			$oRegistry = new row_registry_invitation();
 			$oRegistry->type = 'READER';
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
@@ -73,7 +73,7 @@ class module_invitations extends abstract_module
 	{
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
-			$oRegistry = new row_to_registry();
+			$oRegistry = new row_registry_invitation();
 			$oRegistry->type = 'RESPONSIBLE';
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
@@ -110,7 +110,7 @@ class module_invitations extends abstract_module
 	{
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
-			$oRegistry = new row_to_registry();
+			$oRegistry = new row_registry_invitation();
 			$oRegistry->type = 'BOARD';
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
@@ -308,7 +308,7 @@ class module_invitations extends abstract_module
 		if (! _root::getRequest()->isPost()) {
 			return null;
 		}
-		$oRegistry = new row_to_registry();
+		$oRegistry = new row_registry_invitation();
 		
 		if ('sent' != _root::getParam('phase', null)) {
 			$oPluginXsrf = new plugin_xsrf();

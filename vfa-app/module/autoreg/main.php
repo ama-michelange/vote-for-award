@@ -14,34 +14,17 @@ class module_autoreg extends abstract_module
 
 	public function _index()
 	{
+		// $params = _root::getRequest()->getParams();
+		// var_dump($params);
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
 		
-		if (true == $this->isValid($oInvitation)) {
-			$oView = new _view('autoreg::index');
-			$oView->tAwards = $oInvitation->findAwards();
-			$oView->oGroup = $oInvitation->findGroup();
-			$oView->oCreatedUser = $oInvitation->findCreatedUser();
-			
-			$xPrix = '';
-			$sPrix = '';
-			$awardCount = count($oView->tAwards);
-			if ($awardCount > 1) {
-				$xPrix = 'x';
-				$sPrix = 's';
+		if (true == $this->isInvitationParamsValid($oInvitation)) {
+			if (_root::getRequest()->isPost()) {
+				$this->doPost($oInvitation);
+			} else {
+				$this->doGet($oInvitation);
 			}
-			$oView->textInvit = sprintf(
-				'%s, <small>le responsable du Prix BD de </small>%s<small>, vous invite à confirmer votre inscription au%s prix suivant%s pour voter : </small>', 
-				$oView->oCreatedUser->username, $oView->oGroup->group_name, $xPrix, $sPrix);
-			
-			for ($i = 0; $i < $awardCount; $i ++) {
-				if ($i > 0) {
-					$oView->textInvit .= ', ';
-				}
-				$oView->textInvit .= $oView->tAwards[$i]->getTypeNameString();
-			}
-			$oView->tMessage = "";
-			$this->oLayout->add('work', $oView);
 		} else {
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
@@ -53,16 +36,93 @@ class module_autoreg extends abstract_module
 		$this->oLayout->show();
 	}
 
-	private function isValid($poInvitation)
+	private function doGet($poInvitation)
 	{
-		$key = _root::getParam('key');
-		if ((null == $key) || (null == $poInvitation)) {
+		$oConfirm = new row_confirm_invitation();
+		$oConfirm->invitation_id = _root::getParam('id');
+		$oConfirm->invitation_key = _root::getParam('key');
+		$this->makeTextInvitation($poInvitation, $oConfirm);
+		
+		$oView = new _view('autoreg::index');
+		$oView->oConfirm = $oConfirm;
+		$oView->tMessage = "";
+		
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function doPost($poInvitation)
+	{
+		$oConfirm = $this->doVerifyPost($poInvitation);
+		
+		$oView = new _view('autoreg::index');
+		$oView->oConfirm = $oConfirm;
+		$oView->tMessage = $oConfirm->getMessages();
+		
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function doVerifyPost($poInvitation)
+	{
+		$oConfirm = new row_confirm_invitation();
+		// Verifie le token
+		$oPluginXsrf = new plugin_xsrf();
+		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
+			$oConfirm->setMessages(array(
+				'token' => $oPluginXsrf->getMessage()
+			));
+			return $oConfirm;
+		}
+		// Récupère les params cachés et reconstruit le texte
+		$oConfirm->invitation_id = _root::getParam('invitation_id');
+		$oConfirm->invitation_key = _root::getParam('invitation_key');
+		$this->makeTextInvitation($poInvitation, $oConfirm);
+		return $oConfirm;
+	}
+
+	private function makeTextInvitation($poInvitation, $poConfirm)
+	{
+		$tAwards = $poInvitation->findAwards();
+		$oGroup = $poInvitation->findGroup();
+		$oCreatedUser = $poInvitation->findCreatedUser();
+		
+		$xPrix = '';
+		$sPrix = '';
+		$awardCount = count($tAwards);
+		if ($awardCount > 1) {
+			$xPrix = 'x';
+			$sPrix = 's';
+		}
+		
+		$textInvit = sprintf(
+			'%s, <small>le responsable du Prix BD de </small>%s<small>, vous invite à confirmer votre inscription au%s prix suivant%s pour voter : </small>', 
+			$oCreatedUser->username, $oGroup->group_name, $xPrix, $sPrix);
+		
+		for ($i = 0; $i < $awardCount; $i ++) {
+			if ($i > 0) {
+				$textInvit .= ', ';
+			}
+			$textInvit .= $tAwards[$i]->getTypeNameString();
+		}
+		$poConfirm->textInvit = $textInvit;
+	}
+
+	private function isInvitationParamsValid($poInvitation)
+	{
+		$id = _root::getParam('id', _root::getParam('invitation_id'));
+		$key = _root::getParam('key', _root::getParam('invitation_key'));
+		if ((null == $id) || (null == $key) || (null == $poInvitation)) {
 			return false;
 		}
 		if ((null != $poInvitation) && ($poInvitation->isEmpty())) {
 			return false;
 		}
-		if (_root::getParam('id') != $poInvitation->invitation_id) {
+		if ($id != $poInvitation->invitation_id) {
 			return false;
 		}
 		if ($key != $poInvitation->invitation_key) {
