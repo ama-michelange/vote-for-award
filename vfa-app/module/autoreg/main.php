@@ -82,6 +82,8 @@ class module_autoreg extends abstract_module
 		$oConfirm->invitation_id = _root::getParam('invitation_id');
 		$oConfirm->invitation_key = _root::getParam('invitation_key');
 		$this->makeTextInvitation($poInvitation, $oConfirm);
+		
+		// TODO A finir
 		return $oConfirm;
 	}
 
