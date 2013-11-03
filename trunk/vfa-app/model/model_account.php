@@ -27,7 +27,7 @@ class model_account
 		
 		$oGroups = model_group::getInstance()->findAllByUserId($pUser->user_id);
 		$oAccount->setGroups($oGroups);
-		$oReaderGroups = model_group::getInstance()->findAllByUserIdByType($pUser->user_id, 'READER');
+		$oReaderGroups = model_group::getInstance()->findAllByUserIdByType($pUser->user_id, plugin_vfa::GROUP_TYPE_READER);
 		$oAccount->setReaderGroups($oReaderGroups);
 		
 		$oAwards = model_award::getInstance()->findAllByUserId($pUser->user_id);
@@ -215,17 +215,17 @@ class row_account
 		}
 		return $tSelect;
 	}
-	
+
 	/**
 	 * Attribue un tableau de groupes de LECTEUR
 	 *
-	 * @param row_group $pGroups
+	 * @param row_group $pGroups        	
 	 */
 	public function setReaderGroups($pGroups)
 	{
 		$this->oReaderGroups = $pGroups;
 	}
-	
+
 	/**
 	 * Renvoie le tableau de groupes de LECTEUR
 	 *
@@ -235,6 +235,7 @@ class row_account
 	{
 		return $this->oReaderGroups;
 	}
+
 	/**
 	 * Attribue un tableau de prix
 	 *

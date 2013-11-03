@@ -21,9 +21,9 @@
 			<?php foreach($this->tInvitations as $oInvitation):?>
 			<?php 
 			switch ($oInvitation->type){
-				case 'BOARD': $color='error'; break;
-				case 'RESPONSIBLE': $color='warning'; break;
-				case 'READER': $color='info'; break;
+				case plugin_vfa::INVITATION_TYPE_BOARD: $color='danger'; break;
+				case plugin_vfa::INVITATION_TYPE_RESPONSIBLE: $color='warning'; break;
+				case plugin_vfa::INVITATION_TYPE_READER: $color=''; break;
 				default: $color=''; break;
 			}				
 			?>
@@ -32,15 +32,15 @@
 					<td class="col-md-1">
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('invitations::update')):?>
-							<a rel="tooltip" data-original-title="Modifier <?php echo $oInvitation->group_name ?>" 
-								href="<?php echo $this->getLink('invitations::update',array('id'=>$oInvitation->getId()))?>"><i class="glyphicon glyphicon-edit"></i></a>
+							<a rel="tooltip" data-original-title="Tester l'invitation pour <?php echo $oInvitation->email ?>" target="_new"
+								href="<?php echo plugin_vfa::generateURLInvitation($oInvitation) ?>"><i class="glyphicon glyphicon-new-window"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('invitations::delete')):?>
-							<a rel="tooltip" data-original-title="Supprimer <?php echo $oInvitation->group_name ?>" 
+							<a rel="tooltip" data-original-title="Supprimer l'invitation pour <?php echo $oInvitation->email ?>" 
 								href="<?php echo $this->getLink('invitations::delete',array('id'=>$oInvitation->getId()))?>"><i class="glyphicon glyphicon-trash"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('invitations::read')):?>
-							<a rel="tooltip" data-original-title="Voir <?php echo $oInvitation->group_name ?>" 
+							<a rel="tooltip" data-original-title="Voir l'invitation pour <?php echo $oInvitation->email ?>" 
 								href="<?php echo $this->getLink('invitations::read',array('id'=>$oInvitation->getId()))?>"><i class="glyphicon glyphicon-eye-open"></i></a>
 							<?php endif;?>
 						</div>
@@ -50,8 +50,9 @@
 				<td>
 				<?php 
 				switch ($oInvitation->state){
-					case 'OPEN': $label='label-info'; break;
-					case 'CLOSE': $label='label-success'; break;
+					case plugin_vfa::INVITATION_STATE_OPEN: $label='label-info'; break;
+					case plugin_vfa::INVITATION_STATE_ACCEPTED: $label='label-success'; break;
+					case plugin_vfa::INVITATION_STATE_REJECTED: $label='label-danger'; break;
 					default: $label=''; break;
 				}				
 				echo '<span class="label '.$label.'">'.$oInvitation->showState().'</span>';

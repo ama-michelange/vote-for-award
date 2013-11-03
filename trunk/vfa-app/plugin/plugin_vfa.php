@@ -2,12 +2,29 @@
 /*
  *
  */
+
 /**
  *
  * @author AMA
  */
 class plugin_vfa
 {
+
+	const INVITATION_TYPE_BOARD = 'BOARD';
+
+	const INVITATION_TYPE_READER = 'READER';
+
+	const INVITATION_TYPE_RESPONSIBLE = 'RESPONSIBLE';
+
+	const INVITATION_STATE_OPEN = 'OPEN';
+
+	const INVITATION_STATE_ACCEPTED = 'ACCEPTED';
+
+	const INVITATION_STATE_REJECTED = 'REJECTED';
+
+	const GROUP_TYPE_BOARD = 'BOARD';
+
+	const GROUP_TYPE_READER = 'READER';
 
 	/**
 	 * Déplace, s'il existe, l'article du début d'un titre à la fin du même titre.

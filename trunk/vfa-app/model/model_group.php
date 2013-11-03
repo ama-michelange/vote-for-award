@@ -83,7 +83,7 @@ class row_group extends abstract_row
 	public function getTypeString()
 	{
 		switch ($this->type) {
-			case 'BOARD':
+			case plugin_vfa::GROUP_TYPE_BOARD:
 				$s = "Comité de sélection";
 				break;
 			default:

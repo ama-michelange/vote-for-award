@@ -20,12 +20,40 @@ class row_confirm_invitation extends abstract_row
 	private function getCheck()
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
-		$oPluginValid->isNotEmpty('email');
-		if (null != $this->__get('email')) {
-			$oPluginValid->isEmailValid('email');
+		switch ($this->__get('action')) {
+			case 'toIdentify':
+				$oPluginValid->isNotEmpty('cf_login');
+				$oPluginValid->isNotEmpty('cf_password');
+				break;
+			case 'toRegistry':
+				$oPluginValid->isNotEmpty('username');
+				$oPluginValid->isNotEmpty('email');
+				$bEmailValid = false;
+				if (null != $this->__get('email')) {
+					$bEmailValid = $oPluginValid->isEmailValid('email');
+				}
+				$oPluginValid->isNotEmpty('email_bis');
+				$bEmailBisValid = false;
+				if (null != $this->__get('email_bis')) {
+					$bEmailBisValid = $oPluginValid->isEmailValid('email_bis');
+				}
+				if ($bEmailValid && $bEmailBisValid) {
+					$oPluginValid->isEqual('email', 'email_bis');
+					$oPluginValid->isEqual('email_bis', 'email');
+				}
+				$oPluginValid->isNotEmpty('password');
+				$oPluginValid->isNotEmpty('password_bis');
+				if ((null != $this->__get('password')) && (null != $this->__get('password_bis'))) {
+					$oPluginValid->isEqual('password', 'password_bis');
+					$oPluginValid->isEqual('password_bis', 'password');
+				}
+				break;
+			default:
+				// Valeur non vérifiable de manière à ne jamais être valide !
+				$oPluginValid->isNotEmpty('action');
+				$oPluginValid->isEqual('action', '__action__');
+				break;
 		}
-		$oPluginValid->isNotEmptyOr('award_id', 'awards_ids');
-		$oPluginValid->isNotEmpty('group_id');
 		return $oPluginValid;
 	}
 

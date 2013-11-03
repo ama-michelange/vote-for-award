@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Liste des albums</h3>
+		<h3 class="panel-title">Liste des groupes</h3>
 	</div>
 	<?php if($this->tGroups):?>
 	<table class="table table-striped">
@@ -42,7 +42,7 @@
 				<?php else:?>
 					<td><?php echo $oGroup->group_name ?></td>
 				<?php endif;?>
-				<td<?php if('BOARD'==$oGroup->type) { echo ' class="text-warning"'; }?>><?php echo $oGroup->getTypeString() ?></td>
+				<td<?php if(plugin_vfa::GROUP_TYPE_BOARD==$oGroup->type) { echo ' class="text-warning"'; }?>><?php echo $oGroup->getTypeString() ?></td>
 			</tr>	
 			<?php endforeach;?>
 		</tbody>

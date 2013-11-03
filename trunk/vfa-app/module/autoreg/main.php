@@ -31,6 +31,34 @@ class module_autoreg extends abstract_module
 		}
 	}
 
+	public function _invalid()
+	{
+		$oView = new _view('autoreg::invalid');
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _toReject()
+	{
+		$oInvitationModel = new model_invitation();
+		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
+		
+		if (true == $this->isInvitationParamsValid($oInvitation)) {
+			$oInvitation->state = plugin_vfa::INVITATION_STATE_REJECTED;
+			$oInvitation->modified_date = plugin_vfa::dateTimeSgbd();
+			$oInvitation->update();
+			_root::redirect('autoreg::rejected');
+		} else {
+			$oView = new _view('autoreg::invalid');
+			$this->oLayout->add('work', $oView);
+		}
+	}
+
+	public function _rejected()
+	{
+		$oView = new _view('autoreg::rejected');
+		$this->oLayout->add('work', $oView);
+	}
+
 	public function after()
 	{
 		$this->oLayout->show();
@@ -46,6 +74,7 @@ class module_autoreg extends abstract_module
 		$oView = new _view('autoreg::index');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = "";
+		$oView->tSelectedYears = $this->buildSelectedYears($oConfirm);
 		
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -60,11 +89,28 @@ class module_autoreg extends abstract_module
 		$oView = new _view('autoreg::index');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = $oConfirm->getMessages();
+		$oView->tSelectedYears = $this->buildSelectedYears($oConfirm);
 		
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		
 		$this->oLayout->add('work', $oView);
+	}
+
+	private function buildSelectedYears($poConfirm)
+	{
+		$tYear = array();
+		$date = new plugin_date(date('Y-m-d'));
+		$date->removeYear(10);
+		for ($i = 0; $i < 91; $i ++) {
+			if (($poConfirm->birtyear) && ($poConfirm->birtyear == $date->getYear())) {
+				$tYear[$date->getYear()] = true;
+			} else {
+				$tYear[$date->getYear()] = false;
+			}
+			$date->removeYear(1);
+		}
+		return $tYear;
 	}
 
 	private function doVerifyPost($poInvitation)
@@ -83,8 +129,60 @@ class module_autoreg extends abstract_module
 		$oConfirm->invitation_key = _root::getParam('invitation_key');
 		$this->makeTextInvitation($poInvitation, $oConfirm);
 		
-		// TODO A finir
+		switch (_root::getParam('action')) {
+			case 'toIdentify':
+				$this->doVerifyToIdentify($poInvitation, $oConfirm);
+				break;
+			case 'toRegistry':
+				$this->doVerifyToRegistry($poInvitation, $oConfirm);
+				break;
+			default:
+				_root::redirect('autoreg::invalid');
+		}
 		return $oConfirm;
+	}
+
+	private function doVerifyToIdentify($poInvitation, $poConfirm)
+	{
+		// Copie la saisie dans un enregistrement
+		$poConfirm->action = _root::getParam('action', null);
+		$poConfirm->cf_login = _root::getParam('cf_login', null);
+		$poConfirm->cf_password = _root::getParam('cf_password', null);
+		
+		if ($poConfirm->isValid()) {
+			$poConfirm->validation = true;
+		}
+		// var_dump($poConfirm);
+	}
+
+	private function doVerifyToRegistry($poInvitation, $poConfirm)
+	{
+		// Copie la saisie dans un enregistrement
+		$poConfirm->action = _root::getParam('action', null);
+		$poConfirm->username = _root::getParam('username', null);
+		$poConfirm->email = _root::getParam('email', null);
+		$poConfirm->email_bis = _root::getParam('email_bis', null);
+		$poConfirm->password = _root::getParam('password', null);
+		$poConfirm->password_bis = _root::getParam('password_bis', null);
+		$poConfirm->last_name = _root::getParam('last_name', null);
+		$poConfirm->first_name = _root::getParam('first_name', null);
+		$poConfirm->birthyear = _root::getParam('birthyear', null);
+		$poConfirm->gender = _root::getParam('gender', null);
+		
+		if ($poConfirm->isValid()) {
+			// Doublon ?
+			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->username);
+			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
+				$poConfirm->validation = true;
+			} else {
+				$poConfirm->setMessages(array(
+					'username' => array(
+						'doublon'
+					)
+				));
+			}
+		}
+		// var_dump($poConfirm);
 	}
 
 	private function makeTextInvitation($poInvitation, $poConfirm)
@@ -102,15 +200,17 @@ class module_autoreg extends abstract_module
 		}
 		
 		$textInvit = sprintf(
-			'%s, <small>le responsable du Prix BD de </small>%s<small>, vous invite à confirmer votre inscription au%s prix suivant%s pour voter : </small>', 
-			$oCreatedUser->username, $oGroup->group_name, $xPrix, $sPrix);
+			'Le responsable du groupe <strong>%s</strong>, vous invite à vous inscrire pour participer au%s prix BD suivant%s : ', 
+			$oGroup->group_name, $xPrix, $sPrix);
 		
+		$textInvit .= '<br/><strong>';
 		for ($i = 0; $i < $awardCount; $i ++) {
 			if ($i > 0) {
 				$textInvit .= ', ';
 			}
 			$textInvit .= $tAwards[$i]->getTypeNameString();
 		}
+		$textInvit .= '</strong>';
 		$poConfirm->textInvit = $textInvit;
 	}
 
