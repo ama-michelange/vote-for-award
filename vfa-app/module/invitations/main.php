@@ -14,7 +14,7 @@ class module_invitations extends abstract_module
 
 	public function after()
 	{
-		//$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTop());
+		// $this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTop());
 		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
 		$this->oLayout->show();
 	}
@@ -55,7 +55,7 @@ class module_invitations extends abstract_module
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
-			$oRegistry->type = 'READER';
+			$oRegistry->type = plugin_vfa::INVITATION_TYPE_READER;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
 		}
@@ -74,7 +74,7 @@ class module_invitations extends abstract_module
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
-			$oRegistry->type = 'RESPONSIBLE';
+			$oRegistry->type = plugin_vfa::INVITATION_TYPE_RESPONSIBLE;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
 		}
@@ -111,7 +111,7 @@ class module_invitations extends abstract_module
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
-			$oRegistry->type = 'BOARD';
+			$oRegistry->type = plugin_vfa::INVITATION_TYPE_BOARD;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
 		}
@@ -205,10 +205,10 @@ class module_invitations extends abstract_module
 	{
 		switch (_root::getAction()) {
 			case 'board':
-				$tGroups = model_group::getInstance()->findAllByType('BOARD');
+				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::GROUP_TYPE_BOARD);
 				break;
 			case 'responsible':
-				$tGroups = model_group::getInstance()->findAllByType('READER');
+				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::GROUP_TYPE_READER);
 				break;
 			default:
 				$tGroups = _root::getAuth()->getAccount()->getReaderGroups();
@@ -403,7 +403,7 @@ class module_invitations extends abstract_module
 		// Remplissage de l'invit
 		$oInvit->created_user_id = _root::getAuth()->getAccount()->getUser()->user_id;
 		$oInvit->invitation_key = $this->buildInvitationKey($poRegistry);
-		$oInvit->state = 'OPEN';
+		$oInvit->state = plugin_vfa::INVITATION_STATE_OPEN;
 		$oInvit->type = $poRegistry->type;
 		$oInvit->email = $poRegistry->email;
 		$oInvit->group_id = $poRegistry->group_id;

@@ -15,7 +15,7 @@ _root::setConfigVar('tLangue', array(
 	'matchExpression.number' => "La valeur saisie n'est pas un nombre",
 	'isDateBefore' => "Cohérence des dates : date trop grande !",
 	'isDateAfter' => "Cohérence des dates : date trop petite !",
-	'doublon.username' => 'Ce pseudo existe déjà !',
+	'doublon.username' => 'Ce nom d\'utilisateur ou pseudo existe déjà !',
 	'matchExpression.birthyear' => "La valeur saisie doit correspondre à une année valide (nombre)",
 	'isUpperOrEqualThan.birthyear' => "Pas possible, c'est trop vieux !",
 	'isLowerThan.birthyear' => "Pas possible, c'est trop jeune !",
@@ -27,7 +27,11 @@ _root::setConfigVar('tLangue', array(
 	'nonePBD.awards' => 'Aucun prix trouvé !',
 	'nonePSBD.awards' => 'Aucune présélection trouvée !',
 	'none.groups' => 'Vous n\'appartenez à aucun groupe !',
-	'noneCS.groups' => 'Aucun groupe de comité de sélection trouvé !'
+	'noneCS.groups' => 'Aucun groupe de comité de sélection trouvé !',
+	'isEqual.email' => 'Les emails ne correspondent pas !',
+	'isEqual.email_bis' => 'Les emails ne correspondent pas !',
+	'isEqual.password' => 'Les mots de passes ne correspondent pas !',
+	'isEqual.password_bis' => 'Les mots de passes ne correspondent pas !',
 ))
 
 ;
