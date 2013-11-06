@@ -14,17 +14,19 @@ class module_autoreg extends abstract_module
 
 	public function _index()
 	{
-		// $params = _root::getRequest()->getParams();
-		// var_dump($params);
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
 		
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
-			if (_root::getRequest()->isPost()) {
-				$this->doPost($oInvitation);
-			} else {
-				$this->doGet($oInvitation);
-			}
+			$oConfirm = new row_confirm_invitation();
+			$oConfirm->invitation_id = _root::getParam('id');
+			$oConfirm->invitation_key = _root::getParam('key');
+			$this->makeTextInvitation($oInvitation, $oConfirm);
+			
+			$oView = new _view('autoreg::index');
+			$oView->oConfirm = $oConfirm;
+			
+			$this->oLayout->add('work', $oView);
 		} else {
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
@@ -40,23 +42,36 @@ class module_autoreg extends abstract_module
 	public function _toReject()
 	{
 		$oInvitationModel = new model_invitation();
-		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
+		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
 		
-		if (true == $this->isInvitationParamsValid($oInvitation)) {
+		if ((_root::getRequest()->isPost()) && (true == $this->isInvitationParamsValid($oInvitation))) {
 			$oInvitation->state = plugin_vfa::INVITATION_STATE_REJECTED;
 			$oInvitation->modified_date = plugin_vfa::dateTimeSgbd();
 			$oInvitation->update();
-			_root::redirect('autoreg::rejected');
+			
+			$oView = new _view('autoreg::rejected');
+			$this->oLayout->add('work', $oView);
 		} else {
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
 		}
 	}
 
-	public function _rejected()
+	public function _toConfirm()
 	{
-		$oView = new _view('autoreg::rejected');
-		$this->oLayout->add('work', $oView);
+		$oInvitationModel = new model_invitation();
+		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
+		
+		if (true == $this->isInvitationParamsValid($oInvitation)) {
+			if (_root::getRequest()->isPost()) {
+				$this->doPost($oInvitation);
+			} else {
+				$this->doGet($oInvitation);
+			}
+		} else {
+			$oView = new _view('autoreg::invalid');
+			$this->oLayout->add('work', $oView);
+		}
 	}
 
 	public function after()
@@ -191,24 +206,49 @@ class module_autoreg extends abstract_module
 		$oGroup = $poInvitation->findGroup();
 		$oCreatedUser = $poInvitation->findCreatedUser();
 		
-		$xPrix = '';
-		$sPrix = '';
-		$awardCount = count($tAwards);
-		if ($awardCount > 1) {
-			$xPrix = 'x';
-			$sPrix = 's';
+		$tPrix = array();
+		foreach ($tAwards as $oAward) {
+			$tPrix[] = $oAward->getTypeNameString();
+		}
+		natsort($tPrix);
+		
+		switch ($poInvitation->type) {
+			case plugin_vfa::INVITATION_TYPE_BOARD:
+				$textInvit = 'L\'administrateur du site vous invite à vous inscrire à la présélection suivante : ';
+				$poConfirm->titleInvit = 'Invitation pour voter avec le Comité de sélection';
+				break;
+			case plugin_vfa::INVITATION_TYPE_READER:
+				$xPrix = 'au prix suivant ';
+				if (count($tAwards) > 1) {
+					$xPrix = 'aux prix suivants ';
+				}
+				$textInvit = sprintf('Le responsable du groupe <strong>%s</strong>, vous invite à vous inscrire %s : ', 
+					$oGroup->group_name, $xPrix);
+				$poConfirm->titleInvit = 'Invitation pour voter au Prix BD';
+				break;
+			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+				$xPrix = 'au prix suivant ';
+				if (count($tAwards) > 1) {
+					$xPrix = 'aux prix suivants ';
+				}
+				$textInvit = sprintf(
+					'L\'administrateur du site vous invite à devenir le Responsable du groupe <strong>%s</strong> et vous inscrire %s : ', 
+					$oGroup->group_name, $xPrix);
+				$poConfirm->titleInvit = 'Invitation pour devenir Responsable de groupe et voter au Prix BD';
+				break;
+			default:
+				$textInvit = '';
+				break;
 		}
 		
-		$textInvit = sprintf(
-			'Le responsable du groupe <strong>%s</strong>, vous invite à vous inscrire pour participer au%s prix BD suivant%s : ', 
-			$oGroup->group_name, $xPrix, $sPrix);
-		
-		$textInvit .= '<br/><strong>';
-		for ($i = 0; $i < $awardCount; $i ++) {
+		$textInvit .= '<strong>';
+		$i = 0;
+		foreach ($tPrix as $prix) {
 			if ($i > 0) {
 				$textInvit .= ', ';
 			}
-			$textInvit .= $tAwards[$i]->getTypeNameString();
+			$textInvit .= '<span class="nowrap">' . $prix . '</span>';
+			$i ++;
 		}
 		$textInvit .= '</strong>';
 		$poConfirm->textInvit = $textInvit;
