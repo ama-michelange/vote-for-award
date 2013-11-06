@@ -27,7 +27,7 @@ body {
 <![endif]-->
 
 <!-- Fav and touch icons -->
-<link rel="shortcut icon" href="site/assets/ico/favicon.ico">
+<link rel="shortcut icon" href="site/ico/favicon.ico">
 
 
 </head>

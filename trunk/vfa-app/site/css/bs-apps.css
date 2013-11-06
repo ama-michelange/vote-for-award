@@ -168,6 +168,10 @@
 	}
 }
 */
+.nowrap {
+	white-space: nowrap;
+}
+
 .bd-list img {
 	margin-bottom: 10px;
 	box-shadow: 2px 2px 2px #888;
@@ -285,7 +289,7 @@
 /*!
  * Mon Theme
  */
- .panel-default {
+.panel-default {
 	border-color: #a0b0b0;
 }
 
@@ -330,7 +334,7 @@ h1 small,h2 small,h3 small,h4 small,h5 small,h6 small,.h1 small,.h2 small,.h3 sm
 	color: #666666;
 }
 
-.btn-default, a.btn-default {
+.btn-default,a.btn-default {
 	color: #333333;
 	/* 	background-color: #ffffff; */
 	/* 	border-color: #cccccc; */
@@ -338,7 +342,7 @@ h1 small,h2 small,h3 small,h4 small,h5 small,h6 small,.h1 small,.h2 small,.h3 sm
 	border-color: #c0d0d0;
 }
 
-.btn-default:hover,.btn-default:focus,.btn-default:active,.btn-default.active,.open .dropdown-toggle.btn-default, a.btn-default:hover
+.btn-default:hover,.btn-default:focus,.btn-default:active,.btn-default.active,.open .dropdown-toggle.btn-default,a.btn-default:hover
 	{
 	color: #333333;
 	/* 	background-color: #ebebeb; */
@@ -362,4 +366,3 @@ h1 small,h2 small,h3 small,h4 small,h5 small,h6 small,.h1 small,.h2 small,.h3 sm
 	color: #0e0e5e;
 	background-color: transparent;
 }
-
