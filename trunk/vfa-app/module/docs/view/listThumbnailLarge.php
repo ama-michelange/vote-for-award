@@ -1,7 +1,7 @@
 <div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title">Les albums</h3>	
-	</div>
+<!-- 	<div class="panel-heading"> -->
+<!-- 		<h3 class="panel-title">Les albums</h3>	 -->
+<!-- 	</div> -->
 	<div class="panel-body">
 	<?php if($this->tDocs):?>
 		<?php foreach($this->tDocs as $oDoc):?>

@@ -31,7 +31,7 @@ if (true == $bImage) {
 						</h5>
 					</div>
 	 				<div id="awards" class="collapse in">
-						<table class="table table-stripped table-condensed">
+						<table class="table table-striped table-condensed">
 							<tbody>
 								<?php foreach($this->toAwards as $oAward):?>
 								<tr>

@@ -1,6 +1,6 @@
 <div class="panel panel-danger">
 	<div class="panel-heading">
-		<h3>Supprimer un groupe</h3>
+		<h3 class="panel-title">Supprimer un groupe</h3>
 	</div>
 	<div class="panel-body panel-inner">
 		<?php echo $this->oViewShow->show();?>
