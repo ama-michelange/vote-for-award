@@ -37,7 +37,7 @@
 			<h1>
 				<i class="glyphicon glyphicon-hand-right with-text"></i>Souhaitez-vous vous inscrire ?
 				<span class="nowrap">
-					<button class="btn btn-primary btn-lg" type="submit">Oui</button>
+					<button class="btn btn-primary btn-lg" type="submit" name="action" value="toConfirm">Oui</button>
 					<a class="btn btn-default btn-sm" href="#modalReject" data-toggle="modal">Non</a>
 				</span>
 			</h1>
