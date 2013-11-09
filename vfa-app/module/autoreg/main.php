@@ -60,14 +60,14 @@ class module_autoreg extends abstract_module
 	public function _toConfirm()
 	{
 		$oInvitationModel = new model_invitation();
-		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
+		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
 		
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
 			if (_root::getRequest()->isPost()) {
 				$this->doPost($oInvitation);
-			} else {
-				$this->doGet($oInvitation);
-			}
+			} /*
+			   * else { $this->doGet($oInvitation); }
+			   */
 		} else {
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
@@ -101,7 +101,7 @@ class module_autoreg extends abstract_module
 	{
 		$oConfirm = $this->doVerifyPost($poInvitation);
 		
-		$oView = new _view('autoreg::index');
+		$oView = new _view('autoreg::confirm');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = $oConfirm->getMessages();
 		$oView->tSelectedYears = $this->buildSelectedYears($oConfirm);
@@ -132,19 +132,25 @@ class module_autoreg extends abstract_module
 	{
 		$oConfirm = new row_confirm_invitation();
 		// Verifie le token
-		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
-			$oConfirm->setMessages(array(
-				'token' => $oPluginXsrf->getMessage()
-			));
-			return $oConfirm;
+		if (_root::getParam('token')) {
+			$oPluginXsrf = new plugin_xsrf();
+			if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
+				$oConfirm->setMessages(array(
+					'token' => $oPluginXsrf->getMessage()
+				));
+				return $oConfirm;
+			}
 		}
+		
 		// Récupère les params cachés et reconstruit le texte
 		$oConfirm->invitation_id = _root::getParam('invitation_id');
 		$oConfirm->invitation_key = _root::getParam('invitation_key');
-		$this->makeTextInvitation($poInvitation, $oConfirm);
+		$this->makeTextConfirmation($poInvitation, $oConfirm);
 		
 		switch (_root::getParam('action')) {
+			case 'toConfirm':
+				// $this->doVerifyToRegistry($poInvitation, $oConfirm);
+				break;
 			case 'toIdentify':
 				$this->doVerifyToIdentify($poInvitation, $oConfirm);
 				break;
@@ -252,6 +258,52 @@ class module_autoreg extends abstract_module
 		}
 		$textInvit .= '</strong>';
 		$poConfirm->textInvit = $textInvit;
+	}
+
+	private function makeTextConfirmation($poInvitation, $poConfirm)
+	{
+		$tAwards = $poInvitation->findAwards();
+		$oGroup = $poInvitation->findGroup();
+		$oCreatedUser = $poInvitation->findCreatedUser();
+		
+		$tPrix = array();
+		foreach ($tAwards as $oAward) {
+			$tPrix[] = $oAward->getTypeNameString();
+		}
+		natsort($tPrix);
+		
+		$textPrix = '';
+		$i = 0;
+		foreach ($tPrix as $prix) {
+			if ($i > 0) {
+				$textPrix .= ', ';
+			}
+			$textPrix .= $prix;
+			$i ++;
+		}
+		
+		$tInscription = array();
+		
+		switch ($poInvitation->type) {
+			case plugin_vfa::INVITATION_TYPE_BOARD:
+				$tInscription['Rôle'] = 'Membre du comité de sélection';
+				$poConfirm->titleInvit = 'Inscription pour voter avec le Comité de sélection';
+				break;
+			case plugin_vfa::INVITATION_TYPE_READER:
+				$tInscription['Rôle'] = 'Electeur';
+				$poConfirm->titleInvit = 'Inscription pour voter au Prix BD';
+				break;
+			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+				$tInscription['Rôle'] = 'Responsable de groupe, Electeur';
+				$poConfirm->titleInvit = 'Inscription pour devenir Responsable de groupe et voter au Prix BD';
+				break;
+			default:
+				$textInvit = '';
+				break;
+		}
+		$tInscription['Groupe'] = $oGroup->group_name;
+		$tInscription['Prix'] = $textPrix;
+		$poConfirm->tInscription = $tInscription;
 	}
 
 	private function isInvitationParamsValid($poInvitation)
