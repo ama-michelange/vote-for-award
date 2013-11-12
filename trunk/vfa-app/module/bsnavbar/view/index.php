@@ -19,8 +19,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">Ok</button>
-					<button class="btn btn-default" data-dismiss="modal">Annuler</button>
+					<button class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</button>
+					<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok with-text"></i>Ok</button>
 				</div>
 			</form>
 		</div>

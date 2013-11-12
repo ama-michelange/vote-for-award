@@ -424,6 +424,18 @@ class module_invitations extends abstract_module
 
 	private function sendMail($poRegistry, $poInvitation)
 	{
+		$oMail = new plugin_mail();
+		$oMail->setFrom('Prix Alices', 'prix.alices@free.fr');
+		$oMail->addTo('michelange.anton@free.fr');
+		$oMail->setSubject('Invitation');
+		$oMail->setBody('Mon premier mail');
+		try {
+			$sent = $oMail->send();
+		} catch (Exception $e) {
+			echo 'Exception reçue : ', $e->getMessage(), "\n";
+			$sent = false;
+		}
+		echo 'Message envoyé : ', $sent, "\n";
 	}
 
 	private function delete()
