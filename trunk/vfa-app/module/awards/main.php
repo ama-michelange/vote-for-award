@@ -106,7 +106,7 @@ class module_awards extends abstract_module
 		} else {
 			$flags['titles'] = false;
 		}
-		$this->flagsMenu =$flags;
+		$this->flagsMenu = $flags;
 		
 		return $oView;
 	}

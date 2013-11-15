@@ -1,7 +1,7 @@
 <form class="form-horizontal" action="" method="POST">
-	<input type="hidden" name="phase" value="<?php echo $this->oRegistry->phase ?>" />
-	<input type="hidden" name="type" value="<?php echo $this->oRegistry->type ?>" /> 
-	<input type="hidden" name="email" value="<?php echo $this->oRegistry->email ?>" /> 
+	<input type="hidden" name="phase" value="<?php echo $this->oRegistry->phase ?>" /> <input
+		type="hidden" name="type" value="<?php echo $this->oRegistry->type ?>" /> <input type="hidden"
+		name="email" value="<?php echo $this->oRegistry->email ?>" /> 
 	<?php if ($this->oRegistry->award_id):?>
 		<input type="hidden" name="award_id" value="<?php echo $this->oRegistry->award_id ?>" /> 
 	<?php endif;?>
@@ -24,14 +24,17 @@
 				<div class="panel-body panel-condensed">
 					<dl class="dl-horizontal">
 						<dt>A</dt>
-			  			<dd><?php echo $this->oRegistry->email ?></dd>
+						<dd><?php echo $this->oRegistry->email ?></dd>
 						<dt>En copie</dt>
-			  			<dd><?php echo _root::getAuth()->getAccount()->getUser()->email ?></dd>
-		  			</dl>
-  					<dl class="dl-horizontal">
-		 				<dt>Contenant</dt>
-			  			<dd><a href="<?php echo plugin_vfa::generateURLInvitation($this->oRegistry->invit)?>" target="_new">Adresse d'inscription</a></dd>
-		  			</dl>
+						<dd><?php echo _root::getAuth()->getAccount()->getUser()->email ?></dd>
+					</dl>
+					<dl class="dl-horizontal">
+						<dt>Contenant</dt>
+						<dd>
+							<a href="<?php echo plugin_vfa::generateURLInvitation($this->oRegistry->invit)?>"
+								target="_new">Adresse d'inscription</a>
+						</dd>
+					</dl>
 				</div>
 			</div>
 
@@ -48,8 +51,8 @@
 					</dl>
 					<dl class="dl-horizontal">
 						<dt>au Groupe</dt>
-			  			<dd><?php echo $this->oGroup->group_name ?></dd>
-			  		</dl>
+						<dd><?php echo $this->oGroup->group_name ?></dd>
+					</dl>
 				</div>
 			</div>
 

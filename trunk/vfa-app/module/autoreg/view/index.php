@@ -13,7 +13,8 @@
 			<div class="modal-footer">
 				<form id="toReject" action="<?php echo $this->getLink('autoreg::toReject') ?>" method="POST">
 					<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>" />
-					<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>" /> 
+					<input type="hidden" name="invitation_key"
+						value="<?php echo $this->oConfirm->invitation_key ?>" />
 					<button class="btn btn-primary btn-sm" type="submit">Oui</button>
 					<button class="btn btn-default btn-lg" data-dismiss="modal">Non</button>
 				</form>
@@ -33,10 +34,10 @@
 		<h3><?php echo $this->oConfirm->textInvit ?></h3>
 		<form id="toConfirm" action="<?php echo $this->getLink('autoreg::toConfirm') ?>" method="POST">
 			<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>" />
-			<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>" /> 
+			<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>" />
 			<h1>
-				<i class="glyphicon glyphicon-hand-right with-text"></i>Souhaitez-vous vous inscrire ?
-				<span class="nowrap">
+				<i class="glyphicon glyphicon-hand-right with-text"></i>Souhaitez-vous vous inscrire ? <span
+					class="nowrap">
 					<button class="btn btn-primary btn-lg" type="submit" name="action" value="toConfirm">Oui</button>
 					<a class="btn btn-default btn-sm" href="#modalReject" data-toggle="modal">Non</a>
 				</span>

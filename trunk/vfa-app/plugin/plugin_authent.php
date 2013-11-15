@@ -1,74 +1,71 @@
 <?php
 /*
- This file is part of Mkframework.
-
-Mkframework is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License.
-
-Mkframework is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Mkframework.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+ * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
  * plugin_authent Gestion de l'authentification
+ *
  * @author michelange
  * @author Mika
  * @link http://mkf.mkdevs.com/
  */
-class plugin_authent extends abstract_auth{
+class plugin_authent extends abstract_auth
+{
 
-	private $oAccount=null;
+	private $oAccount = null;
 
-	public function setAccount($oAccount){
-		$_SESSION['oAccount']=serialize($oAccount);
-		$this->oAccount=$oAccount;
+	public function setAccount($oAccount)
+	{
+		$_SESSION['oAccount'] = serialize($oAccount);
+		$this->oAccount = $oAccount;
 	}
 
-	public function getAccount(){
-		if (null==$this->oAccount){
-			$this->oAccount=unserialize($_SESSION['oAccount']);
+	public function getAccount()
+	{
+		if (null == $this->oAccount) {
+			$this->oAccount = unserialize($_SESSION['oAccount']);
 		}
 		return $this->oAccount;
 	}
 
 	/**
 	 * methode appele a la connexion
+	 *
 	 * @access public
 	 * @return bool retourne true/false selon que la personne est ou non authentifiee
 	 */
-	public function isConnected(){
-		if(!$this->_isConnected()){
+	public function isConnected()
+	{
+		if (! $this->_isConnected()) {
 			return false;
 		}
 		$this->setAccount(unserialize($_SESSION['oAccount']));
-		//ajouter critere supp pour verification de l'authentification
+		// ajouter critere supp pour verification de l'authentification
 		return true;
 	}
 
 	/**
 	 * Connexion du compte d'un utilisateur
+	 *
 	 * @access public
-	 * @param object $oAccount L'instance du compte
+	 * @param object $oAccount
+	 *        	L'instance du compte
 	 */
-	public function connect($oAccount){
+	public function connect($oAccount)
+	{
 		$this->_connect();
 		$this->setAccount($oAccount);
 	}
 
 	/**
 	 * methode appele a la deconnexion
-	* @access public
-	*/
-	public function logout(){
+	 *
+	 * @access public
+	 */
+	public function logout()
+	{
 		_root::startSession();
 		$this->_disconnect();
 		_root::redirect(_root::getConfigVar('auth.module'));
 	}
-
 }

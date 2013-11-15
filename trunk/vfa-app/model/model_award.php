@@ -46,7 +46,7 @@ class model_award extends abstract_model
 
 	/**
 	 * Supprime
-	 * 
+	 *
 	 * @param string $pIdAward        	
 	 */
 	public function deleteAwardCascades($pIdAward)
@@ -129,7 +129,9 @@ class row_award extends abstract_row
 
 	public function getListError()
 	{
-		return $this->getCheck()->getListError();
+		$t= $this->getCheck()->getListError();
+		var_dump($t);
+		return $t;
 	}
 
 	public function setMessages($ptMessages)

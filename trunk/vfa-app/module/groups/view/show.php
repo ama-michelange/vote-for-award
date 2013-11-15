@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->oGroup->group_name ?></h3> 
+		<h3 class="panel-title"><?php echo $this->oGroup->group_name ?></h3>
 	</div>
 	<div class="panel-body panel-condensed">
 		<div class="panel panel-default panel-inner">
@@ -17,44 +17,45 @@
 		</div>
 		<?php if($this->toUsers):?>
 			<div class="panel panel-default panel-inner">
-				<div class="panel-heading">
-					<h5 class="panel-title">Utilisateurs du groupe
-						<a class="pull-right accordion-toggle" data-toggle="collapse" href="#users"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
-					</h5>
-				</div>
- 				<div id="users" class="collapse in">
+			<div class="panel-heading">
+				<h5 class="panel-title">
+					Utilisateurs du groupe <a class="pull-right accordion-toggle" data-toggle="collapse"
+						href="#users"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+				</h5>
+			</div>
+			<div id="users" class="collapse in">
 				<div class="table-responsive">
-	 				<table class="table table-striped table-condensed">
-							<thead>
-								<tr>
+					<table class="table table-striped table-condensed">
+						<thead>
+							<tr>
 									<?php if(_root::getACL()->permit('users::read')):?>
 										<th></th>
 									<?php endif;?>
 									<th>Pseudo</th>
-									<th>Nom</th>
-									<th>Prénom</th>
-									<th>Email</th>
-								</tr>
-							</thead>
-							<tbody>
+								<th>Nom</th>
+								<th>Prénom</th>
+								<th>Email</th>
+							</tr>
+						</thead>
+						<tbody>
 								<?php foreach($this->toUsers as $oUser):?>
 								<tr>
 									<?php if(_root::getACL()->permit('users::read')):?>
 										<td><a rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>"
-											href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>"><i class="glyphicon glyphicon-eye-open"></i></a>
-										</td>
+									href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>"><i
+										class="glyphicon glyphicon-eye-open"></i></a></td>
 									<?php endif;?>
 									<td><?php echo $oUser->username ?></td>
-									<td><?php echo $oUser->last_name ?></td>
-									<td><?php echo $oUser->first_name ?></td>
-									<td><?php echo $oUser->email ?></td>
-								</tr>	
+								<td><?php echo $oUser->last_name ?></td>
+								<td><?php echo $oUser->first_name ?></td>
+								<td><?php echo $oUser->email ?></td>
+							</tr>	
 								<?php endforeach;?>
 							</tbody>
-						</table>
-					</div>
+					</table>
 				</div>
 			</div>
+		</div>
 		<?php endif;?>
 	</div>
 </div>
