@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->oRole->role_name ?></h3> 
+		<h3 class="panel-title"><?php echo $this->oRole->role_name ?></h3>
 	</div>
 	<div class="panel-body panel-condensed">
 		<div class="panel panel-default panel-inner">
@@ -17,8 +17,9 @@
 		</div>
 		<div class="panel panel-default panel-inner">
 			<div class="panel-heading">
-				<h5 class="panel-title">Habilitations
-					<a class="pull-right accordion-toggle" data-toggle="collapse" href="#auths"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+				<h5 class="panel-title">
+					Habilitations <a class="pull-right accordion-toggle" data-toggle="collapse" href="#auths"><i
+						data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 				</h5>
 			</div>
 			<div id="auths" class="collapse in">
@@ -47,6 +48,6 @@
 					</tbody>
 				</table>
 			</div>
-		</div>	
+		</div>
 	</div>
 </div>

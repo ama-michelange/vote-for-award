@@ -1,7 +1,7 @@
 <div class="panel panel-default">
-<!-- 	<div class="panel-heading"> -->
-<!-- 		<h3 class="panel-title">Liste des utilisateurs</h3> -->
-<!-- 	</div> -->
+	<!-- 	<div class="panel-heading"> -->
+	<!-- 		<h3 class="panel-title">Liste des utilisateurs</h3> -->
+	<!-- 	</div> -->
 	<?php if($this->tUsers):?>
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -27,19 +27,19 @@
 					<td class="col-xs-1">
 						<div class="btn-group">
 							<?php if(_root::getACL()->permit('users::update')):?>
-							<a rel="tooltip" data-original-title="Modifier <?php echo $oUser->username ?>" 
-								href="<?php echo $this->getLink('users::update',array('id'=>$oUser->getId()))?>">
-								<i class="glyphicon glyphicon-edit"></i></a>
+							<a rel="tooltip" data-original-title="Modifier <?php echo $oUser->username ?>"
+								href="<?php echo $this->getLink('users::update',array('id'=>$oUser->getId()))?>"> <i
+								class="glyphicon glyphicon-edit"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('users::delete')):?>
-							<a rel="tooltip" data-original-title="Supprimer <?php echo $oUser->username ?>" 
-								href="<?php echo $this->getLink('users::delete',array('id'=>$oUser->getId()))?>">
-								<i class="glyphicon glyphicon-trash"></i></a>
+							<a rel="tooltip" data-original-title="Supprimer <?php echo $oUser->username ?>"
+								href="<?php echo $this->getLink('users::delete',array('id'=>$oUser->getId()))?>"> <i
+								class="glyphicon glyphicon-trash"></i></a>
 							<?php endif;?>
 							<?php if(_root::getACL()->permit('users::read')):?>
-							<a rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>" 
-								href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>">
-								<i class="glyphicon glyphicon-eye-open"></i></a>
+							<a rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>"
+								href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>"> <i
+								class="glyphicon glyphicon-eye-open"></i></a>
 							<?php endif;?>
 						</div>
 					</td>
@@ -53,25 +53,31 @@
 					<td><?php echo $oUser->last_name ?></td>
 					<td><?php echo $oUser->first_name ?></td>
 					<td>
-						<?php 
-							$i=0;  
-							foreach($oUser->findGroups() as $oGroup):
-							if($i > 0): echo ', '; endif;
-							echo $oGroup->group_name;
-							$i++; 
-							endforeach;
-						?>
+						<?php
+			$i = 0;
+			foreach ($oUser->findGroups() as $oGroup) :
+				if ($i > 0) :
+					echo ', ';
+				 endif;
+				echo $oGroup->group_name;
+				$i ++;
+			endforeach
+			;
+			?>
 					</td>
 					<?php if(_root::getACL()->permit('roles')):?>
 					<td>
-						<?php 
-							$i=0;  
-							foreach($oUser->findRoles() as $oRole):
-							if($i > 0): echo ', '; endif;
-							echo $oRole->role_name;
-							$i++; 
-							endforeach;
-						?>
+						<?php
+				$i = 0;
+				foreach ($oUser->findRoles() as $oRole) :
+					if ($i > 0) :
+						echo ', ';
+					 endif;
+					echo $oRole->role_name;
+					$i ++;
+				endforeach
+				;
+				?>
 					</td>
 					<?php endif;?>
 				</tr>	

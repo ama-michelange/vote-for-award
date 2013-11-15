@@ -97,7 +97,7 @@ class plugin_validation
 	{
 		$sClass = $sOriginalClass;
 		if (is_array($sFields)) {
-			foreach ($sFields as $field){
+			foreach ($sFields as $field) {
 				if (isset($tErrors) and isset($tErrors[$field])) {
 					$sClass = $sClass . ' has-error';
 					break;
