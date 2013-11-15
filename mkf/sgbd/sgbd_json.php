@@ -2,7 +2,7 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
-class sgbd_xml extends abstract_sgbd
+class sgbd_json extends abstract_sgbd
 {
 
 	public static function getInstance($sConfig)
@@ -51,37 +51,40 @@ class sgbd_xml extends abstract_sgbd
 	{
 		$iId = $this->getIdFromTab($tWhere);
 		
-		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml';
-		$oXml = simplexml_load_file($sFile);
-		$tXml = (array) $oXml;
+		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.json';
+		$oJson = $this->json_decode($sFile);
+		$tJson = (array) $oJson;
 		
 		// remove index
-		$this->removeRowFromAllIndex($sTable, $tXml);
+		$this->removeRowFromAllIndex($sTable, $tJson);
 		
 		foreach ($tProperty as $sVar => $sVal) {
-			$tXml[$sVar] = (string) $sVal;
+			$oJson->$sVar = $sVal;
 		}
 		
 		// add in index
-		$this->addRowInAllIndex($sTable, $tXml);
+		$this->addRowInAllIndex($sTable, $tJson);
 		
-		$this->save($tXml, $sFile);
+		$this->save($oJson, $sFile);
 	}
 
 	public function insert($sTable, $tProperty)
 	{
 		$iId = $this->getMaxId($sTable);
 		
-		$tMax = array(
-			'max' => ($iId + 1)
-		);
+		$iMax = ($iId + 1);
 		
-		$tProperty['id'] = $iId;
+		$oJson = new stdclass();
+		$oJson->id = $iId;
+		foreach ($tProperty as $sVar => $sVal) {
+			$oJson->$sVar = $sVal;
+		}
 		
-		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml';
-		$this->save($tProperty, $sFile);
-		$sFileMax = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/max.xml';
-		$this->save($tMax, $sFileMax);
+		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.json';
+		$this->save($oJson, $sFile);
+		
+		$sFileMax = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/max.txt';
+		file_put_contents($sFileMax, $iMax);
 		
 		$this->addRowInAllIndex($sTable, $tProperty);
 		
@@ -92,23 +95,24 @@ class sgbd_xml extends abstract_sgbd
 	{
 		$iId = $this->getIdFromTab($tWhere);
 		
-		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml';
-		$oXml = simplexml_load_file($sFile);
-		$tXml = (array) $oXml;
+		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.json';
+		$oJson = $this->json_decode($sFile);
+		$tJson = (array) $oJson;
 		
 		// remove index
-		$this->removeRowFromAllIndex($sTable, $tXml);
+		$this->removeRowFromAllIndex($sTable, $tJson);
 		
-		unlink($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml');
+		unlink($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.json');
 	}
 
 	public function getListColumn($sTable)
 	{
-		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/structure.xml';
-		$oXml = simplexml_load_file($sFile);
+		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/structure.csv';
+		$sColumns = trim(file_get_contents($sFile));
 		
-		$tXml = (array) $oXml;
-		return $tXml['colonne'];
+		$tColumn = explode(';', $sColumns);
+		
+		return $tColumn;
 	}
 
 	public function getListTable()
@@ -156,9 +160,9 @@ class sgbd_xml extends abstract_sgbd
 				'=id'
 			)) {
 				$sFilename = $this->_tConfig[$this->_sConfig . '.database'];
-				$sFilename .= $sTable . '/' . (string) $tCritere['=id'] . '.xml';
+				$sFilename .= $sTable . '/' . (string) $tCritere['=id'] . '.json';
 				
-				$tRow = (array) simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
+				$tRow = (array) $this->json_decode($sFilename);
 				
 				$oRow = new $sClassRow($tRow);
 				$tObj[] = $oRow;
@@ -313,7 +317,7 @@ class sgbd_xml extends abstract_sgbd
 			foreach ($tMatchedFile as $sMatchedFile) {
 				$sMatchedFile = trim($sMatchedFile);
 				$sFilename = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $sMatchedFile;
-				$tRow = (array) simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
+				$tRow = (array) $this->json_decode($sFilename);
 				
 				$oRow = new $sClassRow($tRow);
 				$tObj[] = $oRow;
@@ -330,12 +334,12 @@ class sgbd_xml extends abstract_sgbd
 		$tObj = array();
 		foreach ($tFile as $oFile) {
 			if (in_array($oFile->getName(), array(
-				'structure.xml',
-				'max.xml'
+				'structure.csv',
+				'max.txt'
 			))) {
 				continue;
 			}
-			$tRow = (array) simplexml_load_file($oFile->getAdresse(), null, LIBXML_NOCDATA);
+			$tRow = (array) $this->json_decode($oFile->getAdresse());
 			
 			foreach ($tCritere as $sCritereField => $sCritereVal) {
 				
@@ -401,21 +405,21 @@ class sgbd_xml extends abstract_sgbd
 		$tIndexContent = array();
 		
 		foreach ($tFile as $oFile) {
-			if ($oFile->getName() == 'structure.xml') {
+			if ($oFile->getName() == 'structure.csv') {
 				continue;
 			}
-			if ($oFile->getName() == 'max.xml') {
+			if ($oFile->getName() == 'max.txt') {
 				continue;
 			}
 			
-			$tRow = (array) simplexml_load_file($oFile->getAdresse(), null, LIBXML_NOCDATA);
+			$tRow = (array) $this->json_decode($oFile->getAdresse());
 			
 			$sKey = '';
 			foreach ($tFields as $sField) {
 				$sKey .= $tRow[$sField];
 				$sKey .= '####';
 			}
-			$tIndexContent[$sKey][] = $tRow['id'] . '.xml';
+			$tIndexContent[$sKey][] = $tRow['id'] . '.json';
 		}
 		
 		$oDir = new _dir($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex);
@@ -447,7 +451,7 @@ class sgbd_xml extends abstract_sgbd
 		$sFileIndex = $this->getFileIndexFromTab($sIndex, $tProperty);
 		
 		$oFile = new _file($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex . '/' . $sFileIndex);
-		$oFile->addContent($tProperty['id'] . '.xml');
+		$oFile->addContent($tProperty['id'] . '.json');
 		$oFile->save('a');
 	}
 
@@ -474,7 +478,7 @@ class sgbd_xml extends abstract_sgbd
 		$tContent = array();
 		foreach ($tLine as $sLine) {
 			$sLine = trim($sLine);
-			if ($sLine == $tProperty['id'] . '.xml') {
+			if ($sLine == $tProperty['id'] . '.json') {
 				continue;
 			}
 			$tContent[] = $sLine;
@@ -494,22 +498,21 @@ class sgbd_xml extends abstract_sgbd
 		}
 	}
 
-	private function save($tProperty, $sFichier)
+	private function save($oJson, $sFichier)
 	{
-		$oFile = new _file($sFichier);
-		$sRet = "\n";
-		$sXml = '<?xml version="1.0" encoding="ISO-8859-1"?>' . $sRet;
-		$sXml .= '<main>' . $sRet;
-		foreach ($tProperty as $sVar => $sVal) {
-			$sXml .= '<' . $sVar . '><![CDATA[' . $sVal . ']]></' . $sVar . '>' . $sRet;
-		}
-		$sXml .= '</main>' . $sRet;
-		$oFile->write($sXml);
+		$sJson = json_encode($oJson);
+		
+		file_put_contents($sFichier, $sJson);
 	}
 
 	private function getMaxId($sTable)
 	{
-		$oXml = simplexml_load_file($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/max.xml');
-		return (int) $oXml->max;
+		$iMax = trim(file_get_contents($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/max.txt'));
+		return (int) $iMax;
+	}
+
+	private function json_decode($sFile)
+	{
+		return json_decode(file_get_contents($sFile));
 	}
 }
