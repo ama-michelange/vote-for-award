@@ -86,25 +86,20 @@ class _root
 	public static function loadConf()
 	{
 		try {
-			foreach (self::$_tConfigFilename as $tConfig) {
-				$sConfig = $tConfig[0];
-				$sCatFilter = $tConfig[1];
+			foreach (self::$tConfigFilename as $sConfig) {
 				$tIni = parse_ini_file($sConfig, true);
 				
 				foreach ($tIni as $sCat => $tVal) {
-					if ($sCatFilter != null and $sCat != $sCatFilter) {
-						continue;
-					}
-					
 					if (is_array($tVal)) {
 						foreach ($tVal as $sKey => $uVal) {
-							self::$_tConfigVar[$sCat][$sKey] = $uVal;
+							self::$tConfigVar[$sCat][$sKey] = $uVal;
 						}
 					}
 				}
 			}
 		} catch (Exception $e) {
 			self::erreurLog($e->getMessage() . "\n" . $e->getTraceAsString());
+			exit();
 		}
 	}
 
@@ -115,7 +110,7 @@ class _root
 	 */
 	public static function loadLangueDate()
 	{
-		include_once self::getConfigVar('path.i18n') . 'date_' . self::getConfigVar('language.default') . '.php';
+		require_once (self::getConfigVar('path.i18n') . 'date_' . self::getConfigVar('language.default') . '.php');
 	}
 
 	public static function nullbyteprotect($string)
@@ -125,9 +120,9 @@ class _root
 		return preg_replace('/\\x00/', '', preg_replace('/\\\0/', '', $string));
 	}
 
-	public static function startSession()
+	public static function AMA_startSession()
 	{
-		if (self::$_bSessionStarted) {
+		if (self::$bSessionStarted) {
 			return null;
 		} else 
 			if ((int) self::getConfigVar('auth.session.use_cookies') == 1) {
@@ -139,7 +134,6 @@ class _root
 				if ((int) self::getConfigVar('auth.session.cookie_secure') == 1 and isset($_SERVER['HTTPS'])) {
 					$bSecure = true;
 				}
-				// AMA
 				// Version php >= 5.2.0
 				// session_set_cookie_params((int)self::getConfigVar('auth.session.cookie_lifetime',0),self::getConfigVar('auth.session.cookie_path',null),self::getConfigVar('auth.session.cookie_domain',null),$bSecure,$bHttpOnly);
 				// Version php < 5.2.0
@@ -169,7 +163,7 @@ class _root
 			if (self::getConfigVar('site.mode') == 'dev') {
 				error_reporting(E_ALL);
 			} else {
-				error_reporting(0);
+				error_reporting(55);
 			}
 			
 			self::getLog()->setInformation((int) self::getConfigVar('log.information'));
@@ -199,7 +193,7 @@ class _root
 			$sModuleActionToLoad = self::getRequest()->getAction();
 			
 			/* LOG */
-			self::getLog()->info('module a appeler [' . $sModuleToLoad . '::' . $sModuleActionToLoad . ']');
+			self::getLog()->info('>>>>>>>>>>>>>>>>>>>>> module a appeler [' . $sModuleToLoad . '::' . $sModuleActionToLoad . ']');
 			
 			// chargement module/action
 			$sClassModule = 'module_' . $sModuleToLoad;
@@ -231,16 +225,12 @@ class _root
 						/* LOG */
 						self::getLog()->info('utilisation page en cache [' . $sNomPageCache . ']');
 						echo $oFichierCache->getContent();
-						return;
+						exit();
 					}
 					
 					ob_start();
 				}
 				$sAction = '_' . $sModuleActionToLoad;
-				
-				/* LOG */
-				self::getLog()->info('appel module [' . $sModuleToLoad . '::' . $sAction . ']');
-				$oModule->$sAction();
 				
 				// post action
 				if (method_exists($oModule, 'after_' . $sModuleActionToLoad)) {
@@ -250,6 +240,10 @@ class _root
 					$sActionAfter = 'after_' . $sModuleActionToLoad;
 					$oModule->$sActionAfter();
 				}
+				
+				/* LOG */
+				self::getLog()->info('appel module [' . $sModuleToLoad . '::' . $sAction . ']');
+				$oModule->$sAction();
 				
 				// post module
 				if (method_exists($oModule, 'after')) {
@@ -273,8 +267,7 @@ class _root
 					'Erreur dans module/' . $sModuleToLoad . '/main.php',
 					'Pas de m&eacute;thode _' . $sModuleActionToLoad . '() dans le module "' . $sModuleToLoad .
 						 '" &agrave; charger',
-						'Note: vous pouvez modifier le couple module/action par defaut ',
-						'en modifiant la section [navigation] dans le fichier conf/site.ini.php'
+						'Note: vous pouvez modifier le couple module/action par defaut en modifiant le fichier conf/navigation.php'
 				);
 				throw new Exception(implode("\n", $tErreur));
 			}
@@ -310,9 +303,8 @@ class _root
 				
 				foreach ($trace['args'] as $j => $arg) {
 					
-					if ($j > 0) {
+					if ($j > 0)
 						$result .= ' , ';
-					}
 					
 					if (is_array($arg)) {
 						$result .= preg_replace('/\n|\r/', ' ', print_r($arg, 1));
@@ -336,21 +328,21 @@ class _root
 
 	private function loadAutoload()
 	{
-		if ((int) self::getConfigVar('cache.autoload.enabled') == 1) {
-			$sCacheFilename = self::getConfigVar('path.cache') . 'autoload.php';
+		if ((int) _root::getConfigVar('cache.autoload.enabled') == 1) {
+			$sCacheFilename = _root::getConfigVar('path.cache') . 'autoload.php';
 			if (file_exists($sCacheFilename)) {
-				include $sCacheFilename;
+				include ($sCacheFilename);
 			} else {
 				// on creer un tableau associatif de tous les path des classes
 				$tDir = array(
-					'lib' => self::getConfigVar('path.lib'),
-					'abstract' => self::getConfigVar('path.lib') . 'abstract/',
-					'sgbd' => self::getConfigVar('path.lib') . 'sgbd/',
-					'sgbd_pdo' => self::getConfigVar('path.lib') . 'sgbd/pdo/',
-					'sgbd_syntax' => self::getConfigVar('path.lib') . 'sgbd/syntax/',
-					'plugin' => self::getConfigVar('path.plugin'),
-					'model' => self::getConfigVar('path.model'),
-					'module' => self::getConfigVar('path.module')
+					'lib' => _root::getConfigVar('path.lib'),
+					'abstract' => _root::getConfigVar('path.lib') . 'abstract/',
+					'sgbd' => _root::getConfigVar('path.lib') . 'sgbd/',
+					'sgbd_pdo' => _root::getConfigVar('path.lib') . 'sgbd/pdo/',
+					'sgbd_syntax' => _root::getConfigVar('path.lib') . 'sgbd/syntax/',
+					'plugin' => _root::getConfigVar('path.plugin'),
+					'model' => _root::getConfigVar('path.model'),
+					'module' => _root::getConfigVar('path.module')
 				);
 				
 				$tAutoload = array();
@@ -394,7 +386,7 @@ class _root
 				
 				$sCodeCache = '<?php _root::$tAutoload=' . var_export($tAutoload, true) . ';';
 				file_put_contents($sCacheFilename, $sCodeCache);
-				self::$_tAutoload = $tAutoload;
+				_root::$tAutoload = $tAutoload;
 			}
 		}
 	}
@@ -409,10 +401,10 @@ class _root
 	public static function autoload($sClass)
 	{
 		try {
-			if (isset(self::$_tAutoload['_root'])) {
+			if (isset(self::$tAutoload['_root'])) {
 				
-				if (isset(self::$_tAutoload[$sClass])) {
-					include self::$_tAutoload[$sClass];
+				if (isset(self::$tAutoload[$sClass])) {
+					include (self::$tAutoload[$sClass]);
 				} else {
 					return false;
 				}
@@ -421,29 +413,29 @@ class _root
 				$tab = preg_split('/_/', $sClass);
 				
 				if ($sClass[0] == '_') {
-					include self::getConfigVar('path.lib') . 'class' . $sClass . '.php';
+					include (self::getConfigVar('path.lib') . 'class' . $sClass . '.php');
 				} else 
 					if (in_array($tab[0], array(
 						'plugin',
 						'model',
 						'abstract'
 					))) {
-						include self::getConfigVar('path.' . $tab[0]) . $sClass . '.php';
+						include (self::getConfigVar('path.' . $tab[0]) . $sClass . '.php');
 					} else 
 						if ($tab[0] == 'module') {
-							include self::getConfigVar('path.module') . substr($sClass, 7) . '/main.php';
+							include (self::getConfigVar('path.module') . substr($sClass, 7) . '/main.php');
 						} else 
 							if ($tab[0] == 'row') {
-								include self::getConfigVar('path.model') . 'model_' . substr($sClass, 4) . '.php';
+								include (self::getConfigVar('path.model') . 'model_' . substr($sClass, 4) . '.php');
 							} else 
 								if ($tab[0] == 'sgbd' and in_array($tab[1], array(
 									'syntax',
 									'pdo'
 								))) {
-									include self::getConfigVar('path.lib') . 'sgbd/' . $tab[1] . '/' . $sClass . '.php';
+									include (self::getConfigVar('path.lib') . 'sgbd/' . $tab[1] . '/' . $sClass . '.php');
 								} else 
 									if ($tab[0] == 'sgbd') {
-										include self::getConfigVar('path.lib') . 'sgbd/' . $sClass . '.php';
+										include (self::getConfigVar('path.lib') . 'sgbd/' . $sClass . '.php');
 									} else {
 										return false;
 									}
@@ -455,7 +447,7 @@ class _root
 			Les fichiers de type 'plugin' sont dans des fichiers plugin/plugin_CLASS.php
 			Les fichiers de type 'model' sont dans des ficheirs model/model_CLASS.php
 			Les fichiers de type 'row' sont dans des fichiers model/model_CLASS.php (meme fichier que la classe model)
- 
+
 			" . $e->getMessage();
 			self::erreurLog($sError . "\n" . $e->getTraceAsString());
 		}
@@ -540,15 +532,15 @@ class _root
 	 */
 	public static function addRequest($tRequest)
 	{
-		self::$_tRequestTab[] = $tRequest;
+		self::$tRequestTab[] = $tRequest;
 	}
 
 	public static function loadRequest()
 	{
-		if (self::$_oRequest == null) {
-			self::$_oRequest = new _request();
+		if (self::$oRequest == null) {
+			self::$oRequest = new _request();
 		}
-		foreach (self::$_tRequestTab as $tRequest) {
+		foreach (self::$tRequestTab as $tRequest) {
 			foreach ($tRequest as $sVar => $sVal) {
 				self::getRequest()->setParam($sVar, $sVal);
 			}
@@ -562,8 +554,8 @@ class _root
 	 */
 	public static function resetRequest()
 	{
-		self::$_oRequest = null;
-		self::$_tRequestTab = array();
+		self::$oRequest = null;
+		self::$tRequestTab = array();
 	}
 
 	/**
@@ -574,7 +566,7 @@ class _root
 	 */
 	public static function getRequest()
 	{
-		return self::$_oRequest;
+		return self::$oRequest;
 	}
 
 	/**
@@ -585,24 +577,10 @@ class _root
 	 */
 	public static function getCache()
 	{
-		if (self::$_oCache == null) {
-			self::$_oCache = new _cache();
+		if (self::$oCache == null) {
+			self::$oCache = new _cache();
 		}
-		return self::$_oCache;
-	}
-
-	/**
-	 * retourne l'objet _cacheVar
-	 *
-	 * @access public
-	 * @return _cacheVar
-	 */
-	public static function getCacheVar()
-	{
-		if (self::$_oCacheVar == null) {
-			self::$_oCacheVar = new _cacheVar();
-		}
-		return self::$_oCacheVar;
+		return self::$oCache;
 	}
 
 	/**
@@ -613,11 +591,11 @@ class _root
 	 */
 	public static function getAuth()
 	{
-		if (self::$_oAuth == null) {
+		if (self::$oAuth == null) {
 			$sClassAuth = self::getConfigVar('auth.class');
-			self::$_oAuth = new $sClassAuth();
+			self::$oAuth = new $sClassAuth();
 		}
-		return self::$_oAuth;
+		return self::$oAuth;
 	}
 
 	/**
@@ -628,11 +606,11 @@ class _root
 	 */
 	public static function getACL()
 	{
-		if (self::$_oACL == null) {
+		if (self::$oACL == null) {
 			$sClassACL = self::getConfigVar('acl.class');
-			self::$_oACL = new $sClassACL();
+			self::$oACL = new $sClassACL();
 		}
-		return self::$_oACL;
+		return self::$oACL;
 	}
 
 	/**
@@ -643,11 +621,25 @@ class _root
 	 */
 	public static function getUrlRewriting()
 	{
-		if (self::$_oUrlrewriting == null) {
+		if (self::$oUrlrewriting == null) {
 			$sClassUrlrewriting = self::getConfigVar('urlrewriting.class');
-			self::$_oUrlrewriting = new $sClassUrlrewriting();
+			self::$oUrlrewriting = new $sClassUrlrewriting();
 		}
-		return self::$_oUrlrewriting;
+		return self::$oUrlrewriting;
+	}
+
+	/**
+	 * retourne l'objet _tools
+	 *
+	 * @access public
+	 * @return _tools
+	 */
+	public static function getTools()
+	{
+		if (self::$oTools == null) {
+			self::$oTools = new _tools();
+		}
+		return self::$oTools;
 	}
 
 	/**
@@ -658,7 +650,7 @@ class _root
 	 */
 	public static function getLog()
 	{
-		if (self::$_oLog == null) {
+		if (self::$oLog == null) {
 			$sClassLog = self::getConfigVar('log.class');
 			if ($sClassLog == '') {
 				$tErreur = array(
@@ -673,9 +665,9 @@ class _root
 				
 				self::erreurLog(implode("\n", $tErreur));
 			}
-			self::$_oLog = new $sClassLog();
+			self::$oLog = new $sClassLog();
 		}
-		return self::$_oLog;
+		return self::$oLog;
 	}
 
 	/**
@@ -691,9 +683,9 @@ class _root
 	{
 		if (preg_match('/\./', $sCatAndVar)) {
 			list ($sCategory, $sVar) = preg_split('/\./', $sCatAndVar, 2);
-			self::$_tConfigVar[$sCategory][$sVar] = $uValue;
+			self::$tConfigVar[$sCategory][$sVar] = $uValue;
 		} else {
-			self::$_tConfigVar[$sCatAndVar] = $uValue;
+			self::$tConfigVar[$sCatAndVar] = $uValue;
 		}
 	}
 
@@ -721,14 +713,14 @@ class _root
 				if (preg_match('/_/', $sVar)) {
 					$sVar = preg_replace('/_/', '/', $sVar);
 				}
-				return self::$_tConfigVar['path']['lib'] . $sVar . '/';
+				return self::$tConfigVar['path']['lib'] . $sVar . '/';
 			} else 
-				if (isset(self::$_tConfigVar[$sCategory][$sVar])) {
-					return self::$_tConfigVar[$sCategory][$sVar];
+				if (isset(self::$tConfigVar[$sCategory][$sVar])) {
+					return self::$tConfigVar[$sCategory][$sVar];
 				}
 		} else 
-			if (isset(self::$_tConfigVar[$sCatAndVar])) {
-				return self::$_tConfigVar[$sCatAndVar];
+			if (isset(self::$tConfigVar[$sCatAndVar])) {
+				return self::$tConfigVar[$sCatAndVar];
 			}
 		return $uDefaut;
 	}
@@ -744,7 +736,7 @@ class _root
 	 */
 	public static function setGlobalVar($sVar, $sValue)
 	{
-		self::$_tGlobalVar[$sVar] = $sValue;
+		self::$tGlobalVar[$sVar] = $sValue;
 	}
 
 	/**
@@ -759,8 +751,8 @@ class _root
 	 */
 	public static function getGlobalVar($sVar, $defaut = null)
 	{
-		if (isset(self::$_tGlobalVar[$sVar])) {
-			return self::$_tGlobalVar[$sVar];
+		if (isset(self::$tGlobalVar[$sVar])) {
+			return self::$tGlobalVar[$sVar];
 		}
 		return $defaut;
 	}
@@ -776,7 +768,7 @@ class _root
 	 */
 	public static function setInstanceOf($sObj, $oObj)
 	{
-		self::$_tObject[$sObj] = $oObj;
+		self::$tObject[$sObj] = $oObj;
 	}
 
 	/**
@@ -791,8 +783,8 @@ class _root
 	 */
 	public static function getObject($sObj, $defaut = null)
 	{
-		if (isset(self::$_tObject[$sObj])) {
-			return self::$_tObject[$sObj];
+		if (isset(self::$tObject[$sObj])) {
+			return self::$tObject[$sObj];
 		}
 		return $defaut;
 	}
@@ -811,7 +803,7 @@ class _root
 		/* LOG */
 		self::getLog()->info('redirection [' . self::getLink($uNav, $tParam, false) . ']');
 		header('Location:' . self::getLink($uNav, $tParam, false));
-		exit(0);
+		exit();
 	}
 
 	/**
@@ -877,15 +869,14 @@ class _root
 	{
 		if (self::getConfigVar('site.mode') == 'dev') {
 			$sText = nl2br($sText);
-			include self::getConfigVar('path.layout') . 'erreur.php';
+			include ('site/layout/erreur.php');
 		} else {
-			include self::getConfigVar('navigation.layout.erreur');
+			include (self::getConfigVar('navigation.layout.erreur'));
 			try {
 				$open = fopen(self::getConfigVar('path.log', 'data/log') . date('Y-m-d') . '.txt', 'a+');
 				fputs($open, $sText);
 				fclose($open);
 			} catch (Exception $e) {
-				// en mode production, on est muet sur
 			}
 		}
 	}
@@ -908,4 +899,11 @@ function customHtmlentities($string)
 	return _root::nullbyteprotect(htmlentities($string, ENT_QUOTES, _root::getConfigVar('encodage.charset')));
 }
 
+function customHtmlspecialchars($string)
+{
+	if (is_array($string)) {
+		return array_map('customHtmlspecialchars', $string);
+	}
+	return _root::nullbyteprotect(htmlspecialchars($string, ENT_QUOTES, _root::getConfigVar('encodage.charset')));
+}
 

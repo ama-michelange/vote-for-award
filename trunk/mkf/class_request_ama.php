@@ -1,24 +1,23 @@
 <?php
 /*
- * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
+ * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
  * _request classe pour gerer le les requete
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
  */
 class _request
 {
 
-	private $_tVar;
+	private $tVar;
 
-	private $_sModule;
+	private $sModule;
 
-	private $_sAction;
+	private $sAction;
 
-	private $_bHasNavigation;
+	private $bHasNavigation;
 
 	/**
 	 * constructeur
@@ -29,19 +28,17 @@ class _request
 	 */
 	public function __construct()
 	{
-		$this->_sModule = _root::getConfigVar('navigation.module.default', null);
-		if ($this->_sModule == null) {
-			$this->_sModule = _root::getConfigVar('navigation.module.default');
-		}
+		$this->sModule = _root::getConfigVar('navigation.module.default', null);
+		if ($this->sModule == null)
+			$this->sModule = _root::getConfigVar('navigation.module.default');
 		
 		$this->sAction = _root::getConfigVar('navigation.action.default', null);
-		if ($this->_sAction == null) {
-			$this->_sAction = _root::getConfigVar('navigation.action.default');
-		}
+		if ($this->sAction == null)
+			$this->sAction = _root::getConfigVar('navigation.action.default');
 		
-		$this->_tVar = array();
+		$this->tVar = array();
 		
-		$this->_bHasNavigation = false;
+		$this->bHasNavigation = false;
 	}
 
 	/**
@@ -54,15 +51,24 @@ class _request
 	 */
 	public function getParam($sVar, $else = null)
 	{
-		if (array_key_exists($sVar, $this->_tVar)) {
+		if (array_key_exists($sVar, $this->tVar)) {
 			if ((int) _root::getConfigVar('security.xss.enabled') == 1) {
-				if (is_array($this->_tVar[$sVar])) {
-					return array_map('customHtmlentities', $this->_tVar[$sVar]);
+				if (1 == (int) _root::getConfigVar('security.xss.onlyspecialchars')) {
+					if (is_array($this->tVar[$sVar])) {
+						return array_map('customHtmlspecialchars', $this->tVar[$sVar]);
+					}
+					$newVal = _root::nullbyteprotect(
+						htmlspecialchars($this->tVar[$sVar], ENT_QUOTES, _root::getConfigVar('encodage.charset')));
+					return $newVal;
+				} else {
+					if (is_array($this->tVar[$sVar])) {
+						return array_map('customHtmlentities', $this->tVar[$sVar]);
+					}
+					return _root::nullbyteprotect(
+						htmlentities($this->tVar[$sVar], ENT_QUOTES, _root::getConfigVar('encodage.charset')));
 				}
-				return _root::nullbyteprotect(
-					htmlentities($this->_tVar[$sVar], ENT_QUOTES, _root::getConfigVar('encodage.charset')));
 			} else {
-				return $this->_tVar[$sVar];
+				return $this->tVar[$sVar];
 			}
 		} else {
 			return $else;
@@ -78,7 +84,7 @@ class _request
 	 */
 	public function setParam($sVar, $val)
 	{
-		$this->_tVar[$sVar] = $val;
+		$this->tVar[$sVar] = $val;
 		if (! $this->hasNavigation()) {
 			$this->loadContext();
 		}
@@ -86,7 +92,7 @@ class _request
 
 	public function getParams()
 	{
-		return $this->_tVar;
+		return $this->tVar;
 	}
 
 	/**
@@ -121,7 +127,7 @@ class _request
 	 */
 	public function hasNavigation()
 	{
-		return $this->_bHasNavigation;
+		return $this->bHasNavigation;
 	}
 
 	/**
@@ -132,7 +138,7 @@ class _request
 	 */
 	public function setModule($sModule)
 	{
-		$this->_sModule = $sModule;
+		$this->sModule = $sModule;
 	}
 
 	/**
@@ -143,7 +149,7 @@ class _request
 	 */
 	public function setAction($sAction)
 	{
-		$this->_sAction = $sAction;
+		$this->sAction = $sAction;
 	}
 
 	/**
@@ -154,7 +160,7 @@ class _request
 	 */
 	public function getModule()
 	{
-		return $this->_sModule;
+		return $this->sModule;
 	}
 
 	/**
@@ -165,7 +171,7 @@ class _request
 	 */
 	public function getAction()
 	{
-		return $this->_sAction;
+		return $this->sAction;
 	}
 
 	private function loadContext()
@@ -186,8 +192,8 @@ class _request
 	 */
 	public function loadModuleAndAction($sChaine)
 	{
-		$this->_tVar[_root::getConfigVar('navigation.var')] = $sChaine;
-		$this->_bHasNavigation = true;
+		$this->tVar[_root::getConfigVar('navigation.var')] = $sChaine;
+		$this->bHasNavigation = true;
 		$sModule = '';
 		$sAction = '';
 		if (preg_match('/::/', $sChaine)) {
@@ -213,9 +219,8 @@ class _request
 	 */
 	public function isPost()
 	{
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			return true;
-		}
 		return false;
 	}
 
@@ -227,9 +232,8 @@ class _request
 	 */
 	public function isGet()
 	{
-		if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+		if ($_SERVER['REQUEST_METHOD'] == 'GET')
 			return true;
-		}
 		return false;
 	}
 
@@ -244,16 +248,16 @@ class _request
 
 	public function magic_quote()
 	{
-		$this->_tVar = array_map('stripslashes_deep', $this->_tVar);
+		$this->tVar = array_map('stripslashes_deep', $this->tVar);
 	}
 
 	public function __set($sVar, $sVal)
 	{
-		$this->_tVar[$sVar] = $sVal;
+		$this->tVar[$sVar] = $sVal;
 	}
 
 	public function __get($sVar)
 	{
-		return $this->_tVar[$sVar];
+		return $this->tVar[$sVar];
 	}
 }
