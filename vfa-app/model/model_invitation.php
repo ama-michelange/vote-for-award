@@ -106,7 +106,10 @@ class row_invitation extends abstract_row
 	{
 		switch ($this->state) {
 			case plugin_vfa::INVITATION_STATE_OPEN:
-				return 'Ouverte';
+				return 'Préparée';
+				break;
+			case plugin_vfa::INVITATION_STATE_SENT:
+				return 'Envoyée';
 				break;
 			case plugin_vfa::INVITATION_STATE_ACCEPTED:
 				return 'Acceptée';

@@ -182,7 +182,7 @@ class plugin_datetime extends plugin_date
 		} elseif ($sFormat == 'y-m-d') {
 			list ($iAnnee, $iMois, $iJour) = explode('-', $sDate);
 			$iAnnee = 2000 + intval($iAnnee);
-		} elseif ($sFormat == 'Y-m-d h:i:s') {
+		} elseif ($sFormat == 'Y-m-d H:i:s') {
 			$tDatetime = preg_split('/\s/', $sDate);
 			list ($iAnnee, $iMois, $iJour) = explode('-', $tDatetime[0]);
 			list ($iHeure, $iMinute, $iSeconde) = explode(':', $tDatetime[1]);

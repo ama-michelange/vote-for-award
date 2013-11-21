@@ -7,13 +7,17 @@
 			<div class="panel-body">
 				<dl class="dl-horizontal">
 					<dt>Envoyée le</dt>
-					<dd><?php echo plugin_vfa::toStringDateShow($this->oInvitation->created_date) ?></dd>
+					<dd><?php echo plugin_vfa::toStringDatetimeShow($this->oInvitation->created_date) ?></dd>
 					<dt>Par</dt>
 					<dd><?php echo $this->oCreatedUser->username ?> (<?php echo $this->oCreatedUser->email ?>)</dd>
 				</dl>
 				<dl class="dl-horizontal">
 					<dt>Destinataire</dt>
 					<dd><?php echo $this->oInvitation->email ?></dd>
+				</dl>
+				<dl class="dl-horizontal">
+					<dt>Dernière modification</dt>
+					<dd><?php echo plugin_vfa::toStringDatetimeShow($this->oInvitation->modified_date) ?></dd>
 				</dl>
 				<dl class="dl-horizontal">
 					<dt>
@@ -23,10 +27,6 @@
 						<a href="<?php echo plugin_vfa::generateURLInvitation($this->oInvitation)?>" target="_new">Voir
 							l'invitation</a>
 					</dd>
-				</dl>
-				<dl class="dl-horizontal">
-					<dt>Dernière modification</dt>
-					<dd><?php echo plugin_vfa::toStringDateShow($this->oInvitation->modified_date) ?></dd>
 				</dl>
 			</div>
 		</div>
