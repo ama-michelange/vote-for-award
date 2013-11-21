@@ -35,7 +35,7 @@
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-bsnavbar">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="<?php echo $this->getLink($this->tLink['Accueil'])?>">ALICES Award</a>
+			<a class="navbar-brand" href="<?php echo $this->getLink($this->tLink['Accueil'])?>"><?php echo _root::getConfigVar('vfa-app.title')?></a>
 		</div>
 		<div class="navbar-collapse collapse navbar-bsnavbar">
 			<ul class="nav navbar-nav">

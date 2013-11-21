@@ -9,8 +9,7 @@
 		<div class="panel-body">
 			<div class="alert alert-warning clearfix">
 				<p><?php echo plugin_validation::show($this->tMessage, 'token')?>
-					<a class="btn btn-sm btn-warning pull-right"
-						href="<?php echo $this->getLink(_root::getParamNav()) ?>">Fermer</a>
+					<a class="btn btn-sm btn-warning pull-right"	href="<?php echo $this->getLink(_root::getParamNav()) ?>">Fermer</a>
 				</p>
 			</div>
 		</div>
@@ -28,11 +27,10 @@
 					<h3 class="panel-title">Invitation à envoyer par mail</h3>
 				</div>
 				<div class="panel-body panel-condensed">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?>">
-						<label for="inputEmail">Adresse email du destinataire</label> <input class="form-control"
-							type="text" id="inputEmail" name="email" autofocus="autofocus"
-							value="<?php echo $this->oRegistry->email ?>" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email')?></span>
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?>">
+						<label for="inputEmail">Adresse email du destinataire</label>
+						<input class="form-control" type="text" id="inputEmail" name="email" autofocus="autofocus" value="<?php echo $this->oRegistry->email ?>" /> 
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email')?></span>
 					</div>
 				</div>
 			</div>
@@ -48,11 +46,11 @@
 						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, array('award_id','awards'))?>">
 						<label for="inputAwards">Prix</label>
 						<?php if ($this->countAwards == 0): ?>
-							<input class="form-control" type="text" disabled="disabled" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'awards')?></span>
+							<input class="form-control" type="text" disabled="disabled" /> 
+							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'awards')?></span>
 						<?php elseif ($this->countAwards == 1):?>
-							<input type="hidden" name="award_id" value="<?php echo $this->oAward->award_id ?>" /> <input
-							class="form-control" type="text" disabled="disabled"
-							value="<?php echo $this->oAward->getTypeNameString() ?>"> 
+							<input type="hidden" name="award_id" value="<?php echo $this->oAward->award_id ?>" /> 
+							<input class="form-control" type="text" disabled="disabled"	value="<?php echo $this->oAward->getTypeNameString() ?>"> 
 						<?php else:?>
 							<select class="form-control" id="inputAwards" name="awards_ids[]" size="10" multiple>
 								<?php foreach($this->tSelectedAwards as $tAward):?>
@@ -68,11 +66,11 @@
 						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, array('group_id','groups')) ?>">
 						<label for="inputGroups">Groupe</label>
 						<?php if ($this->countGroups == 0): ?>
-							<input class="form-control" type="text" disabled="disabled" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'groups')?></span>
+							<input class="form-control" type="text" disabled="disabled" /> 
+							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'groups')?></span>
 						<?php elseif ($this->countGroups == 1):?>
-							<input type="hidden" name="group_id" value="<?php echo $this->oGroup->group_id ?>" /> <input
-							class="form-control" type="text" disabled="disabled"
-							value="<?php echo $this->oGroup->group_name ?>">
+							<input type="hidden" name="group_id" value="<?php echo $this->oGroup->group_id ?>" /> 
+							<input class="form-control" type="text" disabled="disabled"	value="<?php echo $this->oGroup->group_name ?>">
 						<?php else:?>
 							<select class="form-control" id="inputGroups" name="group_id" data-placeholder="Choisir">
 								<?php foreach($this->tSelectedGroups as $tGroup):?>
@@ -93,13 +91,9 @@
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
-				<button class="btn btn-default" type="submit" name="cancel" value="prepare">
-					<i class="glyphicon glyphicon-remove with-text"></i>Annuler
-				</button>
+				<button class="btn btn-default" type="submit" name="cancel" value="prepare"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</button>
 				<?php if (($this->countAwards > 0) && ($this->countGroups > 0)): ?>
-					<button class="btn btn-primary" type="submit">
-					Suivant &nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right"></i>
-				</button>
+					<button class="btn btn-primary" type="submit">Suivant &nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right"></i></button>
 				<?php endif;?>
 			</div>
 		</div>

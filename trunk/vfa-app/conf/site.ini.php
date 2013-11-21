@@ -89,3 +89,8 @@ base=/vfa/vfa-app/
 
 [model]
 ini.var=db
+
+[vfa-app]
+title=Vote For Award
+mail.from=alicesaward@free.fr
+mail.from.label=Alices Award

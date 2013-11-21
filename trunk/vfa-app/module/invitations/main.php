@@ -141,6 +141,9 @@ class module_invitations extends abstract_module
 			case 'confirm':
 				$this->makeViewMailConfirm($poRegistry);
 				break;
+			case 'notsent':
+				$this->makeViewMailSent($poRegistry, false);
+				break;
 			case 'sent':
 				$this->makeViewMailSent($poRegistry);
 				break;
@@ -262,14 +265,15 @@ class module_invitations extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function makeViewMailSent($poRegistry)
+	private function makeViewMailSent($poRegistry, $pSent = true)
 	{
 		$oRegistry = $poRegistry;
-		// var_dump($oRegistry);
 		$tMessage = $oRegistry->getMessages();
-		// var_dump($tMessage);
-		
-		$oView = new _view('invitations::mailSent');
+		if ($pSent) {
+			$oView = new _view('invitations::mailSent');
+		} else {
+			$oView = new _view('invitations::mailNotSent');
+		}
 		$oView->oRegistry = $oRegistry;
 		$oView->tMessage = $tMessage;
 		
@@ -284,8 +288,8 @@ class module_invitations extends abstract_module
 		$oView->tAwards = $tAwards;
 		$oView->oGroup = model_group::getInstance()->findById($oRegistry->group_id);
 		
-		$oPluginXsrf = new plugin_xsrf();
-		$oView->token = $oPluginXsrf->getToken();
+		// $oPluginXsrf = new plugin_xsrf();
+		// $oView->token = $oPluginXsrf->getToken();
 		
 		$this->oLayout->add('work', $oView);
 	}
@@ -310,15 +314,20 @@ class module_invitations extends abstract_module
 		}
 		$oRegistry = new row_registry_invitation();
 		
-		if ('sent' != _root::getParam('phase', null)) {
-			$oPluginXsrf = new plugin_xsrf();
-			if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
-				$oRegistry->setMessages(array(
-					'token' => $oPluginXsrf->getMessage()
-				));
-				$oRegistry->phase = 'prepare';
-				return $oRegistry;
-			}
+		switch (_root::getParam('phase', null)) {
+			case 'sent':
+			case 'notsent':
+				break;
+			default:
+				$oPluginXsrf = new plugin_xsrf();
+				if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+					$oRegistry->setMessages(array(
+						'token' => $oPluginXsrf->getMessage()
+					));
+					$oRegistry->phase = 'prepare';
+					return $oRegistry;
+				}
+				break;
 		}
 		
 		// Copie la saisie dans un enregistrement
@@ -361,9 +370,12 @@ class module_invitations extends abstract_module
 										break;
 									case 'confirm':
 										$oInvitation = $this->saveInvitation($oRegistry);
-										$this->sendMail($oRegistry, $oInvitation);
+										if ($this->sendMail($oRegistry, $oInvitation)) {
+											$oRegistry->phase = 'sent';
+										} else {
+											$oRegistry->phase = 'notsent';
+										}
 										$oRegistry->invit = $oInvitation;
-										$oRegistry->phase = 'sent';
 										break;
 								}
 							}
@@ -425,18 +437,25 @@ class module_invitations extends abstract_module
 	private function sendMail($poRegistry, $poInvitation)
 	{
 		$oMail = new plugin_mail();
-		$oMail->setFrom('Prix Alices', 'prix.alices@free.fr');
-		$oMail->addTo('michelange.anton@free.fr');
-		$oMail->setBcc('michelange.anton@gmail.com');
-		$oMail->setSubject('Invitation');
+		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
+		$oMail->addTo($poInvitation->email);
+		$createdUser = model_user::getInstance()->findById($poInvitation->created_user_id);
+		$oMail->addCC($createdUser->email);
+		$oMail->setBcc( _root::getConfigVar('vfa-app.mail.from'));
+		
+		
+		$oMail->setSubject('Invitation d\'inscription : '.$poInvitation->showFullFype());
 		$oMail->setBody('Mon premier mail');
 		try {
 			$sent = $oMail->send();
 		} catch (Exception $e) {
-			echo 'Exception reçue : ', $e->getMessage(), "\n";
 			$sent = false;
 		}
-		echo 'Message envoyé : ', $sent, "\n";
+		if ($sent) {
+			$poInvitation->state = plugin_vfa::INVITATION_STATE_SENT;
+			$poInvitation->update();
+		}
+		return $sent;
 	}
 
 	private function delete()

@@ -18,6 +18,8 @@ class plugin_vfa
 
 	const INVITATION_STATE_OPEN = 'OPEN';
 
+	const INVITATION_STATE_SENT = 'SENT';
+
 	const INVITATION_STATE_ACCEPTED = 'ACCEPTED';
 
 	const INVITATION_STATE_REJECTED = 'REJECTED';
@@ -182,6 +184,29 @@ class plugin_vfa
 	}
 
 	/**
+	 * Change le format d'une horodate.
+	 *
+	 * @param string $pDatetime
+	 *        	La horodate au format source
+	 * @param string $pFormatSrc
+	 *        	Le format source
+	 * @param string $pFormatDst
+	 *        	Le format de destination
+	 * @return string La horodate au format de destination ou NULL si pb
+	 */
+	public static function changeDatetimeFormat($pDate, $pFormatSrc, $pFormatDst)
+	{
+		$newDate = null;
+		if (isset($pDate)) {
+			$oDate = new plugin_datetime($pDate, $pFormatSrc);
+			if ($oDate->isValid()) {
+				$newDate = $oDate->toString($pFormatDst);
+			}
+		}
+		return $newDate;
+	}
+
+	/**
 	 * Change le format d'une date SGBD vers le format d'affichage.
 	 *
 	 * @param string $pDate
@@ -202,7 +227,7 @@ class plugin_vfa
 	 */
 	public static function toStringDateTimeShow($pDate)
 	{
-		return self::changeDateFormat($pDate, 'Y-m-d H:i:s', 'd/m/Y H:i:s');
+		return self::changeDatetimeFormat($pDate, 'Y-m-d H:i:s', 'd/m/Y H:i:s');
 	}
 
 	/**

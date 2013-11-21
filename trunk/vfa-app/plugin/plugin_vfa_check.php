@@ -74,7 +74,7 @@ class plugin_vfa_check extends plugin_check
 	{
 		$retA = $this->isNotEmpty($uValueA, $sErrorMsg);
 		$retB = $this->isNotEmpty($uValueB, $sErrorMsg);
-		$ret = (false == $retA) && (false == $retB);
+		$ret = (true == $retA) || (true == $retB);
 		if (false == $ret) {
 			$this->setLastErrorMsg($sErrorMsg);
 		}
