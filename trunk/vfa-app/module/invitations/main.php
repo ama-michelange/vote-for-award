@@ -136,21 +136,21 @@ class module_invitations extends abstract_module
 	{
 		switch ($poRegistry->phase) {
 			case 'prepare':
-				$this->makeViewMailPrepare($poRegistry);
+				$this->makeViewInvitPrepare($poRegistry);
 				break;
 			case 'confirm':
-				$this->makeViewMailConfirm($poRegistry);
+				$this->makeViewInvitConfirm($poRegistry);
 				break;
 			case 'notsent':
-				$this->makeViewMailSent($poRegistry, false);
+				$this->makeViewInvitMailSent($poRegistry, false);
 				break;
 			case 'sent':
-				$this->makeViewMailSent($poRegistry);
+				$this->makeViewInvitMailSent($poRegistry);
 				break;
 		}
 	}
 
-	private function makeViewMailPrepare($poRegistry)
+	private function makeViewInvitPrepare($poRegistry)
 	{
 		$oRegistry = $poRegistry;
 		// var_dump($oRegistry);
@@ -159,7 +159,7 @@ class module_invitations extends abstract_module
 			$tMessage = $oRegistry->getMessages();
 			// var_dump($tMessage);
 		}
-		$oView = new _view('invitations::mailPrepare');
+		$oView = new _view('invitations::invitPrepare');
 		$oView->oRegistry = $oRegistry;
 		$oView->tMessage = $tMessage;
 		$this->fillAwards($oView);
@@ -237,14 +237,14 @@ class module_invitations extends abstract_module
 		}
 	}
 
-	private function makeViewMailConfirm($poRegistry)
+	private function makeViewInvitConfirm($poRegistry)
 	{
 		$oRegistry = $poRegistry;
 		// var_dump($oRegistry);
 		$tMessage = $oRegistry->getMessages();
 		// var_dump($tMessage);
 		
-		$oView = new _view('invitations::mailConfirm');
+		$oView = new _view('invitations::invitConfirm');
 		$oView->oRegistry = $oRegistry;
 		$oView->tMessage = $tMessage;
 		
@@ -265,14 +265,14 @@ class module_invitations extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function makeViewMailSent($poRegistry, $pSent = true)
+	private function makeViewInvitMailSent($poRegistry, $pSent = true)
 	{
 		$oRegistry = $poRegistry;
 		$tMessage = $oRegistry->getMessages();
 		if ($pSent) {
-			$oView = new _view('invitations::mailSent');
+			$oView = new _view('invitations::invitMailSent');
 		} else {
-			$oView = new _view('invitations::mailNotSent');
+			$oView = new _view('invitations::invitMailNotSent');
 		}
 		$oView->oRegistry = $oRegistry;
 		$oView->tMessage = $tMessage;
@@ -370,7 +370,7 @@ class module_invitations extends abstract_module
 										break;
 									case 'confirm':
 										$oInvitation = $this->saveInvitation($oRegistry);
-										if ($this->sendMail($oRegistry, $oInvitation)) {
+										if ($this->sendMail($oInvitation)) {
 											$oRegistry->phase = 'sent';
 										} else {
 											$oRegistry->phase = 'notsent';
@@ -434,17 +434,16 @@ class module_invitations extends abstract_module
 		return $oInvit;
 	}
 
-	private function sendMail($poRegistry, $poInvitation)
+	private function sendMail($poInvitation)
 	{
 		$oMail = new plugin_mail();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
 		$oMail->addTo($poInvitation->email);
 		$createdUser = model_user::getInstance()->findById($poInvitation->created_user_id);
 		$oMail->addCC($createdUser->email);
-		$oMail->setBcc( _root::getConfigVar('vfa-app.mail.from'));
+		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
 		
-		
-		$oMail->setSubject('Invitation d\'inscription : '.$poInvitation->showFullFype());
+		$oMail->setSubject('Invitation d\'inscription : ' . $poInvitation->showFullType());
 		$oMail->setBody('Mon premier mail');
 		try {
 			$sent = $oMail->send();
