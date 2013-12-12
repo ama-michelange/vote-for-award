@@ -62,60 +62,62 @@
 					<?php if(_root::getACL()->permit(array('invitations::update','invitations::delete','invitations::read'))):?>
 						<td class="col-xs-1">
 						<div class="btn-group">
-								<?php if(_root::getACL()->permit('invitations::send')):?>
-									<a rel="tooltip"
+						<?php if(_root::getACL()->permit('invitations::send')):?>
+							<a rel="tooltip"
 								data-original-title="Envoyer l'invitation par email à <?php echo $oInvitation->email ?>"
 								href="<?php echo $this->getLink('invitations::send',array('id'=>$oInvitation->getId()))?>">
 								<i class="glyphicon glyphicon-envelope"></i>
 							</a>
-								<?php endif;?>
-								<?php if(_root::getACL()->permit('invitations::update')):?>
-									<a rel="tooltip"
-								data-original-title="Voir l'invitation pour <?php echo $oInvitation->email ?>" target="_new"
+						<?php endif;?>
+						<?php if(_root::getACL()->permit('invitations::update')):?>
+							<a rel="tooltip"
+								data-original-title="Accéder à l'invitation pour <?php echo $oInvitation->email ?>" target="_new"
 								href="<?php echo plugin_vfa::generateURLInvitation($oInvitation) ?>"> <i
-								class="glyphicon glyphicon-share-alt"></i></a>
-								<?php endif;?>
-								<?php if(_root::getACL()->permit('invitations::delete')):?>
-									<a rel="tooltip"
+								class="glyphicon glyphicon-share-alt"></i>
+							</a>
+						<?php endif;?>
+						<?php if(_root::getACL()->permit('invitations::delete')):?>
+							<a rel="tooltip"
 								data-original-title="Supprimer l'invitation pour <?php echo $oInvitation->email ?>"
 								href="<?php echo $this->getLink('invitations::delete',array('id'=>$oInvitation->getId()))?>">
 								<i class="glyphicon glyphicon-trash"></i>
 							</a>
-								<?php endif;?>
-								<?php if(_root::getACL()->permit('invitations::read')):?>
-									<a rel="tooltip"
+						<?php endif;?>
+						<?php if(_root::getACL()->permit('invitations::read')):?>
+							<a rel="tooltip"
 								data-original-title="Voir l'invitation pour <?php echo $oInvitation->email ?>"
 								href="<?php echo $this->getLink('invitations::read',array('id'=>$oInvitation->getId()))?>">
 								<i class="glyphicon glyphicon-eye-open"></i>
 							</a>
-								<?php endif;?>
-							</div>
+						<?php endif;?>
+						</div>
 					</td>
 					<?php endif;?>
 					<td><?php echo $oInvitation->email ?></td>
-					<td><span class="label <?php echo $labelColor?>" data-rel="tooltip"
-						data-original-title="<?php echo $labelTip ?>"><?php echo $oInvitation->showState()?></span></td>
+					<td>
+						<span class="label <?php echo $labelColor?>" data-rel="tooltip"
+						data-original-title="<?php echo $labelTip ?>"><?php echo $oInvitation->showState()?></span>
+					</td>
 					<td><?php echo $oInvitation->showType() ?></td>
-
 					<td>
 					<?php
-			$tAwards = $oInvitation->findAwards();
-			$i = 0;
-			foreach ($tAwards as $award) {
-				if ($i > 0) {
-					echo '<br>';
-				}
-				;
-				echo $award->getTypeNameString();
-				$i ++;
-			}
-			?>
+						$tAwards = $oInvitation->findAwards();
+						$i = 0;
+						foreach ($tAwards as $award) {
+							if ($i > 0) {
+								echo '<br>';
+							}
+							;
+							echo $award->getTypeNameString();
+							$i ++;
+						}
+					?>
 					</td>
 					<td>
 					<?php
-			$oGroup = $oInvitation->findGroup();
-			echo $oGroup->group_name;
-			?>
+						$oGroup = $oInvitation->findGroup();
+						echo $oGroup->group_name;
+					?>
 					</td>
 				</tr>	
 				<?php endforeach;?>
