@@ -459,12 +459,14 @@ class module_invitations extends abstract_module
 
 	private function delete()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		// si ce n'est pas une requete POST on ne soumet pas
+		if (! _root::getRequest()->isPost()) {
 			return null;
 		}
 		
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		// on verifie que le token est valide
+		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { 
 			return array(
 				'token' => $oPluginXsrf->getMessage()
 			);
