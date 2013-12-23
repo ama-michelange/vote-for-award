@@ -449,7 +449,8 @@ class module_invitations extends abstract_module
 		$oViewTxt->oInvit = $poInvitation;
 		$bodyTxt = $oViewTxt->show();
 		$oMail->setBody($bodyTxt);
-		 _root::getLog()->log($bodyTxt);
+		// _root::getLog()->log($bodyTxt);
+		
 		// Envoi le mail
 		try {
 			$sent = $oMail->send();
