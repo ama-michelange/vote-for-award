@@ -155,13 +155,15 @@ class plugin_mail
 		
 		if ($this->sBody != '') {
 			$sMsg .= '--' . $this->sWall . $n;
-			$sMsg .= 'Content-Type: text/plain; charset="iso-8859-1"' . $nn;
+			// $sMsg .= 'Content-Type: text/plain; charset="iso-8859-1"' . $nn;
+			$sMsg .= 'Content-Type: text/plain; charset="utf-8"' . $nn;
 			$sMsg .= $this->sBody . $nn;
 		}
 		
 		if ($this->sBodyHtml != '') {
 			$sMsg .= '--' . $this->sWall . $n;
-			$sMsg .= 'Content-Type: text/html; charset="iso-8859-1"' . $nn;
+			// $sMsg .= 'Content-Type: text/html; charset="iso-8859-1"' . $nn;
+			$sMsg .= 'Content-Type: text/html; charset="utf-8"' . $nn;
 			$sMsg .= $this->sBodyHtml . $nn;
 		}
 		

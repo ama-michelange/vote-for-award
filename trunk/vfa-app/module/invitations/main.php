@@ -444,7 +444,13 @@ class module_invitations extends abstract_module
 		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
 		
 		$oMail->setSubject('Invitation d\'inscription : ' . $poInvitation->showFullType());
-		$oMail->setBody('Mon premier mail');
+		// Prepare le body TXT
+		$oViewTxt = new _view('invitations::mailOne');
+		$oViewTxt->oInvit = $poInvitation;
+		$bodyTxt = $oViewTxt->show();
+		$oMail->setBody($bodyTxt);
+		 _root::getLog()->log($bodyTxt);
+		// Envoi le mail
 		try {
 			$sent = $oMail->send();
 		} catch (Exception $e) {
@@ -466,7 +472,7 @@ class module_invitations extends abstract_module
 		
 		$oPluginXsrf = new plugin_xsrf();
 		// on verifie que le token est valide
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { 
+		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
 			return array(
 				'token' => $oPluginXsrf->getMessage()
 			);
