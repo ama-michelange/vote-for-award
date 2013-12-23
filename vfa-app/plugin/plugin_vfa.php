@@ -435,7 +435,8 @@ class plugin_vfa
 			array(
 				'id' => $poInvitation->invitation_id,
 				'key' => $poInvitation->invitation_key
-			));
+			), false);
+		// _root::getLog()->log('generateURLInvitation : ' . $url);
 		return $url;
 	}
 }
