@@ -439,17 +439,23 @@ class module_invitations extends abstract_module
 		$oMail = new plugin_mail();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
 		$oMail->addTo($poInvitation->email);
-		$createdUser = model_user::getInstance()->findById($poInvitation->created_user_id);
+		$createdUser = $poInvitation->findCreatedUser();
 		$oMail->addCC($createdUser->email);
 		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
-		
-		$oMail->setSubject('Invitation d\'inscription : ' . $poInvitation->showFullType());
+		// Sujet
+		$oMail->setSubject(plugin_vfa::buildTitleInvitation($poInvitation));
 		// Prepare le body TXT
-		$oViewTxt = new _view('invitations::mailOne');
+		$oViewTxt = new _view('invitations::mailTxt');
 		$oViewTxt->oInvit = $poInvitation;
 		$bodyTxt = $oViewTxt->show();
+		_root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
-		// _root::getLog()->log($bodyTxt);
+		// Prepare le body HTML
+		$oViewTxt = new _view('invitations::mailHtml');
+		$oViewTxt->oInvit = $poInvitation;
+		$bodyHtml = $oViewTxt->show();
+		_root::getLog()->log($bodyHtml);
+		$oMail->setBodyHtml($bodyHtml);
 		
 		// Envoi le mail
 		try {
