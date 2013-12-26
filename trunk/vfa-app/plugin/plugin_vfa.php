@@ -439,4 +439,102 @@ class plugin_vfa
 		// _root::getLog()->log('generateURLInvitation : ' . $url);
 		return $url;
 	}
+
+	/**
+	 * Construit le texte de l'invitation en fonction de son type.
+	 *
+	 * @param row_invitation $poInvitation
+	 *        	L'invitation
+	 * @param boolean $pHtml
+	 *        	Vrai pour inclure du HTML dans le texte
+	 * @return string Le texte de l'invitation
+	 */
+	public static function buildTextInvitation($poInvitation, $pHtml)
+	{
+		$tAwards = $poInvitation->findAwards();
+		$oGroup = $poInvitation->findGroup();
+		$oCreatedUser = $poInvitation->findCreatedUser();
+		$last_name = $oCreatedUser->last_name;
+		$first_name = $oCreatedUser->first_name;
+		$username = $oCreatedUser->username;
+		if ((true == isset($last_name)) && (strlen(trim($last_name)) > 0)) {
+			$creator = trim($first_name . ' ' . $last_name);
+		} else {
+			$creator = $username;
+		}
+		
+		$tPrix = array();
+		foreach ($tAwards as $oAward) {
+			$tPrix[] = $oAward->getTypeNameString();
+		}
+		natsort($tPrix);
+		$xPrix = 'au prix suivant ';
+		if (count($tAwards) > 1) {
+			$xPrix = 'aux prix suivants ';
+		}
+		switch ($poInvitation->type) {
+			case plugin_vfa::INVITATION_TYPE_BOARD:
+				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à vous inscrire à la présélection suivante : ', 
+					$creator);
+				break;
+			case plugin_vfa::INVITATION_TYPE_READER:
+				$textInvit = sprintf('%1s, le correspondant du Prix BD pour "%2s", vous invite à vous inscrire %3s : ', 
+					$creator, $oGroup->group_name, $xPrix);
+				break;
+			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+				$textInvit = sprintf(
+					'%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et vous inscrire %3s : ', 
+					$creator, $oGroup->group_name, $xPrix);
+				break;
+			default:
+				$textInvit = '';
+				break;
+		}
+		
+		$beforeHtml = '';
+		$afterHtml = '';
+		if ($pHtml) {
+			$textInvit .= '<strong>';
+			$beforeHtml = '<span class="nowrap">';
+			$afterHtml = '</span>';
+		}
+		$i = 0;
+		foreach ($tPrix as $prix) {
+			if ($i > 0) {
+				$textInvit .= ', ';
+			}
+			$textInvit .= sprintf('%1s%2s%3s', $beforeHtml, $prix, $afterHtml);
+			$i ++;
+		}
+		if ($pHtml) {
+			$textInvit .= '</strong>';
+		}
+		return $textInvit;
+	}
+
+	/**
+	 * Construit le titre de l'invitation en fonction de son type.
+	 *
+	 * @param row_invitation $poInvitation
+	 *        	L'invitation
+	 * @return string Le titre de l'invitation
+	 */
+	public static function buildTitleInvitation($poInvitation)
+	{
+		switch ($poInvitation->type) {
+			case plugin_vfa::INVITATION_TYPE_BOARD:
+				$titleInvit = 'Invitation pour voter avec le Comité de sélection';
+				break;
+			case plugin_vfa::INVITATION_TYPE_READER:
+				$titleInvit = 'Invitation pour voter au Prix BD';
+				break;
+			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+				$titleInvit = 'Invitation pour devenir correspondant du Prix BD et voter';
+				break;
+			default:
+				$titleInvit = '';
+				break;
+		}
+		return $titleInvit;
+	}
 }
