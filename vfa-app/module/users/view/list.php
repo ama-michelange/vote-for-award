@@ -45,13 +45,13 @@
 					</td>
 					<?php endif;?>
 					<?php if(_root::getACL()->permit('users::read')):?>
-						<td><a href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>"><?php echo $oUser->username ?></a></td>
+						<td><a href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>"><?php echo wordwrap($oUser->username,20,'<br />', true) ?></a></td>
 					<?php else:?>
-						<td><?php echo $oUser->username ?></td>
+						<td><?php echo wordwrap($oUser->username,20,'<br />', true) ?></td>
 					<?php endif;?>
-					<td><?php echo $oUser->email ?></td>
-					<td><?php echo $oUser->last_name ?></td>
-					<td><?php echo $oUser->first_name ?></td>
+					<td><?php echo wordwrap($oUser->email,30,'<br />', true) ?></td>
+					<td><?php echo wordwrap($oUser->last_name,30,'<br />', true) ?></td>
+					<td><?php echo wordwrap($oUser->first_name,30,'<br />', true) ?></td>
 					<td>
 						<?php
 			$i = 0;

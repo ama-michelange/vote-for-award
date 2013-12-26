@@ -93,7 +93,7 @@
 						</div>
 					</td>
 					<?php endif;?>
-					<td><?php echo wordwrap( $oInvitation->email,20,'<br />', true) ?></td>
+					<td><?php echo wordwrap( $oInvitation->email,30,'<br />', true) ?></td>
 					<td>
 						<span class="label <?php echo $labelColor?>" data-rel="tooltip"
 						data-original-title="<?php echo $labelTip ?>"><?php echo $oInvitation->showState()?></span>
