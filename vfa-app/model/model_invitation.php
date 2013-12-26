@@ -84,7 +84,7 @@ class row_invitation extends abstract_row
 			case plugin_vfa::INVITATION_TYPE_BOARD:
 				return 'Membre';
 			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
-				return 'Responsable';
+				return 'Correspondant';
 		}
 		return $this->type;
 	}
@@ -97,7 +97,7 @@ class row_invitation extends abstract_row
 			case plugin_vfa::INVITATION_TYPE_BOARD:
 				return 'Membre du comité de sélection';
 			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
-				return 'Responsable d\'un groupe';
+				return 'Correspondant pour un groupe';
 		}
 		return $this->type;
 	}
