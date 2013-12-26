@@ -208,56 +208,8 @@ class module_autoreg extends abstract_module
 
 	private function makeTextInvitation($poInvitation, $poConfirm)
 	{
-		$tAwards = $poInvitation->findAwards();
-		$oGroup = $poInvitation->findGroup();
-		$oCreatedUser = $poInvitation->findCreatedUser();
-		
-		$tPrix = array();
-		foreach ($tAwards as $oAward) {
-			$tPrix[] = $oAward->getTypeNameString();
-		}
-		natsort($tPrix);
-		
-		switch ($poInvitation->type) {
-			case plugin_vfa::INVITATION_TYPE_BOARD:
-				$textInvit = 'L\'administrateur du site vous invite à vous inscrire à la présélection suivante : ';
-				$poConfirm->titleInvit = 'Invitation pour voter avec le Comité de sélection';
-				break;
-			case plugin_vfa::INVITATION_TYPE_READER:
-				$xPrix = 'au prix suivant ';
-				if (count($tAwards) > 1) {
-					$xPrix = 'aux prix suivants ';
-				}
-				$textInvit = sprintf('Le responsable du groupe <strong>%s</strong>, vous invite à vous inscrire %s : ', 
-					$oGroup->group_name, $xPrix);
-				$poConfirm->titleInvit = 'Invitation pour voter au Prix BD';
-				break;
-			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
-				$xPrix = 'au prix suivant ';
-				if (count($tAwards) > 1) {
-					$xPrix = 'aux prix suivants ';
-				}
-				$textInvit = sprintf(
-					'L\'administrateur du site vous invite à devenir le Responsable du groupe <strong>%s</strong> et vous inscrire %s : ', 
-					$oGroup->group_name, $xPrix);
-				$poConfirm->titleInvit = 'Invitation pour devenir Responsable de groupe et voter au Prix BD';
-				break;
-			default:
-				$textInvit = '';
-				break;
-		}
-		
-		$textInvit .= '<strong>';
-		$i = 0;
-		foreach ($tPrix as $prix) {
-			if ($i > 0) {
-				$textInvit .= ', ';
-			}
-			$textInvit .= '<span class="nowrap">' . $prix . '</span>';
-			$i ++;
-		}
-		$textInvit .= '</strong>';
-		$poConfirm->textInvit = $textInvit;
+		$poConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+		$poConfirm->textInvit = plugin_vfa::buildTextInvitation($poInvitation, true);
 	}
 
 	private function makeTextConfirmation($poInvitation, $poConfirm)
