@@ -10,7 +10,6 @@ class module_roles extends abstract_module
 		
 		$this->oLayout = new _layout('tpl_bs_bar_context');
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-left', plugin_vfa_menu::buildViewNavLeft());
 		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
 	}
 

@@ -413,7 +413,7 @@ class plugin_vfa
 				$title = 'Lecteur';
 				break;
 			case 'responsible':
-				$title = 'Responsable de groupe';
+				$title = 'Correspondant pour un groupe';
 				break;
 			case 'board':
 				$title = 'Membre du comité de sélection';
@@ -483,7 +483,7 @@ class plugin_vfa
 				break;
 			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
 				$textInvit = sprintf(
-					'%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et vous inscrire %3s : ', 
+					'%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et à vous inscrire %3s : ', 
 					$creator, $oGroup->group_name, $xPrix);
 				break;
 			default:
