@@ -87,6 +87,13 @@ class MenuItem extends LabelItem
 class DropdownMenuItem extends LabelItem
 {
 
+	public function addChildSeparator()
+	{
+		if ($this->hasRealChildren()) {
+			$this->addChild(plugin_BsHtml::buildSeparator());
+		}
+	}
+
 	public function toHtml()
 	{
 		$ret = '<li class="dropdown';
