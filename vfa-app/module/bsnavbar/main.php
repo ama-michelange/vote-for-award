@@ -66,21 +66,14 @@ class module_bsnavbar extends abstract_module
 	{
 		$item = new DropdownMenuItem('Prix');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Résultats', new NavLink('results', 'index')));
-// 		if ($item->hasRealChildren()) {
-			$item->addChild(plugin_BsHtml::buildSeparator());
-// 		}
+		
+		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'list')));
-// 		if ($item->hasRealChildren()) {
-			$item->addChild(plugin_BsHtml::buildSeparator());
-// 		}
-		$item->addChild(plugin_BsHtml::buildMenuItem('Toto - Titi', new NavLink('docs', 'list')));
 		
-// 		if ($item->hasRealChildren()) {
-			$item->addChild(plugin_BsHtml::buildSeparator());
-// 		}
-		$item->addChild(plugin_BsHtml::buildMenuItem('Ama', new NavLink('docs', 'golist')));
+		$item->addChildSeparator();
+		$item->addChild(plugin_BsHtml::buildMenuItem('Toto - Titi', new NavLink('docs', 'list')));
 		
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
@@ -94,14 +87,11 @@ class module_bsnavbar extends abstract_module
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'index')));
 		
-// 		if ($item->hasRealChildren()) {
-			$item->addChild(plugin_BsHtml::buildSeparator());
-// 		}
+		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Groupes', new NavLink('groups', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Utilisateurs', new NavLink('users', 'index')));
-// 		if ($item->hasRealChildren()) {
-			$item->addChild(plugin_BsHtml::buildSeparator());
-// 		}
+		
+		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Rôles', new NavLink('roles', 'index')));
 		
 		if ($item->hasRealChildren()) {
@@ -116,9 +106,7 @@ class module_bsnavbar extends abstract_module
 		$item->addChild(plugin_BsHtml::buildMenuItem('Invitation aux lecteurs', new NavLink('invitations', 'reader')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Inscriptions libres', new NavLink('invitations', 'free')));
 		
-		if ($item->hasRealChildren()) {
-			$item->addChild(plugin_BsHtml::buildSeparator());
-		}
+		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Responsable de groupe', new NavLink('invitations', 'responsible')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Membre du comité', new NavLink('invitations', 'board')));
 		
