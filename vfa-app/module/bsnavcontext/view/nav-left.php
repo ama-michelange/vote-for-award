@@ -1,7 +1,7 @@
-<?php 
+<?php
 /*
-       * <div class="navbar"> <div class="navbar-inner"> <span class="navbar-brand"> <?php if ($this->exists('sTitle')) :?> <?php echo $this->sTitle ?> <?php endif;?> </span> </div> </div>
-       */
+ * <div class="navbar"> <div class="navbar-inner"> <span class="navbar-brand"> <?php if ($this->exists('sTitle')) :?> <?php echo $this->sTitle ?> <?php endif;?> </span> </div> </div>
+ */
 ?>
 <ul class="nav nav-tabs nav-stacked">
 <?php if ($this->exists('tLink')) :?>
