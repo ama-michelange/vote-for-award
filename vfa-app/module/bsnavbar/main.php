@@ -6,7 +6,7 @@ class module_bsnavbar extends abstract_module
 	public function _index()
 	{
 		$oView = $this->buildView();
-		$oView->oBar = $this->buildBar();
+		$oView->oNavBar = $this->buildNavBar();
 		return $oView;
 	}
 
@@ -15,11 +15,11 @@ class module_bsnavbar extends abstract_module
 		_root::getAuth()->logout();
 	}
 
-	private function buildBar()
+	private function buildNavBar()
 	{
-		$navBar = new plugin_NavBar();
-		$navBar->put('left', new plugin_NavItems());
-		$navBar->put('right', new plugin_NavItems());
+		$navBar = plugin_BsHtml::buildNavBar();
+		$navBar->addChild(new Bar('left'));
+		$navBar->addChild(new Bar('right'));
 		if (_root::getAuth()->isConnected()) {
 			$this->buildConnectedBar($navBar);
 		} else {
@@ -28,104 +28,102 @@ class module_bsnavbar extends abstract_module
 		return $navBar;
 	}
 
-	private function buildDefaultBar($pBar)
+	private function buildDefaultBar($pNavBar)
 	{
-		$items = $pBar->get('left');
-		$items->put(plugin_LabelItem::buildDefaultLink('Accueil', new plugin_ActionLinkItem('default', 'index')));
-		$items = $pBar->get('right');
-		$items->put(
-			new plugin_LabelItem('Connexion', 'glyphicon-user', new plugin_LinkItem('#myModal', array(
-				'data-toggle' => 'modal'
-			))));
-		
-// 		<a href="#myModal" data-toggle="modal"><i
-// 		class="glyphicon glyphicon-user  with-text"></
-// 		i>Connexion<
+		$bar = $pNavBar->getChild('left');
+		$bar->addChild(new MenuItem('Accueil', new NavLink('default', 'index')));
+		$bar = $pNavBar->getChild('right');
+		$bar->addChild(new MenuItem('Connexion', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user'));
 	}
 
-	private function buildConnectedBar($pBar)
+	private function buildConnectedBar($pNavBar)
 	{
-		$items = $pBar->get('left');
-		$items->put(plugin_LabelItem::buildLink('Accueil', new plugin_ActionLinkItem('home_enable', 'index')));
-		$items->put(plugin_LabelItem::buildLink('Vote', new plugin_ActionLinkItem('home_enable', 'index')));
+		$bar = $pNavBar->getChild('left');
+		$bar->addChild(plugin_BsHtml::buildMenuItem('Accueil', new NavLink('home_enable', 'index')));
+		$bar->addChild(plugin_BsHtml::buildMenuItem('Vote', new NavLink('home_enable', 'index')));
 		
-		$this->buildItemsPrix($items);
-		$this->buildItemsInscription($items);
-		$this->buildItemsAdmin($items);
+		$this->buildMenuPrix($bar);
+		$this->buildMenuInscription($bar);
+		$this->buildMenuAdmin($bar);
 		
-		$items = $pBar->get('right');
-		$this->buildItemsUser($items);
+		$bar = $pNavBar->getChild('right');
+		$this->buildMenuUser($bar);
 	}
 
-	private function buildItemsUser($pItems)
+	private function buildMenuUser($pItems)
 	{
 		$account = _root::getAuth()->getAccount();
-		$item = new plugin_LabelItem($account->getUser()->username, 'glyphicon-user');
-		$item->addChild(plugin_LabelItem::build('Mon compte', 'glyphicon-user', new plugin_ActionLinkItem('user', 'account')));
-		$item->addChild(
-			plugin_LabelItem::build('Déconnexion', 'glyphicon-remove-sign', new plugin_ActionLinkItem('bsnavbar', 'logout')));
+		$item = new DropdownMenuItem($account->getUser()->username, null, 'glyphicon-user');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('user', 'account')), 'glyphicon-user');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Déconnexion', new NavLink('bsnavbar', 'logout')), 'glyphicon-remove-sign');
 		
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$pItems->put($item);
+		if ($item->hasRealChildren()) {
+			$pItems->addChild($item);
 		}
 	}
 
-	private function buildItemsPrix($pItems)
+	private function buildMenuPrix($pItems)
 	{
-		$item = new plugin_LabelItem('Prix');
-		$item->addChild(plugin_LabelItem::buildLink('Résultats', new plugin_ActionLinkItem('results', 'index')));
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$item->addChild(plugin_LabelItem::buildSeparator());
-		}
-		$item->addChild(plugin_LabelItem::buildLink('Prix', new plugin_ActionLinkItem('awards', 'list')));
-		$item->addChild(plugin_LabelItem::buildLink('Titres sélectionnés', new plugin_ActionLinkItem('nominees', 'list')));
-		$item->addChild(plugin_LabelItem::buildLink('Albums', new plugin_ActionLinkItem('docs', 'list')));
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$item->addChild(plugin_LabelItem::buildSeparator());
-		}
-		$item->addChild(plugin_LabelItem::buildLink('Toto - Titi', new plugin_ActionLinkItem('docs', 'list')));
+		$item = new DropdownMenuItem('Prix');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Résultats', new NavLink('results', 'index')));
+// 		if ($item->hasRealChildren()) {
+			$item->addChild(plugin_BsHtml::buildSeparator());
+// 		}
+		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'list')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'list')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'list')));
+// 		if ($item->hasRealChildren()) {
+			$item->addChild(plugin_BsHtml::buildSeparator());
+// 		}
+		$item->addChild(plugin_BsHtml::buildMenuItem('Toto - Titi', new NavLink('docs', 'list')));
 		
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$pItems->put($item);
+// 		if ($item->hasRealChildren()) {
+			$item->addChild(plugin_BsHtml::buildSeparator());
+// 		}
+		$item->addChild(plugin_BsHtml::buildMenuItem('Ama', new NavLink('docs', 'golist')));
+		
+		if ($item->hasRealChildren()) {
+			$pItems->addChild($item);
 		}
 	}
 
-	private function buildItemsAdmin($pItems)
+	private function buildMenuAdmin($pItems)
 	{
-		$item = new plugin_LabelItem('Administrer');
-		$item->addChild(plugin_LabelItem::buildLink('Albums', new plugin_ActionLinkItem('docs', 'index')));
-		$item->addChild(plugin_LabelItem::buildLink('Prix', new plugin_ActionLinkItem('awards', 'index')));
-		$item->addChild(plugin_LabelItem::buildLink('Titres sélectionnés', new plugin_ActionLinkItem('nominees', 'index')));
+		$item = new DropdownMenuItem('Administrer');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'index')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'index')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'index')));
 		
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$item->addChild(plugin_LabelItem::buildSeparator());
-		}
-		$item->addChild(plugin_LabelItem::buildLink('Groupes', new plugin_ActionLinkItem('groups', 'index')));
-		$item->addChild(plugin_LabelItem::buildLink('Utilisateurs', new plugin_ActionLinkItem('users', 'index')));
-		$item->addChild(plugin_LabelItem::buildLink('Rôles', new plugin_ActionLinkItem('roles', 'index')));
+// 		if ($item->hasRealChildren()) {
+			$item->addChild(plugin_BsHtml::buildSeparator());
+// 		}
+		$item->addChild(plugin_BsHtml::buildMenuItem('Groupes', new NavLink('groups', 'index')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Utilisateurs', new NavLink('users', 'index')));
+// 		if ($item->hasRealChildren()) {
+			$item->addChild(plugin_BsHtml::buildSeparator());
+// 		}
+		$item->addChild(plugin_BsHtml::buildMenuItem('Rôles', new NavLink('roles', 'index')));
 		
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$pItems->put($item);
+		if ($item->hasRealChildren()) {
+			$pItems->addChild($item);
 		}
 	}
 
-	private function buildItemsInscription($pItems)
+	private function buildMenuInscription($pItems)
 	{
-		$item = new plugin_LabelItem('Inscription');
-		$item->addChild(plugin_LabelItem::buildLink('Invitations', new plugin_ActionLinkItem('invitations', 'list')));
-		$item->addChild(
-			plugin_LabelItem::buildLink('Invitation aux lecteurs', new plugin_ActionLinkItem('invitations', 'reader')));
-		$item->addChild(plugin_LabelItem::buildLink('Inscriptions libres', new plugin_ActionLinkItem('invitations', 'free')));
+		$item = new DropdownMenuItem('Inscription');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Invitations', new NavLink('invitations', 'list')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Invitation aux lecteurs', new NavLink('invitations', 'reader')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Inscriptions libres', new NavLink('invitations', 'free')));
 		
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$item->addChild(plugin_LabelItem::buildSeparator());
+		if ($item->hasRealChildren()) {
+			$item->addChild(plugin_BsHtml::buildSeparator());
 		}
-		$item->addChild(
-			plugin_LabelItem::buildLink('Responsable de groupe', new plugin_ActionLinkItem('invitations', 'responsible')));
-		$item->addChild(plugin_LabelItem::buildLink('Membre du comité', new plugin_ActionLinkItem('invitations', 'board')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Responsable de groupe', new NavLink('invitations', 'responsible')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Membre du comité', new NavLink('invitations', 'board')));
 		
-		if (false == $item->hasOnlySeparatorChildren()) {
-			$pItems->put($item);
+		if ($item->hasRealChildren()) {
+			$pItems->addChild($item);
 		}
 	}
 
