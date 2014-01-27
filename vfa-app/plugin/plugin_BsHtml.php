@@ -33,10 +33,38 @@ class plugin_BsHtml
 		}
 		return $ret;
 	}
+
+	public static function buildButtonItem($pLabel, $pLink, $pIcon = null, $pShowLabel = true)
+	{
+		$ret = new ButtonItem($pLabel, $pLink, $pIcon, $pShowLabel);
+		if ((false == $ret->isPermit()) || (true == $ret->isCurrentPage())) {
+			$ret = null;
+		}
+		return $ret;
+	}
+
+	public static function buildGroupedButtonItem($pLabel, $pLink, $pIcon = null, $pShowLabel = false)
+	{
+		$ret = new ButtonItem($pLabel, $pLink, $pIcon, $pShowLabel);
+		$ret->setActive($ret->isCurrentPage());
+		if (false == $ret->isPermit()) {
+			$ret = null;
+		}
+		return $ret;
+	}
+
+	public static function buildBrandItem($pLabel, $pLink, $pIcon = null)
+	{
+		$ret = new LabelItem($pLabel, $pLink, $pIcon);
+		$pLink->setProperties(array('class' => 'navbar-brand'));
+		return $ret;
+	}
 }
 
 class NavBar extends DefaultItem
 {
+
+	private $_oTitle;
 
 	public function __construct($pName = null)
 	{
@@ -45,6 +73,16 @@ class NavBar extends DefaultItem
 			$name = 'defaut';
 		}
 		parent::__construct($name);
+	}
+
+	public function setTitle($pLabel, $pLink, $pIcon = null)
+	{
+		$this->_oTitle = plugin_BsHtml::buildBrandItem($pLabel, $pLink, $pIcon);
+	}
+
+	public function toHtmlTitle()
+	{
+		return $this->_oTitle->toHtml();
 	}
 }
 
@@ -132,6 +170,60 @@ class DropdownMenuItem extends LabelItem
 	}
 }
 
+class BarButtons extends Bar
+{
+
+	public function toHtml()
+	{
+		$ret = '<div class="nav navbar-nav';
+		if ('right' == $this->getName()) {
+			$ret .= ' navbar-right';
+		}
+		$ret .= '">';
+		if ($this->hasChildren()) {
+			foreach ($this->getChildren() as $item) {
+				$ret .= $item->toHtml();
+				$ret .= '&nbsp;&nbsp;';
+			}
+		}
+		$ret .= '</div>';
+		return $ret;
+	}
+}
+
+class ButtonItem extends LabelItem
+{
+
+	public function toHtml()
+	{
+		$ret = '<a class="btn btn-default btn-sm navbar-btn';
+		if ($this->isActive()) {
+			$ret .= ' active';
+		}
+		$ret .= '"';
+		$ret .= ' href="';
+		$ret .= $this->getHref();
+		$ret .= '"';
+		$ret .= $this->toHtmlProperties();
+		$ret .= '>';
+		$ret .= $this->toHtmlIconText();
+		$ret .= '</a>';
+		return $ret;
+	}
+}
+
+class GroupButtonItem extends DefaultItem
+{
+
+	public function toHtml()
+	{
+		$ret = '<div class="btn-group">';
+		$ret .= parent::toHtml();
+		$ret .= '</div>';
+		return $ret;
+	}
+}
+
 /**
  *
  * @author ANTON-MA
@@ -141,7 +233,9 @@ class DefaultItem
 
 	private $_sName;
 
-	private $tChildren;
+	private $_tChildren;
+
+	private $_bActive = false;
 
 	public function __construct($pName)
 	{
@@ -156,32 +250,32 @@ class DefaultItem
 	public function addChild($pItem)
 	{
 		if (isset($pItem)) {
-			if (false == isset($this->tChildren)) {
-				$this->tChildren = array();
+			if (false == isset($this->_tChildren)) {
+				$this->_tChildren = array();
 			}
-			$this->tChildren[$pItem->getName()] = $pItem;
+			$this->_tChildren[$pItem->getName()] = $pItem;
 		}
 	}
 
 	public function getChild($pName)
 	{
 		$ret = null;
-		if (isset($this->tChildren)) {
-			$ret = $this->tChildren[$pName];
+		if (isset($this->_tChildren)) {
+			$ret = $this->_tChildren[$pName];
 		}
 		return $ret;
 	}
 
 	public function getChildren()
 	{
-		return $this->tChildren;
+		return $this->_tChildren;
 	}
 
 	public function hasChildren()
 	{
 		$ret = false;
-		if (isset($this->tChildren)) {
-			$ret = (false == empty($this->tChildren));
+		if (isset($this->_tChildren)) {
+			$ret = (false == empty($this->_tChildren));
 		}
 		return $ret;
 	}
@@ -189,7 +283,7 @@ class DefaultItem
 	public function hasRealChildren()
 	{
 		$ret = false;
-		if (isset($this->tChildren)) {
+		if (isset($this->_tChildren)) {
 			foreach ($this->getChildren() as $item) {
 				if (false == plugin_BsHtml::isSeparator($item)) {
 					$ret = true;
@@ -198,6 +292,16 @@ class DefaultItem
 			}
 		}
 		return $ret;
+	}
+
+	public function isActive()
+	{
+		return $this->_bActive;
+	}
+
+	public function setActive($pActive)
+	{
+		$this->_bActive = $pActive;
 	}
 
 	public function hasLink()
@@ -322,6 +426,15 @@ class ActionItem extends DefaultItem
 		}
 		return $ret;
 	}
+
+	public function isCurrentPage()
+	{
+		$ret = false;
+		if ($this->hasLink()) {
+			$ret = $this->getLink()->isCurrentModule() && $this->getLink()->isCurrentAction();
+		}
+		return $ret;
+	}
 }
 
 /**
@@ -333,18 +446,26 @@ class LabelItem extends ActionItem
 
 	private $_sLabel;
 
+	private $_bShowLabel;
+
 	private $_sIcon;
 
-	public function __construct($pLabel, $pLink = null, $pIcon = null)
+	public function __construct($pLabel, $pLink = null, $pIcon = null, $pShowLabel = true)
 	{
 		parent::__construct($pLabel, $pLink);
 		$this->_sLabel = $pLabel;
 		$this->_sIcon = $pIcon;
+		$this->_bShowLabel = $pShowLabel;
 	}
 
 	public function getLabel()
 	{
 		return $this->_sLabel;
+	}
+
+	public function isShowLabel()
+	{
+		return $this->_bShowLabel;
 	}
 
 	public function getIcon()
@@ -364,7 +485,7 @@ class LabelItem extends ActionItem
 		$ret .= '"';
 		$ret .= $this->toHtmlProperties();
 		$ret .= '>';
-		$ret .= $this->toHtmlIconText();
+		$ret .= $this->toHtmlIconText2();
 		$ret .= '</a>';
 		return $ret;
 	}
@@ -378,6 +499,23 @@ class LabelItem extends ActionItem
 			$ret .= ' with-text"></i>';
 		}
 		$ret .= $this->getLabel();
+		return $ret;
+	}
+
+	protected function toHtmlIconText2()
+	{
+		$ret = '';
+		if ($this->hasIcon()) {
+			$ret .= '<i class="glyphicon ';
+			$ret .= $this->getIcon();
+			if ($this->isShowLabel()) {
+				$ret .= ' with-text"';
+			}
+			$ret .= '></i>';
+		}
+		if (true==$this->isShowLabel()) {
+			$ret .= $this->getLabel();
+		}
 		return $ret;
 	}
 
@@ -501,6 +639,11 @@ class Link
 	public function getProperties()
 	{
 		return $this->_tProperties;
+	}
+
+	public function setProperties($pProperties)
+	{
+		$this->_tProperties = $pProperties;
 	}
 
 	public function isPermit()

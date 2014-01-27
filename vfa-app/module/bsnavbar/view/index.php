@@ -35,11 +35,10 @@
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-bsnavbar">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="<?php echo $this->oNavBar->getChild('left')->getChild('Accueil')->getHref()?>"><?php echo _root::getConfigVar('vfa-app.title')?></a>
+			<?php  echo $this->oNavBar->toHtmlTitle();  ?>
 		</div>
 		<div class="navbar-collapse collapse navbar-bsnavbar">
 		<?php  echo $this->oNavBar->toHtml();  ?>
-		<?php  /* echo plugin_NavBarHtml::toHtmlNavBar($this->oBar); */ ?>
 		</div>
 	</div>
 </div>

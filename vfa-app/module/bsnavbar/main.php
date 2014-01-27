@@ -30,6 +30,7 @@ class module_bsnavbar extends abstract_module
 
 	private function buildDefaultBar($pNavBar)
 	{
+		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
 		$bar->addChild(new MenuItem('Accueil', new NavLink('default', 'index')));
 		$bar = $pNavBar->getChild('right');
@@ -38,6 +39,7 @@ class module_bsnavbar extends abstract_module
 
 	private function buildConnectedBar($pNavBar)
 	{
+		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Accueil', new NavLink('home_enable', 'index')));
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Vote', new NavLink('home_enable', 'index')));
