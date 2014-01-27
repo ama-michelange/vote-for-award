@@ -8,7 +8,7 @@
  * @author Mika
  * @link http://mkf.mkdevs.com/
  */
-class _request
+class _request_ama
 {
 
 	private $tVar;

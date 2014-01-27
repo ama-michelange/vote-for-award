@@ -9,7 +9,7 @@
  * @link http://mkf.mkdevs.com/
  *      
  */
-class _root
+class _root_ama
 {
 
 	protected static $_oRequest;
