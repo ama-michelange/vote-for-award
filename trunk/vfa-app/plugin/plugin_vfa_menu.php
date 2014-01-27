@@ -1,7 +1,5 @@
 <?php
-/*
- *
- */
+
 /**
  *
  * @author AMA
@@ -12,6 +10,15 @@ class plugin_vfa_menu
 	public static function buildViewNavTop()
 	{
 		$oView = new _view('bsnavcontext::nav-top');
+		$oView->tTitles = self::buildTopTitle();
+		return $oView;
+	}
+
+	public static function buildViewNavTopCrudIndex($pDataFlags = NULL)
+	{
+		$oView = new _view('bsnavcontext::index');
+		$oView->tLink = self::buildContextNavLinks($pDataFlags);
+		$oView->tButtonGroup = self::buildContextNavButtonGroup();
 		$oView->tTitles = self::buildTopTitle();
 		return $oView;
 	}
@@ -35,17 +42,13 @@ class plugin_vfa_menu
 				if ('listAwards' != _root::getAction()) {
 					if (false === strpos(_root::getAction(), 'list')) {
 						if ($acl->permit($sModule . '::list')) {
-							$tLink['Liste'] = array(
-								$sModule . '::list' . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-list'
-							);
+							$tLink['Liste'] = array($sModule . '::list' . '&idAward=' . _root::getParam('idAward'),
+								'glyphicon glyphicon-list');
 						}
 					}
 					if ($acl->permit($sModule . '::create')) {
-						$tLink['Sélectionner'] = array(
-							$sModule . '::create' . '&idAward=' . _root::getParam('idAward'),
-							'glyphicon glyphicon-heart'
-						);
+						$tLink['Sélectionner'] = array($sModule . '::create' . '&idAward=' . _root::getParam('idAward'),
+							'glyphicon glyphicon-heart');
 					}
 				}
 				switch (_root::getAction()) {
@@ -55,37 +58,28 @@ class plugin_vfa_menu
 						if ($acl->permit($sModule . '::read')) {
 							$tLink['Détail'] = array(
 								$sModule . '::read' . '&id=' . _root::getParam('id') . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-eye-open'
-							);
+								'glyphicon glyphicon-eye-open');
 						}
 						if ($acl->permit($sModule . '::update')) {
 							$tLink['Modifier'] = array(
 								$sModule . '::update' . '&id=' . _root::getParam('id') . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-edit'
-							);
+								'glyphicon glyphicon-edit');
 						}
 						if ($acl->permit($sModule . '::delete')) {
 							$tLink['Supprimer'] = array(
 								$sModule . '::delete' . '&id=' . _root::getParam('id') . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-trash'
-							);
+								'glyphicon glyphicon-trash');
 						}
 						break;
 				}
 				$tLink[] = "_separator_";
 				if ($acl->permit('awards::read')) {
-					$tLink['Prix'] = array(
-						'awards::read' . '&id=' . _root::getParam('idAward'),
-						'glyphicon glyphicon-eye-open'
-					);
+					$tLink['Prix'] = array('awards::read' . '&id=' . _root::getParam('idAward'),'glyphicon glyphicon-eye-open');
 				}
 				break;
 			case 'users':
 				if ($acl->permit($sModule . '::listByGroup')) {
-					$tLink['Liste par groupe'] = array(
-						$sModule . '::listByGroup',
-						'glyphicon glyphicon-list'
-					);
+					$tLink['Liste par groupe'] = array($sModule . '::listByGroup','glyphicon glyphicon-list');
 				}
 				$tLink = array_merge($tLink, self::buildDefaultContextNavLinks());
 				break;
@@ -94,16 +88,12 @@ class plugin_vfa_menu
 				if ($pDataFlags && isset($pDataFlags['titles'])) {
 					$tLink[] = "_separator_";
 					if (true == $pDataFlags['titles'] && $acl->permit('nominees::list')) {
-						$tLink['Titres sélectionnés'] = array(
-							'nominees::list' . '&idAward=' . _root::getParam('id'),
-							'glyphicon glyphicon-list'
-						);
+						$tLink['Titres sélectionnés'] = array('nominees::list' . '&idAward=' . _root::getParam('id'),
+							'glyphicon glyphicon-list');
 					}
 					if (false == $pDataFlags['titles'] && $acl->permit('nominees::create')) {
-						$tLink['Sélectionner un titre'] = array(
-							'nominees::create' . '&idAward=' . _root::getParam('id'),
-							'glyphicon glyphicon-heart'
-						);
+						$tLink['Sélectionner un titre'] = array('nominees::create' . '&idAward=' . _root::getParam('id'),
+							'glyphicon glyphicon-heart');
 					}
 				}
 				break;
@@ -120,38 +110,24 @@ class plugin_vfa_menu
 		$tLink = array();
 		// Vue par défaut
 		if ($acl->permit($sModule . '::list')) {
-			$tLink['Liste'] = array(
-				$sModule . '::list',
-				'glyphicon glyphicon-list'
-			);
+			$tLink['Liste'] = array($sModule . '::list','glyphicon glyphicon-list');
 		}
 		if ($acl->permit($sModule . '::create')) {
-			$tLink['Créer'] = array(
-				$sModule . '::create',
-				'glyphicon glyphicon-plus-sign'
-			);
+			$tLink['Créer'] = array($sModule . '::create','glyphicon glyphicon-plus-sign');
 		}
 		switch (_root::getAction()) {
 			case 'read':
 			case 'update':
 			case 'delete':
 				if ($acl->permit($sModule . '::read')) {
-					$tLink['Détail'] = array(
-						$sModule . '::read' . '&id=' . _root::getParam('id'),
-						'glyphicon glyphicon-eye-open'
-					);
+					$tLink['Détail'] = array($sModule . '::read' . '&id=' . _root::getParam('id'),'glyphicon glyphicon-eye-open');
 				}
 				if ($acl->permit($sModule . '::update')) {
-					$tLink['Modifier'] = array(
-						$sModule . '::update' . '&id=' . _root::getParam('id'),
-						'glyphicon glyphicon-edit'
-					);
+					$tLink['Modifier'] = array($sModule . '::update' . '&id=' . _root::getParam('id'),'glyphicon glyphicon-edit');
 				}
 				if ($acl->permit($sModule . '::delete')) {
-					$tLink['Supprimer'] = array(
-						$sModule . '::delete' . '&id=' . _root::getParam('id'),
-						'glyphicon glyphicon-trash'
-					);
+					$tLink['Supprimer'] = array($sModule . '::delete' . '&id=' . _root::getParam('id'),
+						'glyphicon glyphicon-trash');
 				}
 				break;
 		}
@@ -170,22 +146,17 @@ class plugin_vfa_menu
 					case 'listThumbnail':
 					case 'listThumbnailLarge':
 						if ($acl->permit($sModule . '::list')) {
-							$tButtonGroup['Liste'] = array(
-								$sModule . '::list' . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-list'
-							);
+							$tButtonGroup['Liste'] = array($sModule . '::list' . '&idAward=' . _root::getParam('idAward'),
+								'glyphicon glyphicon-list');
 						}
 						if ($acl->permit($sModule . '::listThumbnail')) {
 							$tButtonGroup['Vignettes'] = array(
-								$sModule . '::listThumbnail' . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-th'
-							);
+								$sModule . '::listThumbnail' . '&idAward=' . _root::getParam('idAward'),'glyphicon glyphicon-th');
 						}
 						if ($acl->permit($sModule . '::listThumbnailLarge')) {
 							$tButtonGroup['Vignettes Larges'] = array(
 								$sModule . '::listThumbnailLarge' . '&idAward=' . _root::getParam('idAward'),
-								'glyphicon glyphicon-th-large'
-							);
+								'glyphicon glyphicon-th-large');
 						}
 						break;
 				}
@@ -196,22 +167,14 @@ class plugin_vfa_menu
 					case 'listThumbnail':
 					case 'listThumbnailLarge':
 						if ($acl->permit($sModule . '::list')) {
-							$tButtonGroup['Liste'] = array(
-								$sModule . '::list',
-								'glyphicon glyphicon-list'
-							);
+							$tButtonGroup['Liste'] = array($sModule . '::list','glyphicon glyphicon-list');
 						}
 						if ($acl->permit($sModule . '::listThumbnail')) {
-							$tButtonGroup['Vignettes'] = array(
-								$sModule . '::listThumbnail',
-								'glyphicon glyphicon-th'
-							);
+							$tButtonGroup['Vignettes'] = array($sModule . '::listThumbnail','glyphicon glyphicon-th');
 						}
 						if ($acl->permit($sModule . '::listThumbnailLarge')) {
-							$tButtonGroup['Vignettes Larges'] = array(
-								$sModule . '::listThumbnailLarge',
-								'glyphicon glyphicon-th-large'
-							);
+							$tButtonGroup['Vignettes Larges'] = array($sModule . '::listThumbnailLarge',
+								'glyphicon glyphicon-th-large');
 						}
 						break;
 				}

@@ -1,19 +1,14 @@
-<ul class="nav nav-tabs nav-stacked">
-<?php foreach($this->tLink as $sLibelle => $item): ?>
-	<?php
-	if (is_array($item)) {
-		$link = $item[0];
-		$icon = $item[1];
-	} else {
-		$link = $item;
-		$icon = false;
-	}
-	?>
-	<li <?php if(plugin_vfa::hasParamNav($link)) : echo 'class="active"'; endif;?>><a
-		href="<?php echo $this->getLink($link) ?>">
-		<?php if($icon): ?><i class="<?php echo $icon ?>"></i><?php endif;?> 
-		<?php echo $sLibelle?>
-		</a></li>
-	<?php endforeach;?>
-</ul>
-<p>COUCOU</p>
+<div class="navbar navbar-default navbar-fixed-top" style="top: 50px;">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-bsnavbarcontext">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+			</button>
+			<?php  echo $this->oNavBar->toHtmlTitle();  ?>
+		</div>
+		<div class="navbar-collapse collapse navbar-bsnavbarcontext">
+			<?php  echo $this->oNavBar->toHtml();  ?>
+		</div>
+	</div>
+</div>

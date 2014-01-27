@@ -146,9 +146,7 @@ class module_docs extends abstract_module
 		$oPluginXsrf = new plugin_xsrf();
 		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oDoc = new row_doc();
-			$oDoc->setMessages(array(
-				'token' => $oPluginXsrf->getMessage()
-			));
+			$oDoc->setMessages(array('token' => $oPluginXsrf->getMessage()));
 			return $oDoc;
 		}
 		
@@ -178,24 +176,21 @@ class module_docs extends abstract_module
 		}
 		if ($oDoc->isValid()) {
 			$oDoc->save();
-			_root::redirect('docs::read', array(
-				'id' => $oDoc->getId()
-			));
+			_root::redirect('docs::read', array('id' => $oDoc->getId()));
 		}
 		return $oDoc;
 	}
 
 	public function delete()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		// si ce n'est pas une requete POST on ne soumet pas
+		if (! _root::getRequest()->isPost()) {
 			return null;
 		}
-		
+		// on verifie que le token est valide
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
-			return array(
-				'token' => $oPluginXsrf->getMessage()
-			);
+		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
+			return array('token' => $oPluginXsrf->getMessage());
 		}
 		
 		$oDocModel = new model_doc();
@@ -210,8 +205,47 @@ class module_docs extends abstract_module
 	public function after()
 	{
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
-		
+		$this->oLayout->add('bsnav-top', $this->buildViewContextBar());
 		$this->oLayout->show();
+	}
+
+	private function buildViewContextBar()
+	{
+		$oView = new _view('bsnavcontext::index');
+		$oView->oNavBar = $this->buildContextBar();
+		// $oView->tButtonGroup = self::buildContextNavButtonGroup();
+		return $oView;
+	}
+
+	private function buildContextBar()
+	{
+		$navBar = plugin_BsHtml::buildNavBar();
+		$navBar->setTitle('Albums', new NavLink('docs', 'index'));
+		$navBar->addChild(new BarButtons('left'));
+		$navBar->addChild(new BarButtons('right'));
+		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		$this->buildContextButtonBar($navBar);
+		return $navBar;
+	}
+
+	private function buildContextButtonBar($pNavBar)
+	{
+		$bar = $pNavBar->getChild('right');
+		$group = new GroupButtonItem('list');
+		switch (_root::getAction()) {
+			case 'list':
+			case 'listThumbnail':
+			case 'listThumbnailLarge':
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('docs', 'list'), 'glyphicon-list'));
+				$group->addChild(
+					plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('docs', 'listThumbnail'), 'glyphicon-th'));
+				$group->addChild(
+					plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges', new NavLink('docs', 'listThumbnailLarge'), 
+						'glyphicon-th-large'));
+				break;
+		}
+		if ($group->hasRealChildren()) {
+			$bar->addChild($group);
+		}
 	}
 }

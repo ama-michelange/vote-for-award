@@ -5,6 +5,7 @@
 				data-target=".navbar-bsnavbarcontext">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
+			
 			<a class="navbar-brand" href="<?php echo $this->getLink($this->tTitles[1])?>"><?php echo $this->tTitles[0] ?></a>
 		</div>
 		<div class="navbar-collapse collapse navbar-bsnavbarcontext">
