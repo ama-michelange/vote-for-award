@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author ANTON-MA
+ * Class plugin_BsHtml
  */
 class plugin_BsHtml
 {
@@ -53,6 +53,12 @@ class plugin_BsHtml
 		return $ret;
 	}
 
+	/**
+	 * @param string $pLabel
+	 * @param Link $pLink
+	 * @param string $pIcon
+	 * @return LabelItem
+	 */
 	public static function buildBrandItem($pLabel, $pLink, $pIcon = null)
 	{
 		$ret = new LabelItem($pLabel, $pLink, $pIcon);
@@ -61,16 +67,21 @@ class plugin_BsHtml
 	}
 }
 
+/**
+ * Class NavBar
+ */
 class NavBar extends DefaultItem
 {
-
+	/**
+	 * @var LabelItem Le titre de
+	 */
 	private $_oTitle;
 
 	public function __construct($pName = null)
 	{
 		$name = $pName;
 		if (null == $name) {
-			$name = 'defaut';
+			$name = 'default';
 		}
 		parent::__construct($name);
 	}
@@ -86,6 +97,9 @@ class NavBar extends DefaultItem
 	}
 }
 
+/**
+ * Class Bar
+ */
 class Bar extends DefaultItem
 {
 
@@ -106,6 +120,9 @@ class Bar extends DefaultItem
 	}
 }
 
+/**
+ * Class MenuItem
+ */
 class MenuItem extends LabelItem
 {
 
@@ -122,6 +139,9 @@ class MenuItem extends LabelItem
 	}
 }
 
+/**
+ * Class DropdownMenuItem
+ */
 class DropdownMenuItem extends LabelItem
 {
 
@@ -142,7 +162,7 @@ class DropdownMenuItem extends LabelItem
 		$ret .= $this->toHtmlDropdownMenuToggle();
 		$ret .= $this->toHtmlDropdownMenu();
 		$ret .= '</li>';
-		
+
 		return $ret;
 	}
 
@@ -170,6 +190,9 @@ class DropdownMenuItem extends LabelItem
 	}
 }
 
+/**
+ * Class BarButtons
+ */
 class BarButtons extends Bar
 {
 
@@ -191,6 +214,9 @@ class BarButtons extends Bar
 	}
 }
 
+/**
+ * Class ButtonItem
+ */
 class ButtonItem extends LabelItem
 {
 
@@ -212,6 +238,9 @@ class ButtonItem extends LabelItem
 	}
 }
 
+/**
+ * Class GroupButtonItem
+ */
 class GroupButtonItem extends DefaultItem
 {
 
@@ -225,16 +254,15 @@ class GroupButtonItem extends DefaultItem
 }
 
 /**
- *
- * @author ANTON-MA
+ * Class DefaultItem
  */
-class DefaultItem
+abstract class DefaultItem
 {
-
+	/** @var  string */
 	private $_sName;
-
+	/** @var DefaultItem[] */
 	private $_tChildren;
-
+	/** @var bool */
 	private $_bActive = false;
 
 	public function __construct($pName)
@@ -242,11 +270,9 @@ class DefaultItem
 		$this->_sName = $pName;
 	}
 
-	public function getName()
-	{
-		return $this->_sName;
-	}
-
+	/**
+	 * @param DefaultItem $pItem
+	 */
 	public function addChild($pItem)
 	{
 		if (isset($pItem)) {
@@ -255,6 +281,14 @@ class DefaultItem
 			}
 			$this->_tChildren[$pItem->getName()] = $pItem;
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->_sName;
 	}
 
 	public function getChild($pName)
@@ -266,20 +300,9 @@ class DefaultItem
 		return $ret;
 	}
 
-	public function getChildren()
-	{
-		return $this->_tChildren;
-	}
-
-	public function hasChildren()
-	{
-		$ret = false;
-		if (isset($this->_tChildren)) {
-			$ret = (false == empty($this->_tChildren));
-		}
-		return $ret;
-	}
-
+	/**
+	 * @return bool
+	 */
 	public function hasRealChildren()
 	{
 		$ret = false;
@@ -292,6 +315,14 @@ class DefaultItem
 			}
 		}
 		return $ret;
+	}
+
+	/**
+	 * @return DefaultItem[]
+	 */
+	public function getChildren()
+	{
+		return $this->_tChildren;
 	}
 
 	public function isActive()
@@ -319,11 +350,22 @@ class DefaultItem
 		}
 		return $ret;
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasChildren()
+	{
+		$ret = false;
+		if (isset($this->_tChildren)) {
+			$ret = (false == empty($this->_tChildren));
+		}
+		return $ret;
+	}
 }
 
 /**
- *
- * @author ANTON-MA
+ * Class SeparatorItem
  */
 class SeparatorItem extends DefaultItem
 {
@@ -332,20 +374,23 @@ class SeparatorItem extends DefaultItem
 
 	public function __construct()
 	{
-		self::$_cpt ++;
+		self::$_cpt++;
 		parent::__construct('__separator__' . self::$_cpt);
 	}
 }
 
 /**
- *
- * @author ANTON-MA
+ * Class ActionItem
  */
 class ActionItem extends DefaultItem
 {
-
+	/** @var Link */
 	private $_oLink;
 
+	/**
+	 * @param string $pName
+	 * @param Link $pLink
+	 */
 	public function __construct($pName, $pLink = null)
 	{
 		if (isset($pName)) {
@@ -356,6 +401,9 @@ class ActionItem extends DefaultItem
 		$this->_oLink = $pLink;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHref()
 	{
 		$ret = '#';
@@ -363,16 +411,6 @@ class ActionItem extends DefaultItem
 			$ret = $this->_oLink->getLink();
 		}
 		return $ret;
-	}
-
-	public function getLink()
-	{
-		return $this->_oLink;
-	}
-
-	public function hasLink()
-	{
-		return isset($this->_oLink);
 	}
 
 	public function isPermit()
@@ -393,19 +431,35 @@ class ActionItem extends DefaultItem
 		if ($this->hasLink()) {
 			$ret = $this->getLink()->isCurrentModule();
 		}
-		if ((false == $ret) && (true == $this->hasChildren())) {
-			foreach ($this->getChildren() as $child) {
-				// _root::getLog()->log('AMA >>> isActivePage() : $child = ' . $child->getName());
-				// _root::getLog()->log('AMA >>> isActivePage() : $$child->hasLink() = ' . $child->hasLink());
-				if ($child->hasLink()) {
-					if ($child->getLink()->isCurrentModule()) {
-						$ret = true;
-						break;
-					}
-				}
-			}
-		}
+//        if ((false == $ret) && (true == $this->hasChildren())) {
+//            foreach ($this->getChildren() as $child) {
+//                // _root::getLog()->log('AMA >>> isActivePage() : $child = ' . $child->getName());
+//                // _root::getLog()->log('AMA >>> isActivePage() : $$child->hasLink() = ' . $child->hasLink());
+//                if ($child->hasLink()) {
+//                    if ($child->getLink()->isCurrentModule()) {
+//                        $ret = true;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
 		return $ret;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasLink()
+	{
+		return isset($this->_oLink);
+	}
+
+	/**
+	 * @return Link|null
+	 */
+	public function getLink()
+	{
+		return $this->_oLink;
 	}
 
 	public function hasCurrentModule()
@@ -438,8 +492,7 @@ class ActionItem extends DefaultItem
 }
 
 /**
- *
- * @author ANTON-MA
+ * Class LabelItem
  */
 class LabelItem extends ActionItem
 {
@@ -458,26 +511,6 @@ class LabelItem extends ActionItem
 		$this->_bShowLabel = $pShowLabel;
 	}
 
-	public function getLabel()
-	{
-		return $this->_sLabel;
-	}
-
-	public function isShowLabel()
-	{
-		return $this->_bShowLabel;
-	}
-
-	public function getIcon()
-	{
-		return $this->_sIcon;
-	}
-
-	public function hasIcon()
-	{
-		return isset($this->_sIcon);
-	}
-
 	public function toHtml()
 	{
 		$ret = '<a href="';
@@ -487,35 +520,6 @@ class LabelItem extends ActionItem
 		$ret .= '>';
 		$ret .= $this->toHtmlIconText2();
 		$ret .= '</a>';
-		return $ret;
-	}
-
-	protected function toHtmlIconText()
-	{
-		$ret = '';
-		if ($this->hasIcon()) {
-			$ret .= '<i class="glyphicon ';
-			$ret .= $this->getIcon();
-			$ret .= ' with-text"></i>';
-		}
-		$ret .= $this->getLabel();
-		return $ret;
-	}
-
-	protected function toHtmlIconText2()
-	{
-		$ret = '';
-		if ($this->hasIcon()) {
-			$ret .= '<i class="glyphicon ';
-			$ret .= $this->getIcon();
-			if ($this->isShowLabel()) {
-				$ret .= ' with-text"';
-			}
-			$ret .= '></i>';
-		}
-		if (true==$this->isShowLabel()) {
-			$ret .= $this->getLabel();
-		}
 		return $ret;
 	}
 
@@ -536,13 +540,59 @@ class LabelItem extends ActionItem
 		}
 		return $ret;
 	}
+
+	protected function toHtmlIconText2()
+	{
+		$ret = '';
+		if ($this->hasIcon()) {
+			$ret .= '<i class="glyphicon ';
+			$ret .= $this->getIcon();
+			if ($this->isShowLabel()) {
+				$ret .= ' with-text"';
+			}
+			$ret .= '></i>';
+		}
+		if (true == $this->isShowLabel()) {
+			$ret .= $this->getLabel();
+		}
+		return $ret;
+	}
+
+	public function hasIcon()
+	{
+		return isset($this->_sIcon);
+	}
+
+	public function getIcon()
+	{
+		return $this->_sIcon;
+	}
+
+	public function isShowLabel()
+	{
+		return $this->_bShowLabel;
+	}
+
+	public function getLabel()
+	{
+		return $this->_sLabel;
+	}
+
+	protected function toHtmlIconText()
+	{
+		$ret = '';
+		if ($this->hasIcon()) {
+			$ret .= '<i class="glyphicon ';
+			$ret .= $this->getIcon();
+			$ret .= ' with-text"></i>';
+		}
+		$ret .= $this->getLabel();
+		return $ret;
+	}
 }
 
 /**
- *
  * @author ANTON-MA
- *        
- *        
  */
 class NavLink extends Link
 {
@@ -561,6 +611,11 @@ class NavLink extends Link
 		$this->_sLink = _root::getLink($this->getNav(), $this->_tParams, false);
 	}
 
+	public function getNav()
+	{
+		return $this->_sModule . '::' . $this->_sAction;
+	}
+
 	public function getModule()
 	{
 		return $this->_sModule;
@@ -574,11 +629,6 @@ class NavLink extends Link
 	public function getName()
 	{
 		return $this->getNav();
-	}
-
-	public function getNav()
-	{
-		return $this->_sModule . '::' . $this->_sAction;
 	}
 
 	public function isPermit()
@@ -608,10 +658,7 @@ class NavLink extends Link
 }
 
 /**
- *
  * @author ANTON-MA
- *        
- *        
  */
 class Link
 {
