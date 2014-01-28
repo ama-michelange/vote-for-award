@@ -219,6 +219,10 @@ class BarButtons extends Bar
  */
 class ButtonItem extends LabelItem
 {
+	public function __construct($pLabel, $pLink = null, $pIcon = null, $pShowLabel = true)
+	{
+		parent::__construct($pLabel, $pLink, $pIcon, $pShowLabel);
+	}
 
 	public function toHtml()
 	{
@@ -232,7 +236,7 @@ class ButtonItem extends LabelItem
 		$ret .= '"';
 		$ret .= $this->toHtmlProperties();
 		$ret .= '>';
-		$ret .= $this->toHtmlIconText();
+		$ret .= $this->toHtmlIconText2();
 		$ret .= '</a>';
 		return $ret;
 	}
@@ -431,18 +435,18 @@ class ActionItem extends DefaultItem
 		if ($this->hasLink()) {
 			$ret = $this->getLink()->isCurrentModule();
 		}
-//        if ((false == $ret) && (true == $this->hasChildren())) {
-//            foreach ($this->getChildren() as $child) {
-//                // _root::getLog()->log('AMA >>> isActivePage() : $child = ' . $child->getName());
-//                // _root::getLog()->log('AMA >>> isActivePage() : $$child->hasLink() = ' . $child->hasLink());
-//                if ($child->hasLink()) {
-//                    if ($child->getLink()->isCurrentModule()) {
-//                        $ret = true;
-//                        break;
-//                    }
-//                }
-//            }
-//        }
+		/* if ((false == $ret) && (true == $this->hasChildren())) {
+				foreach ($this->getChildren() as $child) {
+					 // _root::getLog()->log('AMA >>> isActivePage() : $child = ' . $child->getName());
+					 // _root::getLog()->log('AMA >>> isActivePage() : $$child->hasLink() = ' . $child->hasLink());
+					 if ($child->hasLink()) {
+						  if ($child->getLink()->isCurrentModule()) {
+								$ret = true;
+								break;
+						  }
+					 }
+				}
+		  }*/
 		return $ret;
 	}
 
@@ -548,9 +552,9 @@ class LabelItem extends ActionItem
 			$ret .= '<i class="glyphicon ';
 			$ret .= $this->getIcon();
 			if ($this->isShowLabel()) {
-				$ret .= ' with-text"';
+				$ret .= ' with-text';
 			}
-			$ret .= '></i>';
+			$ret .= '"></i>';
 		}
 		if (true == $this->isShowLabel()) {
 			$ret .= $this->getLabel();
