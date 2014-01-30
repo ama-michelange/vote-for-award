@@ -1,1 +1,0 @@
-<h1><small><?php echo $this->sTitle ?></small></h1>
