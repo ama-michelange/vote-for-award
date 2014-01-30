@@ -236,7 +236,7 @@ class ButtonItem extends LabelItem
 		$ret .= '"';
 		$ret .= $this->toHtmlProperties();
 		$ret .= '>';
-		$ret .= $this->toHtmlIconText2();
+		$ret .= $this->toHtmlIconText();
 		$ret .= '</a>';
 		return $ret;
 	}
@@ -522,7 +522,7 @@ class LabelItem extends ActionItem
 		$ret .= '"';
 		$ret .= $this->toHtmlProperties();
 		$ret .= '>';
-		$ret .= $this->toHtmlIconText2();
+		$ret .= $this->toHtmlIconText();
 		$ret .= '</a>';
 		return $ret;
 	}
@@ -545,7 +545,7 @@ class LabelItem extends ActionItem
 		return $ret;
 	}
 
-	protected function toHtmlIconText2()
+	protected function toHtmlIconText()
 	{
 		$ret = '';
 		if ($this->hasIcon()) {
@@ -582,7 +582,7 @@ class LabelItem extends ActionItem
 		return $this->_sLabel;
 	}
 
-	protected function toHtmlIconText()
+	protected function toHtmlIconText4()
 	{
 		$ret = '';
 		if ($this->hasIcon()) {
