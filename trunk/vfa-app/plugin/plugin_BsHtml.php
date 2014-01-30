@@ -581,18 +581,6 @@ class LabelItem extends ActionItem
 	{
 		return $this->_sLabel;
 	}
-
-	protected function toHtmlIconText4()
-	{
-		$ret = '';
-		if ($this->hasIcon()) {
-			$ret .= '<i class="glyphicon ';
-			$ret .= $this->getIcon();
-			$ret .= ' with-text"></i>';
-		}
-		$ret .= $this->getLabel();
-		return $ret;
-	}
 }
 
 /**
