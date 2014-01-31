@@ -7,16 +7,23 @@ class module_invitations extends abstract_module
 	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-		
 		$this->oLayout = new _layout('tpl_bs_bar_context');
-		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
 	}
 
 	public function after()
 	{
-		// $this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTop());
-		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
+		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
+		$this->oLayout->add('bsnav-top', plugin_BsContextBar::buildViewContextBar($this->buildContextBar()));
 		$this->oLayout->show();
+	}
+
+	private function buildContextBar()
+	{
+		$navBar = plugin_BsHtml::buildNavBar();
+		$navBar->setTitle('Invitations', new NavLink('nominees', 'index', array('idAward' => _root::getParam('idAward'))));
+		$navBar->addChild(new BarButtons('left'));
+		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		return $navBar;
 	}
 
 	public function _index()
@@ -29,10 +36,10 @@ class module_invitations extends abstract_module
 	{
 		$oInvitationModel = new model_invitation();
 		$tInvitations = $oInvitationModel->findAll();
-		
+
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -95,7 +102,7 @@ class module_invitations extends abstract_module
 		$oView->textTitle = 'Libre';
 		$oView->tMessage = $tMessage;
 		// $oView->oViewShow=$this->makeViewShow();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -121,14 +128,14 @@ class module_invitations extends abstract_module
 	public function _delete()
 	{
 		$tMessage = $this->delete();
-		
+
 		$oView = new _view('invitations::delete');
 		$oView->oViewShow = $this->makeViewShow();
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$oView->tMessage = $tMessage;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -164,10 +171,10 @@ class module_invitations extends abstract_module
 		$oView->tMessage = $tMessage;
 		$this->fillAwards($oView);
 		$this->fillGroups($oView);
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -243,11 +250,11 @@ class module_invitations extends abstract_module
 		// var_dump($oRegistry);
 		$tMessage = $oRegistry->getMessages();
 		// var_dump($tMessage);
-		
+
 		$oView = new _view('invitations::invitConfirm');
 		$oView->oRegistry = $oRegistry;
 		$oView->tMessage = $tMessage;
-		
+
 		$tAwards = array();
 		if ($oRegistry->award_id) {
 			$tAwards[] = model_award::getInstance()->findById($oRegistry->award_id);
@@ -258,10 +265,10 @@ class module_invitations extends abstract_module
 		}
 		$oView->tAwards = $tAwards;
 		$oView->oGroup = model_group::getInstance()->findById($oRegistry->group_id);
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -276,7 +283,7 @@ class module_invitations extends abstract_module
 		}
 		$oView->oRegistry = $oRegistry;
 		$oView->tMessage = $tMessage;
-		
+
 		$tAwards = array();
 		if ($oRegistry->award_id) {
 			$tAwards[] = model_award::getInstance()->findById($oRegistry->award_id);
@@ -287,10 +294,10 @@ class module_invitations extends abstract_module
 		}
 		$oView->tAwards = $tAwards;
 		$oView->oGroup = model_group::getInstance()->findById($oRegistry->group_id);
-		
+
 		// $oPluginXsrf = new plugin_xsrf();
 		// $oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -298,7 +305,7 @@ class module_invitations extends abstract_module
 	{
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
-		
+
 		$oView = new _view('invitations::show');
 		$oView->oInvitation = $oInvitation;
 		$oView->tAwards = $oInvitation->findAwards();
@@ -309,27 +316,25 @@ class module_invitations extends abstract_module
 
 	private function verify()
 	{
-		if (! _root::getRequest()->isPost()) {
+		if (!_root::getRequest()->isPost()) {
 			return null;
 		}
 		$oRegistry = new row_registry_invitation();
-		
+
 		switch (_root::getParam('phase', null)) {
 			case 'sent':
 			case 'notsent':
 				break;
 			default:
 				$oPluginXsrf = new plugin_xsrf();
-				if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
-					$oRegistry->setMessages(array(
-						'token' => $oPluginXsrf->getMessage()
-					));
+				if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+					$oRegistry->setMessages(array('token' => $oPluginXsrf->getMessage()));
 					$oRegistry->phase = 'prepare';
 					return $oRegistry;
 				}
 				break;
 		}
-		
+
 		// Copie la saisie dans un enregistrement
 		$oRegistry->type = _root::getParam('type', null);
 		$oRegistry->phase = _root::getParam('phase', null);
@@ -338,7 +343,7 @@ class module_invitations extends abstract_module
 		$oRegistry->awards_ids = _root::getParam('awards_ids', null);
 		$oRegistry->group_id = _root::getParam('group_id', null);
 		// var_dump($oRegistry);
-		
+
 		switch (_root::getParam('cancel', null)) {
 			case 'prepare':
 				// Annulation de la phase 'prepare'
@@ -358,9 +363,7 @@ class module_invitations extends abstract_module
 						if ($oRegistry->isValid()) {
 							$oInvitDoublon = model_invitation::getInstance()->findByRegistry($oRegistry);
 							if ((null != $oInvitDoublon) && (false == $oInvitDoublon->isEmpty())) {
-								$oRegistry->setMessages(array(
-									'doublon' => 'isNotUnique'
-								));
+								$oRegistry->setMessages(array('doublon' => 'isNotUnique'));
 								$oRegistry->phase = 'prepare';
 							} else {
 								// Pas de doublon
@@ -411,7 +414,7 @@ class module_invitations extends abstract_module
 	private function saveInvitation($poRegistry)
 	{
 		$oInvit = new row_invitation();
-		
+
 		// Remplissage de l'invit
 		$oInvit->created_user_id = _root::getAuth()->getAccount()->getUser()->user_id;
 		$oInvit->invitation_key = $this->buildInvitationKey($poRegistry);
@@ -420,17 +423,15 @@ class module_invitations extends abstract_module
 		$oInvit->email = $poRegistry->email;
 		$oInvit->group_id = $poRegistry->group_id;
 		if ($poRegistry->award_id) {
-			$oInvit->awards_ids = array(
-				$poRegistry->award_id
-			);
+			$oInvit->awards_ids = array($poRegistry->award_id);
 		} else {
 			$oInvit->awards_ids = implode(',', $poRegistry->awards_ids);
 		}
 		$oInvit->created_date = plugin_vfa::dateTimeSgbd();
-		
+
 		// Sauve en base
 		$oInvit->save();
-		
+
 		return $oInvit;
 	}
 
@@ -456,7 +457,7 @@ class module_invitations extends abstract_module
 		$bodyHtml = $oViewTxt->show();
 		// _root::getLog()->log($bodyHtml);
 		$oMail->setBodyHtml($bodyHtml);
-		
+
 		// Envoi le mail
 		try {
 			$sent = $oMail->send();
@@ -473,18 +474,16 @@ class module_invitations extends abstract_module
 	private function delete()
 	{
 		// si ce n'est pas une requete POST on ne soumet pas
-		if (! _root::getRequest()->isPost()) {
+		if (!_root::getRequest()->isPost()) {
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		// on verifie que le token est valide
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
-			return array(
-				'token' => $oPluginXsrf->getMessage()
-			);
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+			return array('token' => $oPluginXsrf->getMessage());
 		}
-		
+
 		$oInvitationModel = new model_invitation();
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {

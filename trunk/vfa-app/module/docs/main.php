@@ -20,13 +20,13 @@ class module_docs extends abstract_module
 	{
 		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
 		_root::getRequest()->setAction('list');
-		
+
 		$oDocModel = new model_doc();
 		$tDocs = $oDocModel->findAll();
-		
+
 		$oView = new _view('docs::list');
 		$oView->tDocs = $tDocs;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -34,10 +34,10 @@ class module_docs extends abstract_module
 	{
 		$oDocModel = new model_doc();
 		$tDocs = $oDocModel->findAll();
-		
+
 		$oView = new _view('docs::listThumbnailLarge');
 		$oView->tDocs = $tDocs;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -45,33 +45,31 @@ class module_docs extends abstract_module
 	{
 		$oDocModel = new model_doc();
 		$tDocs = $oDocModel->findAll();
-		
+
 		$oView = new _view('docs::listThumbnail');
 		$oView->tDocs = $tDocs;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
 	public function _create()
 	{
 		$tMessage = null;
-		$oDocModel = new model_doc();
-		
 		$oDoc = $this->save();
 		if (null == $oDoc) {
 			$oDoc = new row_doc();
 		} else {
 			$tMessage = $oDoc->getMessages();
 		}
-		
+
 		$oView = new _view('docs::edit');
 		$oView->oDoc = $oDoc;
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un album';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -79,22 +77,22 @@ class module_docs extends abstract_module
 	{
 		$tMessage = null;
 		$oDocModel = new model_doc();
-		
+
 		$oDoc = $this->save();
 		if (null == $oDoc) {
 			$oDoc = $oDocModel->findById(_root::getParam('id'));
 		} else {
 			$tMessage = $oDoc->getMessages();
 		}
-		
+
 		$oView = new _view('docs::edit');
 		$oView->oDoc = $oDoc;
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un album';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -102,7 +100,7 @@ class module_docs extends abstract_module
 	{
 		$oView = new _view('docs::read');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -111,7 +109,7 @@ class module_docs extends abstract_module
 		$oDocModel = new model_doc();
 		$oDoc = $oDocModel->findById(_root::getParam('id'));
 		$toAwards = model_award::getInstance()->findAllByDocId(_root::getParam('id'));
-		
+
 		$oView = new _view('docs::show');
 		$oView->oDoc = $oDoc;
 		$oView->toAwards = $toAwards;
@@ -121,35 +119,35 @@ class module_docs extends abstract_module
 	public function _delete()
 	{
 		$tMessage = $this->delete();
-		
+
 		$oView = new _view('docs::delete');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$oView->ok = true;
 		if ($oView->oViewShow->toAwards) {
 			$oView->ok = false;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$oView->tMessage = $tMessage;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
 	public function save()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oDoc = new row_doc();
 			$oDoc->setMessages(array('token' => $oPluginXsrf->getMessage()));
 			return $oDoc;
 		}
-		
+
 		$oDocModel = new model_doc();
 		$iId = _root::getParam('id', null);
 		if ($iId == null) {
@@ -184,15 +182,15 @@ class module_docs extends abstract_module
 	public function delete()
 	{
 		// si ce n'est pas une requete POST on ne soumet pas
-		if (! _root::getRequest()->isPost()) {
+		if (!_root::getRequest()->isPost()) {
 			return null;
 		}
 		// on verifie que le token est valide
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
 			return array('token' => $oPluginXsrf->getMessage());
 		}
-		
+
 		$oDocModel = new model_doc();
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {
@@ -205,16 +203,8 @@ class module_docs extends abstract_module
 	public function after()
 	{
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-top', $this->buildViewContextBar());
+		$this->oLayout->add('bsnav-top', plugin_BsContextBar::buildViewContextBar($this->buildContextBar()));
 		$this->oLayout->show();
-	}
-
-	private function buildViewContextBar()
-	{
-		$oView = new _view('bsnavcontext::index');
-		$oView->oNavBar = $this->buildContextBar();
-		// $oView->tButtonGroup = self::buildContextNavButtonGroup();
-		return $oView;
 	}
 
 	private function buildContextBar()
@@ -237,11 +227,9 @@ class module_docs extends abstract_module
 			case 'listThumbnail':
 			case 'listThumbnailLarge':
 				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('docs', 'list'), 'glyphicon-list'));
-				$group->addChild(
-					plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('docs', 'listThumbnail'), 'glyphicon-th'));
-				$group->addChild(
-					plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges', new NavLink('docs', 'listThumbnailLarge'), 
-						'glyphicon-th-large'));
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('docs', 'listThumbnail'), 'glyphicon-th'));
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges', new NavLink('docs', 'listThumbnailLarge'),
+					'glyphicon-th-large'));
 				break;
 		}
 		if ($group->hasRealChildren()) {

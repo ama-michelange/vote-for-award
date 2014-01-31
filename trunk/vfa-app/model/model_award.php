@@ -13,6 +13,9 @@ class model_award extends abstract_model
 		'award_id'
 	);
 
+	/**
+	 * @return model_award
+	 */
 	public static function getInstance()
 	{
 		return self::_getInstance(__CLASS__);
@@ -66,6 +69,10 @@ class model_award extends abstract_model
 		return $this->findMany($sql, $pTitleId);
 	}
 
+	/**
+	 * @param $pDocId
+	 * @return row_award
+	 */
 	public function findAllByDocId($pDocId)
 	{
 		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' .

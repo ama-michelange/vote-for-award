@@ -7,9 +7,41 @@ class module_awards extends abstract_module
 	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-		
+
 		$this->oLayout = new _layout('tpl_bs_bar_context');
 		$this->flagsMenu = array();
+	}
+
+	public function after()
+	{
+		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
+		$this->oLayout->add('bsnav-top', plugin_BsContextBar::buildViewContextBar($this->buildContextBar()));
+		$this->oLayout->show();
+	}
+
+	private function buildContextBar()
+	{
+		$navBar = plugin_BsHtml::buildNavBar();
+		$navBar->setTitle('Prix', new NavLink('awards', 'index'));
+		$navBar->addChild(new BarButtons('left'));
+		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		$navBar->addChild(new BarButtons('right'));
+		if (true == $this->hasTitles()) {
+			$bar = $navBar->getChild('right');
+			$tParamAward = array('idAward' => _root::getParam('id'));
+			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélectionnés', new NavLink('nominees', 'list', $tParamAward), 'glyphicon-list'));
+			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélectionner', new NavLink('nominees', 'create', $tParamAward), 'glyphicon-heart'));
+		}
+		return $navBar;
+	}
+
+	private function hasTitles()
+	{
+		$flags = $this->flagsMenu;
+		if ($flags && isset($flags['titles'])) {
+			return true;
+		}
+		return false;
 	}
 
 	public function _index()
@@ -22,13 +54,13 @@ class module_awards extends abstract_module
 	{
 		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
 		_root::getRequest()->setAction('list');
-		
+
 		$oAwardModel = new model_award();
 		$tAwards = $oAwardModel->findAll();
-		
+
 		$oView = new _view('awards::list');
 		$oView->tAwards = $tAwards;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -37,7 +69,7 @@ class module_awards extends abstract_module
 		$tMessage = null;
 		$oAwardModel = new model_award();
 		$tAwardTitles = null;
-		
+
 		$oAward = $this->save();
 		if (null == $oAward) {
 			$oAward = new row_award();
@@ -45,15 +77,15 @@ class module_awards extends abstract_module
 		} else {
 			$tMessage = $oAward->getMessages();
 		}
-		
+
 		$oView = new _view('awards::edit');
 		$oView->oAward = $oAward;
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un prix';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -62,23 +94,23 @@ class module_awards extends abstract_module
 		$tMessage = null;
 		$tAwardTitles = null;
 		$oAwardModel = new model_award();
-		
+
 		$oAward = $this->save();
 		if (null == $oAward) {
 			$oAward = $oAwardModel->findById(_root::getParam('id'));
 		} else {
 			$tMessage = $oAward->getMessages();
 		}
-		
+
 		$oView = new _view('awards::edit');
 		$oView->oAward = $oAward;
-		
+
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un prix';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -86,7 +118,7 @@ class module_awards extends abstract_module
 	{
 		$oView = new _view('awards::read');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -95,11 +127,11 @@ class module_awards extends abstract_module
 		$oAwardModel = new model_award();
 		$oAward = $oAwardModel->findById(_root::getParam('id'));
 		$toTitles = $oAward->findTitles();
-		
+
 		$oView = new _view('awards::show');
 		$oView->oAward = $oAward;
 		$oView->toTitles = $toTitles;
-		
+
 		$flags = array();
 		if ($toTitles) {
 			$flags['titles'] = true;
@@ -107,39 +139,37 @@ class module_awards extends abstract_module
 			$flags['titles'] = false;
 		}
 		$this->flagsMenu = $flags;
-		
+
 		return $oView;
 	}
 
 	public function _delete()
 	{
 		$tMessage = $this->delete();
-		
+
 		$oView = new _view('awards::delete');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$oView->tMessage = $tMessage;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
 	public function save()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oAward = new row_award();
-			$oAward->setMessages(array(
-				'token' => $oPluginXsrf->getMessage()
-			));
+			$oAward->setMessages(array('token' => $oPluginXsrf->getMessage()));
 			return $oAward;
 		}
-		
+
 		$oAwardModel = new model_award();
 		$iId = _root::getParam('id', null);
 		if ($iId == null) {
@@ -166,42 +196,30 @@ class module_awards extends abstract_module
 				$oAward->$sColumn = _root::getParam($sColumn, null);
 			}
 		}
-		
+
 		if ($oAward->isValid()) {
 			$oAward->save();
-			_root::redirect('awards::read', array(
-				'id' => $oAward->award_id
-			));
+			_root::redirect('awards::read', array('id' => $oAward->award_id));
 		}
 		return $oAward;
 	}
 
 	public function delete()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
-			return array(
-				'token' => $oPluginXsrf->getMessage()
-			);
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+			return array('token' => $oPluginXsrf->getMessage());
 		}
-		
+
 		$oAwardModel = new model_award();
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {
 			$oAward = $oAwardModel->deleteAwardCascades($iId);
 		}
 		_root::redirect('awards::list');
-	}
-
-	public function after()
-	{
-		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud($this->flagsMenu));
-		
-		$this->oLayout->show();
 	}
 }
