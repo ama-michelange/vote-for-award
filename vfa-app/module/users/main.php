@@ -7,30 +7,46 @@ class module_users extends abstract_module
 	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-		
+
 		$this->oLayout = new _layout('tpl_bs_bar_context');
+	}
+
+	public function after()
+	{
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
+		$this->oLayout->add('bsnav-top', plugin_BsContextBar::buildViewContextBar($this->buildContextBar()));
+
+		$this->oLayout->show();
+	}
+
+	private function buildContextBar()
+	{
+		$navBar = plugin_BsHtml::buildNavBar();
+		$navBar->setTitle('Utilisateurs', new NavLink('users', 'index'));
+		$navBar->addChild(new BarButtons('left'));
+
+		$bar = $navBar->getChild('left');
+		$bar->addChild(plugin_BsHtml::buildButtonItem('Liste par groupe', new NavLink('users', 'listByGroup'), 'glyphicon-list'));
+		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		return $navBar;
 	}
 
 	public function _index()
 	{
-		// on considere que la page par defaut est la page de listage
+		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
+		_root::getRequest()->setAction('list');
 		$this->_list();
 	}
 
 	public function _list()
 	{
-		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
-		_root::getRequest()->setAction('list');
-		
 		$oUserModel = new model_user();
 		$tUsers = $oUserModel->findAll();
-		
+
 		$oView = new _view('users::list');
 		$oView->tUsers = $tUsers;
 		$oView->tColumn = $oUserModel->getListColumn(); // array('id','titre');//
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -40,7 +56,7 @@ class module_users extends abstract_module
 		$tGroups = _root::getAuth()->getAccount()->getGroups();
 		$SelectedIdGroup = null;
 		$tUsers = null;
-		
+
 		if (_root::getRequest()->isPost()) {
 			$SelectedIdGroup = _root::getParam('selectedGroup', null);
 		}
@@ -50,12 +66,12 @@ class module_users extends abstract_module
 			}
 			$tUsers = $oUserModel->findAllByGroupId($SelectedIdGroup);
 		}
-		
+
 		$oView = new _view('users::listByGroup');
 		$oView->tUsers = $tUsers;
 		$oView->tGroups = $tGroups;
 		$oView->SelectedIdGroup = $SelectedIdGroup;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -72,7 +88,7 @@ class module_users extends abstract_module
 			'gender',
 			'vote'
 		);
-		
+
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
 			$oUser = new row_user();
@@ -83,7 +99,7 @@ class module_users extends abstract_module
 			$tUserRoles = plugin_vfa::copyValuesToKeys(_root::getParam('user_roles', null));
 			$tUserGroups = plugin_vfa::copyValuesToKeys(_root::getParam('user_groups', null));
 		}
-		
+
 		$oView = new _view('users::edit');
 		$oView->oUser = $oUser;
 		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tUserRoles);
@@ -92,10 +108,10 @@ class module_users extends abstract_module
 		$oView->tId = $oUserModel->getIdTab();
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un utilisateur';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -113,7 +129,7 @@ class module_users extends abstract_module
 			'gender',
 			'vote'
 		);
-		
+
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
 			$oUser = $oUserModel->findById(_root::getParam('id'));
@@ -124,7 +140,7 @@ class module_users extends abstract_module
 			$tUserRoles = plugin_vfa::copyValuesToKeys(_root::getParam('user_roles', null));
 			$tUserGroups = plugin_vfa::copyValuesToKeys(_root::getParam('user_groups', null));
 		}
-		
+
 		$oView = new _view('users::edit');
 		$oView->oUser = $oUser;
 		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tUserRoles);
@@ -133,10 +149,10 @@ class module_users extends abstract_module
 		$oView->textTitle = 'Modifier un utilisateur';
 		$oView->tColumn = $tColumns;
 		$oView->tId = $oUserModel->getIdTab();
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -147,7 +163,7 @@ class module_users extends abstract_module
 		// $oView->oUser=$oUser;
 		// $oView->tColumn=$oUserModel->getListColumn();
 		// $oView->tId=$oUserModel->getIdTab();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -155,46 +171,46 @@ class module_users extends abstract_module
 	{
 		$oUserModel = new model_user();
 		$oUser = $oUserModel->findById(_root::getParam('id'));
-		
+
 		$oView = new _view('users::show');
 		$oView->oUser = $oUser;
 		$oView->toRoles = $oUser->findRoles();
 		$oView->toGroups = $oUser->findGroups();
 		$oView->toAwards = $oUser->findAwards();
-		
+
 		return $oView;
 	}
 
 	public function _delete()
 	{
 		$tMessage = $this->delete();
-		
+
 		$oView = new _view('users::delete');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$oView->tMessage = $tMessage;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
 	public function save($tColumns)
 	{
-		if (! _root::getRequest()->isPost()) {
+		if (!_root::getRequest()->isPost()) {
 			// si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oDoc = new row_title();
 			$oDoc->setMessages(array(
 				'token' => $oPluginXsrf->getMessage()
 			));
 			return $oDoc;
 		}
-		
+
 		$oUserModel = new model_user();
 		$iId = _root::getParam('id', null);
 		if ($iId == null) {
@@ -229,13 +245,13 @@ class module_users extends abstract_module
 		$tUserRoles = _root::getParam('user_roles', null);
 		// Récupère les groupes associés
 		$tUserGroups = _root::getParam('user_groups', null);
-		
+
 		if ($oUser->isValid()) {
 			$bSave = false;
 			$oUserDoublon = $oUserModel->findByLogin(_root::getParam('username', null));
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
 				$bSave = true;
-			} else 
+			} else
 				if ((null != $oUser->getId()) && ($oUserDoublon->getId() == $oUser->getId())) {
 					$bSave = true;
 				}
@@ -260,28 +276,23 @@ class module_users extends abstract_module
 
 	public function delete()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			return array(
 				'token' => $oPluginXsrf->getMessage()
 			);
 		}
-		
+
 		$oUserModel = new model_user();
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {
 			$oUserModel->deleteUserCascades($iId);
 		}
 		_root::redirect('users::list');
-	}
-
-	public function after()
-	{
-		$this->oLayout->show();
 	}
 }
 

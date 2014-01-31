@@ -2,34 +2,45 @@
 
 class module_roles extends abstract_module
 {
-
 	public function before()
 	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-		
+
 		$this->oLayout = new _layout('tpl_bs_bar_context');
+	}
+
+	public function after()
+	{
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
-		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
+		$this->oLayout->add('bsnav-top', plugin_BsContextBar::buildViewContextBar($this->buildContextBar()));
+		$this->oLayout->show();
+	}
+
+	private function buildContextBar()
+	{
+		$navBar = plugin_BsHtml::buildNavBar();
+		$navBar->setTitle('Rôles', new NavLink('roles', 'index'));
+		$navBar->addChild(new BarButtons('left'));
+		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		return $navBar;
 	}
 
 	public function _index()
 	{
-		// on considere que la page par defaut est la page de listage
+		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
+		_root::getRequest()->setAction('list');
 		$this->_list();
 	}
 
 	public function _list()
 	{
-		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
-		_root::getRequest()->setAction('list');
-		
 		$oRoleModel = new model_role();
 		$tRoles = $oRoleModel->findAll();
-		
+
 		$oView = new _view('roles::list');
 		$oView->tRoles = $tRoles;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -38,23 +49,23 @@ class module_roles extends abstract_module
 		$tMessage = null;
 		$oRoleModel = new model_role();
 		$tCompleteAclModules = $this->buildCompleteAclModules();
-		
+
 		$oRole = $this->save($tCompleteAclModules);
 		if (null == $oRole) {
 			$oRole = new row_role();
 		} else {
 			$tMessage = $oRole->getMessages();
 		}
-		
+
 		$oView = new _view('roles::edit');
 		$oView->oRole = $oRole;
 		$oView->tCompleteAclModules = $tCompleteAclModules;
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un rôle';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -63,23 +74,23 @@ class module_roles extends abstract_module
 		$tMessage = null;
 		$oRoleModel = new model_role();
 		$tCompleteAclModules = $this->buildCompleteAclModules();
-		
+
 		$oRole = $this->save($tCompleteAclModules);
 		if (null == $oRole) {
 			$oRole = $oRoleModel->findById(_root::getParam('id'));
 		} else {
 			$tMessage = $oRole->getMessages();
 		}
-		
+
 		$oView = new _view('roles::edit');
 		$oView->oRole = $oRole;
 		$oView->tCompleteAclModules = $this->addCheckedAcl($tCompleteAclModules, $oRole->findAuthorizations());
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un rôle';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -87,7 +98,7 @@ class module_roles extends abstract_module
 	{
 		$oView = new _view('roles::read');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -96,14 +107,13 @@ class module_roles extends abstract_module
 		$oRoleModel = new model_role();
 		$oRole = $oRoleModel->findById(_root::getParam('id'));
 		$tCompleteAclModules = $this->buildCompleteAclModules();
-		
+
 		$oView = new _view('roles::show');
 		$oView->oRole = $oRole;
 		$oView->tCompleteAclModules = $this->addCheckedAcl($tCompleteAclModules, $oRole->findAuthorizations());
-		
+
 		return $oView;
 	}
-	
 	// private function toArrayAcl($poAuthorizations){
 	// $ptAclModules = array();
 	// $module = null;
@@ -117,6 +127,7 @@ class module_roles extends abstract_module
 	// //var_dump($ptAclModules);
 	// return $ptAclModules;
 	// }
+
 	private function addCheckedAcl($ptCompleteAclModules, $poAuthorizations)
 	{
 		foreach ($poAuthorizations as $oAuth) {
@@ -133,10 +144,10 @@ class module_roles extends abstract_module
 	{
 		$aclModules = _root::getConfigVar('acl.modules');
 		$tAclModules = explode(',', $aclModules);
-		
+
 		$pathModule = _root::getConfigVar('path.module');
 		$oDir = new _dir($pathModule);
-		
+
 		$tModuleDir = $oDir->getListDir();
 		$tModules = array();
 		foreach ($tModuleDir as $oModuleDir) {
@@ -152,7 +163,7 @@ class module_roles extends abstract_module
 			}
 		}
 		// var_dump($tModules);
-		
+
 		$tComplete = array();
 		foreach ($tModules as $tDetail) {
 			$module = $tDetail['module'];
@@ -172,32 +183,30 @@ class module_roles extends abstract_module
 	public function _delete()
 	{
 		$tMessage = $this->delete();
-		
+
 		$oView = new _view('roles::delete');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$oView->tMessage = $tMessage;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
 	public function save($ptCompleteAclModules)
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oRole = new row_role();
-			$oRole->setMessages(array(
-				'token' => $oPluginXsrf->getMessage()
-			));
+			$oRole->setMessages(array('token' => $oPluginXsrf->getMessage()));
 			return $oRole;
 		}
-		
+
 		$oRoleModel = new model_role();
 		$iId = _root::getParam('id', null);
 		if ($iId == null) {
@@ -216,20 +225,18 @@ class module_roles extends abstract_module
 				$oRole->$sColumn = _root::getParam($sColumn, null);
 			}
 		}
-		
+
 		if ($oRole->isValid()) {
 			$oRole->save();
 			$this->saveRoleAcl($oRole->getId(), $ptCompleteAclModules);
-			_root::redirect('roles::read', array(
-				'id' => $oRole->getId()
-			));
+			_root::redirect('roles::read', array('id' => $oRole->getId()));
 		}
 		return $oRole;
 	}
 
 	public function saveRoleAcl($pIdRole, $ptCompleteAclModules)
 	{
-		if (! _root::getRequest()->isPost()) {
+		if (!_root::getRequest()->isPost()) {
 			return;
 		}
 		// Recup la saisie
@@ -252,28 +259,21 @@ class module_roles extends abstract_module
 
 	public function delete()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
-			return array(
-				'token' => $oPluginXsrf->getMessage()
-			);
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+			return array('token' => $oPluginXsrf->getMessage());
 		}
-		
+
 		$oRoleModel = new model_role();
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {
 			$oRole = $oRoleModel->deleteRoleCascades($iId);
 		}
 		_root::redirect('roles::list');
-	}
-
-	public function after()
-	{
-		$this->oLayout->show();
 	}
 }
 

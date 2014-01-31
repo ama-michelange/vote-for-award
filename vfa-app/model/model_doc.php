@@ -18,6 +18,10 @@ class model_doc extends abstract_model
 		return self::_getInstance(__CLASS__);
 	}
 
+	/**
+	 * @param $uId
+	 * @return row_doc
+	 */
 	public function findById($uId)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE doc_id=?', $uId);
