@@ -9,9 +9,7 @@ class model_award extends abstract_model
 
 	protected $sConfig = 'mysql';
 
-	protected $tId = array(
-		'award_id'
-	);
+	protected $tId = array('award_id');
 
 	/**
 	 * @return model_award
@@ -21,6 +19,10 @@ class model_award extends abstract_model
 		return self::_getInstance(__CLASS__);
 	}
 
+	/**
+	 * @param $uId
+	 * @return row_award
+	 */
 	public function findById($uId)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE award_id=?', $uId);
@@ -50,7 +52,7 @@ class model_award extends abstract_model
 	/**
 	 * Supprime
 	 *
-	 * @param string $pIdAward        	
+	 * @param string $pIdAward
 	 */
 	public function deleteAwardCascades($pIdAward)
 	{
@@ -65,7 +67,7 @@ class model_award extends abstract_model
 	public function findAllByTitleId($pTitleId)
 	{
 		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
-			 'AND (vfa_award_titles.title_id = ?) ' . 'ORDER BY vfa_awards.name';
+			'AND (vfa_award_titles.title_id = ?) ' . 'ORDER BY vfa_awards.name';
 		return $this->findMany($sql, $pTitleId);
 	}
 
@@ -75,17 +77,15 @@ class model_award extends abstract_model
 	 */
 	public function findAllByDocId($pDocId)
 	{
-		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' .
-			 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
-			 'AND (vfa_award_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ' .
-			 'ORDER BY vfa_awards.name';
+		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
+			'AND (vfa_award_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ' . 'ORDER BY vfa_awards.name';
 		return $this->findMany($sql, $pDocId);
 	}
 
 	public function findAllByUserId($pUserId)
 	{
-		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' . 'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' .
-			 'AND (vfa_user_awards.user_id = ?)';
+		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' .
+			'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' . 'AND (vfa_user_awards.user_id = ?)';
 		return $this->findMany($sql, $pUserId);
 	}
 }
@@ -114,18 +114,18 @@ class row_award extends abstract_row
 		}
 		return $tArray;
 	}
-	
+
 	/* exemple test validation */
 	private function getCheck()
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
-		
+
 		$oPluginValid->isNotEmpty('name');
 		$oPluginValid->isNotEmpty('start_date');
 		$oPluginValid->isNotEmpty('end_date');
 		$oPluginValid->isDateBefore('start_date', 'end_date');
 		$oPluginValid->isDateAfter('end_date', 'start_date');
-		
+
 		return $oPluginValid;
 	}
 
@@ -136,7 +136,7 @@ class row_award extends abstract_row
 
 	public function getListError()
 	{
-		$t= $this->getCheck()->getListError();
+		$t = $this->getCheck()->getListError();
 		var_dump($t);
 		return $t;
 	}

@@ -23,9 +23,8 @@
 			<div class="col-sm-6 col-md-6">
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
-						<h5 class="panel-title">
-							Titres sélectionnés <a class="pull-right accordion-toggle" data-toggle="collapse"
-								href="#nominees"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+						<h5 class="panel-title">Titres sélectionnés
+							<a class="pull-right accordion-toggle btn btn-default btn-xs" data-toggle="collapse" href="#nominees"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 						</h5>
 					</div>
 					<div id="nominees" class="collapse in">
@@ -36,12 +35,13 @@
 								<tr>
 									<td>
 										<?php if(_root::getACL()->permit('nominees::read')):?>
-											<a
-										href="<?php echo $this->getLink('nominees::read',array( 'id'=>$oTitle->getId(), 'idAward'=>$this->oAward->getId()))?>"
-										rel="tooltip" data-original-title="Voir le titre : <?php echo $oTitle->toString() ?>"> <i
-											class="glyphicon glyphicon-eye-open with-text"></i></a>
-										<?php endif;?>
-										<?php echo $oTitle->toString() ?> 
+											<a href="<?php echo $this->getLink('nominees::read',array( 'id'=>$oTitle->getId(), 'idAward'=>$this->oAward->getId()))?>"
+												rel="tooltip" data-original-title="Voir le titre : <?php echo $oTitle->toString() ?>"> <i
+												class="glyphicon glyphicon-eye-open with-text"></i></a>
+										<?php endif; ?>
+										<a href="<?php echo $this->getLink('nominees::read',array( 'id'=>$oTitle->getId(), 'idAward'=>$this->oAward->getId()))?>">
+											<?php echo $oTitle->toString() ?>
+										</a>
 									</td>
 								</tr>	
 								<?php endforeach;?>
