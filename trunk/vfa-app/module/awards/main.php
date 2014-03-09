@@ -67,7 +67,6 @@ class module_awards extends abstract_module
 	public function _create()
 	{
 		$tMessage = null;
-		$oAwardModel = new model_award();
 		$tAwardTitles = null;
 
 		$oAward = $this->save();
@@ -218,8 +217,9 @@ class module_awards extends abstract_module
 		$oAwardModel = new model_award();
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {
-			$oAward = $oAwardModel->deleteAwardCascades($iId);
+			$oAwardModel->deleteAwardCascades($iId);
 		}
 		_root::redirect('awards::list');
+		return null;
 	}
 }
