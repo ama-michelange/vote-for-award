@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class plugin_BsContextBar
+ * Class plugin_BsContextBar.
  */
 class plugin_BsContextBar
 {
