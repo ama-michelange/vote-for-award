@@ -47,7 +47,6 @@ class module_roles extends abstract_module
 	public function _create()
 	{
 		$tMessage = null;
-		$oRoleModel = new model_role();
 		$tCompleteAclModules = $this->buildCompleteAclModules();
 
 		$oRole = $this->save($tCompleteAclModules);
@@ -114,19 +113,6 @@ class module_roles extends abstract_module
 
 		return $oView;
 	}
-	// private function toArrayAcl($poAuthorizations){
-	// $ptAclModules = array();
-	// $module = null;
-	// foreach($poAuthorizations as $oAuth){
-	// if ($module != $oAuth->module){
-	// $module = $oAuth->module;
-	// $ptAclModules[$module] = array();
-	// }
-	// $ptAclModules[$module][] = $oAuth->action;
-	// }
-	// //var_dump($ptAclModules);
-	// return $ptAclModules;
-	// }
 
 	private function addCheckedAcl($ptCompleteAclModules, $poAuthorizations)
 	{
@@ -162,7 +148,7 @@ class module_roles extends abstract_module
 				$tModules[$sModuleDirname] = $tDetailModules;
 			}
 		}
-		// var_dump($tModules);
+		 var_dump($tModules);
 
 		$tComplete = array();
 		foreach ($tModules as $tDetail) {

@@ -43,22 +43,22 @@ class module_bsnavbar extends abstract_module
 		$bar = $pNavBar->getChild('left');
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Accueil', new NavLink('home_enable', 'index')));
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Vote', new NavLink('home_enable', 'index')));
-		
+
 		$this->buildMenuPrix($bar);
 		$this->buildMenuInscription($bar);
 		$this->buildMenuAdmin($bar);
-		
+
 		$bar = $pNavBar->getChild('right');
-		$this->buildMenuUser($bar);
+		$this->buildMenuConnectedUser($bar);
 	}
 
-	private function buildMenuUser($pItems)
+	private function buildMenuConnectedUser($pItems)
 	{
 		$account = _root::getAuth()->getAccount();
 		$item = new DropdownMenuItem($account->getUser()->username, null, 'glyphicon-user');
-		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('user', 'account')), 'glyphicon-user');
-		$item->addChild(plugin_BsHtml::buildMenuItem('Déconnexion', new NavLink('bsnavbar', 'logout')), 'glyphicon-remove-sign');
-		
+		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('connected_user', 'account', null, true)), 'glyphicon-user');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Déconnexion', new NavLink('bsnavbar', 'logout', null, true)), 'glyphicon-remove-sign');
+
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
 		}
@@ -68,15 +68,15 @@ class module_bsnavbar extends abstract_module
 	{
 		$item = new DropdownMenuItem('Prix');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Résultats', new NavLink('results', 'index')));
-		
+
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'list')));
-		
+
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Toto - Titi', new NavLink('docs', 'list')));
-		
+
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
 		}
@@ -88,14 +88,14 @@ class module_bsnavbar extends abstract_module
 		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'index')));
-		
+
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Groupes', new NavLink('groups', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Utilisateurs', new NavLink('users', 'index')));
-		
+
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Rôles', new NavLink('roles', 'index')));
-		
+
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
 		}
@@ -107,11 +107,11 @@ class module_bsnavbar extends abstract_module
 		$item->addChild(plugin_BsHtml::buildMenuItem('Invitations', new NavLink('invitations', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Invitation aux lecteurs', new NavLink('invitations', 'reader')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Inscriptions libres', new NavLink('invitations', 'free')));
-		
+
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Responsable de groupe', new NavLink('invitations', 'responsible')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Membre du comité', new NavLink('invitations', 'board')));
-		
+
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
 		}
