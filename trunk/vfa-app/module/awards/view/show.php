@@ -33,25 +33,14 @@
 							<tbody>
 								<?php foreach($this->toTitles as $oTitle):?>
 								<tr>
-									<td>
-										<?php if(_root::getACL()->permit('nominees::read')):?>
-											<a href="<?php echo $this->getLink('nominees::read',array( 'id'=>$oTitle->getId(), 'idAward'=>$this->oAward->getId()))?>"
-												rel="tooltip" data-original-title="Voir le titre : <?php echo $oTitle->toString() ?>"> <i
-												class="glyphicon glyphicon-eye-open with-text"></i></a>
-										<?php endif; ?>
-										<a href="<?php echo $this->getLink('nominees::read',array( 'id'=>$oTitle->getId(), 'idAward'=>$this->oAward->getId()))?>">
-											<?php echo $oTitle->toString() ?>
-										</a>
-									</td>
+									<td><?php echo plugin_BsHtml::showNavLabel($oTitle->toString(), new NavLink('nominees', 'read', array( 'id'=>$oTitle->getId(), 'idAward'=>$this->oAward->getId()))); ?></td>
 								</tr>	
 								<?php endforeach;?>
 							</tbody>
 						</table>
 						<?php else:?>
 						<div class="panel-body">
-							<h3>
-								<i class="glyphicon glyphicon-warning-sign with-text"></i>Aucun titre sélectionné !
-							</h3>
+							<h3>Aucun titre sélectionné !</h3>
 						</div>
 						<?php endif;?>	
 					</div>

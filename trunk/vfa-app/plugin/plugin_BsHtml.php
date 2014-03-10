@@ -65,6 +65,17 @@ class plugin_BsHtml
 		$pLink->setProperties(array('class' => 'navbar-brand'));
 		return $ret;
 	}
+
+	public static function showNavLabel($pLabel, $pLink, $pIcon = null)
+	{
+		$item = new LabelItem($pLabel, $pLink, $pIcon);
+		if (false == $item->isPermit()) {
+			$ret = $pLabel;
+		} else {
+			$ret = $item->toHtml();
+		}
+		return $ret;
+	}
 }
 
 /**
@@ -317,8 +328,27 @@ abstract class DefaultItem
 					break;
 				}
 			}
+			if ($ret) {
+				$this->deleteLastSeparatorChildren();
+			}
 		}
 		return $ret;
+	}
+
+	public function deleteLastSeparatorChildren()
+	{
+		if (isset($this->_tChildren)) {
+			$end = false;
+			while (false == $end && count($this->_tChildren) > 0) {
+				$item = end($this->_tChildren);
+				if (true == plugin_BsHtml::isSeparator($item)) {
+					array_pop($this->_tChildren);
+				} else {
+					$end = true;
+				}
+			}
+		}
+		return;
 	}
 
 	/**
@@ -588,19 +618,18 @@ class LabelItem extends ActionItem
  */
 class NavLink extends Link
 {
-
 	protected $_sAction;
-
 	protected $_sModule;
-
 	protected $_tParams;
+	protected $_forcePermit = false;
 
-	public function __construct($pModule, $pAction, $ptParams = null)
+	public function __construct($pModule, $pAction, $ptParams = null, $pForcePermit = false)
 	{
 		$this->_sModule = $pModule;
 		$this->_sAction = $pAction;
 		$this->_tParams = $ptParams;
 		$this->_sLink = _root::getLink($this->getNav(), $this->_tParams, false);
+		$this->_forcePermit = $pForcePermit;
 	}
 
 	public function getNav()
@@ -625,7 +654,11 @@ class NavLink extends Link
 
 	public function isPermit()
 	{
-		return _root::getACL()->permit($this->getNav());
+		$permit = $this->_forcePermit;
+		if (!$permit) {
+			$permit = _root::getACL()->permit($this->getNav());
+		}
+		return $permit;
 	}
 
 	public function isCurrentModule()
