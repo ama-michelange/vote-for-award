@@ -148,7 +148,7 @@ class module_roles extends abstract_module
 				$tModules[$sModuleDirname] = $tDetailModules;
 			}
 		}
-		 var_dump($tModules);
+		//var_dump($tModules);
 
 		$tComplete = array();
 		foreach ($tModules as $tDetail) {

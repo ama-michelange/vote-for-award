@@ -30,8 +30,8 @@ if (true == $bImage) {
 				<div class="panel panel-default panel-inner">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						Liaisons de l'album <a class="pull-right accordion-toggle" data-toggle="collapse"
-							href="#awards"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+						Liaisons de l'album
+						<a class="pull-right accordion-toggle btn btn-default btn-xs" data-toggle="collapse" href="#awards"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 					</h5>
 				</div>
 				<div id="awards" class="collapse in">
@@ -43,31 +43,27 @@ if (true == $bImage) {
 									<div class="btn-group">
 											<?php if(_root::getACL()->permit('awards::read')):?>
 												<a class="btn btn-default btn-link dropdown-toggle" data-toggle="dropdown">
-													<?php echo $oAward->getTypeNameString()?>
-													<span class="caret"></span>
-										</a>
+													<?php echo $oAward->getTypeNameString()?><span class="caret with-text"></span>
+												</a>
 											<?php else:?>
 												<?php echo $oAward->getTypeNameString()?>
 											<?php endif;?>
 											<ul class="dropdown-menu">
 												<?php if(_root::getACL()->permit('awards::read')):?>
 												<li><a href="<?php echo $this->getLink('awards::read',array('id'=>$oAward->getId()))?>">
-													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir le prix
-											</a></li>
+													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir le prix</a>
+												</li>
 												<?php endif;?>
 											
 												<?php if(_root::getACL()->permit('nominees::list')):?>
-												<li><a
-												href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">
-													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir la liste des titres
-													sélectionnés
-											</a></li>
+												<li><a href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">
+													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir la liste des titres sélectionnés</a>
+												</li>
 												<?php endif;?>
 												<?php if(_root::getACL()->permit('nominees::read')):?>
-												<li><a
-												href="<?php echo $this->getLink('nominees::readWithDoc',array('idAward'=>$oAward->getId(),'idDoc'=>$this->oDoc->getId()))?>">
-													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir le titre sélectionné
-											</a></li>
+												<li><a href="<?php echo $this->getLink('nominees::readWithDoc',array('idAward'=>$oAward->getId(),'idDoc'=>$this->oDoc->getId()))?>">
+													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir le titre sélectionné</a>
+												</li>
 												<?php endif;?>
 											</ul>
 									</div>
