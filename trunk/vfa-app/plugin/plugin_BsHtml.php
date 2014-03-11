@@ -181,7 +181,7 @@ class DropdownMenuItem extends LabelItem
 	{
 		$ret = '<a href="#" class="dropdown-toggle" data-toggle="dropdown">';
 		$ret .= $this->toHtmlIconText();
-		$ret .= ' <b class="caret"></b>';
+		$ret .= '<b class="caret with-text"></b>';
 		$ret .= '</a>';
 		return $ret;
 	}

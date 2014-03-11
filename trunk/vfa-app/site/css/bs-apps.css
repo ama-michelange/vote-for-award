@@ -252,6 +252,10 @@
     padding-right: 1.5em;
 }
 
+.caret.with-text {
+    margin-left: 0.5em;
+}
+
 .view-label {
     text-align: right;
     padding-right: 0;

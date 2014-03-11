@@ -16,7 +16,7 @@ class module_home_enable extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	public function _ama()
+	public function _amaTest()
 	{
 		$ac = new plugin_ActionItem('myModule', 'myAction');
 		var_dump($ac);
