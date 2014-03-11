@@ -3,7 +3,7 @@
 		<h3 class="panel-title"><?php echo $this->oAward->getTypeNameString() ?></h3>
 	</div>
 	<div class="panel-body panel-condensed">
-		<div class=" row">
+		<div class="row">
 			<div class="col-sm-6 col-md-6">
 				<div class="panel panel-default panel-inner">
 					<div class="panel-body">
