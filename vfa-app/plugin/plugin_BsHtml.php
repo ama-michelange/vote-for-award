@@ -76,6 +76,56 @@ class plugin_BsHtml
 		}
 		return $ret;
 	}
+
+	/**
+	 * @param $pImage
+	 * @param $pTextAlt
+	 * @param $pSize
+	 * @param $pLink NavLink
+	 * @return string
+	 */
+	public static function showNavImage($pImage, $pTextAlt, $pSize, $pLink, $pShowText = false)
+	{
+		$ret = '';
+			$permit = $pLink->isPermit();
+		if (isset($pImage)) {
+			if ($permit) {
+				$ret .= '<a href="';
+				$ret .= $pLink->getLink();
+				$ret .= '"';
+				$ret .= '>';
+			}
+			$ret .= '<img class="';
+			$ret .= $pSize;
+			$ret .= '" src="';
+			$ret .= $pImage;
+			$ret .= '" alt="';
+			$ret .= $pTextAlt;
+			$ret .= '">';
+			if ($permit) {
+				$ret .= '</a>';
+			}
+		} else {
+			$ret .= '<p class="' . $pSize . '">';
+			if ($pShowText) {
+				if ($permit) {
+					$ret .= '<a href="';
+					$ret .= $pLink->getLink();
+					$ret .= '"';
+					$ret .= '>';
+				}
+				$ret .= '<strong>';
+				$ret .= $pTextAlt;
+				$ret .= '</strong>';
+				if ($permit) {
+					$ret .= '</a>';
+				}
+				$ret .= '<br/>';
+			}
+			$ret .= '<i class="glyphicon glyphicon-book"></i></p>';
+		}
+		return $ret;
+	}
 }
 
 /**

@@ -14,17 +14,7 @@
 				<?php else:?>
 					<p class="panel-images-title">&nbsp;</p>
 				<?php endif;?>
-				<?php if ($oDoc->image):?>
-					<?php if(_root::getACL()->permit('docs::read')):?>
-						<a href="<?php echo $this->getLink('docs::read',array('id'=>$oDoc->getId()))?>"><img class="img-sm" src="<?php echo $oDoc->image ?>" alt="<?php echo $oDoc->toString()?>"></a>
-					<?php else:?>
-						<img class="img-sm" src="<?php echo $oDoc->image ?>" alt="<?php echo $oDoc->toString()?>">
-					<?php endif;?>
-				<?php else:?>
-					<p class="img-sm">
-						<i class="glyphicon glyphicon-book"></i>
-					</p>
-				<?php endif;?>
+				<?php echo plugin_BsHtml::showNavImage($oDoc->image,$oDoc->toString(),'img-sm',new NavLink('docs', 'read', array( 'id'=>$oDoc->getId()))); ?>
 			</div>
 		</div>
 		<?php endforeach;?>
