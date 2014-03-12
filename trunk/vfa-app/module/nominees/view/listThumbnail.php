@@ -9,37 +9,15 @@
 	<div class="panel-body">
 		<?php foreach($this->toTitles as $oTitle):?>
 			<div class="panel-images">
-			<div class="panel-images-body">
-				<p><?php echo $oTitle->toString() ?></p>
+				<div class="panel-images-body">
+					<p>
+						<?php echo plugin_BsHtml::showNavLabel($oTitle->toString(),new NavLink('nominees', 'read', array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))); ?>
+					</p>
 					<?php foreach($oTitle->findDocs() as $oDoc):?>
-						<img class="img-sm" src="<?php echo $oDoc->image ?>" alt="">
+						<?php echo plugin_BsHtml::showNavImage($oDoc->image,$oDoc->toString(),'img-sm',new NavLink('nominees', 'read', array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))); ?>
 					<?php endforeach;?>
 				</div>
-			<div class="caption">
-					<?php if(_root::getACL()->permit(array('nominees::update','nominees::delete','nominees::read'))):?>     		
-						<div class="btn-group">
-							<?php if(_root::getACL()->permit('nominees::update')):?>
-							<a rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>"
-						href="<?php echo $this->getLink('nominees::update',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-						<i class="glyphicon glyphicon-edit"></i>
-					</a>
-							<?php endif;?>
-							<?php if(_root::getACL()->permit('nominees::delete')):?>
-							<a rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->toString() ?>"
-						href="<?php echo $this->getLink('nominees::delete',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-						<i class="glyphicon glyphicon-trash"></i>
-					</a>
-							<?php endif;?>
-							<?php if(_root::getACL()->permit('nominees::read')):?>
-							<a rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>"
-						href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-						<i class="glyphicon glyphicon-eye-open"></i>
-					</a>
-							<?php endif;?>
-						</div>
-					<?php endif;?>
-				</div>
-		</div>
+			</div>
 		<?php endforeach;?>
 	</div>
 	<?php endif;?>
