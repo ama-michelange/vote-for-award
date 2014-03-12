@@ -1,8 +1,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			<?php echo $this->oAward->getTypeNameString()?>
-			<small><i class="glyphicon glyphicon-chevron-right"></i></small> Les titres sélectionnés
+			<?php echo $this->oAward->getTypeNameString()?> : la sélection
 		</h3>
 	</div>
 	<?php if($this->toTitles):?>
