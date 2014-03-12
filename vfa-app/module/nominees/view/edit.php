@@ -5,9 +5,7 @@
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h3 class="panel-title">
-				<?php echo $this->oAward->getTypeNameString()?>
-				<small><i class="glyphicon glyphicon-chevron-right"></i></small>
-				<?php echo $this->textTitle?>
+				<?php echo $this->oAward->getTypeNameString()?> : <?php echo $this->textTitle?>
 			</h3>
 		</div>
 		<?php if(plugin_validation::exist($this->tMessage, 'token')):?> 
