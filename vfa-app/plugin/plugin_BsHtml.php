@@ -87,7 +87,7 @@ class plugin_BsHtml
 	public static function showNavImage($pImage, $pTextAlt, $pSize, $pLink, $pShowText = false)
 	{
 		$ret = '';
-			$permit = $pLink->isPermit();
+		$permit = $pLink->isPermit();
 		if (isset($pImage)) {
 			if ($permit) {
 				$ret .= '<a href="';
@@ -122,7 +122,17 @@ class plugin_BsHtml
 				}
 				$ret .= '<br/>';
 			}
-			$ret .= '<i class="glyphicon glyphicon-book"></i></p>';
+			if ($permit) {
+				$ret .= '<a href="';
+				$ret .= $pLink->getLink();
+				$ret .= '"';
+				$ret .= '>';
+			}
+			$ret .= '<i class="glyphicon glyphicon-book"></i>';
+			if ($permit) {
+				$ret .= '</a>';
+			}
+			$ret .= '</p>';
 		}
 		return $ret;
 	}
@@ -266,8 +276,12 @@ class BarButtons extends Bar
 		$ret .= '">';
 		if ($this->hasChildren()) {
 			foreach ($this->getChildren() as $item) {
-				$ret .= $item->toHtml();
-				$ret .= '&nbsp;&nbsp;';
+				if (plugin_BsHtml::isSeparator($item)) {
+					$ret .= '&nbsp;';$ret .= '&nbsp;';
+				} else {
+					$ret .= $item->toHtml();
+				}
+				$ret .= '&nbsp;';
 			}
 		}
 		$ret .= '</div>';

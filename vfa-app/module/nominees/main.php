@@ -43,6 +43,7 @@ class module_nominees extends abstract_module
 
 		}
 		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamAward);
+		$bar->addChild(plugin_BsHtml::buildSeparator());
 		$bar->addChild(plugin_BsHtml::buildButtonItem('Prix', new NavLink('awards', 'read', array('id' => _root::getParam('idAward'))),
 			'glyphicon-eye-open'));
 	}

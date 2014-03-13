@@ -57,12 +57,12 @@ if (true == $bImage) {
 											
 												<?php if(_root::getACL()->permit('nominees::list')):?>
 												<li><a href="<?php echo $this->getLink('nominees::list',array('idAward'=>$oAward->getId()))?>">
-													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir la liste des titres sélectionnés</a>
+													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir la liste des sélections</a>
 												</li>
 												<?php endif;?>
 												<?php if(_root::getACL()->permit('nominees::read')):?>
 												<li><a href="<?php echo $this->getLink('nominees::readWithDoc',array('idAward'=>$oAward->getId(),'idDoc'=>$this->oDoc->getId()))?>">
-													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir le titre sélectionné</a>
+													<i class="glyphicon glyphicon-eye-open with-text"></i>Voir la sélection</a>
 												</li>
 												<?php endif;?>
 											</ul>

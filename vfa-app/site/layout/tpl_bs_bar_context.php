@@ -19,7 +19,7 @@ body {
 <link href="site/assets/css/datepicker.css" rel="stylesheet">
 <link href="site/select2/select2.css" rel="stylesheet">
 <link href="site/select2/select2-bootstrap.css" rel="stylesheet">
-<link href="site/css/bs-apps.css" rel="stylesheet">
+<link href="site/css/bs-apps.css" rel="stylesheet" media="screen">
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
