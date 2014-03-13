@@ -25,11 +25,11 @@ class module_awards extends abstract_module
 		$navBar->setTitle('Prix', new NavLink('awards', 'index'));
 		$navBar->addChild(new BarButtons('left'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar);
-		$navBar->addChild(new BarButtons('right'));
 		if (true == $this->hasTitles()) {
-			$bar = $navBar->getChild('right');
+			$bar = $navBar->getChild('left');
+			$bar->addChild(plugin_BsHtml::buildSeparator());
 			$tParamAward = array('idAward' => _root::getParam('id'));
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélectionnés', new NavLink('nominees', 'list', $tParamAward), 'glyphicon-list'));
+			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection', new NavLink('nominees', 'list', $tParamAward), 'glyphicon-list'));
 			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélectionner', new NavLink('nominees', 'create', $tParamAward), 'glyphicon-heart'));
 		}
 		return $navBar;

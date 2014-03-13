@@ -50,8 +50,9 @@ use4O4=0
 ;XSS, bSecuriteXSS protection des variables GET,POST... via getParam( , plus d'infos http://fr.wikipedia.org/wiki/XSS
 xsrf.enabled=1
 xsrf.timeout.lifetime=900
-xss.enabled=1
 xsrf.session.enabled=0
+xss.enabled=1
+xss.onlyspecialchars=1
 
 [log]
 class=plugin_log

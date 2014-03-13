@@ -71,7 +71,7 @@ class module_bsnavbar extends abstract_module
 
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'list')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'list')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Sélections', new NavLink('nominees', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'list')));
 
 		$item->addChildSeparator();
@@ -87,7 +87,7 @@ class module_bsnavbar extends abstract_module
 		$item = new DropdownMenuItem('Administrer');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'index')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Titres sélectionnés', new NavLink('nominees', 'index')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Sélections', new NavLink('nominees', 'index')));
 
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Groupes', new NavLink('groups', 'index')));

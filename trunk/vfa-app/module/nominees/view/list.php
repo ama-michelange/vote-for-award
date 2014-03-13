@@ -5,46 +5,17 @@
 		</h3>
 	</div>
 	<?php if($this->toTitles):?>
-	<table class="table table-striped">
+	<table class="table table-striped table-image">
 		<tbody>
 			<?php foreach($this->toTitles as $oTitle):?>
 			<tr>
-				<?php if(_root::getACL()->permit(array('nominees::update','nominees::delete','nominees::read'))):?>
-				<td class="col-xs-1">
-					<div class="btn-group">
-						<?php if(_root::getACL()->permit('nominees::update')):?>
-						<a rel="tooltip" data-original-title="Modifier <?php echo $oTitle->toString() ?>"
-							data-container="body"
-							href="<?php echo $this->getLink('nominees::update',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-							<i class="glyphicon glyphicon-edit"></i>
-						</a>
-						<?php endif;?>
-						<?php if(_root::getACL()->permit('nominees::delete')):?>
-						<a rel="tooltip" data-original-title="Supprimer <?php echo $oTitle->toString() ?>"
-							data-container="body"
-							href="<?php echo $this->getLink('nominees::delete',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-							<i class="glyphicon glyphicon-trash"></i>
-						</a>
-						<?php endif;?>
-						<?php if(_root::getACL()->permit('nominees::read')):?>
-						<a rel="tooltip" data-original-title="Voir <?php echo $oTitle->toString() ?>"
-							data-container="body"
-							href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-							<i class="glyphicon glyphicon-eye-open"></i>
-						</a>
-						<?php endif;?>
-					</div>
+				<td class="td-image">
+					<?php foreach($oTitle->findDocs() as $oDoc):?>
+						<?php echo plugin_BsHtml::showNavImage($oDoc->image,$oDoc->toString(),'img-xs',new NavLink('nominees', 'read', array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))); ?>
+					<?php endforeach;?>
 				</td>
-				<?php endif;?>
-				<td>
-					<?php if(_root::getACL()->permit('nominees::read')):?>
-					<a
-					href="<?php echo $this->getLink('nominees::read',array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))?>">
-						<?php echo $oTitle->toString()?>
-					</a>
-					<?php else:?>
-						<?php echo $oTitle->toString()?>
-					<?php endif;?>
+				<td class="td-text">
+					<?php echo plugin_BsHtml::showNavLabel($oTitle->toString(),new NavLink('nominees', 'read', array('id'=>$oTitle->getId(),'idAward'=>$this->oAward->award_id))); ?>
 				</td>
 			</tr>
 			<?php endforeach;?>
