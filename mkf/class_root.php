@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * _root classe moteur du framework (charge les fichiers de config / parametres)
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class _root
 {
@@ -48,21 +49,14 @@ class _root
 	public function __construct()
 	{
 		self::$_tConfigVar = array();
-		
+
 		self::$_tConfigVar['path'] = array(
-			
+
 			'lib' => 'lib/framework/',
-			
-			'conf' => 'conf/',
-			'module' => 'module/',
-			'plugin' => 'plugin/',
-			'model' => 'model/',
-			'img' => 'data/img/',
-			'i18n' => 'data/i18n/',
-			'cache' => 'data/cache/',
-			'layout' => 'site/layout/'
-		);
-		
+
+			'conf' => 'conf/', 'module' => 'module/', 'plugin' => 'plugin/', 'model' => 'model/', 'img' => 'data/img/', 'i18n' => 'data/i18n/',
+			'cache' => 'data/cache/', 'layout' => 'site/layout/');
+
 		self::$_tConfigFilename = array();
 	}
 
@@ -71,16 +65,13 @@ class _root
 	 *
 	 * @access public static
 	 * @param string $sConfig
-	 *        	adresse du fichier de config a charger
+	 *         adresse du fichier de config a charger
 	 * @param string $sCat
-	 *        	nom de la section a charger (si on ne veut charger qu'une section du fichier ini)
+	 *         nom de la section a charger (si on ne veut charger qu'une section du fichier ini)
 	 */
 	public static function addConf($sConfig, $sCat = null)
 	{
-		self::$_tConfigFilename[] = array(
-			$sConfig,
-			$sCat
-		);
+		self::$_tConfigFilename[] = array($sConfig, $sCat);
 	}
 
 	public static function loadConf()
@@ -90,12 +81,12 @@ class _root
 				$sConfig = $tConfig[0];
 				$sCatFilter = $tConfig[1];
 				$tIni = parse_ini_file($sConfig, true);
-				
+
 				foreach ($tIni as $sCat => $tVal) {
 					if ($sCatFilter != null and $sCat != $sCatFilter) {
 						continue;
 					}
-					
+
 					if (is_array($tVal)) {
 						foreach ($tVal as $sKey => $uVal) {
 							self::$_tConfigVar[$sCat][$sKey] = $uVal;
@@ -121,7 +112,7 @@ class _root
 	public static function nullbyteprotect($string)
 	{
 		$string = trim($string);
-		
+
 		return preg_replace('/\\x00/', '', preg_replace('/\\\0/', '', $string));
 	}
 
@@ -129,26 +120,24 @@ class _root
 	{
 		if (self::$_bSessionStarted) {
 			return null;
-		} else 
-			if ((int) self::getConfigVar('auth.session.use_cookies') == 1) {
-				$bHttpOnly = null;
-				if ((int) self::getConfigVar('auth.session.cookie_httponly') == 1) {
-					$bHttpOnly = true;
-				}
-				$bSecure = null;
-				if ((int) self::getConfigVar('auth.session.cookie_secure') == 1 and isset($_SERVER['HTTPS'])) {
-					$bSecure = true;
-				}
-				// AMA
-				// Version php >= 5.2.0
-				// session_set_cookie_params((int)self::getConfigVar('auth.session.cookie_lifetime',0),self::getConfigVar('auth.session.cookie_path',null),self::getConfigVar('auth.session.cookie_domain',null),$bSecure,$bHttpOnly);
-				// Version php < 5.2.0
-				session_set_cookie_params((int) self::getConfigVar('auth.session.cookie_lifetime', 0), 
-					self::getConfigVar('auth.session.cookie_path', null), self::getConfigVar('auth.session.cookie_domain', null), 
-					$bSecure);
+		} else if ((int)self::getConfigVar('auth.session.use_cookies') == 1) {
+			$bHttpOnly = null;
+			if ((int)self::getConfigVar('auth.session.cookie_httponly') == 1) {
+				$bHttpOnly = true;
 			}
+			$bSecure = null;
+			if ((int)self::getConfigVar('auth.session.cookie_secure') == 1 and isset($_SERVER['HTTPS'])) {
+				$bSecure = true;
+			}
+			// AMA
+			// Version php >= 5.2.0
+			// session_set_cookie_params((int)self::getConfigVar('auth.session.cookie_lifetime',0),self::getConfigVar('auth.session.cookie_path',null),self::getConfigVar('auth.session.cookie_domain',null),$bSecure,$bHttpOnly);
+			// Version php < 5.2.0
+			session_set_cookie_params((int)self::getConfigVar('auth.session.cookie_lifetime', 0),
+				self::getConfigVar('auth.session.cookie_path', null), self::getConfigVar('auth.session.cookie_domain', null), $bSecure);
+		}
 		session_start();
-		
+
 		self::$_bSessionStarted = 1;
 	}
 
@@ -160,29 +149,29 @@ class _root
 	public function run()
 	{
 		try {
-			
+
 			self::loadConf();
 			self::loadAutoload();
 			self::loadRequest();
-			
+
 			// parametrage du niveau d'erreur
 			if (self::getConfigVar('site.mode') == 'dev') {
 				error_reporting(E_ALL);
 			} else {
 				error_reporting(0);
 			}
-			
-			self::getLog()->setInformation((int) self::getConfigVar('log.information'));
-			self::getLog()->setWarning((int) self::getConfigVar('log.warning'));
-			self::getLog()->setError((int) self::getConfigVar('log.error'));
-			self::getLog()->setApplication((int) self::getConfigVar('log.application'));
-			
+
+			self::getLog()->setInformation((int)self::getConfigVar('log.information'));
+			self::getLog()->setWarning((int)self::getConfigVar('log.warning'));
+			self::getLog()->setError((int)self::getConfigVar('log.error'));
+			self::getLog()->setApplication((int)self::getConfigVar('log.application'));
+
 			date_default_timezone_set(self::getConfigVar('site.timezone'));
 			// auth
-			if ((int) self::getConfigVar('auth.enabled') == 1) {
+			if ((int)self::getConfigVar('auth.enabled') == 1) {
 				self::getAuth()->enable();
 			}
-			
+
 			// desactivation des magic quotes
 			if (get_magic_quotes_gpc()) {
 				$_POST = array_map('stripslashes_deep', $_POST);
@@ -190,22 +179,22 @@ class _root
 				$_COOKIE = array_map('stripslashes_deep', $_COOKIE);
 				$this->getRequest()->magic_quote();
 			}
-			
-			if ((int) self::getConfigVar('urlrewriting.enabled') == 1) {
+
+			if ((int)self::getConfigVar('urlrewriting.enabled') == 1) {
 				self::getUrlRewriting()->parseUrl($_SERVER['REQUEST_URI']);
 			}
-			
+
 			$sModuleToLoad = self::getRequest()->getModule();
 			$sModuleActionToLoad = self::getRequest()->getAction();
-			
+
 			/* LOG */
 			self::getLog()->info('module a appeler [' . $sModuleToLoad . '::' . $sModuleActionToLoad . ']');
-			
+
 			// chargement module/action
 			$sClassModule = 'module_' . $sModuleToLoad;
-			
+
 			$oModule = new $sClassModule();
-			
+
 			if (method_exists($oModule, '_' . $sModuleActionToLoad)) {
 				if (method_exists($oModule, 'before')) {
 					/* LOG */
@@ -219,63 +208,59 @@ class _root
 					$sActionBefore = 'before_' . $sModuleActionToLoad;
 					$oModule->$sActionBefore();
 				}
-				
+
 				// debut cache
-				if ((int) self::getConfigVar('cache.enabled') == 1) {
-					
+				if ((int)self::getConfigVar('cache.enabled') == 1) {
+
 					$sNomPageCache = 'cache_' . str_replace('::', '_', implode('_', self::getRequest()->getParams())) . '.html';
 					$oFichierCache = new _file(self::getConfigVar('path.cache') . $sNomPageCache);
-					
-					if ($oFichierCache->exist() and time() - $oFichierCache->filemtime() >
-						 (int) self::getConfigVar('cache.lifetime')) {
+
+					if ($oFichierCache->exist() and time() - $oFichierCache->filemtime() > (int)self::getConfigVar('cache.lifetime')) {
 						/* LOG */
 						self::getLog()->info('utilisation page en cache [' . $sNomPageCache . ']');
 						echo $oFichierCache->getContent();
 						return;
 					}
-					
+
 					ob_start();
 				}
 				$sAction = '_' . $sModuleActionToLoad;
-				
+
 				/* LOG */
 				self::getLog()->info('appel module [' . $sModuleToLoad . '::' . $sAction . ']');
 				$oModule->$sAction();
-				
+
 				// post action
 				if (method_exists($oModule, 'after_' . $sModuleActionToLoad)) {
 					/* LOG */
 					self::getLog()->info('appel module [' . $sModuleToLoad . '::after_' . $sModuleActionToLoad . ']');
-					
+
 					$sActionAfter = 'after_' . $sModuleActionToLoad;
 					$oModule->$sActionAfter();
 				}
-				
+
 				// post module
 				if (method_exists($oModule, 'after')) {
 					/* LOG */
 					self::getLog()->info('appel module [' . $sModuleToLoad . '::after]');
 					$oModule->after();
 				}
-				
+
 				// fin cache
-				if ((int) self::getConfigVar('cache.enabled') == 1) {
-					
+				if ((int)self::getConfigVar('cache.enabled') == 1) {
+
 					$sSortie = ob_get_contents();
 					ob_end_clean();
-					
+
 					$oFichierCache->write($sSortie . "\n<!--cache -->");
-					
+
 					echo $sSortie;
 				}
 			} else {
-				$tErreur = array(
-					'Erreur dans module/' . $sModuleToLoad . '/main.php',
-					'Pas de m&eacute;thode _' . $sModuleActionToLoad . '() dans le module "' . $sModuleToLoad .
-						 '" &agrave; charger',
-						'Note: vous pouvez modifier le couple module/action par defaut ',
-						'en modifiant la section [navigation] dans le fichier conf/site.ini.php'
-				);
+				$tErreur = array('Erreur dans module/' . $sModuleToLoad . '/main.php',
+					'Pas de m&eacute;thode _' . $sModuleActionToLoad . '() dans le module "' . $sModuleToLoad . '" &agrave; charger',
+					'Note: vous pouvez modifier le couple module/action par defaut ',
+					'en modifiant la section [navigation] dans le fichier conf/site.ini.php');
 				throw new Exception(implode("\n", $tErreur));
 			}
 		} catch (Exception $e) {
@@ -287,9 +272,9 @@ class _root
 	{
 		$tTrace = $e->getTrace();
 		$result = $e->getTraceAsString();
-		
+
 		$result .= "\n\nDetail:\n";
-		
+
 		foreach ($tTrace as $i => $trace) {
 			$result .= '#' . $i . ' ';
 			if (isset($trace['file'])) {
@@ -299,28 +284,28 @@ class _root
 				$result .= ' (' . $trace['line'] . ') ' . "\n";
 			}
 			$result .= ' ';
-			
+
 			if (isset($trace['class'])) {
 				$result .= $trace['class'] . ' ' . $trace['type'] . ' ' . $trace['function'] . '( ';
 			} else {
 				$result .= $trace['function'] . '( ';
 			}
-			
+
 			if (isset($trace['args']) and is_array($trace['args'])) {
-				
+
 				foreach ($trace['args'] as $j => $arg) {
-					
+
 					if ($j > 0) {
 						$result .= ' , ';
 					}
-					
+
 					if (is_array($arg)) {
 						$result .= preg_replace('/\n|\r/', ' ', print_r($arg, 1));
 					} else {
 						if (is_null($arg)) {
 							$result .= 'NULL';
 						}
-						
+
 						if (is_string($arg)) {
 							$result .= "'$arg'";
 						}
@@ -330,68 +315,52 @@ class _root
 			$result .= ' ) ' . "\n";
 		}
 		$result .= '#' . ($i + 1) . ' {main}';
-		
+
 		return $result;
 	}
 
 	private function loadAutoload()
 	{
-		if ((int) self::getConfigVar('cache.autoload.enabled') == 1) {
+		if ((int)self::getConfigVar('cache.autoload.enabled') == 1) {
 			$sCacheFilename = self::getConfigVar('path.cache') . 'autoload.php';
 			if (file_exists($sCacheFilename)) {
 				include $sCacheFilename;
 			} else {
 				// on creer un tableau associatif de tous les path des classes
-				$tDir = array(
-					'lib' => self::getConfigVar('path.lib'),
-					'abstract' => self::getConfigVar('path.lib') . 'abstract/',
-					'sgbd' => self::getConfigVar('path.lib') . 'sgbd/',
-					'sgbd_pdo' => self::getConfigVar('path.lib') . 'sgbd/pdo/',
-					'sgbd_syntax' => self::getConfigVar('path.lib') . 'sgbd/syntax/',
-					'plugin' => self::getConfigVar('path.plugin'),
-					'model' => self::getConfigVar('path.model'),
-					'module' => self::getConfigVar('path.module')
-				);
-				
+				$tDir = array('lib' => self::getConfigVar('path.lib'), 'abstract' => self::getConfigVar('path.lib') . 'abstract/',
+					'sgbd' => self::getConfigVar('path.lib') . 'sgbd/', 'sgbd_pdo' => self::getConfigVar('path.lib') . 'sgbd/pdo/',
+					'sgbd_syntax' => self::getConfigVar('path.lib') . 'sgbd/syntax/', 'plugin' => self::getConfigVar('path.plugin'),
+					'model' => self::getConfigVar('path.model'), 'module' => self::getConfigVar('path.module'));
+
 				$tAutoload = array();
-				
+
 				foreach ($tDir as $sType => $sDir) {
-					
-					if (in_array($sType, 
-						array(
-							'lib',
-							'abstract',
-							'sgbd',
-							'sgbd_pdo',
-							'sgbd_syntax',
-							'plugin',
-							'model'
-						))) {
-						
+
+					if (in_array($sType, array('lib', 'abstract', 'sgbd', 'sgbd_pdo', 'sgbd_syntax', 'plugin', 'model'))) {
+
 						$oDir = new _dir($sDir);
-						
+
 						$tFile = $oDir->getListFile();
 						foreach ($tFile as $oFile) {
 							$sFilename = $oFile->getName();
 							$tFilename = preg_split('/_/', $sFilename);
 							if ($sType == 'lib') {
-								$tAutoload['_' . substr($tFilename[1], 0, - 4)] = $sDir . $sFilename;
+								$tAutoload['_' . substr($tFilename[1], 0, -4)] = $sDir . $sFilename;
 							} else {
-								$tAutoload[substr($sFilename, 0, - 4)] = $sDir . $sFilename;
+								$tAutoload[substr($sFilename, 0, -4)] = $sDir . $sFilename;
 							}
 						}
-					} else 
-						if ($sType == 'module') {
-							$oDir = new _dir($sDir);
-							
-							$tModuleDir = $oDir->getListDir();
-							foreach ($tModuleDir as $oModuleDir) {
-								$sModuleDirname = $oModuleDir->getName();
-								$tAutoload['module_' . $sModuleDirname] = $sDir . $sModuleDirname . '/main.php';
-							}
+					} else if ($sType == 'module') {
+						$oDir = new _dir($sDir);
+
+						$tModuleDir = $oDir->getListDir();
+						foreach ($tModuleDir as $oModuleDir) {
+							$sModuleDirname = $oModuleDir->getName();
+							$tAutoload['module_' . $sModuleDirname] = $sDir . $sModuleDirname . '/main.php';
 						}
+					}
 				}
-				
+
 				$sCodeCache = '<?php _root::$tAutoload=' . var_export($tAutoload, true) . ';';
 				file_put_contents($sCacheFilename, $sCodeCache);
 				self::$_tAutoload = $tAutoload;
@@ -404,49 +373,37 @@ class _root
 	 *
 	 * @access public static
 	 * @param string $sClass
-	 *        	nom de la classe appellee
+	 *         nom de la classe appellee
 	 */
 	public static function autoload($sClass)
 	{
 		try {
 			if (isset(self::$_tAutoload['_root'])) {
-				
+
 				if (isset(self::$_tAutoload[$sClass])) {
 					include self::$_tAutoload[$sClass];
 				} else {
 					return false;
 				}
 			} else {
-				
+
 				$tab = preg_split('/_/', $sClass);
-				
+
 				if ($sClass[0] == '_') {
 					include self::getConfigVar('path.lib') . 'class' . $sClass . '.php';
-				} else 
-					if (in_array($tab[0], array(
-						'plugin',
-						'model',
-						'abstract'
-					))) {
-						include self::getConfigVar('path.' . $tab[0]) . $sClass . '.php';
-					} else 
-						if ($tab[0] == 'module') {
-							include self::getConfigVar('path.module') . substr($sClass, 7) . '/main.php';
-						} else 
-							if ($tab[0] == 'row') {
-								include self::getConfigVar('path.model') . 'model_' . substr($sClass, 4) . '.php';
-							} else 
-								if ($tab[0] == 'sgbd' and in_array($tab[1], array(
-									'syntax',
-									'pdo'
-								))) {
-									include self::getConfigVar('path.lib') . 'sgbd/' . $tab[1] . '/' . $sClass . '.php';
-								} else 
-									if ($tab[0] == 'sgbd') {
-										include self::getConfigVar('path.lib') . 'sgbd/' . $sClass . '.php';
-									} else {
-										return false;
-									}
+				} else if (in_array($tab[0], array('plugin', 'model', 'abstract'))) {
+					include self::getConfigVar('path.' . $tab[0]) . $sClass . '.php';
+				} else if ($tab[0] == 'module') {
+					include self::getConfigVar('path.module') . substr($sClass, 7) . '/main.php';
+				} else if ($tab[0] == 'row') {
+					include self::getConfigVar('path.model') . 'model_' . substr($sClass, 4) . '.php';
+				} else if ($tab[0] == 'sgbd' and in_array($tab[1], array('syntax', 'pdo'))) {
+					include self::getConfigVar('path.lib') . 'sgbd/' . $tab[1] . '/' . $sClass . '.php';
+				} else if ($tab[0] == 'sgbd') {
+					include self::getConfigVar('path.lib') . 'sgbd/' . $sClass . '.php';
+				} else {
+					return false;
+				}
 			}
 		} catch (Exception $e) {
 			$sError = "Erreur chargement de classe '$sClass'  \n
@@ -465,9 +422,9 @@ class _root
 	 * force une variable de requete GET,POST
 	 * @acces public
 	 *
-	 * @param string $sEnv        	
-	 * @param string $sVar        	
-	 * @param undefined $uValue        	
+	 * @param string $sEnv
+	 * @param string $sVar
+	 * @param undefined $uValue
 	 */
 	public static function setParam($sVar, $uValue)
 	{
@@ -479,9 +436,9 @@ class _root
 	 * @acces public
 	 *
 	 * @return undefined
-	 * @param string $sEnv        	
-	 * @param string $sVar        	
-	 * @param undefined $uElse        	
+	 * @param string $sEnv
+	 * @param string $sVar
+	 * @param undefined $uElse
 	 */
 	public static function getParam($sVar, $uElse = null)
 	{
@@ -492,7 +449,7 @@ class _root
 	 * force une variable de navigation
 	 *
 	 * @access public
-	 * @param string $sNav        	
+	 * @param string $sNav
 	 */
 	public static function setParamNav($sNav)
 	{
@@ -536,7 +493,7 @@ class _root
 	 * defini le tableau d'environnement a utiliser comme _request
 	 *
 	 * @access public
-	 * @param array $tRequest        	
+	 * @param array $tRequest
 	 */
 	public static function addRequest($tRequest)
 	{
@@ -661,16 +618,9 @@ class _root
 		if (self::$_oLog == null) {
 			$sClassLog = self::getConfigVar('log.class');
 			if ($sClassLog == '') {
-				$tErreur = array(
-					'Il vous manque un bloc dans votre fichier conf/site.ini',
-					'[log]',
-					'class=plugin_log',
-					'application=1',
-					'warning=1',
-					'error=1',
-					'information=1'
-				);
-				
+				$tErreur = array('Il vous manque un bloc dans votre fichier conf/site.ini', '[log]', 'class=plugin_log', 'application=1',
+					'warning=1', 'error=1', 'information=1');
+
 				self::erreurLog(implode("\n", $tErreur));
 			}
 			self::$_oLog = new $sClassLog();
@@ -683,9 +633,9 @@ class _root
 	 *
 	 * @access public static
 	 * @param string $sVar
-	 *        	variable a definir
+	 *         variable a definir
 	 * @param string $sValue
-	 *        	valeur
+	 *         valeur
 	 */
 	public static function setConfigVar($sCatAndVar, $uValue)
 	{
@@ -703,33 +653,26 @@ class _root
 	 * @access public static
 	 * @return undefined
 	 * @param string $sVar
-	 *        	variable a definir
+	 *         variable a definir
 	 * @param undefined $uDefaut
-	 *        	retour en cas d'echec
+	 *         retour en cas d'echec
 	 */
 	public static function getConfigVar($sCatAndVar, $uDefaut = null)
 	{
 		if (preg_match('/\./', $sCatAndVar)) {
 			list ($sCategory, $sVar) = preg_split('/\./', $sCatAndVar, 2);
-			
-			if (in_array($sVar, array(
-				'sgbd',
-				'abstract',
-				'sgbd_pdo',
-				'sgbd_syntax'
-			))) {
+
+			if (in_array($sVar, array('sgbd', 'abstract', 'sgbd_pdo', 'sgbd_syntax'))) {
 				if (preg_match('/_/', $sVar)) {
 					$sVar = preg_replace('/_/', '/', $sVar);
 				}
 				return self::$_tConfigVar['path']['lib'] . $sVar . '/';
-			} else 
-				if (isset(self::$_tConfigVar[$sCategory][$sVar])) {
-					return self::$_tConfigVar[$sCategory][$sVar];
-				}
-		} else 
-			if (isset(self::$_tConfigVar[$sCatAndVar])) {
-				return self::$_tConfigVar[$sCatAndVar];
+			} else if (isset(self::$_tConfigVar[$sCategory][$sVar])) {
+				return self::$_tConfigVar[$sCategory][$sVar];
 			}
+		} else if (isset(self::$_tConfigVar[$sCatAndVar])) {
+			return self::$_tConfigVar[$sCatAndVar];
+		}
 		return $uDefaut;
 	}
 
@@ -738,9 +681,9 @@ class _root
 	 *
 	 * @access public static
 	 * @param string $sVar
-	 *        	variable a definir
+	 *         variable a definir
 	 * @param string $sValue
-	 *        	valeur
+	 *         valeur
 	 */
 	public static function setGlobalVar($sVar, $sValue)
 	{
@@ -753,9 +696,9 @@ class _root
 	 * @access public static
 	 * @return undefined
 	 * @param string $sVar
-	 *        	variable a definir
+	 *         variable a definir
 	 * @param string $defaut
-	 *        	retour en cas d'echec
+	 *         retour en cas d'echec
 	 */
 	public static function getGlobalVar($sVar, $defaut = null)
 	{
@@ -770,9 +713,9 @@ class _root
 	 *
 	 * @access public static
 	 * @param string $sVar
-	 *        	variable a definir
+	 *         variable a definir
 	 * @param string $sValue
-	 *        	valeur
+	 *         valeur
 	 */
 	public static function setInstanceOf($sObj, $oObj)
 	{
@@ -785,9 +728,9 @@ class _root
 	 * @access public static
 	 * @return undefined
 	 * @param string $sVar
-	 *        	variable a definir
+	 *         variable a definir
 	 * @param string $defaut
-	 *        	retour en cas d'echec
+	 *         retour en cas d'echec
 	 */
 	public static function getObject($sObj, $defaut = null)
 	{
@@ -802,9 +745,9 @@ class _root
 	 *
 	 * @access public static
 	 * @param
-	 *        	string ou array $uNav (dans le cas de l'array, l'indice 0 c'est le couple controller/action)
+	 *         string ou array $uNav (dans le cas de l'array, l'indice 0 c'est le couple controller/action)
 	 * @param array $tParam
-	 *        	tableau de parametres de l'url
+	 *         tableau de parametres de l'url
 	 */
 	public static function redirect($uNav, $tParam = null)
 	{
@@ -819,11 +762,11 @@ class _root
 	 *
 	 * @access public static
 	 * @param
-	 *        	string ou array $uNav (dans le cas de l'array, l'indice 0 c'est le couple controller/action)
+	 *         string ou array $uNav (dans le cas de l'array, l'indice 0 c'est le couple controller/action)
 	 * @param array $tParam
-	 *        	les parametres de l'url
+	 *         les parametres de l'url
 	 * @param bool $bAmp
-	 *        	utilise ou non &amp; dans les liens (passer a false dans le cas d'un header location)
+	 *         utilise ou non &amp; dans les liens (passer a false dans le cas d'un header location)
 	 */
 	public static function getLink($uNav, $tParam = null, $bAmp = true)
 	{
@@ -834,8 +777,8 @@ class _root
 		} else {
 			$sNav = $uNav;
 		}
-		
-		if ((int) self::getConfigVar('urlrewriting.enabled') == 1) {
+
+		if ((int)self::getConfigVar('urlrewriting.enabled') == 1) {
 			return self::getUrlRewriting()->getLink($sNav, $tParam);
 		} else {
 			return self::getLinkString($sNav, $tParam, $bAmp);
@@ -846,9 +789,9 @@ class _root
 	 * retourne le lien framework
 	 *
 	 * @access public static
-	 * @param string $sLink        	
+	 * @param string $sLink
 	 * @param bool $bAmp
-	 *        	utilise ou non &amp; dans les liens (passer a false dans le cas d'un header location)
+	 *         utilise ou non &amp; dans les liens (passer a false dans le cas d'un header location)
 	 */
 	public static function getLinkString($sNav, $tParam = null, $bAmp = true)
 	{
@@ -857,19 +800,18 @@ class _root
 			foreach ($tParam as $sKey => $sVal) {
 				if ($sKey == '#') {
 					continue;
-				} else 
-					if ($bAmp) {
-						$sLink .= '&amp;';
-					} else {
-						$sLink .= '&';
-					}
+				} else if ($bAmp) {
+					$sLink .= '&amp;';
+				} else {
+					$sLink .= '&';
+				}
 				$sLink .= $sKey . '=' . $sVal;
 			}
 			if (isset($tParam['#'])) {
 				$sLink .= '#' . $tParam['#'];
 			}
 		}
-		
+
 		return self::getConfigVar('navigation.scriptname') . '?' . self::getConfigVar('navigation.var') . '=' . $sNav . $sLink;
 	}
 
@@ -908,4 +850,16 @@ function customHtmlentities($string)
 	return _root::nullbyteprotect(htmlentities($string, ENT_QUOTES, _root::getConfigVar('encodage.charset')));
 }
 
+/**
+ * AMA : Ajout
+ * @param $string
+ * @return array|mixed
+ */
+function customHtmlspecialchars($string)
+{
+	if (is_array($string)) {
+		return array_map('customHtmlspecialchars', $string);
+	}
+	return _root::nullbyteprotect(htmlspecialchars($string, ENT_QUOTES, _root::getConfigVar('encodage.charset')));
+}
 

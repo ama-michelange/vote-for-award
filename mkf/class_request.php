@@ -52,7 +52,7 @@ class _request
 	 * @param string $sVar
 	 *        	variable a retourner
 	 */
-	public function getParam($sVar, $else = null)
+	public function ORI_getParam($sVar, $else = null)
 	{
 		if (array_key_exists($sVar, $this->_tVar)) {
 			if ((int) _root::getConfigVar('security.xss.enabled') == 1) {
@@ -61,6 +61,39 @@ class _request
 				}
 				return _root::nullbyteprotect(
 					htmlentities($this->_tVar[$sVar], ENT_QUOTES, _root::getConfigVar('encodage.charset')));
+			} else {
+				return $this->_tVar[$sVar];
+			}
+		} else {
+			return $else;
+		}
+	}
+	/**
+	 * retourne le parametre $sVar ou $else
+	 *
+	 * @access public
+	 * @return undefined $else
+	 * @param string $sVar
+	 *        	variable a retourner
+	 */
+	public function getParam($sVar, $else = null)
+	{
+		if (array_key_exists($sVar, $this->_tVar)) {
+			if ((int) _root::getConfigVar('security.xss.enabled') == 1) {
+				if (1 == (int) _root::getConfigVar('security.xss.onlyspecialchars')) {
+					if (is_array($this->_tVar[$sVar])) {
+						return array_map('customHtmlspecialchars', $this->_tVar[$sVar]);
+					}
+					$newVal = _root::nullbyteprotect(
+						htmlspecialchars($this->_tVar[$sVar], ENT_QUOTES, _root::getConfigVar('encodage.charset')));
+					return $newVal;
+				} else {
+					if (is_array($this->_tVar[$sVar])) {
+						return array_map('customHtmlentities', $this->_tVar[$sVar]);
+					}
+					return _root::nullbyteprotect(
+						htmlentities($this->_tVar[$sVar], ENT_QUOTES, _root::getConfigVar('encodage.charset')));
+				}
 			} else {
 				return $this->_tVar[$sVar];
 			}
