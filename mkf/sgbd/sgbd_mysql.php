@@ -170,11 +170,18 @@ class sgbd_mysql extends abstract_sgbd
 		return mysql_query($sReq);
 	}
 
-	public function quote($sVal)
+	public function ORI_quote($sVal)
 	{
 		return str_replace("\\", '', str_replace("'", '\'', "'" . $sVal . "'"));
 	}
 	
+	public function quote($sVal)
+	{
+		$this->connect();
+		// return str_replace("'",'\'',"'".$sVal."'");
+		$newVal = "'" . mysql_real_escape_string($sVal, $this->_pDb) . "'";
+		return $newVal;
+	}
 	public function AMA_quote($sVal)
 	{
 		$this->connect();
@@ -183,7 +190,6 @@ class sgbd_mysql extends abstract_sgbd
 		// _root::getLog()->log('AMA >>> quote:$newVal = '.$newVal);
 		return $newVal;
 	}
-
 	public function getWhereAll()
 	{
 		return '1=1';
