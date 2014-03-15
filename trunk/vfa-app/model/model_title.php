@@ -9,50 +9,74 @@ class model_title extends abstract_model
 
 	protected $sConfig = 'mysql';
 
-	protected $tId = array(
-		'title_id'
-	);
+	protected $tId = array('title_id');
 
+	/**
+	 * @return model_title
+	 */
 	public static function getInstance()
 	{
 		return self::_getInstance(__CLASS__);
 	}
+
+	/**
+	 * @param $uId
+	 * @return row_title
+	 */
 
 	public function findById($uId)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE title_id=?', $uId);
 	}
 
+	/**
+	 * @param $uTitle
+	 * @param $uNumbers
+	 * @return array row_title
+	 */
 	public function findByTitleAndNumbers($uTitle, $uNumbers)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE title=? AND numbers=?', $uTitle, $uNumbers);
 	}
 
+	/**
+	 * @return array row_title
+	 */
 	public function findAll()
 	{
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY order_title');
 	}
 
-	public function findAllByAwardId($pAwardId)
+	/**
+	 * @param $pSelectionId string
+	 * @return array row_title
+	 */
+	public function findAllBySelectionId($pSelectionId)
 	{
-		$sql = 'SELECT * FROM vfa_titles, vfa_award_titles ' . 'WHERE (vfa_award_titles.title_id = vfa_titles.title_id) ' .
-			 'AND (vfa_award_titles.award_id = ?) ' . 'ORDER BY vfa_titles.order_title';
-		return $this->findMany($sql, $pAwardId);
+		$sql = 'SELECT * FROM vfa_titles, vfa_selection_titles ' . 'WHERE (vfa_selection_titles.title_id = vfa_titles.title_id) ' .
+			'AND (vfa_selection_titles.selection_id = ?) ' . 'ORDER BY vfa_titles.order_title';
+		return $this->findMany($sql, $pSelectionId);
 	}
 
+	/**
+	 * @return array row_title
+	 */
 	public function findAllByDocId($pDocId)
 	{
 		$sql = 'SELECT * FROM vfa_titles, vfa_title_docs ' . 'WHERE (vfa_title_docs.title_id = vfa_titles.title_id) ' .
-			 'AND (vfa_title_docs.doc_id= ?) ' . 'ORDER BY vfa_titles.order_title';
+			'AND (vfa_title_docs.doc_id= ?) ' . 'ORDER BY vfa_titles.order_title';
 		return $this->findMany($sql, $pDocId);
 	}
 
-	public function findByDocIdAwardId($pDocId, $pAwardId)
+	/**
+	 * @return array row_title
+	 */
+	public function findByDocIdSelectionId($pDocId, $pSelectionId)
 	{
-		$sql = 'SELECT DISTINCT * FROM vfa_titles, vfa_award_titles, vfa_title_docs ' .
-			 'WHERE (vfa_title_docs.title_id = vfa_titles.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ' .
-			 'AND (vfa_award_titles.award_id= ?) ';
-		return $this->findOne($sql, $pDocId, $pAwardId);
+		$sql = 'SELECT DISTINCT * FROM vfa_titles, vfa_selection_titles, vfa_title_docs ' .
+			'WHERE (vfa_title_docs.title_id = vfa_titles.title_id) ' .
+			'AND (vfa_title_docs.doc_id= ?) ' . 'AND (vfa_selection_titles.selection_id= ?) ';
+		return $this->findOne($sql, $pDocId, $pSelectionId);
 	}
 
 	public function getSelect()
@@ -69,9 +93,9 @@ class model_title extends abstract_model
 		return $tSelect;
 	}
 
-	public function getSelectByAwardId($pAwardId)
+	public function getSelectBySelectionId($pSelectionId)
 	{
-		$tab = $this->findAllByAwardId($pAwardId);
+		$tab = $this->findAllBySelectionId($pSelectionId);
 		$tSelect = array();
 		foreach ($tab as $oRow) {
 			if (null == $oRow->numbers) {
@@ -96,16 +120,16 @@ class model_title extends abstract_model
 		}
 	}
 
-	public function deleteAwardTitle($pIdAward, $pIdTitle)
+	public function deleteSelectionTitle($pIdSelection, $pIdTitle)
 	{
-		$this->execute('DELETE FROM vfa_award_titles WHERE award_id=? AND title_id=?', $pIdAward, $pIdTitle);
+		$this->execute('DELETE FROM vfa_selection_titles WHERE selection_id=? AND title_id=?', $pIdSelection, $pIdTitle);
 	}
 
-	public function saveAwardTitle($pIdAward, $pIdTitle)
+	public function saveSelectionTitle($pIdSelection, $pIdTitle)
 	{
-		$find = $this->findOne('SELECT * FROM vfa_award_titles WHERE award_id=? AND title_id=?', $pIdAward, $pIdTitle);
+		$find = $this->findOne('SELECT * FROM vfa_selection_titles WHERE selection_id=? AND title_id=?', $pIdSelection, $pIdTitle);
 		if (true == $find->isEmpty()) {
-			$this->execute('INSERT INTO vfa_award_titles (award_id, title_id) VALUES (?, ?)', $pIdAward, $pIdTitle);
+			$this->execute('INSERT INTO vfa_selection_titles (selection_id, title_id) VALUES (?, ?)', $pIdSelection, $pIdTitle);
 		}
 	}
 }
@@ -126,11 +150,11 @@ class row_title extends abstract_row
 		return $tArray;
 	}
 
-	public function findAwards()
+	public function findSelections()
 	{
 		$tArray = null;
 		if (null != $this->title_id) {
-			$tArray = model_award::getInstance()->findAllByTitleId($this->title_id);
+			$tArray = model_selection::getInstance()->findAllByTitleId($this->title_id);
 		}
 		return $tArray;
 	}
@@ -152,7 +176,7 @@ class row_title extends abstract_row
 		}
 		return $name;
 	}
-	
+
 	/* exemple test validation */
 	private function getCheck()
 	{

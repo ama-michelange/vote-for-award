@@ -135,7 +135,7 @@
 }
 
 .table-image .img-xs {
-    height: 25px;
+    height: 30px;
 }
 
 .table-image p.img-xs {
@@ -285,6 +285,16 @@
 
 .panel-title {
     font-size: 18px;
+}
+
+.text-muted a {
+    color: #999999;
+}
+
+.text-muted a:hover,
+.text-muted a:focus {
+    color: #000000;
+    text-decoration: none;
 }
 
 .panel-footer {

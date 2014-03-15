@@ -20,7 +20,7 @@ class module_nominees extends abstract_module
 	private function buildContextBar()
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Sélectionnés', new NavLink('nominees', 'index', array('idAward' => _root::getParam('idAward'))));
+		$navBar->setTitle('Albums sélectionnés', new NavLink('nominees', 'index', array('idSelection' => _root::getParam('idSelection'))));
 		$navBar->addChild(new BarButtons('left'));
 		$this->buildContextLeftBar($navBar);
 		$navBar->addChild(new BarButtons('right'));
@@ -33,19 +33,19 @@ class module_nominees extends abstract_module
 	 */
 	private function buildContextLeftBar($pNavBar)
 	{
-		$tParamAward = array('idAward' => _root::getParam('idAward'));
+		$tParamSelection = array('idSelection' => _root::getParam('idSelection'));
 		$bar = $pNavBar->getChild('left');
-		if ('listAwards' != _root::getAction()) {
-			if (false === strpos(_root::getAction(), 'list')) {
-				$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamAward), 'glyphicon-list'));
-			}
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélectionner', new NavLink('nominees', 'create', $tParamAward), 'glyphicon-heart'));
-
+		if (false === strpos(_root::getAction(), 'list')) {
+			$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
 		}
-		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamAward);
-		$bar->addChild(plugin_BsHtml::buildSeparator());
-		$bar->addChild(plugin_BsHtml::buildButtonItem('Prix', new NavLink('awards', 'read', array('id' => _root::getParam('idAward'))),
-			'glyphicon-eye-open'));
+		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection),
+			'glyphicon-plus-sign'));
+		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
+		if ('listSelections' != _root::getAction()) {
+			$bar->addChild(plugin_BsHtml::buildSeparator());
+			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
+				new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
+		}
 	}
 
 	/**
@@ -59,13 +59,13 @@ class module_nominees extends abstract_module
 			case 'list':
 			case 'listThumbnail':
 			case 'listThumbnailLarge':
-				$idAward = _root::getParam('idAward');
-				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('nominees', 'list', array('idAward' => $idAward)),
-					'glyphicon-list'));
+				$idSelection = _root::getParam('idSelection');
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste',
+					new NavLink('nominees', 'list', array('idSelection' => $idSelection)), 'glyphicon-list'));
 				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes',
-					new NavLink('nominees', 'listThumbnail', array('idAward' => $idAward)), 'glyphicon-th'));
+					new NavLink('nominees', 'listThumbnail', array('idSelection' => $idSelection)), 'glyphicon-th'));
 				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges',
-					new NavLink('nominees', 'listThumbnailLarge', array('idAward' => $idAward)), 'glyphicon-th-large'));
+					new NavLink('nominees', 'listThumbnailLarge', array('idSelection' => $idSelection)), 'glyphicon-th-large'));
 				break;
 		}
 		if ($group->hasRealChildren()) {
@@ -75,22 +75,22 @@ class module_nominees extends abstract_module
 
 	public function _index()
 	{
-		if (null == _root::getParam('idAward', null)) {
-			_root::getRequest()->setAction('listAwards');
-			$this->_listAwards();
+		if (null == _root::getParam('idSelection', null)) {
+			_root::getRequest()->setAction('listSelections');
+			$this->_listSelections();
 		} else {
 			_root::getRequest()->setAction('list');
 			$this->_list();
 		}
 	}
 
-	public function _listAwards()
+	public function _listSelections()
 	{
-		$oAwardModel = new model_award();
-		$tAwards = $oAwardModel->findAll();
+		$oSelectionModel = new model_selection();
+		$tSelections = $oSelectionModel->findAll();
 
-		$oView = new _view('nominees::listAwards');
-		$oView->tAwards = $tAwards;
+		$oView = new _view('nominees::listSelections');
+		$oView->tSelections = $tSelections;
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -107,16 +107,16 @@ class module_nominees extends abstract_module
 			$tMessage = $oTitle->getMessages();
 			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs', null));
 		}
-		$oAwardModel = new model_award();
-		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
+		$oSelectionModel = new model_selection();
+		$oSelection = $oSelectionModel->findById(_root::getParam('idSelection'));
 
 		$oView = new _view('nominees::edit');
 		$oView->oTitle = $oTitle;
-		$oView->oAward = $oAward;
+		$oView->oSelection = $oSelection;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Sélectionner un titre';
+		$oView->textTitle = 'Ajouter un album sélectionné';
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -139,15 +139,15 @@ class module_nominees extends abstract_module
 			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs', null));
 		}
 
-		$oAwardModel = new model_award();
-		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
+		$oSelectionModel = new model_selection();
+		$oSelection = $oSelectionModel->findById(_root::getParam('idSelection'));
 
 		$oView = new _view('nominees::edit');
 		$oView->oTitle = $oTitle;
-		$oView->oAward = $oAward;
+		$oView->oSelection = $oSelection;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Modifier un titre sélectionné';
+		$oView->textTitle = 'Modifier l\'album sélectionné : ' . $oTitle->toString();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -158,11 +158,11 @@ class module_nominees extends abstract_module
 	public function _list()
 	{
 		$oView = new _view('nominees::list');
-		$oAwardModel = new model_award();
-		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
-		$toTitles = $oAward->findTitles();
+		$oSelectionModel = new model_selection();
+		$oSelection = $oSelectionModel->findById(_root::getParam('idSelection'));
+		$toTitles = $oSelection->findTitles();
 
-		$oView->oAward = $oAward;
+		$oView->oSelection = $oSelection;
 		$oView->toTitles = $toTitles;
 
 		$this->oLayout->add('work', $oView);
@@ -171,11 +171,11 @@ class module_nominees extends abstract_module
 	public function _listThumbnailLarge()
 	{
 		$oView = new _view('nominees::listThumbnailLarge');
-		$oAwardModel = new model_award();
-		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
-		$toTitles = $oAward->findTitles();
+		$oSelectionModel = new model_selection();
+		$oSelection = $oSelectionModel->findById(_root::getParam('idSelection'));
+		$toTitles = $oSelection->findTitles();
 
-		$oView->oAward = $oAward;
+		$oView->oSelection = $oSelection;
 		$oView->toTitles = $toTitles;
 
 		$this->oLayout->add('work', $oView);
@@ -184,11 +184,11 @@ class module_nominees extends abstract_module
 	public function _listThumbnail()
 	{
 		$oView = new _view('nominees::listThumbnail');
-		$oAwardModel = new model_award();
-		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
-		$toTitles = $oAward->findTitles();
+		$oSelectionModel = new model_selection();
+		$oSelection = $oSelectionModel->findById(_root::getParam('idSelection'));
+		$toTitles = $oSelection->findTitles();
 
-		$oView->oAward = $oAward;
+		$oView->oSelection = $oSelection;
 		$oView->toTitles = $toTitles;
 
 		$this->oLayout->add('work', $oView);
@@ -204,27 +204,27 @@ class module_nominees extends abstract_module
 
 	public function _readWithDoc()
 	{
-		$oTitle = model_title::getInstance()->findByDocIdAwardId(_root::getParam('idDoc'), _root::getParam('idAward'));
-		_root::redirect('nominees::read', array('id' => $oTitle->getId(), 'idAward' => _root::getParam('idAward')));
+		$oTitle = model_title::getInstance()->findByDocIdSelectionId(_root::getParam('idDoc'), _root::getParam('idSelection'));
+		_root::redirect('nominees::read', array('id' => $oTitle->getId(), 'idSelection' => _root::getParam('idSelection')));
 	}
 
 	public function buildViewShow()
 	{
 		$oTitleModel = new model_title();
 		if (_root::getParam('idDoc')) {
-			$oTitle = $oTitleModel->findByDocIdAwardId(_root::getParam('idDoc'), _root::getParam('idAward'));
+			$oTitle = $oTitleModel->findByDocIdSelectionId(_root::getParam('idDoc'), _root::getParam('idSelection'));
 		} else {
 			$oTitle = $oTitleModel->findById(_root::getParam('id'));
 		}
 
 		$toDocs = $oTitle->findDocs();
-		$oAwardModel = new model_award();
-		$oAward = $oAwardModel->findById(_root::getParam('idAward'));
+		$oSelectionModel = new model_selection();
+		$oSelection = $oSelectionModel->findById(_root::getParam('idSelection'));
 
 		$oView = new _view('nominees::show');
 		$oView->oTitle = $oTitle;
 		$oView->toDocs = $toDocs;
-		$oView->oAward = $oAward;
+		$oView->oSelection = $oSelection;
 
 		return $oView;
 	}
@@ -235,11 +235,6 @@ class module_nominees extends abstract_module
 
 		$oView = new _view('nominees::delete');
 		$oView->oViewShow = $this->buildViewShow();
-
-		// $oView->ok = true;
-		// if ($oView->oViewShow->toAwards) {
-		// $oView->ok = false;
-		// }
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -268,6 +263,8 @@ class module_nominees extends abstract_module
 		} else {
 			$oTitle = $oTitleModel->findById(_root::getParam('id', null));
 		}
+		$idSelection = _root::getParam('idSelection');
+
 		// Copie la saisie dans un enregistrement
 		foreach ($oTitleModel->getListColumn() as $sColumn) {
 			if (in_array($sColumn, $oTitleModel->getIdTab())) {
@@ -301,19 +298,19 @@ class module_nominees extends abstract_module
 				// Champ de tri : déplace l'article à la fin du titre s'il existe
 				$oTitle->order_title = plugin_vfa::pushArticle($oTitle->title) . $oTitle->numbers;
 				// Vérifie que le titre n'existe pas déjà
-				$oTitleDoublon = $this->findDoublon($oTitleModel, $oTitle);
-				if (null == $oTitleDoublon) {
-					// Sauvegarde si valide
-					if ($oTitle->isValid()) {
-						$oTitle->save();
-						$oTitleModel->saveTitleDocs($oTitle->title_id, $tTitleDocs);
-						$oTitleModel->saveAwardTitle(_root::getParam('idAward'), $oTitle->title_id);
-						_root::redirect('nominees::list', array('idAward' => _root::getParam('idAward')));
-					}
-				} else {
-					$oTitleModel->saveAwardTitle(_root::getParam('idAward'), $oTitleDoublon->title_id);
-					_root::redirect('nominees::list', array('idAward' => _root::getParam('idAward')));
+//				$oTitleDoublon = $this->findDoublon($oTitleModel, $oTitle);
+//				if (null == $oTitleDoublon) {
+				// Sauvegarde si valide
+				if ($oTitle->isValid()) {
+					$oTitle->save();
+					$oTitleModel->saveTitleDocs($oTitle->title_id, $tTitleDocs);
+					$oTitleModel->saveSelectionTitle($idSelection, $oTitle->title_id);
+					_root::redirect('nominees::list', array('idSelection' => $idSelection));
 				}
+//				} else {
+//					$oTitleModel->saveSelectionTitle($idSelection, $oTitleDoublon->title_id);
+//					_root::redirect('nominees::list', array('idSelection' => $idSelection));
+//				}
 			} else {
 				$tMessage['title_docs'][] = 'all-equals';
 				$oTitle->setMessages($tMessage);
@@ -354,15 +351,15 @@ class module_nominees extends abstract_module
 		}
 
 		$iId = _root::getParam('id', null);
-		$idAward = _root::getParam('idAward');
+		$idSelection = _root::getParam('idSelection');
 		if (null != $iId) {
 			// Supprime la relation avec le Prix
 			$oTitleModel = new model_title();
-			$oTitleModel->deleteAwardTitle($idAward, $iId);
+			$oTitleModel->deleteSelectionTitle($idSelection, $iId);
 			// Supprime le titre si aucun autre Prix ne l'utilise
-			$oAwardModel = new model_award();
-			$tAwards = $oAwardModel->findAllByTitleId($iId);
-			$count = count($tAwards);
+			$oSelectionModel = new model_selection();
+			$tSelections = $oSelectionModel->findAllByTitleId($iId);
+			$count = count($tSelections);
 			if (1 == $count) {
 				$oTitle = $oTitleModel->findById($iId);
 				$oTitle->delete();
@@ -370,6 +367,6 @@ class module_nominees extends abstract_module
 				$oTitleModel->deleteTitleDocs($iId);
 			}
 		}
-		_root::redirect('nominees::list', array('idAward' => $idAward));
+		_root::redirect('nominees::list', array('idSelection' => $idSelection));
 	}
 }
