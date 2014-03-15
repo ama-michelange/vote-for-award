@@ -162,9 +162,20 @@ class NavBar extends DefaultItem
 		$this->_oTitle = plugin_BsHtml::buildBrandItem($pLabel, $pLink, $pIcon);
 	}
 
+	public function addTitle($pLabel, $pLink, $pIcon = null)
+	{
+		$this->_oTitle->addChild(plugin_BsHtml::buildBrandItem($pLabel, $pLink, $pIcon));
+	}
+
 	public function toHtmlTitle()
 	{
-		return $this->_oTitle->toHtml();
+		$ret = $this->_oTitle->toHtml();
+		if ($this->_oTitle->hasChildren()) {
+			foreach ($this->_oTitle->getChildren() as $item) {
+				$ret .= '<span class="navbar-brand">/</span>'.$item->toHtml();
+			}
+		}
+		return $ret;
 	}
 }
 
@@ -277,7 +288,8 @@ class BarButtons extends Bar
 		if ($this->hasChildren()) {
 			foreach ($this->getChildren() as $item) {
 				if (plugin_BsHtml::isSeparator($item)) {
-					$ret .= '&nbsp;';$ret .= '&nbsp;';
+					$ret .= '&nbsp;';
+					$ret .= '&nbsp;';
 				} else {
 					$ret .= $item->toHtml();
 				}

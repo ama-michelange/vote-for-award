@@ -1,11 +1,15 @@
 <form action="" method="POST">
 	<input type="hidden" name="token" value="<?php echo $this->token?>" /> <input type="hidden"
 		name="title_id" value="<?php echo $this->oTitle->getId() ?>" /> <input type="hidden"
-		name="idAward" value="<?php echo $this->oAward->getId() ?>" />
+		name="idSelection" value="<?php echo $this->oSelection->getId() ?>" />
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h3 class="panel-title">
-				<?php echo $this->oAward->getTypeNameString()?> : <?php echo $this->textTitle?>
+				<span class="text-muted">
+					<?php echo plugin_BsHtml::showNavLabel('Sélection '.$this->oSelection->toString(),new NavLink('selections', 'read', array('id'=>$this->oSelection->selection_id))); ?>
+				</span>
+				<span class="text-muted">/</span>
+				<?php echo $this->textTitle?>
 			</h3>
 		</div>
 		<?php if(plugin_validation::exist($this->tMessage, 'token')):?> 
@@ -38,11 +42,11 @@
 			<div class="pull-right">
 				<?php if (null == $this->oTitle->getId()):?>
 					<a class="btn btn-default"
-					href="<?php echo $this->getLink('nominees::list',array('idAward'=>$this->oAward->getId())) ?>"><i
+					href="<?php echo $this->getLink('nominees::list',array('idSelection'=>$this->oSelection->getId())) ?>"><i
 					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<?php else:?>
 					<a class="btn btn-default"
-					href="<?php echo $this->getLink('nominees::read',array('id'=>$this->oTitle->getId(),'idAward'=>$this->oAward->getId())) ?>"><i
+					href="<?php echo $this->getLink('nominees::read',array('id'=>$this->oTitle->getId(),'idSelection'=>$this->oSelection->getId())) ?>"><i
 					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<?php endif;?>
 				<button class="btn btn-primary" type="submit">

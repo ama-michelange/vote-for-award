@@ -28,6 +28,9 @@ class model_award extends abstract_model
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE award_id=?', $uId);
 	}
 
+	/**
+	 * @return array row_award
+	 */
 	public function findAll()
 	{
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY start_date DESC, name');
@@ -43,6 +46,9 @@ class model_award extends abstract_model
 		return $tSelect;
 	}
 
+	/**
+	 * @return array row_award
+	 */
 	public function findAllByType($pType)
 	{
 		$sql = 'SELECT * FROM vfa_awards ' . 'WHERE (vfa_awards.type = ?) ' . 'ORDER BY start_date DESC, name';
@@ -57,13 +63,15 @@ class model_award extends abstract_model
 	public function deleteAwardCascades($pIdAward)
 	{
 		$this->execute('DELETE FROM vfa_awards WHERE award_id=?', $pIdAward);
-		$this->execute('DELETE FROM vfa_award_titles WHERE award_id=?', $pIdAward);
-		$sql = 'DELETE FROM vfa_titles ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_award_titles)';
-		$this->execute($sql);
-		$sql = 'DELETE FROM vfa_title_docs ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_titles)';
-		$this->execute($sql);
+		$this->execute('DELETE FROM vfa_award_selections WHERE award_id=?', $pIdAward);
+		// TODO A supprimer !
+//		$sql = 'DELETE FROM vfa_titles ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_award_titles)';
+//		$this->execute($sql);
+//		$sql = 'DELETE FROM vfa_title_docs ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_titles)';
+//		$this->execute($sql);
 	}
 
+	// TODO A conserver ?
 	public function findAllByTitleId($pTitleId)
 	{
 		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
@@ -75,6 +83,7 @@ class model_award extends abstract_model
 	 * @param $pDocId
 	 * @return row_award
 	 */
+	// TODO A conserver ?
 	public function findAllByDocId($pDocId)
 	{
 		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
@@ -137,7 +146,6 @@ class row_award extends abstract_row
 	public function getListError()
 	{
 		$t = $this->getCheck()->getListError();
-		var_dump($t);
 		return $t;
 	}
 

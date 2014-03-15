@@ -88,7 +88,7 @@ class module_docs extends abstract_module
 		$oView = new _view('docs::edit');
 		$oView->oDoc = $oDoc;
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Modifier un album';
+		$oView->textTitle = 'Modifier l\'album : '.$oDoc->toString();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
