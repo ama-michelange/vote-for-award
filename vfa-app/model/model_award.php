@@ -33,7 +33,7 @@ class model_award extends abstract_model
 	 */
 	public function findAll()
 	{
-		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY start_date DESC, name');
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY year DESC, name, type');
 	}
 
 	public function getSelect()
@@ -72,6 +72,10 @@ class model_award extends abstract_model
 	}
 
 	// TODO A conserver ?
+	/**
+	 * @param $pTitleId
+	 * @return array row_award
+	 */
 	public function findAllByTitleId($pTitleId)
 	{
 		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
@@ -79,23 +83,28 @@ class model_award extends abstract_model
 		return $this->findMany($sql, $pTitleId);
 	}
 
-	/**
-	 * @param $pDocId
-	 * @return row_award
-	 */
 	// TODO A conserver ?
-	public function findAllByDocId($pDocId)
-	{
-		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
-			'AND (vfa_award_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ' . 'ORDER BY vfa_awards.name';
-		return $this->findMany($sql, $pDocId);
-	}
-
+	/**
+	 * @param $pUserId
+	 * @return array row_award
+	 */
 	public function findAllByUserId($pUserId)
 	{
 		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' .
 			'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' . 'AND (vfa_user_awards.user_id = ?)';
 		return $this->findMany($sql, $pUserId);
+	}
+
+	/**
+	 * @param $pYear
+	 * @param $pName
+	 * @param $pType
+	 * @return row_award
+	 */
+	public function findByYearNameType($pYear, $pName, $pType)
+	{
+		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE (year=?) AND (name=?) AND (type=?)';
+		return $this->findOne($sql, $pYear, $pName, $pType);
 	}
 }
 
@@ -109,8 +118,8 @@ class row_award extends abstract_row
 	public function findTitles()
 	{
 		$tArray = null;
-		if (null != $this->award_id) {
-			$tArray = model_title::getInstance()->findAllByAwardId($this->award_id);
+		if ((null != $this->award_id) && (null != $this->selection_id)) {
+			$tArray = model_title::getInstance()->findAllBySelectionId($this->selection_id);
 		}
 		return $tArray;
 	}
@@ -118,8 +127,8 @@ class row_award extends abstract_row
 	public function getSelectTitles()
 	{
 		$tArray = null;
-		if (null != $this->award_id) {
-			$tArray = model_title::getInstance()->getSelectByAwardId($this->award_id);
+		if ((null != $this->award_id) && (null != $this->selection_id)) {
+			$tArray = model_title::getInstance()->getSelectBySelectionId($this->selection_id);
 		}
 		return $tArray;
 	}
@@ -129,6 +138,9 @@ class row_award extends abstract_row
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
 
+		$oPluginValid->isNotEmpty('year');
+		$oPluginValid->matchExpression('year', '/^[0-9]+$/');
+		$oPluginValid->isUpperOrEqualThan('year', 2000);
 		$oPluginValid->isNotEmpty('name');
 		$oPluginValid->isNotEmpty('start_date');
 		$oPluginValid->isNotEmpty('end_date');
@@ -160,6 +172,12 @@ class row_award extends abstract_row
 			return $this->tMessages;
 		}
 		return $this->getListError();
+	}
+
+	public function toString()
+	{
+		$s = $this->getTypeString() . ' ' . $this->name . ' ' . $this->year;
+		return $s;
 	}
 
 	public function getTypeString()

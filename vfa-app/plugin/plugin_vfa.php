@@ -465,7 +465,7 @@ class plugin_vfa
 		
 		$tPrix = array();
 		foreach ($tAwards as $oAward) {
-			$tPrix[] = $oAward->getTypeNameString();
+			$tPrix[] = $oAward->toString();
 		}
 		natsort($tPrix);
 		$xPrix = 'au prix suivant ';

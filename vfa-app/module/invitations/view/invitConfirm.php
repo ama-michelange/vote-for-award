@@ -46,7 +46,7 @@
 					<dl class="dl-horizontal">
 						<dt>Prix</dt>
 								<?php foreach($this->tAwards as $oAward):?>
-									<dd><?php echo $oAward->getTypeNameString() ?></dd>
+									<dd><?php echo $oAward->toString() ?></dd>
 								<?php endforeach;?>
 				  			<dt>Groupe</dt>
 						<dd><?php echo $this->oGroup->group_name ?></dd>

@@ -46,7 +46,7 @@
 					<dl class="dl-horizontal">
 						<dt>au Prix</dt>
 						<?php foreach($this->tAwards as $oAward):?>
-						<dd><?php echo $oAward->getTypeNameString() ?></dd>
+						<dd><?php echo $oAward->toString() ?></dd>
 						<?php endforeach;?>
 					</dl>
 					<dl class="dl-horizontal">

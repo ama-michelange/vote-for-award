@@ -50,7 +50,7 @@
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'awards')?></span>
 						<?php elseif ($this->countAwards == 1):?>
 							<input type="hidden" name="award_id" value="<?php echo $this->oAward->award_id ?>" /> 
-							<input class="form-control" type="text" disabled="disabled"	value="<?php echo $this->oAward->getTypeNameString() ?>"> 
+							<input class="form-control" type="text" disabled="disabled"	value="<?php echo $this->oAward->toString() ?>">
 						<?php else:?>
 							<select class="form-control" id="inputAwards" name="awards_ids[]" size="10" multiple>
 								<?php foreach($this->tSelectedAwards as $tAward):?>

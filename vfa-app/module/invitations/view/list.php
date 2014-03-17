@@ -108,7 +108,7 @@
 								echo '<br>';
 							}
 							;
-							echo $award->getTypeNameString();
+							echo $award->toString();
 							$i ++;
 						}
 					?>
