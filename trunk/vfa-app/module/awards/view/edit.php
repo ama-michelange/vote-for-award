@@ -15,51 +15,72 @@
 			</div>
 		<?php else:?>
 		<div class="panel-body">
-			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'name')?>">
-				<label for="inputName">Nom
-					<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Le nom du prix à afficher.">
-						<i class="glyphicon glyphicon-info-sign"></i>
-					</span>
-				</label> <input class="form-control" type="text" id="inputName" name="name"
-					value="<?php echo $this->oAward->name ?>" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'name')?></span>
-			</div>
 			<div class="row">
 				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'type')?>">
-						<label>Type <span class="btn btn-xs btn-link" data-rel="tooltip"
-							data-original-title="Les albums d'un 'Prix' sont destinés aux lecteurs inscris. Les albums d'une 'Présélection' sont destinés au comité de sélection.">
-								<i class="glyphicon glyphicon-info-sign"></i></span>
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'type')?>">
+						<label>Type
+							<span class="btn btn-xs btn-link" data-rel="tooltip"
+									data-original-title="Les albums d'un 'Prix' sont destinés aux lecteurs inscris. Les albums d'une 'Présélection' sont destinés au comité de sélection.">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</span>
 						</label>
 						<div>
-							<label class="radio-inline" for="inputTypePrix"> <input type="radio" id="inputTypePrix"
-								name="type" value="PBD" <?php if('PBD'==$this->oAward->type): echo 'checked'; endif; ?> />
+							<label class="radio-inline" for="inputTypePrix">
+								<input type="radio" id="inputTypePrix" name="type" value="PBD" <?php if('PBD'==$this->oAward->type): echo 'checked'; endif; ?> />
 								Prix
-							</label> <label class="radio-inline" for="inputTypeSelection"> <input type="radio"
-								id="inputTypeSelection" name="type" value="PSBD"
-								<?php if('PSBD'==$this->oAward->type): echo 'checked'; endif; ?> /> Présélection
-							</label> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'type')?></span>
+							</label>
+							<label class="radio-inline" for="inputTypeSelection">
+								<input type="radio" id="inputTypeSelection" name="type" value="PSBD" <?php if('PSBD'==$this->oAward->type): echo 'checked'; endif; ?> />
+								Présélection
+							</label>
+							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'type')?></span>
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'public')?>">
-						<label>Visibilité <span class="btn btn-xs btn-link" data-rel="tooltip"
-							data-original-title="En privé, le prix est visible uniquement par les lecteurs inscris à ce prix. En public, les résultats du prix sont, en plus, visibles par tous les internautes visitant le site.">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'public')?>">
+						<label>Visibilité
+							<span class="btn btn-xs btn-link" data-rel="tooltip"
+									data-original-title="En privé, le prix est visible uniquement par les lecteurs inscris à ce prix. En public, les résultats du prix sont, en plus, visibles par tous les internautes visitant le site.">
 								<i class="glyphicon glyphicon-info-sign"></i>
-						</span>
+							</span>
 						</label>
 						<div>
 							<label class="radio-inline" for="inputPublic"> <input type="radio" id="inputPublic"
-								name="public" value="1" <?php if($this->oAward->public): echo 'checked'; endif; ?> /> Public
+																									name="public" value="1" <?php if($this->oAward->public): echo 'checked'; endif; ?> /> Public
 							</label> <label class="radio-inline" for="inputPrivate"> <input type="radio"
-								id="inputPrivate" name="public" value="0"
-								<?php if(!$this->oAward->public): echo 'checked'; endif; ?> /> Privé
+																												 id="inputPrivate" name="public" value="0"
+									<?php if(!$this->oAward->public): echo 'checked'; endif; ?> /> Privé
 							</label> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'public')?></span>
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'year')?>">
+						<label for="inputName">Année
+							<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="L'année officlelle du prix à afficher.">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</span>
+						</label>
+						<input class="form-control" type="text" id="inputName" name="year" value="<?php echo $this->oAward->year ?>" />
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'year')?></span>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'name')?>">
+						<label for="inputName">Nom
+							<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Le nom du prix à afficher.">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</span>
+						</label>
+						<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oAward->name ?>" />
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'name')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-sm-6">
 					<div
 						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'start_date')?>">

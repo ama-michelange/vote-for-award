@@ -123,12 +123,12 @@ class module_awards extends abstract_module
 
 	public function buildViewShow()
 	{
-		$oAwardModel = new model_award();
-		$oAward = $oAwardModel->findById(_root::getParam('id'));
+		$oAward = model_award::getInstance()->findById(_root::getParam('id'));
+		$oSelection = model_selection::getInstance()->findById($oAward->selection_id);
 		$toTitles = $oAward->findTitles();
-
 		$oView = new _view('awards::show');
 		$oView->oAward = $oAward;
+		$oView->oSelection = $oSelection;
 		$oView->toTitles = $toTitles;
 
 		$flags = array();
@@ -158,12 +158,13 @@ class module_awards extends abstract_module
 
 	public function save()
 	{
-		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		// si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) {
 			return null;
 		}
-
+		// on verifie que le token est valide
 		$oPluginXsrf = new plugin_xsrf();
-		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
 			$oAward = new row_award();
 			$oAward->setMessages(array('token' => $oPluginXsrf->getMessage()));
 			return $oAward;
@@ -195,11 +196,19 @@ class module_awards extends abstract_module
 				$oAward->$sColumn = _root::getParam($sColumn, null);
 			}
 		}
-
+		// Saisie valide ?
 		if ($oAward->isValid()) {
-			$oAward->save();
-			_root::redirect('awards::read', array('id' => $oAward->award_id));
+			// Doublon ?
+			$doublon = $oAwardModel->findByYearNameType($oAward->year, $oAward->name, $oAward->type);
+			if (($doublon->isEmpty()) || ($doublon->getId() == $oAward->getId())) {
+				// Sauvegarde si pas doublon ou soi-même
+				$oAward->save();
+				_root::redirect('awards::read', array('id' => $oAward->award_id));
+			} else {
+				$oAward->setMessages(array('year' => array('doublon'), 'name' => array('doublon'), 'type' => array('doublon')));
+			}
 		}
+
 		return $oAward;
 	}
 

@@ -43,10 +43,10 @@ if (true == $bImage) {
 									<div class="btn-group">
 											<?php if(_root::getACL()->permit('awards::read')):?>
 												<a class="btn btn-default btn-link dropdown-toggle" data-toggle="dropdown">
-													<?php echo $oAward->getTypeNameString()?><span class="caret with-text"></span>
+													<?php echo $oAward->toString()?><span class="caret with-text"></span>
 												</a>
 											<?php else:?>
-												<?php echo $oAward->getTypeNameString()?>
+												<?php echo $oAward->toString()?>
 											<?php endif;?>
 											<ul class="dropdown-menu">
 												<?php if(_root::getACL()->permit('awards::read')):?>

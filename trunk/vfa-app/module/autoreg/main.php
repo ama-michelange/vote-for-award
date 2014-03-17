@@ -220,7 +220,7 @@ class module_autoreg extends abstract_module
 		
 		$tPrix = array();
 		foreach ($tAwards as $oAward) {
-			$tPrix[] = $oAward->getTypeNameString();
+			$tPrix[] = $oAward->toString();
 		}
 		natsort($tPrix);
 		

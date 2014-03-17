@@ -25,7 +25,13 @@ _root::setConfigVar('tLangue',
 		'isEqualKO.email_bis' => 'Les emails ne correspondent pas !',
 		'isEqualKO.password' => 'Les mots de passes ne correspondent pas !',
 		'isEqualKO.password_bis' => 'Les mots de passes ne correspondent pas !',
-		
+
+		'matchExpressionKO.year' => "La valeur saisie doit correspondre à une année valide (nombre)",
+		'isUpperOrEqualThanKO.year' => "L'année du prix doit appartenir au XXI siècle",
+		'doublon.year' => 'Ce prix existe déjà !',
+		'doublon.name' => 'Ce prix existe déjà !',
+		'doublon.type' => 'Ce prix existe déjà !',
+
 		'required-selection' => "Sélection obligatoire !",
 		'required-selection.title_docs' => "Sélectionnez au minimum un album !",
 		'all-equals.title_docs' => "Les albums sélectionnés doivent être de la même série !",
