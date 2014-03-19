@@ -95,6 +95,15 @@ class model_award extends abstract_model
 	}
 
 	/**
+	 * @param $pSelectionId
+	 * @return array row_award
+	 */
+	public function findAllBySelectionId($pSelectionId)
+	{
+		$sql = 'SELECT * FROM vfa_awards WHERE (selection_id = ?)';
+		return $this->findMany($sql, $pSelectionId);
+	}
+	/**
 	 * @param $pUserId
 	 * @return array row_award
 	 */
