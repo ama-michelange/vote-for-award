@@ -17,6 +17,30 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-sm-6">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'name')?>">
+						<label for="inputName">Nom
+							<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Le nom du prix à afficher.">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</span>
+						</label>
+						<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oAward->name ?>" />
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'name')?></span>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'year')?>">
+						<label for="inputName">Année
+							<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="L'année officlelle du prix à afficher.">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</span>
+						</label>
+						<input class="form-control" type="text" id="inputName" name="year" value="<?php echo $this->oAward->year ?>" />
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'year')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'type')?>">
 						<label>Type
 							<span class="btn btn-xs btn-link" data-rel="tooltip"
@@ -58,30 +82,6 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'year')?>">
-						<label for="inputName">Année
-							<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="L'année officlelle du prix à afficher.">
-								<i class="glyphicon glyphicon-info-sign"></i>
-							</span>
-						</label>
-						<input class="form-control" type="text" id="inputName" name="year" value="<?php echo $this->oAward->year ?>" />
-						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'year')?></span>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'name')?>">
-						<label for="inputName">Nom
-							<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Le nom du prix à afficher.">
-								<i class="glyphicon glyphicon-info-sign"></i>
-							</span>
-						</label>
-						<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oAward->name ?>" />
-						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'name')?></span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-6">
 					<div
 						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'start_date')?>">
 						<label for="inputDateBegin">Date de début <span class="btn btn-xs btn-link" data-rel="tooltip"
@@ -104,6 +104,26 @@
 						</label> <input class="form-control datepicker" type="text" id="inputDateEnd" name="end_date"
 							value="<?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?>" /> <span
 							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'end_date')?></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'selection')?>">
+						<label for="inputSelection">Sélection
+							<span class="btn btn-xs btn-link" data-rel="tooltip"
+									data-original-title="Choisissez la sélection à associer au prix.">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</span>
+						</label>
+						<select id="inputSelection" class="form-control" name="selection" size="13">
+							<?php foreach($this->tSelectedSelections as $tSelection):?>
+								<option value="<?php echo $tSelection[0] ?>" <?php if($tSelection[2]): echo 'selected'; endif;?>>
+									<?php echo $tSelection[1]?>
+								</option>
+							<?php endforeach;?>
+						</select>
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'selection')?></span>
 					</div>
 				</div>
 			</div>

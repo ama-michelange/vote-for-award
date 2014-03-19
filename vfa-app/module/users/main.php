@@ -79,15 +79,7 @@ class module_users extends abstract_module
 	{
 		$tMessage = null;
 		$oUserModel = new model_user();
-		$tColumns = array(
-			'username',
-			'last_name',
-			'first_name',
-			'email',
-			'birthyear',
-			'gender',
-			'vote'
-		);
+		$tColumns = array('username', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
 
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
@@ -119,16 +111,7 @@ class module_users extends abstract_module
 	{
 		$tMessage = null;
 		$oUserModel = new model_user();
-		$tColumns = array(
-			'user_id',
-			'username',
-			'last_name',
-			'first_name',
-			'email',
-			'birthyear',
-			'gender',
-			'vote'
-		);
+		$tColumns = array('user_id', 'username', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
 
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
@@ -205,9 +188,7 @@ class module_users extends abstract_module
 		$oPluginXsrf = new plugin_xsrf();
 		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oDoc = new row_title();
-			$oDoc->setMessages(array(
-				'token' => $oPluginXsrf->getMessage()
-			));
+			$oDoc->setMessages(array('token' => $oPluginXsrf->getMessage()));
 			return $oDoc;
 		}
 
@@ -251,23 +232,16 @@ class module_users extends abstract_module
 			$oUserDoublon = $oUserModel->findByLogin(_root::getParam('username', null));
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
 				$bSave = true;
-			} else
-				if ((null != $oUser->getId()) && ($oUserDoublon->getId() == $oUser->getId())) {
-					$bSave = true;
-				}
+			} else if ((null != $oUser->getId()) && ($oUserDoublon->getId() == $oUser->getId())) {
+				$bSave = true;
+			}
 			if (true == $bSave) {
 				$oUser->save();
 				$oUserModel->saveUserRoles($oUser->user_id, $tUserRoles);
 				$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
-				_root::redirect('users::read', array(
-					'id' => $oUser->user_id
-				));
+				_root::redirect('users::read', array('id' => $oUser->user_id));
 			} else {
-				$oUser->setMessages(array(
-					'username' => array(
-						'doublon'
-					)
-				));
+				$oUser->setMessages(array('username' => array('doublon')));
 			}
 		}
 		// return $oUser->getListError();
@@ -282,9 +256,7 @@ class module_users extends abstract_module
 
 		$oPluginXsrf = new plugin_xsrf();
 		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
-			return array(
-				'token' => $oPluginXsrf->getMessage()
-			);
+			return array('token' => $oPluginXsrf->getMessage());
 		}
 
 		$oUserModel = new model_user();

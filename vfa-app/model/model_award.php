@@ -83,7 +83,17 @@ class model_award extends abstract_model
 		return $this->findMany($sql, $pTitleId);
 	}
 
-	// TODO A conserver ?
+	/**
+	 * @param $pDocId
+	 * @return array row_award
+	 */
+	public function findAllByDocId($pDocId)
+	{
+		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
+			'AND (vfa_award_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ORDER BY vfa_awards.name';
+		return $this->findMany($sql, $pDocId);
+	}
+
 	/**
 	 * @param $pUserId
 	 * @return array row_award

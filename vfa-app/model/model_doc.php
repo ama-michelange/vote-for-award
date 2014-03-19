@@ -35,7 +35,7 @@ class model_doc extends abstract_model
 	public function findAllRecent()
 	{
 		$date = new plugin_date(date('Y-m-d'), 'Y-m-d');
-		$date->addYear(- 2);
+		$date->addYear(- 5);
 		return $this->findMany(
 			'SELECT * FROM ' . $this->sTable . ' WHERE date_legal >= DATE(\'' . $date->toString() .
 				 '\') ORDER BY order_title,LENGTH(number),number,proper_title');

@@ -4,8 +4,8 @@
 			<span class="text-muted">
 				<?php echo plugin_BsHtml::showNavLabel('Sélection '.$this->oViewShow->oSelection->toString(),new NavLink('selections', 'read', array('id'=>$this->oViewShow->oSelection->selection_id))); ?>
 			</span>
-			<span class="text-muted">/</span>
-			Supprimer l'album sélectionné : <?php echo $this->oViewShow->oTitle->toString()?>
+			<span class="text-info">&gt;</span>
+			Supprimer le nominé : <?php echo $this->oViewShow->oTitle->toString()?>
 		</h3>
 	</div>
 	<div class="panel-body panel-inner">
