@@ -109,10 +109,12 @@ class module_docs extends abstract_module
 		$oDocModel = new model_doc();
 		$oDoc = $oDocModel->findById(_root::getParam('id'));
 		$toAwards = model_award::getInstance()->findAllByDocId(_root::getParam('id'));
+		$toSelections = model_selection::getInstance()->findAllByDocId(_root::getParam('id'));
 
 		$oView = new _view('docs::show');
 		$oView->oDoc = $oDoc;
 		$oView->toAwards = $toAwards;
+		$oView->toSelections = $toSelections;
 		return $oView;
 	}
 

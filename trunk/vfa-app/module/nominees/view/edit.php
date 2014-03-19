@@ -8,7 +8,7 @@
 				<span class="text-muted">
 					<?php echo plugin_BsHtml::showNavLabel('Sélection '.$this->oSelection->toString(),new NavLink('selections', 'read', array('id'=>$this->oSelection->selection_id))); ?>
 				</span>
-				<span class="text-muted">/</span>
+				<span class="text-info">&gt;</span>
 				<?php echo $this->textTitle?>
 			</h3>
 		</div>
@@ -26,7 +26,7 @@
 			<div
 				class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'title_docs')?>">
 				<label for="inputDocs">Albums <span class="btn btn-xs btn-link" data-rel="tooltip"
-					data-original-title="Choisissez un ou plusieurs albums pour un titre sélectionné. Pour rechercher un album, tapez les premiers caractères de son titre. Pour ouvrir la liste déroulante, cliquez sur la partie vide du champ de saisie. Pour supprimer un album, cliquez sur la croix. Pour ajouter un 2ème album de la même série, faites comme le premier.">
+					data-original-title="Choisissez un ou plusieurs albums pour un nominé. Pour rechercher un album, tapez les premiers caractères de son titre. Pour ouvrir la liste déroulante, cliquez sur la partie vide du champ de saisie. Pour supprimer un album, cliquez sur la croix. Pour ajouter un 2ème album de la même série, faites comme le premier.">
 						<i class="glyphicon glyphicon-info-sign"></i>
 				</span>
 				</label> <select id="inputDocs" class="form-control" name="title_docs[]" size="13" multiple>

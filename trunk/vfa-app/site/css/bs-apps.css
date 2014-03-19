@@ -147,15 +147,6 @@
     color: #d0e0e0;
 }
 
-.bd-show p.img-responsive {
-    text-align: center;
-}
-
-.bd-show p.img-responsive .glyphicon {
-    font-size: 120px;
-    color: #d0e0e0;
-}
-
 /*
 @media ( max-width : 767px) {
 	.panel-images-body img.img-sm {
@@ -227,7 +218,46 @@
 .bd-show img {
     min-height: 200px;
     box-shadow: 6px 6px 10px #666;
-    /* 	margin: 5px; */
+}
+
+.bd-show img.img-sm {
+    min-height: 100px;
+    height: 100px;
+}
+
+.bd-show p.img-sm .glyphicon {
+    font-size: 40px;
+    color: #d0e0e0;
+}
+
+.bd-show img.img-md {
+    min-height: 250px;
+    height: 250px;
+}
+
+.bd-show p.img-md .glyphicon {
+    font-size: 80px;
+    color: #d0e0e0;
+}
+
+
+.bd-show img.img-lg {
+    min-height: 350px;
+    height: 350px;
+}
+
+.bd-show p.img-lg .glyphicon {
+    font-size: 120px;
+    color: #d0e0e0;
+}
+
+.bd-show p.img-responsive {
+    text-align: center;
+}
+
+.bd-show p.img-responsive .glyphicon {
+    font-size: 120px;
+    color: #d0e0e0;
 }
 
 .bd-note img {
@@ -295,6 +325,10 @@
 .text-muted a:focus {
     color: #000000;
     text-decoration: none;
+}
+
+.text-nobold {
+    font-weight: normal;
 }
 
 .panel-footer {

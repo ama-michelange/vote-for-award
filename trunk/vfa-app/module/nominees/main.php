@@ -20,7 +20,7 @@ class module_nominees extends abstract_module
 	private function buildContextBar()
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Albums sélectionnés', new NavLink('nominees', 'index', array('idSelection' => _root::getParam('idSelection'))));
+		$navBar->setTitle('Nominés', new NavLink('nominees', 'index', array('idSelection' => _root::getParam('idSelection'))));
 		$navBar->addChild(new BarButtons('left'));
 		$this->buildContextLeftBar($navBar);
 		$navBar->addChild(new BarButtons('right'));
@@ -38,8 +38,7 @@ class module_nominees extends abstract_module
 		if (false === strpos(_root::getAction(), 'list')) {
 			$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
 		}
-		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection),
-			'glyphicon-plus-sign'));
+		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
 		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
 		if ('listSelections' != _root::getAction()) {
 			$bar->addChild(plugin_BsHtml::buildSeparator());
@@ -116,7 +115,7 @@ class module_nominees extends abstract_module
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Ajouter un album sélectionné';
+		$oView->textTitle = 'Ajouter un nominé';
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -147,7 +146,7 @@ class module_nominees extends abstract_module
 		$oView->oSelection = $oSelection;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Modifier l\'album sélectionné : ' . $oTitle->toString();
+		$oView->textTitle = 'Modifier le nominé : ' . $oTitle->toString();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -276,7 +275,7 @@ class module_nominees extends abstract_module
 				$oTitle->$sColumn = _root::getParam($sColumn, null);
 			}
 		}
-		// Récupère les albums associés
+		// Récupère les titres associés
 		$tTitleDocs = _root::getParam('title_docs', null);
 		if ($tTitleDocs) {
 			// Récupère les enregistrements des albums
@@ -297,9 +296,6 @@ class module_nominees extends abstract_module
 				$oTitle->numbers = plugin_vfa::formatTitleNumbers($tRowDoc);
 				// Champ de tri : déplace l'article à la fin du titre s'il existe
 				$oTitle->order_title = plugin_vfa::pushArticle($oTitle->title) . $oTitle->numbers;
-				// Vérifie que le titre n'existe pas déjà
-//				$oTitleDoublon = $this->findDoublon($oTitleModel, $oTitle);
-//				if (null == $oTitleDoublon) {
 				// Sauvegarde si valide
 				if ($oTitle->isValid()) {
 					$oTitle->save();
@@ -307,10 +303,6 @@ class module_nominees extends abstract_module
 					$oTitleModel->saveSelectionTitle($idSelection, $oTitle->title_id);
 					_root::redirect('nominees::list', array('idSelection' => $idSelection));
 				}
-//				} else {
-//					$oTitleModel->saveSelectionTitle($idSelection, $oTitleDoublon->title_id);
-//					_root::redirect('nominees::list', array('idSelection' => $idSelection));
-//				}
 			} else {
 				$tMessage['title_docs'][] = 'all-equals';
 				$oTitle->setMessages($tMessage);

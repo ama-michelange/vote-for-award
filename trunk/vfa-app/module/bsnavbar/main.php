@@ -87,7 +87,6 @@ class module_bsnavbar extends abstract_module
 		$item = new DropdownMenuItem('Administrer');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Sélections', new NavLink('selections', 'index')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Sélections OLD', new NavLink('nominees', 'index')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'index')));
 
 		$item->addChildSeparator();

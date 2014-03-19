@@ -28,9 +28,12 @@ class model_selection extends abstract_model
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE selection_id=?', $uId);
 	}
 
+	/**
+	 * @return array row_selection
+	 */
 	public function findAll()
 	{
-		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY name');
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY year DESC, name');
 	}
 
 	public function getSelect()
@@ -38,16 +41,55 @@ class model_selection extends abstract_model
 		$tab = $this->findAll();
 		$tSelect = array();
 		foreach ($tab as $oRow) {
+			$tSelect[$oRow->selection_id] = $oRow->toString();
+		}
+		return $tSelect;
+	}
+
+	public function getSelectById($pSelectionId)
+	{
+		$oRow = $this->findById($pSelectionId);
+		$tSelect = array();
+		$tSelect[$oRow->selection_id] = $oRow->toString();
+		return $tSelect;
+	}
+
+	/**
+	 * @param $pDate
+	 * @return array string
+	 */
+	// FIXME A conserver ?
+	public function getSelectByDate($pDate)
+	{
+		$tab = $this->findAllByDate($pDate);
+		$tSelect = array();
+		foreach ($tab as $oRow) {
 			$tSelect[$oRow->selection_id] = $oRow->name;
 		}
 		return $tSelect;
 	}
 
+	/**
+	 * @param $pDate
+	 * @return array row_selection
+	 */
+	// FIXME A conserver ?
+	public function findAllByDate($pDate)
+	{
+		$sql = 'SELECT * FROM vfa_selections WHERE (year = ?)';
+		return $this->findMany($sql, $pDate);
+	}
+
+	/**
+	 * @param $pType
+	 * @return array row_selection
+	 */
 	public function findAllByType($pType)
 	{
-		$sql = 'SELECT * FROM vfa_selections ' . 'WHERE (vfa_selections.type = ?) ' . 'ORDER BY name';
+		$sql = 'SELECT * FROM vfa_selections WHERE (vfa_selections.type = ?) ORDER BY name';
 		return $this->findMany($sql, $pType);
 	}
+
 
 	/**
 	 * Supprime
@@ -74,7 +116,7 @@ class model_selection extends abstract_model
 
 	/**
 	 * @param $pDocId
-	 * @return row_selection
+	 * @return array row_selection
 	 */
 	public function findAllByDocId($pDocId)
 	{
@@ -84,7 +126,6 @@ class model_selection extends abstract_model
 			'AND (vfa_title_docs.doc_id= ?) ' . 'ORDER BY vfa_selections.name';
 		return $this->findMany($sql, $pDocId);
 	}
-
 }
 
 class row_selection extends abstract_row
@@ -147,6 +188,6 @@ class row_selection extends abstract_row
 
 	public function toString()
 	{
-		return $this->name;
+		return $this->name . ' ' . $this->year;
 	}
 }

@@ -4,8 +4,8 @@
 			<span class="text-muted">
 				<?php echo plugin_BsHtml::showNavLabel('Sélection '.$this->oSelection->toString(),new NavLink('selections', 'read', array('id'=>$this->oSelection->selection_id))); ?>
 			</span>
-			<span class="text-muted">/</span>
-			Albums sélectionnés
+			<span class="text-info">&gt;</span>
+			Nominés
 		</h3>
 	</div>
 	<div class="panel-body">
@@ -20,7 +20,7 @@
 				</div>
 			<?php endforeach;?>
 		<?php else: ?>
-			<h3>Aucun album sélectionné !</h3>
+			<h4>Aucun nominé !</h4>
 		<?php endif;?>
 	</div>
 </div>

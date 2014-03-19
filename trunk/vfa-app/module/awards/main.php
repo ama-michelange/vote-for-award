@@ -68,6 +68,7 @@ class module_awards extends abstract_module
 	{
 		$tMessage = null;
 		$tAwardTitles = null;
+		$tSelections = null;
 
 		$oAward = $this->save();
 		if (null == $oAward) {
@@ -75,10 +76,13 @@ class module_awards extends abstract_module
 			$oAward->type = 'PBD';
 		} else {
 			$tMessage = $oAward->getMessages();
+			$tSelections = plugin_vfa::copyValuesToKeys(_root::getParam('selections', null));
 		}
 
 		$oView = new _view('awards::edit');
 		$oView->oAward = $oAward;
+		$oView->tSelectedSelections = plugin_vfa::buildOptionSelected(model_selection::getInstance()->getSelect(), $tSelections);
+
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un prix';
 
@@ -97,12 +101,15 @@ class module_awards extends abstract_module
 		$oAward = $this->save();
 		if (null == $oAward) {
 			$oAward = $oAwardModel->findById(_root::getParam('id'));
+			$tSelections = model_selection::getInstance()->getSelectById($oAward->selection_id);
 		} else {
 			$tMessage = $oAward->getMessages();
+			$tSelections = array(_root::getParam('selection', null) => _root::getParam('selection', null));
 		}
 
 		$oView = new _view('awards::edit');
 		$oView->oAward = $oAward;
+		$oView->tSelectedSelections = plugin_vfa::buildOptionSelected(model_selection::getInstance()->getSelect(), $tSelections);
 
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un prix';
@@ -196,6 +203,11 @@ class module_awards extends abstract_module
 				$oAward->$sColumn = _root::getParam($sColumn, null);
 			}
 		}
+		// Récupère la sélection associée
+		$selection = _root::getParam('selection', null);
+		if ($selection) {
+			$oAward->selection_id = $selection;
+		}
 		// Saisie valide ?
 		if ($oAward->isValid()) {
 			// Doublon ?
@@ -208,7 +220,6 @@ class module_awards extends abstract_module
 				$oAward->setMessages(array('year' => array('doublon'), 'name' => array('doublon'), 'type' => array('doublon')));
 			}
 		}
-
 		return $oAward;
 	}
 

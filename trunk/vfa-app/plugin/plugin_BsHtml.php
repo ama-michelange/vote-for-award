@@ -5,17 +5,26 @@
  */
 class plugin_BsHtml
 {
-
+	/**
+	 * @return NavBar
+	 */
 	public static function buildNavBar()
 	{
 		return new NavBar();
 	}
 
+	/**
+	 * @return SeparatorItem
+	 */
 	public static function buildSeparator()
 	{
 		return new SeparatorItem();
 	}
 
+	/**
+	 * @param $pItem
+	 * @return bool
+	 */
 	public static function isSeparator($pItem)
 	{
 		$ret = false;
@@ -25,6 +34,12 @@ class plugin_BsHtml
 		return $ret;
 	}
 
+	/**
+	 * @param $pLabel
+	 * @param $pLink
+	 * @param null $pIcon
+	 * @return MenuItem|null
+	 */
 	public static function buildMenuItem($pLabel, $pLink, $pIcon = null)
 	{
 		$ret = new MenuItem($pLabel, $pLink, $pIcon);
@@ -34,6 +49,13 @@ class plugin_BsHtml
 		return $ret;
 	}
 
+	/**
+	 * @param $pLabel
+	 * @param $pLink
+	 * @param null $pIcon
+	 * @param bool $pShowLabel
+	 * @return ButtonItem|null
+	 */
 	public static function buildButtonItem($pLabel, $pLink, $pIcon = null, $pShowLabel = true)
 	{
 		$ret = new ButtonItem($pLabel, $pLink, $pIcon, $pShowLabel);
@@ -43,6 +65,13 @@ class plugin_BsHtml
 		return $ret;
 	}
 
+	/**
+	 * @param $pLabel
+	 * @param $pLink
+	 * @param null $pIcon
+	 * @param bool $pShowLabel
+	 * @return ButtonItem|null
+	 */
 	public static function buildGroupedButtonItem($pLabel, $pLink, $pIcon = null, $pShowLabel = false)
 	{
 		$ret = new ButtonItem($pLabel, $pLink, $pIcon, $pShowLabel);
@@ -172,7 +201,7 @@ class NavBar extends DefaultItem
 		$ret = $this->_oTitle->toHtml();
 		if ($this->_oTitle->hasChildren()) {
 			foreach ($this->_oTitle->getChildren() as $item) {
-				$ret .= '<span class="navbar-brand">/</span>'.$item->toHtml();
+				$ret .= '<span class="navbar-brand">/</span>' . $item->toHtml();
 			}
 		}
 		return $ret;
@@ -268,6 +297,31 @@ class DropdownMenuItem extends LabelItem
 			}
 		}
 		$ret .= '</ul>';
+		return $ret;
+	}
+}
+
+/**
+ * Class DropdownButtonItem
+ */
+class DropdownButtonItem extends DropdownMenuItem
+{
+	public function toHtml()
+	{
+		$ret = '<div class="btn-group">';
+		$ret .= $this->toHtmlDropdownMenuToggle();
+		$ret .= $this->toHtmlDropdownMenu();
+		$ret .= '</div>';
+
+		return $ret;
+	}
+
+	protected function toHtmlDropdownMenuToggle()
+	{
+		$ret = '<a href="#" class="btn btn-default btn-link btn-sm dropdown-toggle" data-toggle="dropdown">';
+		$ret .= $this->toHtmlIconText();
+		$ret .= '<b class="caret with-text"></b>';
+		$ret .= '</a>';
 		return $ret;
 	}
 }

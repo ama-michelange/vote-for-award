@@ -29,9 +29,10 @@ class module_selections extends abstract_module
 			$bar = $navBar->getChild('left');
 			$bar->addChild(plugin_BsHtml::buildSeparator());
 
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Albums', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Album', new NavLink('nominees', 'create', $tParamSelection),
-				'glyphicon-plus-sign'));
+			$item = new DropdownButtonItem('Nominés');
+			$item->addChild(plugin_BsHtml::buildMenuItem('Nominés de la sélection', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
+			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à la sélection', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
+			$bar->addChild($item);
 		}
 		return $navBar;
 	}
@@ -64,7 +65,6 @@ class module_selections extends abstract_module
 		$oSelection = $this->save();
 		if (null == $oSelection) {
 			$oSelection = new row_selection();
-//	FIXME		$oSelection->type = 'PBD';
 		} else {
 			$tMessage = $oSelection->getMessages();
 		}
@@ -72,7 +72,7 @@ class module_selections extends abstract_module
 		$oView = new _view('selections::edit');
 		$oView->oSelection = $oSelection;
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Créer une sélection';
+		$oView->textTitle = 'Créer une nouvelle sélection';
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -167,15 +167,6 @@ class module_selections extends abstract_module
 			}
 			if ((_root::getParam($sColumn, null) == null) && (null != $oSelection->$sColumn)) {
 				$oSelection->$sColumn = null;
-				// FIXME
-//			} elseif (('start_date' == $sColumn) || ('end_date' == $sColumn)) {
-//				$oSelection->$sColumn = plugin_vfa::toStringDateSgbd(_root::getParam($sColumn, null));
-//			} elseif ('public' == $sColumn) {
-//				if (_root::getParam($sColumn, null)) {
-//					$oSelection->$sColumn = 1;
-//				} else {
-//					$oSelection->$sColumn = 0;
-//				}
 			} else {
 				$oSelection->$sColumn = _root::getParam($sColumn, null);
 			}

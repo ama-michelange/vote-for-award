@@ -4,20 +4,17 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
+						<th>Sélection</th>
+						<th class="col-sm-2 col-md-1">Année</th>
 						<th>Nom</th>
-	<!--					TODO A conserver ?-->
-	<!--					<th>Début</th>-->
-	<!--					<th>Fin</th>-->
-	<!--					<th>Affichage</th>-->
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach($this->tSelections as $oSelection):?>
 					<tr>
-						<td><?php echo plugin_BsHtml::showNavLabel($oSelection->name, new NavLink('selections', 'read', array( 'id'=>$oSelection->getId()))); ?></td>
-	<!--					<td>--><?php //echo plugin_vfa::toStringDateShow($oSelection->start_date) ?><!--</td>-->
-	<!--					<td>--><?php //echo plugin_vfa::toStringDateShow($oSelection->end_date) ?><!--</td>-->
-	<!--					<td>--><?php //echo $oSelection->getShowString() ?><!--</td>-->
+						<td><?php echo plugin_BsHtml::showNavLabel($oSelection->toString(), new NavLink('selections', 'read', array( 'id'=>$oSelection->getId()))); ?></td>
+						<td><?php echo $oSelection->year ?></td>
+						<td><?php echo $oSelection->name ?></td>
 					</tr>
 					<?php endforeach;?>
 				</tbody>
