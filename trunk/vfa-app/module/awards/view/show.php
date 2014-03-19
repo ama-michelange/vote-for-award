@@ -53,7 +53,7 @@
 					</div>
 					<div id="selection" class="collapse in">
 						<?php if ($this->toTitles): ?>
-							<table class="table table-striped table-image">
+							<table class="table table-striped table-condensed table-image">
 								<tbody>
 								<?php foreach ($this->toTitles as $oTitle): ?>
 									<tr>

@@ -9,7 +9,7 @@ class module_awards extends abstract_module
 		plugin_vfa::loadI18n();
 
 		$this->oLayout = new _layout('tpl_bs_bar_context');
-		$this->flagsMenu = array();
+		$this->memos = array();
 	}
 
 	public function after()
@@ -25,23 +25,40 @@ class module_awards extends abstract_module
 		$navBar->setTitle('Prix', new NavLink('awards', 'index'));
 		$navBar->addChild(new BarButtons('left'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar);
-		if (true == $this->hasTitles()) {
+
+		if ($this->getMemo('oSelection')) {
 			$bar = $navBar->getChild('left');
 			$bar->addChild(plugin_BsHtml::buildSeparator());
-			$tParamAward = array('idAward' => _root::getParam('id'));
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection', new NavLink('nominees', 'list', $tParamAward), 'glyphicon-list'));
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélectionner', new NavLink('nominees', 'create', $tParamAward), 'glyphicon-heart'));
+			$oSelection = $this->getMemo('oSelection');
+			$tParamId = array('id' => $oSelection->selection_id);
+			$tParamSelection = array('idSelection' => $oSelection->selection_id);
+
+			$item = new DropdownButtonItem('Sélection');
+			$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(), new NavLink('selections', 'read', $tParamId),
+				'glyphicon-eye-open'));
+			$item->addChild(plugin_BsHtml::buildMenuItem('Nominés de ' . $oSelection->toString(),
+				new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
+			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à ' . $oSelection->toString(),
+				new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
+			$bar->addChild($item);
 		}
 		return $navBar;
 	}
 
-	private function hasTitles()
+	private function getMemo($pKey)
 	{
-		$flags = $this->flagsMenu;
-		if ($flags && isset($flags['titles'])) {
-			return true;
+		$memos = $this->memos;
+		if ($memos && isset($memos[$pKey])) {
+			return $memos[$pKey];
 		}
-		return false;
+		return null;
+	}
+
+	private function setMemo($pKey, $pValue)
+	{
+		$memos = $this->memos;
+		$memos[$pKey] = $pValue;
+		$this->memos = $memos;
 	}
 
 	public function _index()
@@ -76,7 +93,7 @@ class module_awards extends abstract_module
 			$oAward->type = 'PBD';
 		} else {
 			$tMessage = $oAward->getMessages();
-			$tSelections = plugin_vfa::copyValuesToKeys(_root::getParam('selections', null));
+			$tSelections = array(_root::getParam('selection', null) => _root::getParam('selection', null));
 		}
 
 		$oView = new _view('awards::edit');
@@ -138,13 +155,7 @@ class module_awards extends abstract_module
 		$oView->oSelection = $oSelection;
 		$oView->toTitles = $toTitles;
 
-		$flags = array();
-		if ($toTitles) {
-			$flags['titles'] = true;
-		} else {
-			$flags['titles'] = false;
-		}
-		$this->flagsMenu = $flags;
+		$this->setMemo('oSelection', $oSelection);
 
 		return $oView;
 	}
