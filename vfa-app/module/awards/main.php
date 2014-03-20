@@ -26,10 +26,10 @@ class module_awards extends abstract_module
 		$navBar->addChild(new BarButtons('left'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar);
 
-		if ($this->getMemo('oSelection')) {
+		$oSelection = $this->getMemo('oSelection');
+		if ($oSelection && false == $oSelection->isEmpty()) {
 			$bar = $navBar->getChild('left');
 			$bar->addChild(plugin_BsHtml::buildSeparator());
-			$oSelection = $this->getMemo('oSelection');
 			$tParamId = array('id' => $oSelection->selection_id);
 			$tParamSelection = array('idSelection' => $oSelection->selection_id);
 
@@ -40,7 +40,9 @@ class module_awards extends abstract_module
 				new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
 			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à ' . $oSelection->toString(),
 				new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-			$bar->addChild($item);
+			if ($item->hasRealChildren()) {
+				$bar->addChild($item);
+			}
 		}
 		return $navBar;
 	}

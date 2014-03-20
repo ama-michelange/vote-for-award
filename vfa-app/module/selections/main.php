@@ -37,16 +37,22 @@ class module_selections extends abstract_module
 				new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
 			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à ' . $oSelection->toString(),
 				new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-			$bar->addChild($item);
+			if ($item->hasRealChildren()) {
+				$bar->addChild($item);
+			}
 
 			$toAwards = model_award::getInstance()->findAllBySelectionId($oSelection->selection_id);
-			$item = new DropdownButtonItem('Prix');
-			foreach ($toAwards as $oAward) {
-				$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
-					new NavLink('awards', 'read', array('id' => $oAward->getId())), 'glyphicon-eye-open'));
+			if (count($toAwards) > 0) {
+				$item = new DropdownButtonItem('Prix');
+				foreach ($toAwards as $oAward) {
+					$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
+						new NavLink('awards', 'read', array('id' => $oAward->getId())), 'glyphicon-eye-open'));
 
+				}
+				if ($item->hasRealChildren()) {
+					$bar->addChild($item);
+				}
 			}
-			$bar->addChild($item);
 		}
 		return $navBar;
 	}
