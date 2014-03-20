@@ -61,13 +61,13 @@
 											<?php foreach ($oTitle->findDocs() as $oDoc): ?>
 												<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-xs',
 													new NavLink('nominees', 'read', array('id' => $oTitle->getId(),
-														'idAward' => $this->oAward->getId()))); ?>
+														'idSelection' => $this->oSelection->getId()))); ?>
 											<?php endforeach; ?>
 										</td>
 										<td class="td-text">
 											<?php echo plugin_BsHtml::showNavLabel($oTitle->toString(),
 												new NavLink('nominees', 'read', array('id' => $oTitle->getId(),
-													'idAward' => $this->oAward->getId()))); ?>
+													'idSelection' =>  $this->oSelection->getId()))); ?>
 										</td>
 									</tr>
 								<?php endforeach; ?>

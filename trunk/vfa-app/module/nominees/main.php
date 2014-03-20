@@ -40,11 +40,9 @@ class module_nominees extends abstract_module
 		}
 		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
 		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
-		if ('listSelections' != _root::getAction()) {
-			$bar->addChild(plugin_BsHtml::buildSeparator());
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
-				new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
-		}
+		$bar->addChild(plugin_BsHtml::buildSeparator());
+		$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
+			new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
 	}
 
 	/**
