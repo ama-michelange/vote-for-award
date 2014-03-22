@@ -23,27 +23,16 @@ class module_selections extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->setTitle('Sélections', new NavLink('selections', 'index'));
-		$navBar->addChild(new BarButtons('left'));
-		plugin_BsContextBar::buildDefaultContextBar($navBar);
-		if ($this->getMemo('oSelection')) {
-			$oSelection = $this->getMemo('oSelection');
-			$tParamSelection = array('idSelection' => $oSelection->selection_id);
+		$navBar->addChild(new Bar('left'));
+		$navBar->addChild(new BarButtons('right'));
+		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
 
-			$bar = $navBar->getChild('left');
-			$bar->addChild(plugin_BsHtml::buildSeparator());
-
-			$item = new DropdownButtonItem('Nominés');
-			$item->addChild(plugin_BsHtml::buildMenuItem('Nominés de ' . $oSelection->toString(),
-				new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
-			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à ' . $oSelection->toString(),
-				new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-			if ($item->hasRealChildren()) {
-				$bar->addChild($item);
-			}
-
+		$bar = $navBar->getChild('left');
+		$oSelection = $this->getMemo('oSelection');
+		if ($oSelection) {
 			$toAwards = model_award::getInstance()->findAllBySelectionId($oSelection->selection_id);
 			if (count($toAwards) > 0) {
-				$item = new DropdownButtonItem('Prix');
+				$item = new DropdownMenuItem('Prix');
 				foreach ($toAwards as $oAward) {
 					$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
 						new NavLink('awards', 'read', array('id' => $oAward->getId())), 'glyphicon-eye-open'));
@@ -53,6 +42,28 @@ class module_selections extends abstract_module
 					$bar->addChild($item);
 				}
 			}
+		}
+		$item = plugin_BsHtml::buildMenuItem('Sélections', new NavLink('selections', 'list'));
+		if ($item) {
+			$bar->addChild($item);
+		}
+		if ($oSelection) {
+			$tParamSelection = array('idSelection' => $oSelection->selection_id);
+
+			$bar->addChild(plugin_BsHtml::buildSeparator());
+
+			$item = plugin_BsHtml::buildMenuItem('Nominés', new NavLink('nominees', 'list', $tParamSelection));
+			if ($item) {
+				$bar->addChild($item);
+			}
+//			$item = new DropdownMenuItem('Nominés');
+//			$item->addChild(plugin_BsHtml::buildMenuItem('Nominés de ' . $oSelection->toString(),
+//				new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
+//			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à ' . $oSelection->toString(),
+//				new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
+//			if ($item->hasRealChildren()) {
+//				$bar->addChild($item);
+//			}
 		}
 		return $navBar;
 	}

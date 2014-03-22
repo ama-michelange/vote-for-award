@@ -26,6 +26,7 @@ if (true == $bImage) {
 				</p>
 			<?php endif; ?>
 
+			<?php /*
 			<?php if ($this->toSelections): ?>
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
@@ -77,6 +78,7 @@ if (true == $bImage) {
 					</div>
 				</div>
 			<?php endif; ?>
+ */ ?>
 		</div>
 	</div>
 </div>
