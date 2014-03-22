@@ -11,16 +11,16 @@
 			<?php if($this->tMessage and isset($this->tMessage['token'])): echo $this->tMessage['token']; endif;?>
 			<?php if ($this->ok):?>
 				<div class="pull-right">
-				<a class="btn btn-default" href="<?php echo $this->getLink('docs::index') ?>"><i
-					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
-				<button class="btn btn-danger" type="submit">
-					<i class="glyphicon glyphicon-ok with-text"></i>Confirmer la suppression
-				</button>
-			</div>
+					<a class="btn btn-default" href="<?php echo $this->getLink('docs::index') ?>"><i
+						class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
+					<button class="btn btn-danger" type="submit">
+						<i class="glyphicon glyphicon-ok with-text"></i>Confirmer la suppression
+					</button>
+				</div>
 			<?php else :?>
-				<strong>Suppression interdite !</strong> Cet album est encore associé à un prix. <a
-				class="btn btn-default pull-right" href="<?php echo $this->getLink('docs::index') ?>"><i
-				class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
+				<strong>Suppression interdite !</strong> Cet album est encore associé à une sélection.
+				<a	class="btn btn-default pull-right" href="<?php echo $this->getLink('docs::index') ?>">
+					<i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 			<?php endif;?>
 		</form>
 	</div>

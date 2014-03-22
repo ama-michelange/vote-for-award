@@ -288,15 +288,18 @@ class DropdownMenuItem extends LabelItem
 
 	protected function toHtmlDropdownMenu()
 	{
-		$ret = '<ul class="dropdown-menu">';
-		foreach ($this->getChildren() as $item) {
-			if (plugin_BsHtml::isSeparator($item)) {
-				$ret .= '<li class="divider"></li>';
-			} else {
-				$ret .= '<li>' . $item->toHtml() . '</li>';
+		$ret = '';
+		if ($this->hasChildren()) {
+			$ret .= '<ul class="dropdown-menu">';
+			foreach ($this->getChildren() as $item) {
+				if (plugin_BsHtml::isSeparator($item)) {
+					$ret .= '<li class="divider"></li>';
+				} else {
+					$ret .= '<li>' . $item->toHtml() . '</li>';
+				}
 			}
+			$ret .= '</ul>';
 		}
-		$ret .= '</ul>';
 		return $ret;
 	}
 }

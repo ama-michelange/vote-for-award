@@ -8,8 +8,24 @@ class module_docs extends abstract_module
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
 		$this->oLayout = new _layout('tpl_bs_bar_context');
+		$this->memos = array();
 	}
 
+	private function getMemo($pKey)
+	{
+		$memos = $this->memos;
+		if ($memos && isset($memos[$pKey])) {
+			return $memos[$pKey];
+		}
+		return null;
+	}
+
+	private function setMemo($pKey, $pValue)
+	{
+		$memos = $this->memos;
+		$memos[$pKey] = $pValue;
+		$this->memos = $memos;
+	}
 	public function _index()
 	{
 		// on considere que la page par defaut est la page de listage
@@ -108,13 +124,14 @@ class module_docs extends abstract_module
 	{
 		$oDocModel = new model_doc();
 		$oDoc = $oDocModel->findById(_root::getParam('id'));
-		$toAwards = model_award::getInstance()->findAllByDocId(_root::getParam('id'));
 		$toSelections = model_selection::getInstance()->findAllByDocId(_root::getParam('id'));
 
 		$oView = new _view('docs::show');
 		$oView->oDoc = $oDoc;
-		$oView->toAwards = $toAwards;
 		$oView->toSelections = $toSelections;
+
+		$this->setMemo('toSelections', $toSelections);
+
 		return $oView;
 	}
 
@@ -126,7 +143,7 @@ class module_docs extends abstract_module
 		$oView->oViewShow = $this->buildViewShow();
 
 		$oView->ok = true;
-		if ($oView->oViewShow->toAwards) {
+		if ($oView->oViewShow->toSelections) {
 			$oView->ok = false;
 		}
 
@@ -215,8 +232,24 @@ class module_docs extends abstract_module
 		$navBar->setTitle('Albums', new NavLink('docs', 'index'));
 		$navBar->addChild(new BarButtons('left'));
 		$navBar->addChild(new BarButtons('right'));
-		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		plugin_BsContextBar::buildDefaultContextBar( $navBar->getChild('left'));
 		$this->buildContextButtonBar($navBar);
+
+		$bar = $navBar->getChild('left');
+		$bar->addChild(plugin_BsHtml::buildSeparator());
+
+		$toSelections = $this->getMemo('toSelections');
+		if ($toSelections && count($toSelections) > 0) {
+			$item = new DropdownButtonItem('Sélections');
+			foreach ($toSelections as $oSelection) {
+				$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(),
+					new NavLink('selections', 'read', array('id' => $oSelection->getId())), 'glyphicon-eye-open'));
+
+			}
+			if ($item->hasRealChildren()) {
+				$bar->addChild($item);
+			}
+		}
 		return $navBar;
 	}
 

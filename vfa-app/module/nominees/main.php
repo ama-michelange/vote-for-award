@@ -21,7 +21,7 @@ class module_nominees extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->setTitle('Nominés', new NavLink('nominees', 'index', array('idSelection' => _root::getParam('idSelection'))));
-		$navBar->addChild(new BarButtons('left'));
+		$navBar->addChild(new Bar('left'));
 		$this->buildContextLeftBar($navBar);
 		$navBar->addChild(new BarButtons('right'));
 		$this->buildContextRightBar($navBar);
@@ -31,18 +31,61 @@ class module_nominees extends abstract_module
 	/**
 	 * @param NavBar $pNavBar
 	 */
+//	private function buildContextLeftBar($pNavBar)
+//	{
+//		$tParamSelection = array('idSelection' => _root::getParam('idSelection'));
+//		$bar = $pNavBar->getChild('left');
+//		if (false === strpos(_root::getAction(), 'list')) {
+//			$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
+//		}
+//		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
+//		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
+//		$bar->addChild(plugin_BsHtml::buildSeparator());
+//		$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
+//			new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
+//	}
 	private function buildContextLeftBar($pNavBar)
 	{
-		$tParamSelection = array('idSelection' => _root::getParam('idSelection'));
 		$bar = $pNavBar->getChild('left');
-		if (false === strpos(_root::getAction(), 'list')) {
-			$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
+		if (_root::getParam('idSelection', null)) {
+			$toAwards = model_award::getInstance()->findAllBySelectionId(_root::getParam('idSelection'));
+			if (count($toAwards) > 0) {
+				$item = new DropdownMenuItem('Prix');
+				foreach ($toAwards as $oAward) {
+					$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
+						new NavLink('awards', 'read', array('id' => $oAward->getId())), 'glyphicon-eye-open'));
+
+				}
+				if ($item->hasRealChildren()) {
+					$bar->addChild($item);
+				}
+			}
 		}
-		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
-		$bar->addChild(plugin_BsHtml::buildSeparator());
-		$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
-			new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
+		$item = plugin_BsHtml::buildMenuItem('Sélection', new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))));
+		if ($item) {
+			$bar->addChild($item);
+		}
+		$item = plugin_BsHtml::buildMenuItem('Nominés',
+			new NavLink('nominees', 'index', array('idSelection' => _root::getParam('idSelection'))));
+		if ($item) {
+			$bar->addChild($item);
+		}
+//		$item = new DropdownMenuItem('Sélection');
+//		$item->addChild(plugin_BsHtml::buildMenuItem('Sélection', new NavLink('selections', 'read', array('id' => _root::getParam('idSelection')))));
+//		if ($item->hasRealChildren()) {
+//			$bar->addChild($item);
+//		}
+
+
+//		if (false === strpos(_root::getAction(), 'list')) {
+//			$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
+//		}
+//		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
+//		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
+//		$bar->addChild(plugin_BsHtml::buildSeparator());
+//		$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
+//			new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
+
 	}
 
 	/**
@@ -51,24 +94,51 @@ class module_nominees extends abstract_module
 	private function buildContextRightBar($pNavBar)
 	{
 		$bar = $pNavBar->getChild('right');
+
+		$tParamSelection = array('idSelection' => _root::getParam('idSelection'));
+		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
+		plugin_BsContextBar::buildRUDContextBar($bar, $tParamSelection);
+		$bar->addChild(plugin_BsHtml::buildSeparator());
+
 		$group = new GroupButtonItem('list');
 		switch (_root::getAction()) {
 			case 'list':
 			case 'listThumbnail':
 			case 'listThumbnailLarge':
 				$idSelection = _root::getParam('idSelection');
-				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste',
-					new NavLink('nominees', 'list', array('idSelection' => $idSelection)), 'glyphicon-list'));
-				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes',
-					new NavLink('nominees', 'listThumbnail', array('idSelection' => $idSelection)), 'glyphicon-th'));
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection),
+					'glyphicon-list'));
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('nominees', 'listThumbnail', $tParamSelection),
+					'glyphicon-th'));
 				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges',
-					new NavLink('nominees', 'listThumbnailLarge', array('idSelection' => $idSelection)), 'glyphicon-th-large'));
+					new NavLink('nominees', 'listThumbnailLarge', $tParamSelection), 'glyphicon-th-large'));
 				break;
 		}
 		if ($group->hasRealChildren()) {
 			$bar->addChild($group);
 		}
 	}
+//	private function buildContextRightBar($pNavBar)
+//	{
+//		$bar = $pNavBar->getChild('right');
+//		$group = new GroupButtonItem('list');
+//		switch (_root::getAction()) {
+//			case 'list':
+//			case 'listThumbnail':
+//			case 'listThumbnailLarge':
+//				$idSelection = _root::getParam('idSelection');
+//				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste',
+//					new NavLink('nominees', 'list', array('idSelection' => $idSelection)), 'glyphicon-list'));
+//				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes',
+//					new NavLink('nominees', 'listThumbnail', array('idSelection' => $idSelection)), 'glyphicon-th'));
+//				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges',
+//					new NavLink('nominees', 'listThumbnailLarge', array('idSelection' => $idSelection)), 'glyphicon-th-large'));
+//				break;
+//		}
+//		if ($group->hasRealChildren()) {
+//			$bar->addChild($group);
+//		}
+//	}
 
 	public function _index()
 	{
@@ -81,16 +151,16 @@ class module_nominees extends abstract_module
 		}
 	}
 
-	public function _listSelections()
-	{
-		$oSelectionModel = new model_selection();
-		$tSelections = $oSelectionModel->findAll();
-
-		$oView = new _view('nominees::listSelections');
-		$oView->tSelections = $tSelections;
-
-		$this->oLayout->add('work', $oView);
-	}
+//	public function _listSelections()
+//	{
+//		$oSelectionModel = new model_selection();
+//		$tSelections = $oSelectionModel->findAll();
+//
+//		$oView = new _view('nominees::listSelections');
+//		$oView->tSelections = $tSelections;
+//
+//		$this->oLayout->add('work', $oView);
+//	}
 
 	public function _create()
 	{
