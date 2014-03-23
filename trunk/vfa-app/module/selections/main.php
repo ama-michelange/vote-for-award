@@ -35,8 +35,7 @@ class module_selections extends abstract_module
 				$item = new DropdownMenuItem('Prix');
 				foreach ($toAwards as $oAward) {
 					$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
-						new NavLink('awards', 'read', array('id' => $oAward->getId())), 'glyphicon-eye-open'));
-
+						new NavLink('awards', 'read', array('id' => $oAward->getId()))));
 				}
 				if ($item->hasRealChildren()) {
 					$bar->addChild($item);
@@ -49,21 +48,10 @@ class module_selections extends abstract_module
 		}
 		if ($oSelection) {
 			$tParamSelection = array('idSelection' => $oSelection->selection_id);
-
-			$bar->addChild(plugin_BsHtml::buildSeparator());
-
 			$item = plugin_BsHtml::buildMenuItem('Nominés', new NavLink('nominees', 'list', $tParamSelection));
 			if ($item) {
 				$bar->addChild($item);
 			}
-//			$item = new DropdownMenuItem('Nominés');
-//			$item->addChild(plugin_BsHtml::buildMenuItem('Nominés de ' . $oSelection->toString(),
-//				new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
-//			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à ' . $oSelection->toString(),
-//				new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-//			if ($item->hasRealChildren()) {
-//				$bar->addChild($item);
-//			}
 		}
 		return $navBar;
 	}
@@ -145,7 +133,7 @@ class module_selections extends abstract_module
 		$this->setMemo('oSelection', $oSelection);
 
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Modifier la sélection : ' . $oSelection->toString();
+		$oView->textTitle = 'Modifier ' . $oSelection->toString();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -248,4 +236,5 @@ class module_selections extends abstract_module
 		_root::redirect('selections::list');
 		return null;
 	}
+
 }

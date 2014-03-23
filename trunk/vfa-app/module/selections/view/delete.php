@@ -1,6 +1,6 @@
 <div class="panel panel-danger">
 	<div class="panel-heading">
-		<h3 class="panel-title">Supprimer la sélection : <?php echo $this->oViewShow->oSelection->name ?></h3>
+		<h3 class="panel-title">Supprimer <?php echo $this->oViewShow->oSelection->toString() ?></h3>
 	</div>
 	<div class="panel-body panel-inner">
 		<?php echo $this->oViewShow->show();?>

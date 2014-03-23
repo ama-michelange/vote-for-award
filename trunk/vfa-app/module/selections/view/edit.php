@@ -16,15 +16,6 @@
 			</div>
 		<?php else: ?>
 			<div class="panel-body">
-<!--				<div class="--><?php //echo plugin_validation::addClassError('form-group', $this->tMessage, 'name') ?><!--">-->
-<!--					<label for="inputName">Nom-->
-<!--						<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Le nom de la sélection à afficher.">-->
-<!--							<i class="glyphicon glyphicon-info-sign"></i>-->
-<!--						</span>-->
-<!--					</label>-->
-<!--					<input class="form-control" type="text" id="inputName" name="name" value="--><?php //echo $this->oSelection->name ?><!--"/>-->
-<!--					<span class="help-block">--><?php //echo plugin_validation::show($this->tMessage, 'name') ?><!--</span>-->
-<!--				</div>-->
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'name') ?>">

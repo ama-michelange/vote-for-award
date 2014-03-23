@@ -31,19 +31,6 @@ class module_nominees extends abstract_module
 	/**
 	 * @param NavBar $pNavBar
 	 */
-//	private function buildContextLeftBar($pNavBar)
-//	{
-//		$tParamSelection = array('idSelection' => _root::getParam('idSelection'));
-//		$bar = $pNavBar->getChild('left');
-//		if (false === strpos(_root::getAction(), 'list')) {
-//			$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
-//		}
-//		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-//		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
-//		$bar->addChild(plugin_BsHtml::buildSeparator());
-//		$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
-//			new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
-//	}
 	private function buildContextLeftBar($pNavBar)
 	{
 		$bar = $pNavBar->getChild('left');
@@ -53,7 +40,7 @@ class module_nominees extends abstract_module
 				$item = new DropdownMenuItem('Prix');
 				foreach ($toAwards as $oAward) {
 					$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
-						new NavLink('awards', 'read', array('id' => $oAward->getId())), 'glyphicon-eye-open'));
+						new NavLink('awards', 'read', array('id' => $oAward->getId()))));
 
 				}
 				if ($item->hasRealChildren()) {
@@ -70,22 +57,6 @@ class module_nominees extends abstract_module
 		if ($item) {
 			$bar->addChild($item);
 		}
-//		$item = new DropdownMenuItem('Sélection');
-//		$item->addChild(plugin_BsHtml::buildMenuItem('Sélection', new NavLink('selections', 'read', array('id' => _root::getParam('idSelection')))));
-//		if ($item->hasRealChildren()) {
-//			$bar->addChild($item);
-//		}
-
-
-//		if (false === strpos(_root::getAction(), 'list')) {
-//			$bar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
-//		}
-//		$bar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-//		plugin_BsContextBar::buildRUDContextBar($pNavBar, $tParamSelection);
-//		$bar->addChild(plugin_BsHtml::buildSeparator());
-//		$bar->addChild(plugin_BsHtml::buildButtonItem('Sélection',
-//			new NavLink('selections', 'read', array('id' => _root::getParam('idSelection'))), 'glyphicon-eye-open'));
-
 	}
 
 	/**
@@ -151,17 +122,6 @@ class module_nominees extends abstract_module
 		}
 	}
 
-//	public function _listSelections()
-//	{
-//		$oSelectionModel = new model_selection();
-//		$tSelections = $oSelectionModel->findAll();
-//
-//		$oView = new _view('nominees::listSelections');
-//		$oView->tSelections = $tSelections;
-//
-//		$this->oLayout->add('work', $oView);
-//	}
-
 	public function _create()
 	{
 		$tMessage = null;
@@ -183,7 +143,7 @@ class module_nominees extends abstract_module
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Ajouter un nominé';
+		$oView->textTitle = 'Créer un nouveau nominé';
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -214,7 +174,7 @@ class module_nominees extends abstract_module
 		$oView->oSelection = $oSelection;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Modifier le nominé : ' . $oTitle->toString();
+		$oView->textTitle = 'Modifier ' . $oTitle->toString();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();

@@ -43,10 +43,7 @@
 			<div class="col-sm-6 col-md-6">
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
-						<h5 class="panel-title">Sélection
-							<?php if (false==$this->oSelection->isEmpty()): ?>
-								<?php  echo $this->oSelection->toString() ?>
-							<?php endif; ?>
+						<h5 class="panel-title">Nominés
 							<a class="pull-right accordion-toggle btn btn-default btn-xs" data-toggle="collapse" href="#selection"><i
 									data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 						</h5>
@@ -75,7 +72,7 @@
 							</table>
 						<?php else: ?>
 							<div class="panel-body">
-								<h4>Aucune sélection associée !</h4>
+								<h4>Aucun nominé !</h4>
 							</div>
 						<?php endif; ?>
 					</div>

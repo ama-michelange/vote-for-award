@@ -7,7 +7,7 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th></th>
+					<th>Prix</th>
 					<th>Année</th>
 					<th>Nom</th>
 					<th>Type</th>

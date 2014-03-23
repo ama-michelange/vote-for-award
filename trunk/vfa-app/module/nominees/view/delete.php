@@ -1,11 +1,7 @@
 <div class="panel panel-danger">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			<span class="text-muted">
-				<?php echo plugin_BsHtml::showNavLabel('Sélection '.$this->oViewShow->oSelection->toString(),new NavLink('selections', 'read', array('id'=>$this->oViewShow->oSelection->selection_id))); ?>
-			</span>
-			<span class="text-info">&gt;</span>
-			Supprimer le nominé : <?php echo $this->oViewShow->oTitle->toString()?>
+			Supprimer <?php echo $this->oViewShow->oTitle->toString()?> <small>( Nominé de la sélection <?php echo $this->oViewShow->oSelection->toString() ?> )</small>
 		</h3>
 	</div>
 	<div class="panel-body panel-inner">

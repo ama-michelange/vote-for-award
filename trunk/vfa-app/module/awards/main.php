@@ -47,16 +47,6 @@ class module_awards extends abstract_module
 			if ($item) {
 				$bar->addChild($item);
 			}
-//			$item = new DropdownMenuItem('Sélection');
-//			$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(), new NavLink('selections', 'read', $tParamId),
-//				'glyphicon-eye-open'));
-//			$item->addChild(plugin_BsHtml::buildMenuItem('Nominés de ' . $oSelection->toString(),
-//				new NavLink('nominees', 'list', $tParamSelection), 'glyphicon-list'));
-//			$item->addChild(plugin_BsHtml::buildMenuItem('Ajouter un nominé à ' . $oSelection->toString(),
-//				new NavLink('nominees', 'create', $tParamSelection), 'glyphicon-plus-sign'));
-//			if ($item->hasRealChildren()) {
-//				$bar->addChild($item);
-//			}
 		}
 		return $navBar;
 	}
@@ -117,7 +107,7 @@ class module_awards extends abstract_module
 		$oView->tSelectedSelections = plugin_vfa::buildOptionSelected(model_selection::getInstance()->getSelect(), $tSelections);
 
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Créer un prix';
+		$oView->textTitle = 'Créer un nouveau prix';
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -145,7 +135,7 @@ class module_awards extends abstract_module
 		$oView->tSelectedSelections = plugin_vfa::buildOptionSelected(model_selection::getInstance()->getSelect(), $tSelections);
 
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Modifier un prix';
+		$oView->textTitle = 'Modifier '.$oAward->toString();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
