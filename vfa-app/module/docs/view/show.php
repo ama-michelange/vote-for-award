@@ -7,7 +7,7 @@ if (true == $bImage) {
 ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Album : <?php echo $this->oDoc->toString() ?></h3>
+		<h3 class="panel-title"><?php echo $this->oDoc->toString() ?></h3>
 	</div>
 	<div class="panel-body">
 		<?php if (true == $bImage): ?>

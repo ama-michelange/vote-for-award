@@ -1,7 +1,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			<span class="text-muted">Sélection</span>
+<!--			<span class="text-muted">Sélection</span>-->
 			<?php echo $this->oSelection->toString() ?>
 		</h3>
 	</div>

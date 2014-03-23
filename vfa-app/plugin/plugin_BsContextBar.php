@@ -19,25 +19,25 @@ class plugin_BsContextBar
 
 	/**
 	 * Construit la barre de boutons de gauche du menu contextuel
-	 * @param NavBar $pBar
+	 * @param Bar $pBar
+	 * @param null $pOtherParams
 	 */
 	public static function buildDefaultContextBar($pBar, $pOtherParams = null)
 	{
 		$sModule = _root::getModule();
-//		$bar = $pBar->getChild('right');
-		$pBar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink($sModule, 'list'), 'glyphicon-list'));
+//		$pBar->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink($sModule, 'list'), 'glyphicon-list'));
 		$pBar->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink($sModule, 'create'), 'glyphicon-plus-sign'));
 		self::buildRUDContextBar($pBar, $pOtherParams);
 	}
 
 	/**
 	 * Construit la barre de boutons RUD (Read, Update, Delete) de gauche du menu contextuel
-	 * @param NavBar $pNavBar
+	 * @param Bar $pNavBar
+	 * @param null $pOtherParams
 	 */
 	public static function buildRUDContextBar($pBar, $pOtherParams = null)
 	{
 		$sModule = _root::getModule();
-//		$bar = $pNavBar->getChild('right');
 
 		$tParams = array('id' => _root::getParam('id'));
 		if (null != $pOtherParams) {
