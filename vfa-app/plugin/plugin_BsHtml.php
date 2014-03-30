@@ -36,6 +36,35 @@ class plugin_BsHtml
 
 	/**
 	 * @param $pLabel
+	 * @param null $pLink
+	 * @param null $pIcon
+	 * @param bool $pShowLabel
+	 * @return DropdownMenuItem
+	 */
+	public static function buildDropdownActivable($pLabel, $pLink = null, $pIcon = null, $pShowLabel = true)
+	{
+		$ret = new DropdownMenuItem($pLabel, $pLink, $pIcon, $pShowLabel);
+		$ret->setEnableActive(true);
+		return $ret;
+	}
+
+	/**
+	 * @param $pLabel
+	 * @param $pLink
+	 * @param null $pIcon
+	 * @return MenuItem|null
+	 */
+	public static function buildMenuItemActivable($pLabel, $pLink, $pIcon = null)
+	{
+		$ret = self::buildMenuItem($pLabel, $pLink, $pIcon);
+		if (null != $ret) {
+			$ret->setEnableActive(true);
+		}
+		return $ret;
+	}
+
+	/**
+	 * @param $pLabel
 	 * @param $pLink
 	 * @param null $pIcon
 	 * @return MenuItem|null
@@ -232,6 +261,29 @@ class Bar extends DefaultItem
 }
 
 /**
+ * Class Bar
+ */
+class BreadcrumbBar extends DefaultItem
+{
+
+	public function toHtml()
+	{
+		$ret = '<ul class="nav navbar-nav';
+		if ('right' == $this->getName()) {
+			$ret .= ' navbar-right';
+		}
+		$ret .= '"><li><ul class="breadcrumb">';
+		if ($this->hasChildren()) {
+			foreach ($this->getChildren() as $item) {
+				$ret .= $item->toHtml();
+			}
+		}
+		$ret .= '</ul></li></ul>';
+		return $ret;
+	}
+}
+
+/**
  * Class MenuItem
  */
 class MenuItem extends LabelItem
@@ -240,7 +292,7 @@ class MenuItem extends LabelItem
 	public function toHtml()
 	{
 		$ret = '<li';
-		if ($this->isActivePage()) {
+		if ($this->isEnableActive() && $this->isActivePage()) {
 			$ret .= ' class="active"';
 		}
 		$ret .= '>';
@@ -265,8 +317,23 @@ class DropdownMenuItem extends LabelItem
 
 	public function toHtml()
 	{
+//		if ($this->hasChildren()) {
+//			if (count($this->getChildren()) == 1) {
+//				$t = $this->getChildren();
+//				$e = array_shift($t);
+//				$e->setLabel($this->getLabel());
+//				$ret = $e->toHtml();
+//			} else {
+				$ret = $this->toHtmlDropdown();
+//			}
+//		}
+		return $ret;
+	}
+
+	public function toHtmlDropdown()
+	{
 		$ret = '<li class="dropdown';
-		if ($this->isActivePage()) {
+		if ($this->isEnableActive() && $this->isActivePage()) {
 			$ret .= ' active';
 		}
 		$ret .= '">';
@@ -554,6 +621,8 @@ class ActionItem extends DefaultItem
 	/** @var Link */
 	private $_oLink;
 
+	private $_enableActive = false;
+
 	/**
 	 * @param string $pName
 	 * @param Link $pLink
@@ -598,18 +667,41 @@ class ActionItem extends DefaultItem
 		if ($this->hasLink()) {
 			$ret = $this->getLink()->isCurrentModule();
 		}
-		/* if ((false == $ret) && (true == $this->hasChildren())) {
-				foreach ($this->getChildren() as $child) {
-					 // _root::getLog()->log('AMA >>> isActivePage() : $child = ' . $child->getName());
-					 // _root::getLog()->log('AMA >>> isActivePage() : $$child->hasLink() = ' . $child->hasLink());
-					 if ($child->hasLink()) {
-						  if ($child->getLink()->isCurrentModule()) {
-								$ret = true;
-								break;
-						  }
-					 }
+		if ((false == $ret) && (true == $this->hasChildren())) {
+			foreach ($this->getChildren() as $child) {
+				if ($child->hasLink()) {
+					if ($child->getLink()->isCurrentModule()) {
+						$ret = true;
+						break;
+					}
 				}
-		  }*/
+			}
+		}
+		return $ret;
+	}
+
+	public function setEnableActive($pEnableActive)
+	{
+		$this->_enableActive = $pEnableActive;
+	}
+
+	public function isEnableActive()
+	{
+		return $this->_enableActive;
+	}
+
+	private function isCrudAction($pAction)
+	{
+		switch ($pAction) {
+			case 'create':
+			case 'update':
+			case 'read':
+			case 'delete':
+				$ret = true;
+				break;
+			default:
+				$ret = false;
+		}
 		return $ret;
 	}
 
@@ -743,6 +835,11 @@ class LabelItem extends ActionItem
 	public function getLabel()
 	{
 		return $this->_sLabel;
+	}
+
+	public function setLabel($pLabel)
+	{
+		$this->_sLabel = $pLabel;
 	}
 }
 

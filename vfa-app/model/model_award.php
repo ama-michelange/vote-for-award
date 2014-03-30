@@ -95,22 +95,30 @@ class model_award extends abstract_model
 	}
 
 	/**
-	 * @param $pSelectionId
+	 * @param $pSelectionId string|array
 	 * @return array row_award
 	 */
 	public function findAllBySelectionId($pSelectionId)
 	{
 		$sql = 'SELECT * FROM vfa_awards WHERE (selection_id = ?)';
+		if (is_array($pSelectionId)) {
+		 $nbWhere = count($pSelectionId) -1;
+			for ($i = 0; $i < $nbWhere; $i++) {
+				$sql.=' OR (selection_id = ?)';
+			}
+		}
+		$sql .= ' ORDER BY year DESC, name, type';
 		return $this->findMany($sql, $pSelectionId);
 	}
+
 	/**
 	 * @param $pUserId
 	 * @return array row_award
 	 */
 	public function findAllByUserId($pUserId)
 	{
-		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' .
-			'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' . 'AND (vfa_user_awards.user_id = ?)';
+		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' . 'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' .
+			'AND (vfa_user_awards.user_id = ?)';
 		return $this->findMany($sql, $pUserId);
 	}
 

@@ -447,26 +447,67 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
 
 .navbar-default {
     background-color: #DDECF3;
-    border-color: #BBDAE8;
+    border-color: #99C7DB;
 }
-/*.navbar-default {*/
-    /*background-color: #DDECF3;*/
-    /*border-color: #BBDAE8;*/
-/*}*/
 
 .navbar-default .navbar-brand {
-    color: #777777;
+    color: #6499B0;
 }
 
-.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-    color: #0e0e5e;
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #59879B;
     background-color: transparent;
 }
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+
+.navbar-default .navbar-nav > li > a {
+    color: #59879B ;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
     color: #000000;
-    background-color: transparent;
+    /*text-decoration: underline;*/
+    background-color: #DDECF3;
 }
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus{
-    color: #e9f0f0;
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: #1E2D34;
+    background-color: #DDECF3;
+}
+.navbar-default .navbar-nav > .active > a {
+    color: #59879B;
+    background-color: #BBDAE8;
+}
+
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #000000;
+    background-color: #BBDAE8;
+}
+
+
+.navbar-default .navbar-nav > .dropdown > a .caret {
+    border-top-color: #59879B;
+    border-bottom-color: #59879B;
+}
+
+.navbar-default .navbar-nav > .dropdown > a:hover .caret,
+.navbar-default .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #000000;
+    border-bottom-color: #000000;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu {
+    background-color: #DDECF3;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu .divider {
     background-color: #6499B0;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+    background-color: #99C7DB ;
 }

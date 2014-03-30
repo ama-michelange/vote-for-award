@@ -28,23 +28,29 @@ class module_awards extends abstract_module
 		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
 
 		$bar = $navBar->getChild('left');
-		$item = plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'index'));
-		if ($item) {
-			$bar->addChild($item);
-		}
+		$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Prix', new NavLink('awards', 'index')));
 
+//		$item = plugin_BsHtml::buildDropdownActivable('Prix');
+//		$item->addChild(plugin_BsHtml::buildMenuItem('Tous les prix', new NavLink('awards', 'index')));
+//		if ($item->hasRealChildren()) {
+//			$bar->addChild($item);
+//		}
 		$oSelection = $this->getMemo('oSelection');
 		if ($oSelection && false == $oSelection->isEmpty()) {
-			$bar->addChild(plugin_BsHtml::buildSeparator());
 			$tParamId = array('id' => $oSelection->selection_id);
 			$tParamSelection = array('idSelection' => $oSelection->selection_id);
 
-			$item = plugin_BsHtml::buildMenuItem('Sélection', new NavLink('selections', 'read', $tParamId));
-			if ($item) {
+			$item = plugin_BsHtml::buildDropdownActivable('Sélections');
+			$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(), new NavLink('selections', 'read', $tParamId)));
+			if ($item->hasRealChildren()) {
 				$bar->addChild($item);
 			}
-			$item = plugin_BsHtml::buildMenuItem('Nominés', new NavLink('nominees', 'list', $tParamSelection));
-			if ($item) {
+			$item->addChild(plugin_BsHtml::buildSeparator());
+			$item->addChild(plugin_BsHtml::buildMenuItem('Toutes les sélections', new NavLink('selections', 'index')));
+
+			$item = plugin_BsHtml::buildDropdownActivable('Nominés');
+			$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(), new NavLink('nominees', 'list', $tParamSelection)));
+			if ($item->hasRealChildren()) {
 				$bar->addChild($item);
 			}
 		}
@@ -135,7 +141,7 @@ class module_awards extends abstract_module
 		$oView->tSelectedSelections = plugin_vfa::buildOptionSelected(model_selection::getInstance()->getSelect(), $tSelections);
 
 		$oView->tMessage = $tMessage;
-		$oView->textTitle = 'Modifier '.$oAward->toString();
+		$oView->textTitle = 'Modifier ' . $oAward->toString();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
