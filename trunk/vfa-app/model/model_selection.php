@@ -135,6 +135,9 @@ class row_selection extends abstract_row
 
 	protected $tMessages = null;
 
+	/**
+	 * @return array row_title|null
+	 */
 	public function findTitles()
 	{
 		$tArray = null;

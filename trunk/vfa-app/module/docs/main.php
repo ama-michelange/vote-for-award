@@ -234,23 +234,27 @@ class module_docs extends abstract_module
 		$navBar->addChild(new Bar('left'));
 
 		$bar = $navBar->getChild('left');
-		$bar->addChild(plugin_BsHtml::buildSeparator());
-
+//		$bar->addChild(plugin_BsHtml::buildSeparator());
+//
 		$toSelections = $this->getMemo('toSelections');
 		if ($toSelections && count($toSelections) > 0) {
 
 			$item = new DropdownMenuItem('Prix');
+			$tIdSel = array();
 			foreach ($toSelections as $oSelection) {
-				$toAwards = model_award::getInstance()->findAllBySelectionId($oSelection->getId());
-				if (count($toAwards) > 0) {
-					foreach ($toAwards as $oAward) {
-						$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
-							new NavLink('awards', 'read', array('id' => $oAward->getId()))));
-					}
-					if ($item->hasRealChildren()) {
-						$bar->addChild($item);
-					}
+				$tIdSel[] = $oSelection->getId();
+			}
+			$toAwards = model_award::getInstance()->findAllBySelectionId($tIdSel);
+			if (count($toAwards) > 0) {
+				foreach ($toAwards as $oAward) {
+					$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
+						new NavLink('awards', 'read', array('id' => $oAward->getId()))));
 				}
+			}
+			$item->addChild(plugin_BsHtml::buildSeparator());
+			$item->addChild(plugin_BsHtml::buildMenuItem('Tous les prix', new NavLink('awards', 'index')));
+			if ($item->hasRealChildren()) {
+				$bar->addChild($item);
 			}
 
 //			$item = new DropdownMenuItem('Sélections');
@@ -270,9 +274,15 @@ class module_docs extends abstract_module
 				$bar->addChild($item);
 			}
 		}
-		$item = plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'index'));
-		if ($item) {
-			$bar->addChild($item);
+
+		if (_root::getParam('id', null)) {
+			$item = new DropdownMenuItem('Albums');
+//			$item->addChild(plugin_BsHtml::buildMenuItem('Album', new NavLink('docs', 'read', array('id' => _root::getParam('id')))));
+//			$item->addChild(plugin_BsHtml::buildSeparator());
+			$item->addChild(plugin_BsHtml::buildMenuItem('Tous les albums', new NavLink('docs', 'index')));
+			if ($item) {
+				$bar->addChild($item);
+			}
 		}
 
 		$navBar->addChild(new BarButtons('right'));
@@ -284,6 +294,8 @@ class module_docs extends abstract_module
 	private function buildContextButtonBar($pNavBar)
 	{
 		$bar = $pNavBar->getChild('right');
+		$bar->addChild(plugin_BsHtml::buildSeparator());
+
 		$group = new GroupButtonItem('list');
 		switch (_root::getAction()) {
 			case 'list':
