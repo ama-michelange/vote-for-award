@@ -11,7 +11,7 @@
 			<?php if($this->tMessage and isset($this->tMessage['token'])): echo $this->tMessage['token']; endif;?>
 			<?php if ($this->ok):?>
 				<div class="pull-right">
-					<a class="btn btn-default" href="<?php echo $this->getLink('docs::index') ?>"><i
+					<a class="btn btn-default" href="<?php echo $this->getLink('docs::read',array('id'=>_root::getParam('id'))) ?>"><i
 						class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 					<button class="btn btn-danger" type="submit">
 						<i class="glyphicon glyphicon-ok with-text"></i>Confirmer la suppression
@@ -19,7 +19,7 @@
 				</div>
 			<?php else :?>
 				<strong>Suppression interdite !</strong> Cet album est encore associé à une sélection.
-				<a	class="btn btn-default pull-right" href="<?php echo $this->getLink('docs::index') ?>">
+				<a	class="btn btn-default pull-right" href="<?php echo $this->getLink('docs::read',array('id'=>_root::getParam('id'))) ?>">
 					<i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 			<?php endif;?>
 		</form>

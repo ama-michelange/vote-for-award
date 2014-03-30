@@ -13,7 +13,7 @@
 			<?php if($this->tMessage and isset($this->tMessage['token'])): echo $this->tMessage['token']; endif;?>
 			<div class="pull-right">
 				<a class="btn btn-default"
-					href="<?php echo $this->getLink('nominees::index',array('idSelection'=>$this->oViewShow->oSelection->selection_id)) ?>"><i
+					href="<?php echo $this->getLink('nominees::read',array('id'=>_root::getParam('id'),'idSelection'=>$this->oViewShow->oSelection->selection_id)) ?>"><i
 					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<button class="btn btn-danger" type="submit">
 					<i class="glyphicon glyphicon-ok with-text"></i>Confirmer la suppression
