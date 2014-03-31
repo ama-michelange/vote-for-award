@@ -234,7 +234,6 @@ class module_docs extends abstract_module
 		$navBar->addChild(new Bar('left'));
 
 		$bar = $navBar->getChild('left');
-//		$bar->addChild(plugin_BsHtml::buildSeparator());
 //
 		$toSelections = $this->getMemo('toSelections');
 		if ($toSelections && count($toSelections) > 0) {
@@ -251,39 +250,37 @@ class module_docs extends abstract_module
 						new NavLink('awards', 'read', array('id' => $oAward->getId()))));
 				}
 			}
-			$item->addChild(plugin_BsHtml::buildSeparator());
-			$item->addChild(plugin_BsHtml::buildMenuItem('Tous les prix', new NavLink('awards', 'index')));
 			if ($item->hasRealChildren()) {
 				$bar->addChild($item);
 			}
 
-//			$item = new DropdownMenuItem('Sélections');
-//			foreach ($toSelections as $oSelection) {
-//				$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(),
-//					new NavLink('selections', 'read', array('id' => $oSelection->getId()))));
-//			}
-//			if ($item->hasRealChildren()) {
-//				$bar->addChild($item);
-//			}
-			$item = new DropdownMenuItem('Nominés');
-			foreach ($toSelections as $oSelection) {
-				$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(),
+			if (count($toSelections) == 1) {
+				$oSelection = $toSelections[0];
+				$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Sélection',
+					new NavLink('selections', 'read', array('id' => $oSelection->getId()))));
+				$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Nominé',
 					new NavLink('nominees', 'list', array('idSelection' => $oSelection->getId()))));
-			}
-			if ($item->hasRealChildren()) {
-				$bar->addChild($item);
+			} else {
+				$item = new DropdownMenuItem('Sélections');
+				foreach ($toSelections as $oSelection) {
+					$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(),
+						new NavLink('selections', 'read', array('id' => $oSelection->getId()))));
+				}
+				if ($item->hasRealChildren()) {
+					$bar->addChild($item);
+				}
+				$item = new DropdownMenuItem('Nominés');
+				foreach ($toSelections as $oSelection) {
+					$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(),
+						new NavLink('nominees', 'list', array('idSelection' => $oSelection->getId()))));
+				}
+				if ($item->hasRealChildren()) {
+					$bar->addChild($item);
+				}
 			}
 		}
 
-		if (_root::getParam('id', null)) {
-			$item = new DropdownMenuItem('Albums');
-//			$item->addChild(plugin_BsHtml::buildMenuItem('Album', new NavLink('docs', 'read', array('id' => _root::getParam('id')))));
-//			$item->addChild(plugin_BsHtml::buildSeparator());
-			$item->addChild(plugin_BsHtml::buildMenuItem('Tous les albums', new NavLink('docs', 'index')));
-			if ($item) {
-				$bar->addChild($item);
-			}
-		}
+		$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Albums', new NavLink('docs', 'index')));
 
 		$navBar->addChild(new BarButtons('right'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));

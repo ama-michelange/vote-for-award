@@ -479,13 +479,14 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
 }
 .navbar-default .navbar-nav > .active > a {
     color: #59879B;
-    background-color: #BBDAE8;
+    background-color: #DDECF3;
+    font-size: 18px;
 }
 
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
     color: #000000;
-    background-color: #BBDAE8;
+    background-color: #DDECF3;
 }
 
 
