@@ -65,6 +65,18 @@ class plugin_BsHtml
 
 	/**
 	 * @param $pLabel
+	 * @param null $pIcon
+	 * @return MenuItem|null
+	 */
+	public static function buildMenuItemDisabled($pLabel, $pIcon = null)
+	{
+		$ret = new MenuItem($pLabel, null, $pIcon);
+		$ret->setDisabled(true);
+		return $ret;
+	}
+
+	/**
+	 * @param $pLabel
 	 * @param $pLink
 	 * @param null $pIcon
 	 * @return MenuItem|null
@@ -205,6 +217,7 @@ class NavBar extends DefaultItem
 	 * @var LabelItem Le titre de
 	 */
 	private $_oTitle;
+	private $_sTitle;
 
 	public function __construct($pName = null)
 	{
@@ -215,9 +228,13 @@ class NavBar extends DefaultItem
 		parent::__construct($name);
 	}
 
-	public function setTitle($pLabel, $pLink, $pIcon = null)
+	public function setTitle($pLabel, $pLink = null, $pIcon = null)
 	{
-		$this->_oTitle = plugin_BsHtml::buildBrandItem($pLabel, $pLink, $pIcon);
+		if (null == $pLink) {
+			$this->_sTitle = $pLabel;
+		} else {
+			$this->_oTitle = plugin_BsHtml::buildBrandItem($pLabel, $pLink, $pIcon);
+		}
 	}
 
 	public function addTitle($pLabel, $pLink, $pIcon = null)
@@ -227,10 +244,14 @@ class NavBar extends DefaultItem
 
 	public function toHtmlTitle()
 	{
-		$ret = $this->_oTitle->toHtml();
-		if ($this->_oTitle->hasChildren()) {
-			foreach ($this->_oTitle->getChildren() as $item) {
-				$ret .= '<span class="navbar-brand">/</span>' . $item->toHtml();
+		if ($this->_sTitle) {
+			$ret = '<span class="navbar-brand visible-xs">' . $this->_sTitle . '</span>';
+		} else {
+			$ret = $this->_oTitle->toHtml();
+			if ($this->_oTitle->hasChildren()) {
+				foreach ($this->_oTitle->getChildren() as $item) {
+					$ret .= '<span class="navbar-brand">/</span>' . $item->toHtml();
+				}
 			}
 		}
 		return $ret;
@@ -294,6 +315,8 @@ class MenuItem extends LabelItem
 		$ret = '<li';
 		if ($this->isEnableActive() && $this->isActivePage()) {
 			$ret .= ' class="active"';
+		} elseif ($this->isDisabled()) {
+			$ret .= ' class="disabled"';
 		}
 		$ret .= '>';
 		$ret .= parent::toHtml();
@@ -324,7 +347,7 @@ class DropdownMenuItem extends LabelItem
 //				$e->setLabel($this->getLabel());
 //				$ret = $e->toHtml();
 //			} else {
-				$ret = $this->toHtmlDropdown();
+		$ret = $this->toHtmlDropdown();
 //			}
 //		}
 		return $ret;
@@ -529,15 +552,26 @@ abstract class DefaultItem
 				}
 			}
 			if ($ret) {
-				$this->deleteLastSeparatorChildren();
+				$this->deleteDoublonSeparatorChildren();
 			}
 		}
 		return $ret;
 	}
 
-	public function deleteLastSeparatorChildren()
+	public function deleteDoublonSeparatorChildren()
 	{
 		if (isset($this->_tChildren)) {
+			// Supprime les séparateurs avant le 1er terme
+			$end = false;
+			while (false == $end && count($this->_tChildren) > 0) {
+				$item = reset($this->_tChildren);
+				if (true == plugin_BsHtml::isSeparator($item)) {
+					array_shift($this->_tChildren);
+				} else {
+					$end = true;
+				}
+			}
+			// Supprime les séparateurs après le dernier terme
 			$end = false;
 			while (false == $end && count($this->_tChildren) > 0) {
 				$item = end($this->_tChildren);
@@ -545,6 +579,24 @@ abstract class DefaultItem
 					array_pop($this->_tChildren);
 				} else {
 					$end = true;
+				}
+			}
+			// Cherche et note les séparateurs cote à cote
+			$t = array();
+			foreach ($this->_tChildren as $key => $item) {
+				if ((true == plugin_BsHtml::isSeparator($item))) {
+					$t[] = $key;
+				} else {
+					$t[] = false;
+				}
+			}
+			// Supprime les séparateurs cote à cote de trop
+			$size = count($t);
+			for ($i = 0; $i < $size; $i++) {
+				if ($i > 0) {
+					if ((false != $t[$i - 1]) && (false != $t[$i])) {
+						unset($this->_tChildren[$t[$i]]);
+					}
 				}
 			}
 		}
@@ -622,6 +674,7 @@ class ActionItem extends DefaultItem
 	private $_oLink;
 
 	private $_enableActive = false;
+	private $_disabled = false;
 
 	/**
 	 * @param string $pName
@@ -688,6 +741,16 @@ class ActionItem extends DefaultItem
 	public function isEnableActive()
 	{
 		return $this->_enableActive;
+	}
+
+	public function setDisabled($pDisabled)
+	{
+		$this->_disabled = $pDisabled;
+	}
+
+	public function isDisabled()
+	{
+		return $this->_disabled;
 	}
 
 	private function isCrudAction($pAction)

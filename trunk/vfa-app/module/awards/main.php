@@ -22,23 +22,49 @@ class module_awards extends abstract_module
 	private function buildContextBar()
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Prix', new NavLink('awards', 'index'));
+		$navBar->setTitle('Prix');
 		$navBar->addChild(new Bar('left'));
 		$navBar->addChild(new BarButtons('right'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
 
 		$bar = $navBar->getChild('left');
-		$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Prix', new NavLink('awards', 'index')));
+
+		$item = plugin_BsHtml::buildMenuItemActivable('Prix', new NavLink('awards', 'index'));
+		if ($item) {
+			$bar->addChild($item);
+		}
 
 		$oSelection = $this->getMemo('oSelection');
 		if ($oSelection && false == $oSelection->isEmpty()) {
 			$tParamId = array('id' => $oSelection->selection_id);
 			$tParamSelection = array('idSelection' => $oSelection->selection_id);
-
-			$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Sélection', new NavLink('selections', 'read', $tParamId)));
-
-			$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Nominés', new NavLink('nominees', 'index', $tParamSelection)));
 		}
+
+		$item = plugin_BsHtml::buildDropdownActivable('Sélections');
+		if (isset($tParamId)) {
+			$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(), new NavLink('selections', 'read', $tParamId)));
+		}
+		$item->addChild(plugin_BsHtml::buildSeparator());
+		$item->addChild(plugin_BsHtml::buildMenuItem('Toutes les sélections', new NavLink('selections', 'index')));
+		if ($item->hasRealChildren()) {
+			$bar->addChild($item);
+		}
+		if (isset($tParamSelection)) {
+			$item = plugin_BsHtml::buildDropdownActivable('Nominés');
+			if (isset($tParamSelection)) {
+				$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(), new NavLink('nominees', 'list', $tParamSelection)));
+			}
+			if ($item->hasRealChildren()) {
+				$bar->addChild($item);
+			}
+		} else {
+			$bar->addChild(plugin_BsHtml::buildMenuItemDisabled('Nominés'));
+		}
+
+		$item = plugin_BsHtml::buildDropdownActivable('Albums');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Tous les albums', new NavLink('docs', 'index')));
+		$bar->addChild($item);
+
 		return $navBar;
 	}
 
