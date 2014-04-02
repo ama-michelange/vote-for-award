@@ -152,6 +152,8 @@ class plugin_BsHtml
 	 * @param $pTextAlt
 	 * @param $pSize
 	 * @param $pLink NavLink
+	 * @param bool $pShowText
+	 * @internal param $
 	 * @return string
 	 */
 	public static function showNavImage($pImage, $pTextAlt, $pSize, $pLink, $pShowText = false)
