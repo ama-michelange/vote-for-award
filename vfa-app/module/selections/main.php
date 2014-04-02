@@ -22,7 +22,7 @@ class module_selections extends abstract_module
 	private function buildContextBar()
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Sélections', new NavLink('selections', 'index'));
+		$navBar->setTitle('Sélections');
 		$navBar->addChild(new Bar('left'));
 		$navBar->addChild(new BarButtons('right'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
@@ -31,33 +31,35 @@ class module_selections extends abstract_module
 		$oSelection = $this->getMemo('oSelection');
 		if ($oSelection) {
 			$toAwards = model_award::getInstance()->findAllBySelectionId($oSelection->selection_id);
-			if (count($toAwards) > 0) {
-				if (count($toAwards) == 1) {
-					$oAward = $toAwards[0];
-					$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Prix',
-						new NavLink('awards', 'read', array('id' => $oAward->getId()))));
-				} else {
-					$item = plugin_BsHtml::buildDropdownActivable('Prix');
-					foreach ($toAwards as $oAward) {
-						$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
-							new NavLink('awards', 'read', array('id' => $oAward->getId()))));
-					}
-					if ($item->hasRealChildren()) {
-						$bar->addChild($item);
-					}
-				}
+		}
+
+		$item = plugin_BsHtml::buildDropdownActivable('Prix');
+		if ($oSelection && count($toAwards) > 0) {
+			foreach ($toAwards as $oAward) {
+				$item->addChild(plugin_BsHtml::buildMenuItem($oAward->toString(),
+					new NavLink('awards', 'read', array('id' => $oAward->getId()))));
 			}
-//			else {
-//				$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Prix', new NavLink('awards', 'index')));
-//			}
 		}
-		else {
-			$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Prix', new NavLink('awards', 'index')));
+		$item->addChild(plugin_BsHtml::buildSeparator());
+		$item->addChild(plugin_BsHtml::buildMenuItem('Tous les prix', new NavLink('awards', 'index')));
+		if ($item->hasRealChildren()) {
+			$bar->addChild($item);
 		}
-		$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Sélections', new NavLink('selections', 'index')));
+
+		$item = plugin_BsHtml::buildMenuItemActivable('Sélections', new NavLink('selections', 'index'));
+		if ($item) {
+			$bar->addChild($item);
+		}
+
 		if ($oSelection) {
 			$tParamSelection = array('idSelection' => $oSelection->selection_id);
-			$bar->addChild(plugin_BsHtml::buildMenuItemActivable('Nominés', new NavLink('nominees', 'index', $tParamSelection)));
+			$item = plugin_BsHtml::buildDropdownActivable('Nominés');
+			$item->addChild(plugin_BsHtml::buildMenuItem($oSelection->toString(), new NavLink('nominees', 'index', $tParamSelection)));
+			if ($item->hasRealChildren()) {
+				$bar->addChild($item);
+			}
+		} else {
+			$bar->addChild(plugin_BsHtml::buildMenuItemDisabled('Nominés'));
 		}
 		return $navBar;
 	}
