@@ -33,7 +33,7 @@ body {
 <?php echo $this->load('work') ?>
 
 <!-- 	<script src="http://code.jquery.com/jquery-latest.js"></script> -->
-	<script src="site/assets/js/jquery-1.8.3.min.js"></script>
+	<script src="site/assets/js/jquery-1.11.0.min.js"></script>
 	<script src="site/assets/js/bootstrap.min.js"></script>
 	<script src="site/js/bs-apps.js"></script>
 	
