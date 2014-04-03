@@ -54,7 +54,7 @@ class module_bsnavbar extends abstract_module
 
 	private function buildMenuConnectedUser($pItems)
 	{
-		$account = _root::getAuth()->getAccount();
+		$account = _root::getAuth()->getUserSession();
 		$item = new DropdownMenuItem($account->getUser()->username, null, 'glyphicon-user');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('connected_user', 'account', null, true)), 'glyphicon-user');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Déconnexion', new NavLink('bsnavbar', 'logout', null, true)), 'glyphicon-remove-sign');
@@ -132,9 +132,9 @@ class module_bsnavbar extends abstract_module
 			$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);
 			// Connexion si utilisateur autorisé
 			if (null != $oUser) {
-				$oAccount = model_account::getInstance()->create($oUser);
-				// _root::getLog()->log('AMA >>> $oAccount = '.$oAccount->getUser()->username);
-				_root::getAuth()->connect($oAccount);
+				$oUserSession = model_user_session::getInstance()->create($oUser);
+				// _root::getLog()->log('AMA >>> $oUserSession = '.$oUserSession->getUser()->username);
+				_root::getAuth()->connect($oUserSession);
 				_root::redirect('home_enable::index');
 			} else {
 				// TODO Passer une info du genre : $this->sUnknownLogin=$sLogin; pour indiquer au module parent une erreur

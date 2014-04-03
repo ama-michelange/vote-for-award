@@ -221,7 +221,7 @@ class module_invitations extends abstract_module
 				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::GROUP_TYPE_READER);
 				break;
 			default:
-				$tGroups = _root::getAuth()->getAccount()->getReaderGroups();
+				$tGroups = _root::getAuth()->getUserSession()->getReaderGroups();
 				break;
 		}
 		$pView->countGroups = count($tGroups);
@@ -416,7 +416,7 @@ class module_invitations extends abstract_module
 		$oInvit = new row_invitation();
 
 		// Remplissage de l'invit
-		$oInvit->created_user_id = _root::getAuth()->getAccount()->getUser()->user_id;
+		$oInvit->created_user_id = _root::getAuth()->getUserSession()->getUser()->user_id;
 		$oInvit->invitation_key = $this->buildInvitationKey($poRegistry);
 		$oInvit->state = plugin_vfa::INVITATION_STATE_OPEN;
 		$oInvit->type = $poRegistry->type;

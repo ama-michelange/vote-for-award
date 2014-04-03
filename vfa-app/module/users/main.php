@@ -53,7 +53,7 @@ class module_users extends abstract_module
 	public function _listByGroup()
 	{
 		$oUserModel = new model_user();
-		$tGroups = _root::getAuth()->getAccount()->getGroups();
+		$tGroups = _root::getAuth()->getUserSession()->getGroups();
 		$SelectedIdGroup = null;
 		$tUsers = null;
 

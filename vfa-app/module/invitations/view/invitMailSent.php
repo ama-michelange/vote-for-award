@@ -26,7 +26,7 @@
 						<dt>A</dt>
 						<dd><?php echo $this->oRegistry->email ?></dd>
 						<dt>En copie</dt>
-						<dd><?php echo _root::getAuth()->getAccount()->getUser()->email ?></dd>
+						<dd><?php echo _root::getAuth()->getUserSession()->getUser()->email ?></dd>
 					</dl>
 					<dl class="dl-horizontal">
 						<dt>Contenant</dt>

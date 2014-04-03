@@ -12,20 +12,20 @@
 class plugin_authent extends abstract_auth
 {
 
-	private $oAccount = null;
+	private $oUserSession = null;
 
-	public function setAccount($oAccount)
+	public function setUserSession($oUserSession)
 	{
-		$_SESSION['oAccount'] = serialize($oAccount);
-		$this->oAccount = $oAccount;
+		$_SESSION['oUserSession'] = serialize($oUserSession);
+		$this->oUserSession = $oUserSession;
 	}
 
-	public function getAccount()
+	public function getUserSession()
 	{
-		if (null == $this->oAccount) {
-			$this->oAccount = unserialize($_SESSION['oAccount']);
+		if (null == $this->oUserSession) {
+			$this->oUserSession = unserialize($_SESSION['oUserSession']);
 		}
-		return $this->oAccount;
+		return $this->oUserSession;
 	}
 
 	/**
@@ -39,7 +39,7 @@ class plugin_authent extends abstract_auth
 		if (! $this->_isConnected()) {
 			return false;
 		}
-		$this->setAccount(unserialize($_SESSION['oAccount']));
+		$this->setUserSession(unserialize($_SESSION['oUserSession']));
 		// ajouter critere supp pour verification de l'authentification
 		return true;
 	}
@@ -48,13 +48,13 @@ class plugin_authent extends abstract_auth
 	 * Connexion du compte d'un utilisateur
 	 *
 	 * @access public
-	 * @param object $oAccount
+	 * @param object $oUserSession
 	 *        	L'instance du compte
 	 */
-	public function connect($oAccount)
+	public function connect($oUserSession)
 	{
 		$this->_connect();
-		$this->setAccount($oAccount);
+		$this->setUserSession($oUserSession);
 	}
 
 	/**
