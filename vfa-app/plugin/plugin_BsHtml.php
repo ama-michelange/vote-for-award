@@ -342,21 +342,6 @@ class DropdownMenuItem extends LabelItem
 
 	public function toHtml()
 	{
-//		if ($this->hasChildren()) {
-//			if (count($this->getChildren()) == 1) {
-//				$t = $this->getChildren();
-//				$e = array_shift($t);
-//				$e->setLabel($this->getLabel());
-//				$ret = $e->toHtml();
-//			} else {
-		$ret = $this->toHtmlDropdown();
-//			}
-//		}
-		return $ret;
-	}
-
-	public function toHtmlDropdown()
-	{
 		$ret = '<li class="dropdown';
 		if ($this->isEnableActive() && $this->isActivePage()) {
 			$ret .= ' active';
@@ -387,7 +372,7 @@ class DropdownMenuItem extends LabelItem
 				if (plugin_BsHtml::isSeparator($item)) {
 					$ret .= '<li class="divider"></li>';
 				} else {
-					$ret .= '<li>' . $item->toHtml() . '</li>';
+					$ret .= $item->toHtml();
 				}
 			}
 			$ret .= '</ul>';
