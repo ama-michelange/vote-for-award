@@ -14,9 +14,9 @@ class plugin_authorization
 	public function isInRole($pRole)
 	{
 		$bInRole = false;
-		$oAccount = _root::getAuth()->getAccount();
-		if (null != $oAccount) {
-			$tRoles = $oAccount->getNameRoles();
+		$oUserSession = _root::getAuth()->getUserSession();
+		if (null != $oUserSession) {
+			$tRoles = $oUserSession->getNameRoles();
 			$bInRole = isset($tRoles['owner']);
 			if (false == $bInRole) {
 				if (is_array($pRole)) {
@@ -46,11 +46,11 @@ class plugin_authorization
 
 	public function permit($pModActions)
 	{
-		$oAccount = _root::getAuth()->getAccount();
-		$tRoles = $oAccount->getNameRoles();
+		$oUserSession = _root::getAuth()->getUserSession();
+		$tRoles = $oUserSession->getNameRoles();
 		$bPermit = isset($tRoles['owner']);
 		if (false == $bPermit) {
-			$tAuthos = $oAccount->getAuthorizations();
+			$tAuthos = $oUserSession->getAuthorizations();
 			if (is_array($pModActions)) {
 				foreach ($pModActions as $modAction) {
 					$bPermit = isset($tAuthos[$modAction]);

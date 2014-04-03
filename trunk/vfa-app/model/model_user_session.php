@@ -1,6 +1,6 @@
 <?php
 
-class model_account
+class model_user_session
 {
 
 	private static $tInstance = array();
@@ -20,18 +20,18 @@ class model_account
 
 	public function create($pUser)
 	{
-		$oAccount = new row_account();
-		$oAccount->setUser($pUser);
+		$oUserSession = new row_user_session();
+		$oUserSession->setUser($pUser);
 		$oRoles = model_role::getInstance()->findAllByUserId($pUser->user_id);
-		$oAccount->setRoles($oRoles);
+		$oUserSession->setRoles($oRoles);
 		
 		$oGroups = model_group::getInstance()->findAllByUserId($pUser->user_id);
-		$oAccount->setGroups($oGroups);
+		$oUserSession->setGroups($oGroups);
 		$oReaderGroups = model_group::getInstance()->findAllByUserIdByType($pUser->user_id, plugin_vfa::GROUP_TYPE_READER);
-		$oAccount->setReaderGroups($oReaderGroups);
+		$oUserSession->setReaderGroups($oReaderGroups);
 		
 		$oAwards = model_award::getInstance()->findAllByUserId($pUser->user_id);
-		$oAccount->setAwards($oAwards);
+		$oUserSession->setAwards($oAwards);
 		
 		$tAuthorizations = array();
 		foreach ($oRoles as $oRole) {
@@ -45,12 +45,12 @@ class model_account
 				$tAuthorizations[$key] = true;
 			}
 		}
-		$oAccount->setAuthorizations($tAuthorizations);
-		return $oAccount;
+		$oUserSession->setAuthorizations($tAuthorizations);
+		return $oUserSession;
 	}
 }
 
-class row_account
+class row_user_session
 {
 
 	/**
