@@ -12,7 +12,7 @@
 <!-- <link href="site/assets/css/bootstrap-theme.css" rel="stylesheet" media="screen"> -->
 <style>
 body {
-	padding-top: 15px; 
+	padding-top: 60px;
 /* 	padding-top: 83px; */
 	/* 60px to make the container go all the way to the bottom of the topbar */
 }
@@ -47,7 +47,7 @@ body {
 	<script src="site/assets/js/bootstrap-datepicker.js"></script>
 	<script src="site/select2/select2.min.js"></script>
 	<script src="site/js/bs-apps.js"></script>
-	
+	<?php echo $this->load('script') ?>
 </body>
 
 

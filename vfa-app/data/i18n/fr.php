@@ -23,8 +23,10 @@ _root::setConfigVar('tLangue',
 		'isLowerThanKO.birthyear' => "Pas possible, c'est trop jeune !",
 		'isEqualKO.email' => 'Les emails ne correspondent pas !',
 		'isEqualKO.email_bis' => 'Les emails ne correspondent pas !',
-		'isEqualKO.password' => 'Les mots de passes ne correspondent pas !',
-		'isEqualKO.password_bis' => 'Les mots de passes ne correspondent pas !',
+		'isEqualKO.newPassword' => 'Le mot de passe et sa confirmation ne correspondent pas !',
+		'isEqualKO.confirmPassword' => 'Le mot de passe et sa confirmation ne correspondent pas !',
+		'badSize.newPassword' => 'Le mot de passe doit contenir entre 7 et 30 caractères !',
+
 
 		'matchExpressionKO.year' => "La valeur saisie doit correspondre à une année valide (nombre)",
 		'isUpperOrEqualThanKO.year' => "L'année du prix doit appartenir au XXI siècle",
