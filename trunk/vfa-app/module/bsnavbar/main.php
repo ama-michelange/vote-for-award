@@ -49,14 +49,14 @@ class module_bsnavbar extends abstract_module
 		$this->buildMenuAdmin($bar);
 
 		$bar = $pNavBar->getChild('right');
-		$this->buildMenuConnectedUser($bar);
+		$this->buildMenuAccount($bar);
 	}
 
-	private function buildMenuConnectedUser($pItems)
+	private function buildMenuAccount($pItems)
 	{
-		$account = _root::getAuth()->getUserSession();
-		$item = new DropdownMenuItem($account->getUser()->username, null, 'glyphicon-user');
-		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('connected_user', 'account', null, true)), 'glyphicon-user');
+		$userSession = _root::getAuth()->getUserSession();
+		$item = new DropdownMenuItem($userSession->getUser()->username, null, 'glyphicon-user');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('accounts', 'index', null, true)), 'glyphicon-user');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Déconnexion', new NavLink('bsnavbar', 'logout', null, true)), 'glyphicon-remove-sign');
 
 		if ($item->hasRealChildren()) {

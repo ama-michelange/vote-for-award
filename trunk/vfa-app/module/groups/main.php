@@ -144,9 +144,7 @@ class module_groups extends abstract_module
 		$oPluginXsrf = new plugin_xsrf();
 		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oGroup = new row_group();
-			$oGroup->setMessages(array(
-				'token' => $oPluginXsrf->getMessage()
-			));
+			$oGroup->setMessages(array('token' => $oPluginXsrf->getMessage()));
 			return $oGroup;
 		}
 
@@ -171,9 +169,7 @@ class module_groups extends abstract_module
 
 		if ($oGroup->isValid()) {
 			$oGroup->save();
-			_root::redirect('groups::read', array(
-				'id' => $oGroup->getId()
-			));
+			_root::redirect('groups::read', array('id' => $oGroup->getId()));
 		}
 		return $oGroup;
 	}
@@ -186,9 +182,7 @@ class module_groups extends abstract_module
 
 		$oPluginXsrf = new plugin_xsrf();
 		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
-			return array(
-				'token' => $oPluginXsrf->getMessage()
-			);
+			return array('token' => $oPluginXsrf->getMessage());
 		}
 
 		$oGroupModel = new model_group();

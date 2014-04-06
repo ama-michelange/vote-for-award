@@ -22,7 +22,7 @@ if (true == $bImage) {
 			<?php if (trim($this->oDoc->url) != false): ?>
 				<p>
 					<a class="btn btn-sm" href="<?php echo $this->oDoc->url ?>" target="resume"><i
-							class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;Résumé de l'album</a>
+							class="glyphicon glyphicon-globe with-text"></i>Résumé de l'album</a>
 				</p>
 			<?php endif; ?>
 
