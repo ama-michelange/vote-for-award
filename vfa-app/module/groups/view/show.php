@@ -41,11 +41,11 @@
 								<?php foreach($this->toUsers as $oUser):?>
 								<tr>
 									<?php if(_root::getACL()->permit('users::read')):?>
-										<td><a rel="tooltip" data-original-title="Voir <?php echo $oUser->username ?>"
+										<td><a rel="tooltip" data-original-title="Voir <?php echo $oUser->login ?>"
 									href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>"><i
 										class="glyphicon glyphicon-eye-open"></i></a></td>
 									<?php endif;?>
-									<td><?php echo $oUser->username ?></td>
+									<td><?php echo $oUser->login ?></td>
 								<td><?php echo $oUser->last_name ?></td>
 								<td><?php echo $oUser->first_name ?></td>
 								<td><?php echo $oUser->email ?></td>

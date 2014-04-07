@@ -76,8 +76,9 @@ class module_accounts extends abstract_module
 			return $oUser;
 		}
 
+		var_dump(_root::getParam('submit'));
 		$oUserModel = new model_user();
-		$iId = _root::getParam('user_id', null);
+		$iId = _root::getParam('user_id');
 		if ($iId == null) {
 			return null;
 		} else {
@@ -85,7 +86,7 @@ class module_accounts extends abstract_module
 		}
 		$oUser->modified_date = plugin_vfa::dateTimeSgbd();
 		// Copie la saisie dans un enregistrement
-		$tColumns = array('user_id', 'username', 'last_name', 'first_name', 'email', 'birthyear', 'gender');
+		$tColumns = array('user_id', 'login', 'email', 'alias', 'last_name', 'first_name', 'birthyear', 'gender');
 		foreach ($tColumns as $sColumn) {
 			if (in_array($sColumn, $oUserModel->getIdTab())) {
 				continue;

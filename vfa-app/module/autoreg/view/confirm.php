@@ -87,10 +87,10 @@
 							<div class="row">
 								<div class="col-sm-6">
 									<div
-										class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'username')?>">
-										<label for="username">Nom d'utilisateur</label> <input class="form-control" type="text"
-											id="username" name="username" value="<?php echo $this->oConfirm->username ?>"
-											placeholder="Votre nom d'utilisateur ou pseudo" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'username')?></span>
+										class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login')?>">
+										<label for="login">Nom d'utilisateur</label> <input class="form-control" type="text"
+											id="login" name="login" value="<?php echo $this->oConfirm->login ?>"
+											placeholder="Votre nom d'utilisateur ou pseudo" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login')?></span>
 									</div>
 								</div>
 							</div>

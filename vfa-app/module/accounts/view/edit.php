@@ -1,7 +1,8 @@
 
 <form action="" method="POST">
-	<input type="hidden" name="token" value="<?php echo $this->token?>" />
+	<input type="hidden" name="token" value="<?php echo $this->token ?>" />
 	<input type="hidden" name="user_id" value="<?php echo $this->oUser->user_id ?>" />
+	<input type="hidden" name="login" value="<?php echo $this->oUser->login ?>" />
 	<input type="hidden" name="email" value="<?php echo $this->oUser->email ?>" />
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -25,50 +26,125 @@
 <!--							<h3 class="panel-title">Paramètres d'identification</h3>-->
 <!--						</div>-->
 						<div class="panel-body">
+							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login')?>">
+								<label for="inputLogin">Login</label>
+								<input class="form-control" type="text" id="inputLogin" name="loginDisabled" value="<?php echo $this->oUser->login ?>" disabled />
+								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login')?></span>
+							</div>
+<!--							<div>-->
+<!--								<a class="btn btn-info btn-block" href="#changeEmail">-->
+<!--									Changer mon email-->
+<!--									<i class="glyphicon glyphicon-mail with-text"></i>-->
+<!--								</a>-->
+<!--							</div>-->
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?>">
 								<label for="inputEmail">Email</label>
 								<input class="form-control" type="email" id="inputEmail" name="emailDisabled" value="<?php echo $this->oUser->email ?>" disabled />
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email')?></span>
 							</div>
-							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'username')?>">
-								<label for="inputUsername">Alias ou Pseudo</label>
-								<input class="form-control" type="text" id="inputUsername" name="username" value="<?php echo $this->oUser->username ?>"/>
-								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'username')?></span>
-							</div>
+<!--							<div class="--><?php //echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?><!--">-->
+<!--								<label for="inputEmail">Email</label>-->
+<!--								<div class="input-group">-->
+<!--									<input class="form-control" type="email" id="inputEmail" name="emailDisabled" value="--><?php //echo $this->oUser->email ?><!--" disabled />-->
+<!--									<span class="input-group-btn">-->
+<!--										<button class="btn btn-primary" type="button">Changer</button>-->
+<!--									</span>-->
+<!--								</div>-->
+<!--							</div>-->
+
 							<?php
 								// Gère l'ouverture ou la fermeture du panel des mots de passe
 								if ($this->oUser->openPassword ) {
-									$upOrDown = 'up';
-									$collapseIn = ' in';
+									$upOrDownPassword = 'up';
+									$collapsePassword = ' in';
 								} else {
-									$upOrDown = 'down';
-									$collapseIn = '';
+									$upOrDownPassword = 'down';
+									$collapsePassword = '';
 								}
 							?>
-							<div>
-								<a class="btn btn-info btn-block" data-toggle="collapse" href="#getPassword">
-									Changer mon mot de passe
-									<i data-chevron="collapse" class="pull-right glyphicon glyphicon-chevron-<?php echo $upOrDown ?> with-text"></i>
-								</a>
-							</div>
-							<div id="getPassword" class="collapse<?php echo $collapseIn ?>">
-								<div class="panel panel-default panel-inner">
-									<div class="panel-body panel-condensed">
-										<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newPassword')?>">
-											<label for="inputNewPass">Nouveau mot de passe</label>
-											<input class="form-control" type="password" id="inputNewPass" name="newPassword" value="<?php echo $this->oUser->newPassword ?>" autocomplete="off"/>
-											<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newPassword')?></span>
+							<div class="panel-group" id="accordion">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+												Changer mon mot de passe
+											</a>
+											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+												<i data-chevron="collapse" class="glyphicon glyphicon-chevron-<?php echo $upOrDownPassword ?> with-text"></i>
+											</a>
+										</h4>
+									</div>
+									<div id="collapseOne" class="panel-collapse collapse<?php echo $collapsePassword ?>">
+										<div class="panel-body">
+											<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newPassword')?>">
+												<label for="inputNewPass">Nouveau mot de passe</label>
+												<input class="form-control" type="password" id="inputNewPass" name="newPassword" value="<?php echo $this->oUser->newPassword ?>" autocomplete="off"/>
+												<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newPassword')?></span>
+											</div>
+											<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'confirmPassword')?>">
+												<label for="inputNewPassConfirm">Confirmation du mot de passe</label>
+												<input class="form-control" type="password" id="inputNewPassConfirm" name="confirmPassword" value="<?php echo $this->oUser->confirmPassword ?>" autocomplete="off" />
+												<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'confirmPassword')?></span>
+											</div>
 										</div>
-										<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'confirmPassword')?>">
-											<label for="inputNewPassConfirm">Confirmation du mot de passe</label>
-											<input class="form-control" type="password" id="inputNewPassConfirm" name="confirmPassword" value="<?php echo $this->oUser->confirmPassword ?>" autocomplete="off" />
-											<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'confirmPassword')?></span>
+										<div class="panel-footer clearfix">
+											<div class="pull-right">
+												<button class="btn btn-primary" type="submit" name="submit" value="savePassword">
+													<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+												Changer mon email
+											</a>
+										</h4>
+									</div>
+									<div id="collapseTwo" class="panel-collapse collapse">
+										<div class="panel-body">
+											Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+												Collapsible Group Item #3
+											</a>
+										</h4>
+									</div>
+									<div id="collapseThree" class="panel-collapse collapse">
+										<div class="panel-body">
+											Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<div class="panel-footer clearfix">
+							<div class="btn-group pull-right">
+<!--								<button class="btn btn-primary" type="submit" name="submit" value="changePassword">-->
+<!--									<i class="glyphicon glyphicon-ok with-text"></i>Changer-->
+<!--								</button>-->
+<!--								<div class="btn-group">-->
+									<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+										Changer <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="#getPassword" data-toggle="collapse">Changer mon mot de passe</a></li>
+										<li><a href="#">Changer mon email</a></li>
+										<li class="divider"></li>
+										<li><a href="#">Sélectionner Mon login</a></li>
+									</ul>
+							</div>
+						</div>
 					</div>
+
 				</div>
 				<div class="col-sm-6 col-md-6">
 					<div class="panel panel-info panel-inner">
@@ -76,8 +152,12 @@
 <!--							<h3 class="panel-title">Infos personnelles</h3>-->
 <!--						</div>-->
 						<div class="panel-body">
-							<div
-								class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name')?>">
+							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'alias')?>">
+								<label for="inputAlias">Alias</label>
+								<input class="form-control" type="text" id="inputAlias" name="alias" value="<?php echo $this->oUser->alias ?>"/>
+								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'alias')?></span>
+							</div>
+							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name')?>">
 								<label for="inputLastName">Nom</label>
 								<input class="form-control" type="text" id="inputLastName" name="last_name" value="<?php echo $this->oUser->last_name ?>" />
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'last_name')?></span>
@@ -113,15 +193,15 @@
 								</div>
 							</div>
 						</div>
+						<div class="panel-footer clearfix">
+							<div class="pull-right">
+								<button class="btn btn-primary" type="submit" name="submit" value="save">
+									<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="panel-footer clearfix">
-			<div class="pull-right">
-				<button class="btn btn-primary" type="submit">
-					<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
-				</button>
 			</div>
 		</div>
 		<?php endif;?>

@@ -1,13 +1,13 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->oUser->username ?></h3>
+		<h3 class="panel-title"><?php echo $this->oUser->login ?></h3>
 	</div>
 	<div class="panel-body panel-condensed">
 		<div class="panel panel-default panel-inner">
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-3 col-md-3 col-lg-2 view-label">Pseudo</div>
-					<div class="col-sm-9 col-md-9 col-lg-10 view-value"><?php echo $this->oUser->username ?></div>
+					<div class="col-sm-9 col-md-9 col-lg-10 view-value"><?php echo $this->oUser->login ?></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-3 col-md-3 col-lg-2 view-label">Email</div>

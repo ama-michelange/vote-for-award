@@ -55,7 +55,7 @@ class module_bsnavbar extends abstract_module
 	private function buildMenuAccount($pItems)
 	{
 		$userSession = _root::getAuth()->getUserSession();
-		$item = new DropdownMenuItem($userSession->getUser()->username, null, 'glyphicon-user');
+		$item = new DropdownMenuItem($userSession->getUser()->login, null, 'glyphicon-user');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('accounts', 'index', null, true)), 'glyphicon-user');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Déconnexion', new NavLink('bsnavbar', 'logout', null, true)), 'glyphicon-remove-sign');
 
@@ -133,7 +133,7 @@ class module_bsnavbar extends abstract_module
 			// Connexion si utilisateur autorisé
 			if (null != $oUser) {
 				$oUserSession = model_user_session::getInstance()->create($oUser);
-				// _root::getLog()->log('AMA >>> $oUserSession = '.$oUserSession->getUser()->username);
+				// _root::getLog()->log('AMA >>> $oUserSession = '.$oUserSession->getUser()->login);
 				_root::getAuth()->connect($oUserSession);
 				_root::redirect('home_enable::index');
 			} else {

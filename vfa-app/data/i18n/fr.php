@@ -17,7 +17,7 @@ _root::setConfigVar('tLangue',
 		'isDateBeforeKO' => "Cohérence des dates : date trop grande !",
 		'isDateAfterKO' => "Cohérence des dates : date trop petite !",
 		
-		'doublon.username' => 'Ce nom d\'utilisateur ou pseudo existe déjà !',
+		'doublon.login' => 'Ce nom d\'utilisateur ou pseudo existe déjà !',
 		'matchExpressionKO.birthyear' => "La valeur saisie doit correspondre à une année valide (nombre)",
 		'isUpperOrEqualThanKO.birthyear' => "Pas possible, c'est trop vieux !",
 		'isLowerThanKO.birthyear' => "Pas possible, c'est trop jeune !",

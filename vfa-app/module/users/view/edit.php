@@ -19,10 +19,10 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'username')?>">
+						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login')?>">
 						<label for="inputUsername">Pseudo</label> <input class="form-control" type="text"
-							id="inputUsername" name="username" value="<?php echo $this->oUser->username ?>" /> <span
-							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'username')?></span>
+							id="inputUsername" name="login" value="<?php echo $this->oUser->login ?>" /> <span
+							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login')?></span>
 					</div>
 				</div>
 				<div class="col-sm-6">

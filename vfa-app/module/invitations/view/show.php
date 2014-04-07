@@ -9,7 +9,7 @@
 					<dt>Envoyée le</dt>
 					<dd><?php echo plugin_vfa::toStringDatetimeShow($this->oInvitation->created_date) ?></dd>
 					<dt>Par</dt>
-					<dd><?php echo $this->oCreatedUser->username ?> (<?php echo $this->oCreatedUser->email ?>)</dd>
+					<dd><?php echo $this->oCreatedUser->login ?> (<?php echo $this->oCreatedUser->email ?>)</dd>
 				</dl>
 				<dl class="dl-horizontal">
 					<dt>Destinataire</dt>

@@ -456,11 +456,11 @@ class plugin_vfa
 		$oCreatedUser = $poInvitation->findCreatedUser();
 		$last_name = $oCreatedUser->last_name;
 		$first_name = $oCreatedUser->first_name;
-		$username = $oCreatedUser->username;
+		$login = $oCreatedUser->login;
 		if ((true == isset($last_name)) && (strlen(trim($last_name)) > 0)) {
 			$creator = trim($first_name . ' ' . $last_name);
 		} else {
-			$creator = $username;
+			$creator = $login;
 		}
 		
 		$tPrix = array();
