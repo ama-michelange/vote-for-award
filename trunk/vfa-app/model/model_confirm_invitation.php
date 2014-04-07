@@ -26,7 +26,7 @@ class row_confirm_invitation extends abstract_row
 				$oPluginValid->isNotEmpty('cf_password');
 				break;
 			case 'toRegistry':
-				$oPluginValid->isNotEmpty('username');
+				$oPluginValid->isNotEmpty('login');
 				$oPluginValid->isNotEmpty('email');
 				$bEmailValid = false;
 				if (null != $this->__get('email')) {

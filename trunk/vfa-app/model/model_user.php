@@ -25,20 +25,20 @@ class model_user extends abstract_model
 
 	public function findAll()
 	{
-		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY vfa_users.username');
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY vfa_users.login');
 	}
 
 	public function findAllByGroupId($pGroupId)
 	{
 		$sql = 'SELECT * FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
-			 'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.username';
+			 'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.login';
 		// .'AND (vfa_user_groups.group_id = vfa_groups.group_id) '
 		return $this->findMany($sql, $pGroupId);
 	}
 
 	public function findByLogin($login)
 	{
-		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE username=?', $login);
+		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE login=?', $login);
 	}
 
 	/**
@@ -46,7 +46,7 @@ class model_user extends abstract_model
 	 * Si un utilisateur est trouvé, vérifie si son mot de passe est identique à celui donné.
 	 * 
 	 * @param String $pLogin
-	 *        	Le login (ou username) unique dans la table
+	 *        	Le login (ou login) unique dans la table
 	 * @param String $pPass
 	 *        	Le mot de passe crypté SHA1
 	 * @return L'utilisateur correspondant ou null si non trouvé ou si le mot de passe ne correspond pas
@@ -67,7 +67,7 @@ class model_user extends abstract_model
 		$tab = $this->findAll();
 		$tSelect = array();
 		foreach ($tab as $oRow) {
-			$tSelect[$oRow->user_id] = $oRow->username;
+			$tSelect[$oRow->user_id] = $oRow->login;
 		}
 		return $tSelect;
 	}
@@ -77,8 +77,8 @@ class model_user extends abstract_model
 		$tUser = $this->findAll();
 		$tLoginPassUser = array();
 		foreach ($tUser as $oUser) {
-			$tLoginPassUser[$oUser->username][$oUser->password] = $oUser;
-			// _root::getLog()->log('AMA >>> login = '.$oUser->username.', pass = '.$oUser->password.', sha1 = '.sha1($oUser->password));
+			$tLoginPassUser[$oUser->login][$oUser->password] = $oUser;
+			// _root::getLog()->log('AMA >>> login = '.$oUser->login.', pass = '.$oUser->password.', sha1 = '.sha1($oUser->password));
 		}
 		return $tLoginPassUser;
 	}
@@ -178,7 +178,7 @@ class row_user extends abstract_row
 	private function getCheck()
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
-		$oPluginValid->isNotEmpty('username');
+		$oPluginValid->isNotEmpty('login');
 		$oPluginValid->isNotEmpty('email');
 		if (null != $this->__get('email')) {
 			$oPluginValid->isEmailValid('email');

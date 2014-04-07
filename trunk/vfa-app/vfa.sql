@@ -377,7 +377,7 @@ INSERT INTO `vfa_title_docs` (`title_id`, `doc_id`) VALUES
 
 CREATE TABLE IF NOT EXISTS `vfa_users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) NOT NULL,
+  `login` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
@@ -394,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `vfa_users` (
 -- Contenu de la table `vfa_users`
 --
 
-INSERT INTO `vfa_users` (`user_id`, `username`, `password`, `first_name`, `last_name`, `email`, `vote`, `birthyear`, `gender`, `created_date`, `modified_date`) VALUES
+INSERT INTO `vfa_users` (`user_id`, `login`, `password`, `first_name`, `last_name`, `email`, `vote`, `birthyear`, `gender`, `created_date`, `modified_date`) VALUES
 (2, 'ama', 'd8e6e1405e607479c1ce78791f76a05cb6dc01fa', 'first', 'amdeus', 'michelange.anton@free.fr', NULL, 1955, 'M', '2012-10-28 21:27:29', '2013-11-01 22:03:08'),
 (3, 'asterix', '35bc6c28bca27fbecc144761d32d09986876438f', 'asterix', 'asterix', 'asterix@bretagne.com', NULL, 1958, NULL, '2012-10-28 21:27:29', '2013-07-10 22:46:10'),
 (4, 'obelix', 'c9e44795639f0b01c2d7ce02ea1ef83038e0d476', 'obelix', 'obelix', 'asterix@bretagne.com', NULL, NULL, NULL, '2012-10-28 21:27:29', '2013-07-09 23:39:18'),

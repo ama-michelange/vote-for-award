@@ -180,7 +180,7 @@ class module_autoreg extends abstract_module
 	{
 		// Copie la saisie dans un enregistrement
 		$poConfirm->action = _root::getParam('action', null);
-		$poConfirm->username = _root::getParam('username', null);
+		$poConfirm->login = _root::getParam('login', null);
 		$poConfirm->email = _root::getParam('email', null);
 		$poConfirm->email_bis = _root::getParam('email_bis', null);
 		$poConfirm->password = _root::getParam('password', null);
@@ -192,12 +192,12 @@ class module_autoreg extends abstract_module
 		
 		if ($poConfirm->isValid()) {
 			// Doublon ?
-			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->username);
+			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->login);
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
 				$poConfirm->validation = true;
 			} else {
 				$poConfirm->setMessages(array(
-					'username' => array(
+					'login' => array(
 						'doublon'
 					)
 				));

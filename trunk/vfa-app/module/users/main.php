@@ -79,7 +79,7 @@ class module_users extends abstract_module
 	{
 		$tMessage = null;
 		$oUserModel = new model_user();
-		$tColumns = array('username', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
+		$tColumns = array('login', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
 
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
@@ -111,7 +111,7 @@ class module_users extends abstract_module
 	{
 		$tMessage = null;
 		$oUserModel = new model_user();
-		$tColumns = array('user_id', 'username', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
+		$tColumns = array('user_id', 'login', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
 
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
@@ -229,7 +229,7 @@ class module_users extends abstract_module
 
 		if ($oUser->isValid()) {
 			$bSave = false;
-			$oUserDoublon = $oUserModel->findByLogin(_root::getParam('username', null));
+			$oUserDoublon = $oUserModel->findByLogin(_root::getParam('login', null));
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
 				$bSave = true;
 			} else if ((null != $oUser->getId()) && ($oUserDoublon->getId() == $oUser->getId())) {
@@ -241,7 +241,7 @@ class module_users extends abstract_module
 				$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
 				_root::redirect('users::read', array('id' => $oUser->user_id));
 			} else {
-				$oUser->setMessages(array('username' => array('doublon')));
+				$oUser->setMessages(array('login' => array('doublon')));
 			}
 		}
 		// return $oUser->getListError();
