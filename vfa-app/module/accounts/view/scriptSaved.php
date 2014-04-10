@@ -1,9 +1,15 @@
 <div id="modalAccount" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-body">
+			<div class="modal-header bg-info">
 				<button type="button" class="close" data-dismiss="modal">×</button>
-				<h3>Données enregistrées</h3>
+				<i class="glyphicon glyphicon-info-sign text-primary" style="font-size: 2em;"></i>
+			</div>
+			<div class="modal-body">
+<!--				<button type="button" class="close" data-dismiss="modal">×</button>-->
+				<h4>
+<!--					<i class="glyphicon glyphicon-info-sign with-text"></i>-->
+					<?php echo $this->text ?></h4>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-primary" data-dismiss="modal">

@@ -51,12 +51,20 @@ class module_accounts extends abstract_module
 			$tMessage = $oUser->getMessages();
 		}
 
+
 		$oView = new _view('accounts::edit');
 		$oView->oUser = $oUser;
 		$oView->tMessage = $tMessage;
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
+
+		$alias = $oUser->alias;
+		$email = $oUser->email;
+		$oView->changeLogin = false;
+		if (isset($alias) && isset($email)) {
+			$oView->changeLogin = true;
+		}
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -76,64 +84,123 @@ class module_accounts extends abstract_module
 			return $oUser;
 		}
 
-		var_dump(_root::getParam('submit'));
-		$oUserModel = new model_user();
 		$iId = _root::getParam('user_id');
 		if ($iId == null) {
 			return null;
 		} else {
-			$oUser = $oUserModel->findById($iId);
+			$oUser = model_user::getInstance()->findById($iId);
 		}
 		$oUser->modified_date = plugin_vfa::dateTimeSgbd();
+
+		switch (_root::getParam('submit')) {
+			case 'savePassword':
+				return $this->savePassword($oUser);
+				break;
+			case 'saveLogin':
+				return $this->saveLogin($oUser);
+				break;
+			default:
+				return $this->saveDefault($oUser);
+		}
+	}
+
+	private function saveDefault($poUser)
+	{
 		// Copie la saisie dans un enregistrement
-		$tColumns = array('user_id', 'login', 'email', 'alias', 'last_name', 'first_name', 'birthyear', 'gender');
+		$tColumns = array('alias', 'last_name', 'first_name', 'birthyear', 'gender');
 		foreach ($tColumns as $sColumn) {
-			if (in_array($sColumn, $oUserModel->getIdTab())) {
-				continue;
-			}
-			if ((_root::getParam($sColumn, null) == null) && (null != $oUser->$sColumn)) {
-				$oUser->$sColumn = null;
+			if ((_root::getParam($sColumn, null) == null) && (null != $poUser->$sColumn)) {
+				$poUser->$sColumn = null;
 			} else {
-				$oUser->$sColumn = _root::getParam($sColumn, null);
+				$poUser->$sColumn = _root::getParam($sColumn, null);
 			}
 		}
+
+		if ($poUser->isValid()) {
+			// Sauvegarde
+			$poUser->save();
+			// Met à jour la session
+			$oUserSession = _root::getAuth()->getUserSession();
+			$oUserSession->setUser($poUser);
+			_root::getAuth()->setUserSession($oUserSession);
+			// Prepare et Affiche la popup
+			$scriptView = new _view('accounts::scriptSaved');
+			$scriptView->text = 'Les données de votre compte sont enregistrées';
+			$this->oLayout->add('script', $scriptView);
+		}
+		return $poUser;
+	}
+
+	private function savePassword($poUser)
+	{
 		// Gère la saisie du mot de passe
-		$canValidate = false;
+		$canSave = false;
 		$newPassword = _root::getParam('newPassword');
 		$confirmPassword = _root::getParam('confirmPassword');
 		if (null != $newPassword) {
 			$lenPassword = strlen($newPassword);
 			if (($lenPassword < 7) OR ($lenPassword > 30)) {
-				$oUser->openPassword = true;
-				$oUser->newPassword = $newPassword;
-				$oUser->confirmPassword = $confirmPassword;
-				$oUser->setMessages(array('newPassword' => array('badSize')));
+				$poUser->openPassword = true;
+				$poUser->newPassword = $newPassword;
+				$poUser->confirmPassword = $confirmPassword;
+				$poUser->setMessages(array('newPassword' => array('badSize')));
 			} else {
 				if ($newPassword === $confirmPassword) {
-					$oUser->password = sha1($newPassword);
-					$canValidate = true;
+					$poUser->password = sha1($newPassword);
+					$canSave = true;
 				} else {
-					$oUser->openPassword = true;
-					$oUser->newPassword = $newPassword;
-					$oUser->confirmPassword = $confirmPassword;
-					$oUser->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
+					$poUser->openPassword = true;
+					$poUser->newPassword = $newPassword;
+					$poUser->confirmPassword = $confirmPassword;
+					$poUser->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
 				}
 			}
-		} else {
-			$canValidate = true;
 		}
 
-		if (true == $canValidate && $oUser->isValid()) {
+		if (true == $canSave && $poUser->isValid()) {
 			// Sauvegarde
-			$oUser->save();
+			$poUser->save();
 			// Met à jour la session
 			$oUserSession = _root::getAuth()->getUserSession();
-			$oUserSession->setUser($oUser);
+			$oUserSession->setUser($poUser);
 			_root::getAuth()->setUserSession($oUserSession);
-			//_root::redirect('accounts::saved');
-			$this->oLayout->add('script', new _view('accounts::scriptSaved'));
+			// Prepare et Affiche la popup
+			$scriptView = new _view('accounts::scriptSaved');
+			$scriptView->text = 'Votre nouveau mot de passe est enregistré';
+			$this->oLayout->add('script', $scriptView);
 		}
-		return $oUser;
+		return $poUser;
+	}
+
+	private function saveLogin($poUser)
+	{
+		$canSave = false;
+		$newLogin = _root::getParam('newLogin');
+		if ($newLogin != $poUser->login) {
+			$oUserDoublon = model_user::getInstance()->findByLogin($newLogin);
+			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
+				$poUser->login = $newLogin;
+				$canSave = true;
+			} else {
+				$poUser->setMessages(array('newLogin' => array('doublon')));
+				$poUser->openLogin = true;
+			}
+		}
+
+		if (true == $canSave && $poUser->isValid()) {
+			// Sauvegarde
+			$poUser->save();
+			// Met à jour la session
+			$oUserSession = _root::getAuth()->getUserSession();
+			$oUserSession->setUser($poUser);
+			_root::getAuth()->setUserSession($oUserSession);
+			// Prepare et Affiche la popup
+			$scriptView = new _view('accounts::scriptSaved');
+			$scriptView->text = '<p>Votre nouvel identifiant <strong>' . $poUser->login .
+				'</strong> est enregistré.</p><p><br>N\'oubliez de l\'utiliser lors de votre prochaine connexion.';
+			$this->oLayout->add('script', $scriptView);
+		}
+		return $poUser;
 	}
 
 
