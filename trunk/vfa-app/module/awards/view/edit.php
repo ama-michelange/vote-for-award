@@ -23,7 +23,7 @@
 								<i class="glyphicon glyphicon-info-sign"></i>
 							</span>
 						</label>
-						<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oAward->name ?>" />
+						<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oAward->name ?>" autofocus />
 						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'name')?></span>
 					</div>
 				</div>
@@ -130,17 +130,17 @@
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
-				<?php if(trim($this->oAward->award_id)==false):?>
-				<a class="btn btn-default" href="<?php echo $this->getLink('awards::index') ?>"><i
-					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
-				<?php else:?>
-				<a class="btn btn-default"
-					href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->award_id)) ?>"><i
-					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
-				<?php endif;?>
 				<button class="btn btn-primary" type="submit">
 					<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
 				</button>
+				<?php if(trim($this->oAward->award_id)==false):?>
+					<a class="btn btn-default" href="<?php echo $this->getLink('awards::index') ?>"><i
+					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
+				<?php else:?>
+					<a class="btn btn-default"
+					href="<?php echo $this->getLink('awards::read',array('id'=>$this->oAward->award_id)) ?>"><i
+					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
+				<?php endif;?>
 			</div>
 		</div>
 		<?php endif;?>

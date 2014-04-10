@@ -24,7 +24,7 @@
 									<i class="glyphicon glyphicon-info-sign"></i>
 								</span>
 							</label>
-							<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oSelection->name ?>"/>
+							<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oSelection->name ?>" autofocus />
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'name') ?></span>
 						</div>
 					</div>
@@ -43,6 +43,9 @@
 			</div>
 			<div class="panel-footer clearfix">
 				<div class="pull-right">
+					<button class="btn btn-primary" type="submit">
+						<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
+					</button>
 					<?php if (trim($this->oSelection->selection_id) == false): ?>
 						<a class="btn btn-default" href="<?php echo $this->getLink('selections::index') ?>"><i
 								class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
@@ -51,9 +54,6 @@
 							href="<?php echo $this->getLink('selections::read', array('id' => $this->oSelection->selection_id)) ?>"><i
 								class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 					<?php endif; ?>
-					<button class="btn btn-primary" type="submit">
-						<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
-					</button>
 				</div>
 			</div>
 		<?php endif; ?>

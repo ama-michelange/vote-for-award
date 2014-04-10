@@ -9,20 +9,20 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="inputIdent">Identifiant</label> <input type="text" id="inputIdent" name="login"
-							class="form-control" placeholder="Mon identifiant" required="required" autofocus="autofocus" />
+						<label for="inputIdent">Identifiant</label>
+						<input type="text" id="inputIdent" name="login" class="form-control" placeholder="Mon identifiant" required autofocus />
 					</div>
 					<div class="form-group">
-						<label for="inputPassword">Mot de passe</label> <input type="password" id="inputPassword"
-							name="password" class="form-control" required="required" />
+						<label for="inputPassword">Mot de passe</label>
+						<input type="password" id="inputPassword" name="password" class="form-control" required />
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" >
+						<i class="glyphicon glyphicon-ok with-text"></i>Ok
+					</button>
 					<button class="btn btn-default" data-dismiss="modal">
 						<i class="glyphicon glyphicon-remove with-text"></i>Annuler
-					</button>
-					<button type="submit" class="btn btn-primary">
-						<i class="glyphicon glyphicon-ok with-text"></i>Ok
 					</button>
 				</div>
 			</form>

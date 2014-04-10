@@ -33,7 +33,7 @@ $(document).ready(function () {
         'weekStart': 1
     });
 
-    $("#myModal").on('shown', function () {
+    $("#myModal").on('shown.bs.modal', function () {
         $('input:text:visible:first', this).focus();
     });
 
@@ -67,18 +67,18 @@ $(document).ready(function () {
         var href = $parent.attr('href');
         // debug('href = ' + href);
 
-        $(href).on('hidden.bs.collapse', $.proxy(this.hidden, this));
-        $(href).on('shown.bs.collapse', $.proxy(this.shown, this));
+        $(href).on('hide.bs.collapse', $.proxy(this.hidden, this));
+        $(href).on('show.bs.collapse', $.proxy(this.shown, this));
     };
 
     Chevron.prototype.hidden = function () {
-        this.$element.removeClass('glyphicon-chevron-up');
-        this.$element.addClass('glyphicon-chevron-down');
+        this.$element.removeClass('glyphicon-collapse-up');
+        this.$element.addClass('glyphicon-collapse-down');
         // alert("caché");
     };
     Chevron.prototype.shown = function () {
-        this.$element.removeClass('glyphicon-chevron-down');
-        this.$element.addClass('glyphicon-chevron-up');
+        this.$element.removeClass('glyphicon-collapse-down');
+        this.$element.addClass('glyphicon-collapse-up');
         // alert("shown");
     };
 

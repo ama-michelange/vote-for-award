@@ -27,7 +27,7 @@
 <!--						</div>-->
 						<div class="panel-body">
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login')?>">
-								<label for="inputLogin">Login</label>
+								<label for="inputLogin">Identifiant</label>
 								<input class="form-control" type="text" id="inputLogin" name="loginDisabled" value="<?php echo $this->oUser->login ?>" disabled />
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login')?></span>
 							</div>
@@ -38,7 +38,7 @@
 <!--								</a>-->
 <!--							</div>-->
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?>">
-								<label for="inputEmail">Email</label>
+								<label for="inputEmail">Adresse Email</label>
 								<input class="form-control" type="email" id="inputEmail" name="emailDisabled" value="<?php echo $this->oUser->email ?>" disabled />
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email')?></span>
 							</div>
@@ -56,25 +56,74 @@
 								// Gère l'ouverture ou la fermeture du panel des mots de passe
 								if ($this->oUser->openPassword ) {
 									$upOrDownPassword = 'up';
-									$collapsePassword = ' in';
+									$collapseInPassword = ' in';
 								} else {
 									$upOrDownPassword = 'down';
-									$collapsePassword = '';
+									$collapseInPassword = '';
+								}
+								// Gère l'ouverture ou la fermeture du panel de sélection du login
+								if ($this->oUser->openLogin ) {
+									$upOrDownLogin = 'up';
+									$collapseInLogin = ' in';
+								} else {
+									$upOrDownLogin = 'down';
+									$collapseInLogin = '';
 								}
 							?>
 							<div class="panel-group" id="accordion">
+								<?php if ($this->changeLogin): ?>
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-												Changer mon mot de passe
+											<a data-toggle="collapse" data-parent="#accordion" href="#collapseLogin">
+												Changer mon identifiant
 											</a>
-											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-												<i data-chevron="collapse" class="glyphicon glyphicon-chevron-<?php echo $upOrDownPassword ?> with-text"></i>
+											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin">
+												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-<?php echo $upOrDownLogin ?> text-muted"></i>
 											</a>
 										</h4>
 									</div>
-									<div id="collapseOne" class="panel-collapse collapse<?php echo $collapsePassword ?>">
+									<div id="collapseLogin" class="panel-collapse collapse<?php echo $collapseInLogin ?>">
+										<div class="panel-body">
+											<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newLogin')?>">
+												<select id="inputNewLogin" class="form-control" name="newLogin" size="2" data-placeholder="Sélectionnez votre identifiant">
+													<option></option>
+													<optgroup label="Email">
+														<option value="<?php echo $this->oUser->email ?>">
+															<?php echo $this->oUser->email ?>
+														</option>
+													</optgroup>
+													<optgroup label="Alias">
+														<option value="<?php echo $this->oUser->alias ?>">
+															<?php echo $this->oUser->alias ?>
+														</option>
+													</optgroup>
+												</select>
+												<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newLogin')?></span>
+											</div>
+										</div>
+										<div class="panel-footer clearfix">
+											<div class="pull-right">
+												<button class="btn btn-primary btn-sm" type="submit" name="submit" value="saveLogin">
+													<i class="glyphicon glyphicon-ok with-text"></i>Changer
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<?php endif; ?>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#accordion" href="#collapsePassword">
+												Changer mon mot de passe
+											</a>
+											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapsePassword">
+												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-<?php echo $upOrDownPassword ?> text-muted"></i>
+											</a>
+										</h4>
+									</div>
+									<div id="collapsePassword" class="panel-collapse collapse<?php echo $collapseInPassword ?>">
 										<div class="panel-body">
 											<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newPassword')?>">
 												<label for="inputNewPass">Nouveau mot de passe</label>
@@ -89,8 +138,8 @@
 										</div>
 										<div class="panel-footer clearfix">
 											<div class="pull-right">
-												<button class="btn btn-primary" type="submit" name="submit" value="savePassword">
-													<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
+												<button class="btn btn-primary btn-sm" type="submit" name="submit" value="savePassword">
+													<i class="glyphicon glyphicon-ok with-text"></i>Changer
 												</button>
 											</div>
 										</div>
@@ -99,52 +148,23 @@
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-												Changer mon email
+											<a data-toggle="collapse" data-parent="#accordion" href="#collapseEmail">
+												Changer mon adresse email
+											</a>
+											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseEmail">
+												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-down text-muted"></i>
 											</a>
 										</h4>
 									</div>
-									<div id="collapseTwo" class="panel-collapse collapse">
+									<div id="collapseEmail" class="panel-collapse collapse">
 										<div class="panel-body">
 											Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 										</div>
 									</div>
 								</div>
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-												Collapsible Group Item #3
-											</a>
-										</h4>
-									</div>
-									<div id="collapseThree" class="panel-collapse collapse">
-										<div class="panel-body">
-											Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="panel-footer clearfix">
-							<div class="btn-group pull-right">
-<!--								<button class="btn btn-primary" type="submit" name="submit" value="changePassword">-->
-<!--									<i class="glyphicon glyphicon-ok with-text"></i>Changer-->
-<!--								</button>-->
-<!--								<div class="btn-group">-->
-									<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-										Changer <span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu" role="menu">
-										<li><a href="#getPassword" data-toggle="collapse">Changer mon mot de passe</a></li>
-										<li><a href="#">Changer mon email</a></li>
-										<li class="divider"></li>
-										<li><a href="#">Sélectionner Mon login</a></li>
-									</ul>
 							</div>
 						</div>
 					</div>
-
 				</div>
 				<div class="col-sm-6 col-md-6">
 					<div class="panel panel-info panel-inner">
@@ -195,7 +215,7 @@
 						</div>
 						<div class="panel-footer clearfix">
 							<div class="pull-right">
-								<button class="btn btn-primary" type="submit" name="submit" value="save">
+								<button class="btn btn-primary btn-sm" type="submit" name="submit" value="save">
 									<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
 								</button>
 							</div>

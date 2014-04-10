@@ -25,7 +25,8 @@
 					data-original-title="Choisissez un ou plusieurs albums pour un nominé. Pour rechercher un album, tapez les premiers caractères de son titre. Pour ouvrir la liste déroulante, cliquez sur la partie vide du champ de saisie. Pour supprimer un album, cliquez sur la croix. Pour ajouter un 2ème album de la même série, faites comme le premier.">
 						<i class="glyphicon glyphicon-info-sign"></i>
 				</span>
-				</label> <select id="inputDocs" class="form-control" name="title_docs[]" size="13" multiple>
+				</label>
+				<select id="inputDocs" class="form-control" name="title_docs[]" size="13" multiple autofocus>
 					<?php foreach($this->tSelectedDocs as $tDoc):?>
 					<option value="<?php echo $tDoc[0] ?>" <?php if($tDoc[2]): echo 'selected'; endif;?>>
 						<?php echo $tDoc[1]?>
@@ -36,6 +37,9 @@
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
+				<button class="btn btn-primary" type="submit">
+					<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
+				</button>
 				<?php if (null == $this->oTitle->getId()):?>
 					<a class="btn btn-default"
 					href="<?php echo $this->getLink('nominees::list',array('idSelection'=>$this->oSelection->getId())) ?>"><i
@@ -45,9 +49,6 @@
 					href="<?php echo $this->getLink('nominees::read',array('id'=>$this->oTitle->getId(),'idSelection'=>$this->oSelection->getId())) ?>"><i
 					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<?php endif;?>
-				<button class="btn btn-primary" type="submit">
-					<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
-				</button>
 			</div>
 		</div>
 		<?php endif;?>
