@@ -112,10 +112,14 @@ class module_accounts extends abstract_module
 		// Copie la saisie dans un enregistrement
 		$tColumns = array('alias', 'last_name', 'first_name', 'birthyear', 'gender');
 		foreach ($tColumns as $sColumn) {
-			if ((_root::getParam($sColumn, null) == null) && (null != $poUser->$sColumn)) {
+			$param = _root::getParam($sColumn, null);
+			if (0 == strlen($param)) {
+				$param = null;
+			}
+			if ((null == $param) && (null != $poUser->$sColumn)) {
 				$poUser->$sColumn = null;
 			} else {
-				$poUser->$sColumn = _root::getParam($sColumn, null);
+				$poUser->$sColumn = $param;
 			}
 		}
 
@@ -128,6 +132,7 @@ class module_accounts extends abstract_module
 			_root::getAuth()->setUserSession($oUserSession);
 			// Prepare et Affiche la popup
 			$scriptView = new _view('accounts::scriptSaved');
+			$scriptView->title = 'Données personnelles';
 			$scriptView->text = 'Les données de votre compte sont enregistrées';
 			$this->oLayout->add('script', $scriptView);
 		}
@@ -169,6 +174,7 @@ class module_accounts extends abstract_module
 			_root::getAuth()->setUserSession($oUserSession);
 			// Prepare et Affiche la popup
 			$scriptView = new _view('accounts::scriptSaved');
+			$scriptView->title = "Changer mon mot de passe";
 			$scriptView->text = 'Votre nouveau mot de passe est enregistré';
 			$this->oLayout->add('script', $scriptView);
 		}
@@ -199,6 +205,7 @@ class module_accounts extends abstract_module
 			_root::getAuth()->setUserSession($oUserSession);
 			// Prepare et Affiche la popup
 			$scriptView = new _view('accounts::scriptSaved');
+			$scriptView->title = "Changer mon identifiant";
 			$scriptView->text = '<p>Votre nouvel identifiant <strong>' . $poUser->login .
 				'</strong> est enregistré.</p><p><br>N\'oubliez de l\'utiliser lors de votre prochaine connexion.';
 			$this->oLayout->add('script', $scriptView);
@@ -209,7 +216,6 @@ class module_accounts extends abstract_module
 	private function saveEmail($poUser)
 	{
 		$newEmail = _root::getParam('newEmail');
-		var_dump($newEmail);
 		if ($newEmail != $poUser->email) {
 			$oldEmail = $poUser->email;
 			$poUser->email = $newEmail;
@@ -223,9 +229,10 @@ class module_accounts extends abstract_module
 				_root::getAuth()->setUserSession($oUserSession);
 				// Prepare et Affiche la popup
 				$scriptView = new _view('accounts::scriptSaved');
-				$scriptView->text = '<p>Un message vient d\être envoyé à l\'adresse <strong>' . $poUser->email .
-					'</strong>.</p><p><br>Consultez votre messagerie !<br/>' .
-					'<p>Le lien contenu dans ce message vous permet de confirmer le changement d\'adresse.</p>';
+				$scriptView->title = "Changer mon adresse Email";
+				$scriptView->text = '<p>Un message vient d\'être envoyé à l\'adresse <strong>' . $poUser->email . '</strong>.</p>' .
+					'<p>Le lien contenu dans ce message vous permet de confirmer le changement d\'adresse.</p>' .
+					'<p><br>Consultez votre messagerie dans les 48 heures !<br/>';
 				$this->oLayout->add('script', $scriptView);
 			} else {
 				$tMess = $poUser->getMessages();

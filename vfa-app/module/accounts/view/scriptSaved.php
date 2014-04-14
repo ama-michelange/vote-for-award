@@ -3,7 +3,10 @@
 		<div class="modal-content">
 			<div class="modal-header bg-info">
 				<button type="button" class="close" data-dismiss="modal">×</button>
-				<i class="glyphicon glyphicon-info-sign text-primary" style="font-size: 2em;"></i>
+
+				<h4><i class="glyphicon glyphicon-info-sign text-primary with-text"></i>
+					<?php if ($this->title ) { echo $this->title; } ?>
+				</h4>
 			</div>
 			<div class="modal-body">
 <!--				<button type="button" class="close" data-dismiss="modal">×</button>-->
