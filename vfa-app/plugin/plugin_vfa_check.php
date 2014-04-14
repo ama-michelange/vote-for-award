@@ -12,12 +12,12 @@ class plugin_vfa_check extends plugin_check
 	 * verifie si $uValueA est une date précédente a $uValueB
 	 *
 	 * @access public
-	 * @param string $uValueA
-	 *        	valeur A
-	 * @param string $uValueB
-	 *        	valeur B
+	 * @param string $pValueA
+	 *         valeur A
+	 * @param string $pValueB
+	 *         valeur B
 	 * @param string $sErrorMsg
-	 *        	message d'erreur a afficher
+	 *         message d'erreur a afficher
 	 * @return bool retourne true/false selon
 	 */
 	public function isDateBefore($pValueA, $pValueB, $sErrorMsg = 'isDateBeforeKO')
@@ -39,11 +39,11 @@ class plugin_vfa_check extends plugin_check
 	 *
 	 * @access public
 	 * @param string $uValueA
-	 *        	valeur A
+	 *         valeur A
 	 * @param string $uValueB
-	 *        	valeur B
+	 *         valeur B
 	 * @param string $sErrorMsg
-	 *        	message d'erreur a afficher
+	 *         message d'erreur a afficher
 	 * @return bool retourne true/false selon
 	 */
 	public function isDateAfter($uValueA, $uValueB, $sErrorMsg = 'isDateAfterKO')
@@ -65,9 +65,9 @@ class plugin_vfa_check extends plugin_check
 	 *
 	 * @access public
 	 * @param undefined $uValueA
-	 *        	valeur A
+	 *         valeur A
 	 * @param undefined $uValueB
-	 *        	valeur B
+	 *         valeur B
 	 * @return bool retourne true/false selon
 	 */
 	public function isNotEmptyOr($uValueA, $uValueB, $sErrorMsg = 'isNotEmptyOrKO')
@@ -86,9 +86,9 @@ class plugin_vfa_check extends plugin_check
 	 * Si $uValue est un array, vérifie qu'il contient au moins un élément.
 	 *
 	 * @param undefined $uValue
-	 *        	valeur
+	 *         valeur
 	 * @param string $sErrorMsg
-	 *        	message d'erreur a afficher
+	 *         message d'erreur a afficher
 	 * @return bool retourne true/false selon
 	 * @see plugin_check::isNotEmpty()
 	 */
@@ -106,5 +106,26 @@ class plugin_vfa_check extends plugin_check
 			$this->setLastErrorMsg($sErrorMsg);
 		}
 		return $ret;
+	}
+
+	/**
+	 * verifie si $pValueA ne contient pas $pValueB
+	 *
+	 * @access public
+	 * @param string $pValueA
+	 *         valeur A
+	 * @param string $pValueB
+	 *         valeur B
+	 * @param string $sErrorMsg
+	 *         message d'erreur a afficher
+	 * @return bool retourne true/false selon
+	 */
+	public function isNotContains($pValueA, $pValueB, $sErrorMsg = 'isNotContainsKO')
+	{
+		if (false == strpos($pValueA, $pValueB)) {
+			return true;
+		}
+		$this->setLastErrorMsg($sErrorMsg);
+		return false;
 	}
 }
