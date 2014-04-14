@@ -99,6 +99,9 @@ class module_accounts extends abstract_module
 			case 'saveLogin':
 				return $this->saveLogin($oUser);
 				break;
+			case 'saveEmail':
+				return $this->saveEmail($oUser);
+				break;
 			default:
 				return $this->saveDefault($oUser);
 		}
@@ -203,6 +206,77 @@ class module_accounts extends abstract_module
 		return $poUser;
 	}
 
+	private function saveEmail($poUser)
+	{
+		$newEmail = _root::getParam('newEmail');
+		var_dump($newEmail);
+		if ($newEmail != $poUser->email) {
+			$oldEmail = $poUser->email;
+			$poUser->email = $newEmail;
+
+			if ($poUser->isValid()) {
+				// Sauvegarde
+//				$poUser->save();
+				// Met à jour la session
+				$oUserSession = _root::getAuth()->getUserSession();
+				$oUserSession->setUser($poUser);
+				_root::getAuth()->setUserSession($oUserSession);
+				// Prepare et Affiche la popup
+				$scriptView = new _view('accounts::scriptSaved');
+				$scriptView->text = '<p>Un message vient d\être envoyé à l\'adresse <strong>' . $poUser->email .
+					'</strong>.</p><p><br>Consultez votre messagerie !<br/>' .
+					'<p>Le lien contenu dans ce message vous permet de confirmer le changement d\'adresse.</p>';
+				$this->oLayout->add('script', $scriptView);
+			} else {
+				$tMess = $poUser->getMessages();
+				if (array_key_exists('email', $tMess)) {
+					$tNewMess = array();
+					$tNewMess['newEmail'] = $tMess['email'];
+					$poUser->setMessages($tNewMess);
+					$poUser->newEmail = $newEmail;
+					$poUser->openEmail = true;
+				}
+				$poUser->email = $oldEmail;
+			}
+		}
+		return $poUser;
+	}
+
+	private function sendMail($poInvitation)
+	{
+		$oMail = new plugin_mail();
+		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
+		$oMail->addTo($poInvitation->email);
+		$createdUser = $poInvitation->findCreatedUser();
+		$oMail->addCC($createdUser->email);
+		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
+		// Sujet
+		$oMail->setSubject(plugin_vfa::buildTitleInvitation($poInvitation));
+		// Prepare le body TXT
+		$oViewTxt = new _view('invitations::mailTxt');
+		$oViewTxt->oInvit = $poInvitation;
+		$bodyTxt = $oViewTxt->show();
+		// _root::getLog()->log($bodyTxt);
+		$oMail->setBody($bodyTxt);
+		// Prepare le body HTML
+		$oViewTxt = new _view('invitations::mailHtml');
+		$oViewTxt->oInvit = $poInvitation;
+		$bodyHtml = $oViewTxt->show();
+		// _root::getLog()->log($bodyHtml);
+		$oMail->setBodyHtml($bodyHtml);
+
+		// Envoi le mail
+		try {
+			$sent = $oMail->send();
+		} catch (Exception $e) {
+			$sent = false;
+		}
+		if ($sent) {
+			$poInvitation->state = plugin_vfa::INVITATION_STATE_SENT;
+			$poInvitation->update();
+		}
+		return $sent;
+	}
 
 }
 

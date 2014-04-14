@@ -9,9 +9,7 @@ class model_user extends abstract_model
 
 	protected $sConfig = 'mysql';
 
-	protected $tId = array(
-		'user_id'
-	);
+	protected $tId = array('user_id');
 
 	public static function getInstance()
 	{
@@ -31,7 +29,7 @@ class model_user extends abstract_model
 	public function findAllByGroupId($pGroupId)
 	{
 		$sql = 'SELECT * FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
-			 'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.login';
+			'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.login';
 		// .'AND (vfa_user_groups.group_id = vfa_groups.group_id) '
 		return $this->findMany($sql, $pGroupId);
 	}
@@ -44,11 +42,11 @@ class model_user extends abstract_model
 	/**
 	 * Recherche un utilisateur par son "login".
 	 * Si un utilisateur est trouvé, vérifie si son mot de passe est identique à celui donné.
-	 * 
+	 *
 	 * @param String $pLogin
-	 *        	Le login (ou login) unique dans la table
+	 *         Le login (ou login) unique dans la table
 	 * @param String $pPass
-	 *        	Le mot de passe crypté SHA1
+	 *         Le mot de passe crypté SHA1
 	 * @return L'utilisateur correspondant ou null si non trouvé ou si le mot de passe ne correspond pas
 	 */
 	public function findByLoginAndCheckPass($pLogin, $pPass)
@@ -85,8 +83,8 @@ class model_user extends abstract_model
 
 	/**
 	 * Supprime
-	 * 
-	 * @param int $pIdUser        	
+	 *
+	 * @param int $pIdUser
 	 */
 	public function deleteUserCascades($pIdUser)
 	{
@@ -173,12 +171,13 @@ class row_user extends abstract_row
 		}
 		return $tAwards;
 	}
-	
+
 	/* exemple test validation */
 	private function getCheck()
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
 		$oPluginValid->isNotEmpty('login');
+		$oPluginValid->isNotContains('alias', '@', 'isNotContainsAtKO');
 		$oPluginValid->isNotEmpty('email');
 		if (null != $this->__get('email')) {
 			$oPluginValid->isEmailValid('email');

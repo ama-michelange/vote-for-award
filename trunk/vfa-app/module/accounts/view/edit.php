@@ -42,15 +42,6 @@
 								<input class="form-control" type="email" id="inputEmail" name="emailDisabled" value="<?php echo $this->oUser->email ?>" disabled />
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email')?></span>
 							</div>
-<!--							<div class="--><?php //echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?><!--">-->
-<!--								<label for="inputEmail">Email</label>-->
-<!--								<div class="input-group">-->
-<!--									<input class="form-control" type="email" id="inputEmail" name="emailDisabled" value="--><?php //echo $this->oUser->email ?><!--" disabled />-->
-<!--									<span class="input-group-btn">-->
-<!--										<button class="btn btn-primary" type="button">Changer</button>-->
-<!--									</span>-->
-<!--								</div>-->
-<!--							</div>-->
 
 							<?php
 								// Gère l'ouverture ou la fermeture du panel des mots de passe
@@ -69,6 +60,14 @@
 									$upOrDownLogin = 'down';
 									$collapseInLogin = '';
 								}
+								// Gère l'ouverture ou la fermeture du panel de sélection de l'email
+								if ($this->oUser->openEmail ) {
+									$upOrDownEmail = 'up';
+									$collapseInEmail = ' in';
+								} else {
+									$upOrDownEmail = 'down';
+									$collapseInEmail = '';
+								}
 							?>
 							<div class="panel-group" id="accordion">
 								<?php if ($this->changeLogin): ?>
@@ -79,7 +78,7 @@
 												Changer mon identifiant
 											</a>
 											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin">
-												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-<?php echo $upOrDownLogin ?> text-muted"></i>
+												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-<?php echo $upOrDownLogin ?> text-primary"></i>
 											</a>
 										</h4>
 									</div>
@@ -119,7 +118,7 @@
 												Changer mon mot de passe
 											</a>
 											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapsePassword">
-												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-<?php echo $upOrDownPassword ?> text-muted"></i>
+												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-<?php echo $upOrDownPassword ?> text-primary"></i>
 											</a>
 										</h4>
 									</div>
@@ -149,16 +148,27 @@
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#accordion" href="#collapseEmail">
-												Changer mon adresse email
+												Changer mon adresse Email
 											</a>
 											<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseEmail">
-												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-down text-muted"></i>
+												<i data-chevron="collapse" class="glyphicon glyphicon-collapse-<?php echo $upOrDownEmail ?> text-primary"></i>
 											</a>
 										</h4>
 									</div>
-									<div id="collapseEmail" class="panel-collapse collapse">
+									<div id="collapseEmail" class="panel-collapse collapse<?php echo $collapseInEmail ?>">
 										<div class="panel-body">
-											Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+											<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newEmail')?>">
+												<label for="inputNewEmail">Nouvelle adresse Email</label>
+												<input class="form-control" type="email" id="inputNewEmail" name="newEmail" value="<?php echo $this->oUser->newEmail ?>" />
+												<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newEmail')?></span>
+											</div>
+										</div>
+										<div class="panel-footer clearfix">
+											<div class="pull-right">
+												<button class="btn btn-primary btn-sm" type="submit" name="submit" value="saveEmail">
+													<i class="glyphicon glyphicon-ok with-text"></i>Changer
+												</button>
+											</div>
 										</div>
 									</div>
 								</div>
