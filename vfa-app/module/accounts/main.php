@@ -279,7 +279,7 @@ class module_accounts extends abstract_module
 			$sent = false;
 		}
 		if ($sent) {
-			$poInvitation->state = plugin_vfa::INVITATION_STATE_SENT;
+			$poInvitation->state = plugin_vfa::STATE_SENT;
 			$poInvitation->update();
 		}
 		return $sent;

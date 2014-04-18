@@ -56,7 +56,7 @@ class module_groups extends abstract_module
 		$oGroup = $this->save();
 		if (null == $oGroup) {
 			$oGroup = new row_group();
-			$oGroup->type = plugin_vfa::GROUP_TYPE_READER;
+			$oGroup->type = plugin_vfa::TYPE_READER;
 		} else {
 			$tMessage = $oGroup->getMessages();
 		}

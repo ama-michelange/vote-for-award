@@ -62,7 +62,7 @@ class module_invitations extends abstract_module
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
-			$oRegistry->type = plugin_vfa::INVITATION_TYPE_READER;
+			$oRegistry->type = plugin_vfa::TYPE_READER;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
 		}
@@ -81,7 +81,7 @@ class module_invitations extends abstract_module
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
-			$oRegistry->type = plugin_vfa::INVITATION_TYPE_RESPONSIBLE;
+			$oRegistry->type = plugin_vfa::TYPE_RESPONSIBLE;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
 		}
@@ -118,7 +118,7 @@ class module_invitations extends abstract_module
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
-			$oRegistry->type = plugin_vfa::INVITATION_TYPE_BOARD;
+			$oRegistry->type = plugin_vfa::TYPE_BOARD;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
 		}
@@ -215,10 +215,10 @@ class module_invitations extends abstract_module
 	{
 		switch (_root::getAction()) {
 			case 'board':
-				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::GROUP_TYPE_BOARD);
+				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::TYPE_BOARD);
 				break;
 			case 'responsible':
-				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::GROUP_TYPE_READER);
+				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::TYPE_READER);
 				break;
 			default:
 				$tGroups = _root::getAuth()->getUserSession()->getReaderGroups();
@@ -418,7 +418,7 @@ class module_invitations extends abstract_module
 		// Remplissage de l'invit
 		$oInvit->created_user_id = _root::getAuth()->getUserSession()->getUser()->user_id;
 		$oInvit->invitation_key = $this->buildInvitationKey($poRegistry);
-		$oInvit->state = plugin_vfa::INVITATION_STATE_OPEN;
+		$oInvit->state = plugin_vfa::STATE_OPEN;
 		$oInvit->type = $poRegistry->type;
 		$oInvit->email = $poRegistry->email;
 		$oInvit->group_id = $poRegistry->group_id;
@@ -465,7 +465,7 @@ class module_invitations extends abstract_module
 			$sent = false;
 		}
 		if ($sent) {
-			$poInvitation->state = plugin_vfa::INVITATION_STATE_SENT;
+			$poInvitation->state = plugin_vfa::STATE_SENT;
 			$poInvitation->update();
 		}
 		return $sent;

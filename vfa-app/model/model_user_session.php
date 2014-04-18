@@ -27,7 +27,7 @@ class model_user_session
 		
 		$oGroups = model_group::getInstance()->findAllByUserId($pUser->user_id);
 		$oUserSession->setGroups($oGroups);
-		$oReaderGroups = model_group::getInstance()->findAllByUserIdByType($pUser->user_id, plugin_vfa::GROUP_TYPE_READER);
+		$oReaderGroups = model_group::getInstance()->findAllByUserIdByType($pUser->user_id, plugin_vfa::TYPE_READER);
 		$oUserSession->setReaderGroups($oReaderGroups);
 		
 		$oAwards = model_award::getInstance()->findAllByUserId($pUser->user_id);

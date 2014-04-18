@@ -10,30 +10,23 @@
 class plugin_vfa
 {
 
-	const INVITATION_TYPE_BOARD = 'BOARD';
+	const CATEGORY_INVITATION = 'INVITATION';
 
-	const INVITATION_TYPE_READER = 'READER';
+	const TYPE_BOARD = 'BOARD';
+	const TYPE_READER = 'READER';
+	const TYPE_RESPONSIBLE = 'RESPONSIBLE';
 
-	const INVITATION_TYPE_RESPONSIBLE = 'RESPONSIBLE';
-
-	const INVITATION_STATE_OPEN = 'OPEN';
-
-	const INVITATION_STATE_SENT = 'SENT';
-
-	const INVITATION_STATE_ACCEPTED = 'ACCEPTED';
-
-	const INVITATION_STATE_REJECTED = 'REJECTED';
-
-	const GROUP_TYPE_BOARD = 'BOARD';
-
-	const GROUP_TYPE_READER = 'READER';
+	const STATE_OPEN = 'OPEN';
+	const STATE_SENT = 'SENT';
+	const STATE_ACCEPTED = 'ACCEPTED';
+	const STATE_REJECTED = 'REJECTED';
 
 	/**
 	 * Déplace, s'il existe, l'article du début d'un titre à la fin du même titre.
 	 * Ex : 'La page blanche' devient 'Page blanche (La)'
 	 *
 	 * @param string $pTitle
-	 *        	Titre à traiter
+	 *         Titre à traiter
 	 * @return string Le titre traité
 	 */
 	public static function pushArticle($pTitle)
@@ -41,7 +34,7 @@ class plugin_vfa
 		$sTitleUp = trim(strtoupper($pTitle));
 		$sTrimTitle = trim($pTitle);
 		$sTitleRet = $sTrimTitle;
-		
+
 		if (false == empty($sTitleUp)) {
 			if (0 == substr_compare($sTitleUp, 'LES ', 0, 4)) {
 				$sTitleRet = ucfirst(substr($sTrimTitle, 4)) . ' (' . substr($sTrimTitle, 0, 3) . ')';
@@ -60,7 +53,7 @@ class plugin_vfa
 	 * Renvoie le premier paramètre.
 	 * Le séparateur est celui de la QueryString '&'.
 	 *
-	 * @param string $pLink        	
+	 * @param string $pLink
 	 * @return string Le 1er param sinon FALSE
 	 */
 	public static function getFirstParam($pLink)
@@ -76,7 +69,7 @@ class plugin_vfa
 	 * Renvoie le premier module du lien donné.
 	 * Le séparateur est '::'.
 	 *
-	 * @param string $pLink        	
+	 * @param string $pLink
 	 * @return string Le 1er module sinon FALSE
 	 */
 	public static function getFirstModule($pLink)
@@ -91,7 +84,7 @@ class plugin_vfa
 	/**
 	 * Renvoie vrai si le lien partiel donné contient le ParamNav courant.
 	 *
-	 * @param string $pLink        	
+	 * @param string $pLink
 	 * @return boolean
 	 */
 	public static function hasParamNav($pLink)
@@ -105,7 +98,7 @@ class plugin_vfa
 	/**
 	 * Renvoie vrai si le lien partiel donné contient le Module courant.
 	 *
-	 * @param string $pLink        	
+	 * @param string $pLink
 	 * @return boolean
 	 */
 	public static function hasModule($pLink)
@@ -119,7 +112,7 @@ class plugin_vfa
 	/**
 	 * Renvoie vrai si le lien partiel donné contient le Module courant.
 	 *
-	 * @param string $pLink        	
+	 * @param string $pLink
 	 * @return boolean
 	 */
 	public static function hasModuleInLinks($pLinks)
@@ -138,7 +131,7 @@ class plugin_vfa
 	 */
 	public static function loadI18n()
 	{
-		if (! isset($_SESSION['lang'])) {
+		if (!isset($_SESSION['lang'])) {
 			$_SESSION['lang'] = _root::getConfigVar('language.default');
 		}
 		plugin_i18n::load($_SESSION['lang']);
@@ -148,7 +141,7 @@ class plugin_vfa
 	 * Transforme une chaine au format SGBD en date.
 	 *
 	 * @param string $pDate
-	 *        	La date au format SGBD
+	 *         La date au format SGBD
 	 * @return plugin_date La date ou NULL si pb
 	 */
 	public static function toDateFromSgbd($pDate)
@@ -164,11 +157,11 @@ class plugin_vfa
 	 * Change le format d'une date.
 	 *
 	 * @param string $pDate
-	 *        	La date au format source
+	 *         La date au format source
 	 * @param string $pFormatSrc
-	 *        	Le format source
+	 *         Le format source
 	 * @param string $pFormatDst
-	 *        	Le format de destination
+	 *         Le format de destination
 	 * @return string La date au format de destination ou NULL si pb
 	 */
 	public static function changeDateFormat($pDate, $pFormatSrc, $pFormatDst)
@@ -187,11 +180,11 @@ class plugin_vfa
 	 * Change le format d'une horodate.
 	 *
 	 * @param string $pDatetime
-	 *        	La horodate au format source
+	 *         La horodate au format source
 	 * @param string $pFormatSrc
-	 *        	Le format source
+	 *         Le format source
 	 * @param string $pFormatDst
-	 *        	Le format de destination
+	 *         Le format de destination
 	 * @return string La horodate au format de destination ou NULL si pb
 	 */
 	public static function changeDatetimeFormat($pDate, $pFormatSrc, $pFormatDst)
@@ -210,7 +203,7 @@ class plugin_vfa
 	 * Change le format d'une date SGBD vers le format d'affichage.
 	 *
 	 * @param string $pDate
-	 *        	La date au format SGBD
+	 *         La date au format SGBD
 	 * @return La date au format d'affichage
 	 */
 	public static function toStringDateShow($pDate)
@@ -222,7 +215,7 @@ class plugin_vfa
 	 * Change le format d'une date et d'une heure SGBD vers le format d'affichage.
 	 *
 	 * @param string $pDateTime
-	 *        	La date et heure au format SGBD
+	 *         La date et heure au format SGBD
 	 * @return La date et l'haure au format d'affichage
 	 */
 	public static function toStringDateTimeShow($pDate)
@@ -234,7 +227,7 @@ class plugin_vfa
 	 * Change le format d'une date d'affichage vers le format SGBD.
 	 *
 	 * @param string $pDate
-	 *        	La date au format d'affichage
+	 *         La date au format d'affichage
 	 * @return La date au format SGBD
 	 */
 	public static function toStringDateSgbd($pDate)
@@ -255,7 +248,7 @@ class plugin_vfa
 	/**
 	 * Copie les valeurs du tableau dans les clés.
 	 *
-	 * @param array $pArray        	
+	 * @param array $pArray
 	 * @return array
 	 */
 	public static function copyValuesToKeys($pArray)
@@ -264,7 +257,7 @@ class plugin_vfa
 		if (isset($pArray)) {
 			$tRet = array();
 			$size = count($pArray);
-			for ($i = 0; $i < $size; ++ $i) {
+			for ($i = 0; $i < $size; ++$i) {
 				$tRet[$pArray[$i]] = $pArray[$i];
 			}
 		}
@@ -275,7 +268,7 @@ class plugin_vfa
 	 * Formate le nom d'un titre avec le 1er enregistrement des documents.
 	 *
 	 * @param
-	 *        	array of row_doc $ptRowDocs Tableau d'enregistrement de document
+	 *         array of row_doc $ptRowDocs Tableau d'enregistrement de document
 	 * @return string Titre du titre formaté
 	 */
 	public static function formatTitle($ptRowDocs)
@@ -291,7 +284,7 @@ class plugin_vfa
 	 * Formate les tomes d'un titre avec les numéros de tomes des documents.
 	 *
 	 * @param
-	 *        	array of row_doc $ptRowDocs Tableau d'enregistrement de document
+	 *         array of row_doc $ptRowDocs Tableau d'enregistrement de document
 	 * @return string Les tomes du titre formaté
 	 */
 	public static function formatTitleNumbers($ptRowDocs)
@@ -299,7 +292,7 @@ class plugin_vfa
 		$sTomes = null;
 		if ((isset($ptRowDocs)) && (count($ptRowDocs) > 0)) {
 			$size = count($ptRowDocs);
-			for ($i = 0; $i < $size; ++ $i) {
+			for ($i = 0; $i < $size; ++$i) {
 				if ($ptRowDocs[$i]->number) {
 					if ($i == 0) {
 						$sTomes = '#' . $ptRowDocs[$i]->number;
@@ -316,7 +309,7 @@ class plugin_vfa
 	 * Renvoiee le genre d'un utilisateur sius forme textuelle.
 	 *
 	 * @param
-	 *        	row_user L'utilisateur
+	 *         row_user L'utilisateur
 	 * @return string Le genre Homme, Femme ou NULL si inconnu
 	 */
 	public static function getTextGender($oUser)
@@ -337,9 +330,9 @@ class plugin_vfa
 	 * Construit les données sélectionnées pour un composant SELECT MULTIPLE.
 	 *
 	 * @param
-	 *        	array(id:int ->label:string) $ptAll Tableau clé/valeur de tous les éléments
+	 *         array(id:int ->label:string) $ptAll Tableau clé/valeur de tous les éléments
 	 * @param array(id:int->?) $ptSelected
-	 *        	Tableau clé/valeur des éléments sélectionnés, les clés contiennent les identifiants
+	 *         Tableau clé/valeur des éléments sélectionnés, les clés contiennent les identifiants
 	 * @return array(id:int, label:string, selected:boolean)
 	 */
 	public static function buildOptionSelected($ptAll, $ptSelected)
@@ -347,23 +340,11 @@ class plugin_vfa
 		$tSelected = array();
 		foreach ($ptAll as $id => $label) {
 			if (null == $ptSelected) {
-				$tSelected[] = array(
-					$id,
-					$label,
-					FALSE
-				);
+				$tSelected[] = array($id, $label, FALSE);
 			} elseif (is_array($ptSelected)) {
-				$tSelected[] = array(
-					$id,
-					$label,
-					array_key_exists($id, $ptSelected)
-				);
+				$tSelected[] = array($id, $label, array_key_exists($id, $ptSelected));
 			} else {
-				$tSelected[] = array(
-					$id,
-					$label,
-					$id == $ptSelected
-				);
+				$tSelected[] = array($id, $label, $id == $ptSelected);
 			}
 		}
 		return $tSelected;
@@ -373,29 +354,26 @@ class plugin_vfa
 	 * Transforme un tableau de tuples en un tableau pour un composant SELECT.
 	 *
 	 * @param unknown $ptRows
-	 *        	Le tableau de tuples
+	 *         Le tableau de tuples
 	 * @param unknown $pKeyName
-	 *        	Le nom du champ dans le tuple pour la clé de sélection
+	 *         Le nom du champ dans le tuple pour la clé de sélection
 	 * @param string $pLabelFieldName
-	 *        	Le nom du champ dans le tuple pour le libellé (Mettre à null pour utiliser une fonction)
+	 *         Le nom du champ dans le tuple pour le libellé (Mettre à null pour utiliser une fonction)
 	 * @param string $pLabelFunctionName
-	 *        	Le nom de la fonction de rapppel dans le tuple pour le libellé sinon null
+	 *         Le nom de la fonction de rapppel dans le tuple pour le libellé sinon null
 	 * @param boolean $pForceEmpty
-	 *        	Si vrai insère une valeur vide dans le tableau
+	 *         Si vrai insère une valeur vide dans le tableau
 	 * @return array(id:int ->label:string)
 	 */
 	public static function toSelect($ptRows, $pKeyName, $pLabelFieldName = NULL, $pLabelFunctionName = NULL, $pForceEmpty = NULL)
 	{
 		$tSelect = array();
 		if ((null != $pForceEmpty) && (true == $pForceEmpty)) {
-			$tSelect[- 1] = '';
+			$tSelect[-1] = '';
 		}
 		foreach ($ptRows as $oRow) {
 			if (null != $pLabelFunctionName) {
-				$tSelect[$oRow->$pKeyName] = call_user_func(array(
-					$oRow,
-					$pLabelFunctionName
-				));
+				$tSelect[$oRow->$pKeyName] = call_user_func(array($oRow, $pLabelFunctionName));
 			} else {
 				$tSelect[$oRow->$pKeyName] = $oRow->$pLabelFieldName;
 			}
@@ -431,11 +409,7 @@ class plugin_vfa
 	public static function generateURLInvitation($poInvitation)
 	{
 		$url = 'http://' . $_SERVER['SERVER_NAME'] . _root::getConfigVar('path.base');
-		$url .= _root::getLink('autoreg::index', 
-			array(
-				'id' => $poInvitation->invitation_id,
-				'key' => $poInvitation->invitation_key
-			), false);
+		$url .= _root::getLink('autoreg::index', array('id' => $poInvitation->invitation_id, 'key' => $poInvitation->invitation_key), false);
 		// _root::getLog()->log('generateURLInvitation : ' . $url);
 		return $url;
 	}
@@ -444,9 +418,9 @@ class plugin_vfa
 	 * Construit le texte de l'invitation en fonction de son type.
 	 *
 	 * @param row_invitation $poInvitation
-	 *        	L'invitation
+	 *         L'invitation
 	 * @param boolean $pHtml
-	 *        	Vrai pour inclure du HTML dans le texte
+	 *         Vrai pour inclure du HTML dans le texte
 	 * @return string Le texte de l'invitation
 	 */
 	public static function buildTextInvitation($poInvitation, $pHtml)
@@ -462,7 +436,7 @@ class plugin_vfa
 		} else {
 			$creator = $login;
 		}
-		
+
 		$tPrix = array();
 		foreach ($tAwards as $oAward) {
 			$tPrix[] = $oAward->toString();
@@ -473,24 +447,22 @@ class plugin_vfa
 			$xPrix = 'aux prix suivants ';
 		}
 		switch ($poInvitation->type) {
-			case plugin_vfa::INVITATION_TYPE_BOARD:
-				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à vous inscrire à la présélection suivante : ', 
-					$creator);
+			case plugin_vfa::TYPE_BOARD:
+				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à vous inscrire à la présélection suivante : ', $creator);
 				break;
-			case plugin_vfa::INVITATION_TYPE_READER:
-				$textInvit = sprintf('%1s, le correspondant du Prix BD pour "%2s", vous invite à vous inscrire %3s : ', 
-					$creator, $oGroup->group_name, $xPrix);
+			case plugin_vfa::TYPE_READER:
+				$textInvit = sprintf('%1s, le correspondant du Prix BD pour "%2s", vous invite à vous inscrire %3s : ', $creator,
+					$oGroup->group_name, $xPrix);
 				break;
-			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
-				$textInvit = sprintf(
-					'%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et à vous inscrire %3s : ', 
+			case plugin_vfa::TYPE_RESPONSIBLE:
+				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et à vous inscrire %3s : ',
 					$creator, $oGroup->group_name, $xPrix);
 				break;
 			default:
 				$textInvit = '';
 				break;
 		}
-		
+
 		$beforeHtml = '';
 		$afterHtml = '';
 		if ($pHtml) {
@@ -504,7 +476,7 @@ class plugin_vfa
 				$textInvit .= ', ';
 			}
 			$textInvit .= sprintf('%1s%2s%3s', $beforeHtml, $prix, $afterHtml);
-			$i ++;
+			$i++;
 		}
 		if ($pHtml) {
 			$textInvit .= '</strong>';
@@ -516,19 +488,19 @@ class plugin_vfa
 	 * Construit le titre de l'invitation en fonction de son type.
 	 *
 	 * @param row_invitation $poInvitation
-	 *        	L'invitation
+	 *         L'invitation
 	 * @return string Le titre de l'invitation
 	 */
 	public static function buildTitleInvitation($poInvitation)
 	{
 		switch ($poInvitation->type) {
-			case plugin_vfa::INVITATION_TYPE_BOARD:
+			case plugin_vfa::TYPE_BOARD:
 				$titleInvit = 'Invitation pour voter avec le Comité de sélection';
 				break;
-			case plugin_vfa::INVITATION_TYPE_READER:
+			case plugin_vfa::TYPE_READER:
 				$titleInvit = 'Invitation pour voter au Prix BD';
 				break;
-			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+			case plugin_vfa::TYPE_RESPONSIBLE:
 				$titleInvit = 'Invitation pour devenir correspondant du Prix BD et voter';
 				break;
 			default:

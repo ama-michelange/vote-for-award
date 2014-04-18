@@ -43,7 +43,7 @@
 					<?php else:?>
 						<td><?php echo $oGroup->group_name ?></td>
 					<?php endif;?>
-					<td <?php if(plugin_vfa::GROUP_TYPE_BOARD==$oGroup->type) { echo ' class="text-warning"'; }?>><?php echo $oGroup->getTypeString() ?></td>
+					<td <?php if(plugin_vfa::TYPE_BOARD==$oGroup->type) { echo ' class="text-warning"'; }?>><?php echo $oGroup->getTypeString() ?></td>
 				</tr>	
 				<?php endforeach;?>
 			</tbody>

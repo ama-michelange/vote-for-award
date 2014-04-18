@@ -22,13 +22,13 @@
 				<?php foreach($this->tInvitations as $oInvitation):?>
 				<?php
 				switch ($oInvitation->type) {
-					case plugin_vfa::INVITATION_TYPE_BOARD:
+					case plugin_vfa::TYPE_BOARD:
 						$color = 'danger';
 						break;
-					case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+					case plugin_vfa::TYPE_RESPONSIBLE:
 						$color = 'warning';
 						break;
-					case plugin_vfa::INVITATION_TYPE_READER:
+					case plugin_vfa::TYPE_READER:
 						$color = '';
 						break;
 					default:
@@ -36,19 +36,19 @@
 						break;
 				}
 				switch ($oInvitation->state) {
-					case plugin_vfa::INVITATION_STATE_OPEN:
+					case plugin_vfa::STATE_OPEN:
 						$labelColor = 'label-warning';
 						$labelTip = 'L\'invitation est ouverte mais l\'email n\'a pas été envoyé à '.$oInvitation->email;
 						break;
-					case plugin_vfa::INVITATION_STATE_SENT:
+					case plugin_vfa::STATE_SENT:
 						$labelColor = 'label-info';
 						$labelTip = 'L\'invitation a été envoyé par email';
 						break;
-					case plugin_vfa::INVITATION_STATE_ACCEPTED:
+					case plugin_vfa::STATE_ACCEPTED:
 						$labelColor = 'label-success';
 						$labelTip = $oInvitation->email.' a accepté l\'invitation.';
 						break;
-					case plugin_vfa::INVITATION_STATE_REJECTED:
+					case plugin_vfa::STATE_REJECTED:
 						$labelColor = 'label-danger';
 						$labelTip = 'Le destinataire, '.$oInvitation->email.',  a refusé l\'invitation.';
 						break;
