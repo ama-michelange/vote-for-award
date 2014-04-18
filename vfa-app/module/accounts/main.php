@@ -224,9 +224,9 @@ class module_accounts extends abstract_module
 				// Sauvegarde
 //				$poUser->save();
 				// Met à jour la session
-				$oUserSession = _root::getAuth()->getUserSession();
-				$oUserSession->setUser($poUser);
-				_root::getAuth()->setUserSession($oUserSession);
+//				$oUserSession = _root::getAuth()->getUserSession();
+//				$oUserSession->setUser($poUser);
+//				_root::getAuth()->setUserSession($oUserSession);
 				// Prepare et Affiche la popup
 				$scriptView = new _view('accounts::scriptSaved');
 				$scriptView->title = "Changer mon adresse Email";
