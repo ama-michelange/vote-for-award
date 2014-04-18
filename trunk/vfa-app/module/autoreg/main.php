@@ -45,7 +45,7 @@ class module_autoreg extends abstract_module
 		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
 		
 		if ((_root::getRequest()->isPost()) && (true == $this->isInvitationParamsValid($oInvitation))) {
-			$oInvitation->state = plugin_vfa::INVITATION_STATE_REJECTED;
+			$oInvitation->state = plugin_vfa::STATE_REJECTED;
 			$oInvitation->modified_date = plugin_vfa::dateTimeSgbd();
 			$oInvitation->update();
 			
@@ -237,15 +237,15 @@ class module_autoreg extends abstract_module
 		$tInscription = array();
 		
 		switch ($poInvitation->type) {
-			case plugin_vfa::INVITATION_TYPE_BOARD:
+			case plugin_vfa::TYPE_BOARD:
 				$tInscription['Rôle'] = 'Membre du comité de sélection';
 				$poConfirm->titleInvit = 'Inscription pour voter avec le Comité de sélection';
 				break;
-			case plugin_vfa::INVITATION_TYPE_READER:
+			case plugin_vfa::TYPE_READER:
 				$tInscription['Rôle'] = 'Electeur';
 				$poConfirm->titleInvit = 'Inscription pour voter au Prix BD';
 				break;
-			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+			case plugin_vfa::TYPE_RESPONSIBLE:
 				$tInscription['Rôle'] = 'Responsable de groupe, Electeur';
 				$poConfirm->titleInvit = 'Inscription pour devenir Responsable de groupe et voter au Prix BD';
 				break;

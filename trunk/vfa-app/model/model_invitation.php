@@ -79,11 +79,11 @@ class row_invitation extends abstract_row
 	public function showType()
 	{
 		switch ($this->type) {
-			case plugin_vfa::INVITATION_TYPE_READER:
+			case plugin_vfa::TYPE_READER:
 				return 'Lecteur';
-			case plugin_vfa::INVITATION_TYPE_BOARD:
+			case plugin_vfa::TYPE_BOARD:
 				return 'Membre';
-			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+			case plugin_vfa::TYPE_RESPONSIBLE:
 				return 'Correspondant';
 		}
 		return $this->type;
@@ -92,11 +92,11 @@ class row_invitation extends abstract_row
 	public function showFullType()
 	{
 		switch ($this->type) {
-			case plugin_vfa::INVITATION_TYPE_READER:
+			case plugin_vfa::TYPE_READER:
 				return 'Lecteur d\'un groupe';
-			case plugin_vfa::INVITATION_TYPE_BOARD:
+			case plugin_vfa::TYPE_BOARD:
 				return 'Membre du comité de sélection';
-			case plugin_vfa::INVITATION_TYPE_RESPONSIBLE:
+			case plugin_vfa::TYPE_RESPONSIBLE:
 				return 'Correspondant pour un groupe';
 		}
 		return $this->type;
@@ -105,16 +105,16 @@ class row_invitation extends abstract_row
 	public function showState()
 	{
 		switch ($this->state) {
-			case plugin_vfa::INVITATION_STATE_OPEN:
+			case plugin_vfa::STATE_OPEN:
 				return 'Préparée';
 				break;
-			case plugin_vfa::INVITATION_STATE_SENT:
+			case plugin_vfa::STATE_SENT:
 				return 'Envoyée';
 				break;
-			case plugin_vfa::INVITATION_STATE_ACCEPTED:
+			case plugin_vfa::STATE_ACCEPTED:
 				return 'Acceptée';
 				break;
-			case plugin_vfa::INVITATION_STATE_REJECTED:
+			case plugin_vfa::STATE_REJECTED:
 				return 'Refusée';
 				break;
 		}

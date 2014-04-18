@@ -32,12 +32,12 @@
 				</label>
 				<div>
 					<label class="radio-inline" for="inputTypeLecteur"> <input type="radio" id="inputTypeLecteur"
-						name="type" value="<?php echo plugin_vfa::GROUP_TYPE_READER ?>"
-						<?php if(plugin_vfa::GROUP_TYPE_READER==$this->oGroup->type): echo 'checked'; endif; ?> />
+						name="type" value="<?php echo plugin_vfa::TYPE_READER ?>"
+						<?php if(plugin_vfa::TYPE_READER==$this->oGroup->type): echo 'checked'; endif; ?> />
 						Groupe de lecteurs
 					</label> <label class="radio-inline" for="inputTypeBoard"> <input type="radio"
-						id="inputTypeBoard" name="type" value="<?php echo plugin_vfa::GROUP_TYPE_BOARD ?>"
-						<?php if(plugin_vfa::GROUP_TYPE_BOARD==$this->oGroup->type): echo 'checked'; endif; ?> />
+						id="inputTypeBoard" name="type" value="<?php echo plugin_vfa::TYPE_BOARD ?>"
+						<?php if(plugin_vfa::TYPE_BOARD==$this->oGroup->type): echo 'checked'; endif; ?> />
 						Comité de sélection
 					</label> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'type')?></span>
 				</div>
