@@ -9,9 +9,7 @@ class model_invitation extends abstract_model
 
 	protected $sConfig = 'mysql';
 
-	protected $tId = array(
-		'invitation_id'
-	);
+	protected $tId = array('invitation_id');
 
 	public static function getInstance()
 	{
@@ -30,11 +28,17 @@ class model_invitation extends abstract_model
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY email, type, created_date DESC');
 	}
 
+	public function findAllByCategory($pCategory)
+	{
+		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE category=? ORDER BY email, type, created_date DESC';
+		return $this->findMany($sql, $pCategory);
+	}
+
 	public function findByRegistry($poRegistry, $pState = 'OPEN')
 	{
 		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE type=?' . '	AND state=?' . '	AND email=?' . '	AND group_id=?' .
-			 '	AND awards_ids=?';
-		return $this->findOne($sql, $poRegistry->type, $pState, $poRegistry->email, $poRegistry->group_id, 
+			'	AND awards_ids=?';
+		return $this->findOne($sql, $poRegistry->type, $pState, $poRegistry->email, $poRegistry->group_id,
 			implode(',', $poRegistry->awards_ids));
 	}
 }
@@ -120,16 +124,17 @@ class row_invitation extends abstract_row
 		}
 		return $this->state;
 	}
-	
+
 	/* exemple test validation */
 	private function getCheck()
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
-		
+
 		$oPluginValid->isNotEmpty('key');
+		$oPluginValid->isNotEmpty('category');
 		$oPluginValid->isNotEmpty('type');
 		$oPluginValid->isNotEmpty('state');
-		
+
 		return $oPluginValid;
 	}
 

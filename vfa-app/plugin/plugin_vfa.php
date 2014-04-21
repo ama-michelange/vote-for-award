@@ -11,6 +11,7 @@ class plugin_vfa
 {
 
 	const CATEGORY_INVITATION = 'INVITATION';
+	const CATEGORY_CHANGE = 'CHANGE';
 
 	const TYPE_BOARD = 'BOARD';
 	const TYPE_READER = 'READER';
