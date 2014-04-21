@@ -34,8 +34,7 @@ class module_invitations extends abstract_module
 
 	public function _list()
 	{
-		$oInvitationModel = new model_invitation();
-		$tInvitations = $oInvitationModel->findAll();
+		$tInvitations = model_invitation::getInstance()->findAllByCategory(plugin_vfa::CATEGORY_INVITATION);
 
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
@@ -62,6 +61,7 @@ class module_invitations extends abstract_module
 		$oRegistry = $this->verify();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
+			$oRegistry->category = plugin_vfa::CATEGORY_INVITATION;
 			$oRegistry->type = plugin_vfa::TYPE_READER;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
@@ -336,6 +336,7 @@ class module_invitations extends abstract_module
 		}
 
 		// Copie la saisie dans un enregistrement
+		$oRegistry->category = plugin_vfa::CATEGORY_INVITATION;
 		$oRegistry->type = _root::getParam('type', null);
 		$oRegistry->phase = _root::getParam('phase', null);
 		$oRegistry->email = _root::getParam('email', null);
@@ -398,7 +399,7 @@ class module_invitations extends abstract_module
 
 	private function buildInvitationKey($poRegistry)
 	{
-		$s = $poRegistry->type . $poRegistry->email . $poRegistry->group_id;
+		$s = $poRegistry->category . $poRegistry->type . $poRegistry->email . $poRegistry->group_id;
 		if ($poRegistry->award_id) {
 			$s .= $poRegistry->award_id;
 		} else {
@@ -419,6 +420,7 @@ class module_invitations extends abstract_module
 		$oInvit->created_user_id = _root::getAuth()->getUserSession()->getUser()->user_id;
 		$oInvit->invitation_key = $this->buildInvitationKey($poRegistry);
 		$oInvit->state = plugin_vfa::STATE_OPEN;
+		$oInvit->category = $poRegistry->category;
 		$oInvit->type = $poRegistry->type;
 		$oInvit->email = $poRegistry->email;
 		$oInvit->group_id = $poRegistry->group_id;
