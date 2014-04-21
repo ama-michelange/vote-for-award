@@ -16,11 +16,13 @@ class plugin_vfa
 	const TYPE_BOARD = 'BOARD';
 	const TYPE_READER = 'READER';
 	const TYPE_RESPONSIBLE = 'RESPONSIBLE';
+	const TYPE_EMAIL = 'EMAIL';
 
 	const STATE_OPEN = 'OPEN';
 	const STATE_SENT = 'SENT';
 	const STATE_ACCEPTED = 'ACCEPTED';
 	const STATE_REJECTED = 'REJECTED';
+	const STATE_NOT_SENT = 'NOT_SENT';
 
 	/**
 	 * Déplace, s'il existe, l'article du début d'un titre à la fin du même titre.
@@ -486,7 +488,7 @@ class plugin_vfa
 	}
 
 	/**
-	 * Construit le titre de l'invitation en fonction de son type.
+	 * Construit le titre de l'invitation en fonction de sa catégorie et de son type.
 	 *
 	 * @param row_invitation $poInvitation
 	 *         L'invitation
@@ -494,20 +496,31 @@ class plugin_vfa
 	 */
 	public static function buildTitleInvitation($poInvitation)
 	{
-		switch ($poInvitation->type) {
-			case plugin_vfa::TYPE_BOARD:
-				$titleInvit = 'Invitation pour voter avec le Comité de sélection';
+		$titleInvit = '[' . _root::getConfigVar('vfa-app.title') . '] ';
+		switch ($poInvitation->category) {
+			case plugin_vfa::CATEGORY_INVITATION:
+				switch ($poInvitation->type) {
+					case plugin_vfa::TYPE_BOARD:
+						$titleInvit .= 'Invitation pour voter avec le Comité de sélection';
+						break;
+					case plugin_vfa::TYPE_READER:
+						$titleInvit .= 'Invitation pour voter au Prix BD';
+						break;
+					case plugin_vfa::TYPE_RESPONSIBLE:
+						$titleInvit .= 'Invitation pour devenir correspondant du Prix BD et voter';
+						break;
+				}
 				break;
-			case plugin_vfa::TYPE_READER:
-				$titleInvit = 'Invitation pour voter au Prix BD';
-				break;
-			case plugin_vfa::TYPE_RESPONSIBLE:
-				$titleInvit = 'Invitation pour devenir correspondant du Prix BD et voter';
-				break;
-			default:
-				$titleInvit = '';
+			case plugin_vfa::CATEGORY_CHANGE:
+				switch ($poInvitation->type) {
+					case plugin_vfa::TYPE_EMAIL:
+						$titleInvit .= 'Validation de changement d\'adresse Email';
+						break;
+				}
 				break;
 		}
+		_root::getLog()->log($titleInvit);
 		return $titleInvit;
 	}
+
 }
