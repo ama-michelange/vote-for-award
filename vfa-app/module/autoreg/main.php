@@ -7,31 +7,82 @@ class module_autoreg extends abstract_module
 	{
 		_root::startSession();
 		plugin_vfa::loadI18n();
-		
+
 		$this->oLayout = new _layout('tpl_bs_bar');
 		// $this->oLayout->addModule('bsnavbar','bsnavbar::index');
 	}
 
 	public function _index()
 	{
-		$oInvitationModel = new model_invitation();
-		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
-		
+		$oInvitation = model_invitation::getInstance()->findById(_root::getParam('id'));
+
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
-			$oConfirm = new row_confirm_invitation();
-			$oConfirm->invitation_id = _root::getParam('id');
-			$oConfirm->invitation_key = _root::getParam('key');
-			$this->makeTextInvitation($oInvitation, $oConfirm);
-			
-			$oView = new _view('autoreg::index');
-			$oView->oConfirm = $oConfirm;
-			
-			$this->oLayout->add('work', $oView);
+			$this->dispatch($oInvitation);
 		} else {
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
 		}
 	}
+
+	private function dispatch($poInvitation)
+	{
+		switch ($poInvitation->category) {
+			case plugin_vfa::CATEGORY_INVITATION:
+				$this->doInvitation($poInvitation);
+				break;
+			case plugin_vfa::CATEGORY_CHANGE:
+				switch ($poInvitation->type) {
+					case plugin_vfa::TYPE_EMAIL:
+						$this->doChangeEmail($poInvitation);
+						break;
+				}
+				break;
+		}
+	}
+
+	private function doChangeEmail($poInvitation)
+	{
+		// TODO Comparer le datetime courant avec elle de création
+		// TODO Si dépassement de 48h, message d'erreur
+
+		$oConfirm = new row_confirm_invitation();
+		$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+		$oConfirm->textInvit = 'Votre nouvelle adresse <strong>' . $poInvitation->email . '</strong> est validée.';
+
+		$oView = new _view('autoreg::ok');
+		$oView->oConfirm = $oConfirm;
+
+		$this->oLayout->add('work', $oView);
+
+		// MAJ Email Utilisateur
+		$oUser = model_user::getInstance()->findById($poInvitation->created_user_id);
+		if (false == $oUser->isEmpty()) {
+			$oUser->email = $poInvitation->email;
+			model_user::getInstance()->update($oUser);
+			if (_root::getAuth()->isConnected()) {
+				// Met à jour la session
+				$oUserSession = _root::getAuth()->getUserSession();
+				$oUserSession->setUser($oUser);
+				_root::getAuth()->setUserSession($oUserSession);
+			}
+		}
+		// Supprime l'invit
+		model_invitation::getInstance()->delete($poInvitation);
+	}
+
+	private function doInvitation($poInvitation)
+	{
+		$oConfirm = new row_confirm_invitation();
+		$oConfirm->invitation_id = _root::getParam('id');
+		$oConfirm->invitation_key = _root::getParam('key');
+		$this->makeTextInvitation($poInvitation, $oConfirm);
+
+		$oView = new _view('autoreg::index');
+		$oView->oConfirm = $oConfirm;
+
+		$this->oLayout->add('work', $oView);
+	}
+
 
 	public function _invalid()
 	{
@@ -43,12 +94,12 @@ class module_autoreg extends abstract_module
 	{
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
-		
+
 		if ((_root::getRequest()->isPost()) && (true == $this->isInvitationParamsValid($oInvitation))) {
 			$oInvitation->state = plugin_vfa::STATE_REJECTED;
 			$oInvitation->modified_date = plugin_vfa::dateTimeSgbd();
 			$oInvitation->update();
-			
+
 			$oView = new _view('autoreg::rejected');
 			$this->oLayout->add('work', $oView);
 		} else {
@@ -61,7 +112,7 @@ class module_autoreg extends abstract_module
 	{
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
-		
+
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
 			if (_root::getRequest()->isPost()) {
 				$this->doPost($oInvitation);
@@ -85,30 +136,30 @@ class module_autoreg extends abstract_module
 		$oConfirm->invitation_id = _root::getParam('id');
 		$oConfirm->invitation_key = _root::getParam('key');
 		$this->makeTextInvitation($poInvitation, $oConfirm);
-		
+
 		$oView = new _view('autoreg::index');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = "";
 		$oView->tSelectedYears = $this->buildSelectedYears($oConfirm);
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
 	private function doPost($poInvitation)
 	{
 		$oConfirm = $this->doVerifyPost($poInvitation);
-		
+
 		$oView = new _view('autoreg::confirm');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = $oConfirm->getMessages();
 		$oView->tSelectedYears = $this->buildSelectedYears($oConfirm);
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -117,7 +168,7 @@ class module_autoreg extends abstract_module
 		$tYear = array();
 		$date = new plugin_date(date('Y-m-d'));
 		$date->removeYear(10);
-		for ($i = 0; $i < 91; $i ++) {
+		for ($i = 0; $i < 91; $i++) {
 			if (($poConfirm->birtyear) && ($poConfirm->birtyear == $date->getYear())) {
 				$tYear[$date->getYear()] = true;
 			} else {
@@ -134,19 +185,17 @@ class module_autoreg extends abstract_module
 		// Verifie le token
 		if (_root::getParam('token')) {
 			$oPluginXsrf = new plugin_xsrf();
-			if (! $oPluginXsrf->checkToken(_root::getParam('token'))) {
-				$oConfirm->setMessages(array(
-					'token' => $oPluginXsrf->getMessage()
-				));
+			if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+				$oConfirm->setMessages(array('token' => $oPluginXsrf->getMessage()));
 				return $oConfirm;
 			}
 		}
-		
+
 		// Récupère les params cachés et reconstruit le texte
 		$oConfirm->invitation_id = _root::getParam('invitation_id');
 		$oConfirm->invitation_key = _root::getParam('invitation_key');
 		$this->makeTextConfirmation($poInvitation, $oConfirm);
-		
+
 		switch (_root::getParam('action')) {
 			case 'toConfirm':
 				// $this->doVerifyToRegistry($poInvitation, $oConfirm);
@@ -169,7 +218,7 @@ class module_autoreg extends abstract_module
 		$poConfirm->action = _root::getParam('action', null);
 		$poConfirm->cf_login = _root::getParam('cf_login', null);
 		$poConfirm->cf_password = _root::getParam('cf_password', null);
-		
+
 		if ($poConfirm->isValid()) {
 			$poConfirm->validation = true;
 		}
@@ -189,18 +238,14 @@ class module_autoreg extends abstract_module
 		$poConfirm->first_name = _root::getParam('first_name', null);
 		$poConfirm->birthyear = _root::getParam('birthyear', null);
 		$poConfirm->gender = _root::getParam('gender', null);
-		
+
 		if ($poConfirm->isValid()) {
 			// Doublon ?
 			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->login);
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
 				$poConfirm->validation = true;
 			} else {
-				$poConfirm->setMessages(array(
-					'login' => array(
-						'doublon'
-					)
-				));
+				$poConfirm->setMessages(array('login' => array('doublon')));
 			}
 		}
 		// var_dump($poConfirm);
@@ -217,13 +262,13 @@ class module_autoreg extends abstract_module
 		$tAwards = $poInvitation->findAwards();
 		$oGroup = $poInvitation->findGroup();
 		$oCreatedUser = $poInvitation->findCreatedUser();
-		
+
 		$tPrix = array();
 		foreach ($tAwards as $oAward) {
 			$tPrix[] = $oAward->toString();
 		}
 		natsort($tPrix);
-		
+
 		$textPrix = '';
 		$i = 0;
 		foreach ($tPrix as $prix) {
@@ -231,11 +276,11 @@ class module_autoreg extends abstract_module
 				$textPrix .= ', ';
 			}
 			$textPrix .= $prix;
-			$i ++;
+			$i++;
 		}
-		
+
 		$tInscription = array();
-		
+
 		switch ($poInvitation->type) {
 			case plugin_vfa::TYPE_BOARD:
 				$tInscription['Rôle'] = 'Membre du comité de sélection';

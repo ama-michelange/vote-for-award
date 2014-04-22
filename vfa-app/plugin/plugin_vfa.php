@@ -182,12 +182,9 @@ class plugin_vfa
 	/**
 	 * Change le format d'une horodate.
 	 *
-	 * @param string $pDatetime
-	 *         La horodate au format source
-	 * @param string $pFormatSrc
-	 *         Le format source
-	 * @param string $pFormatDst
-	 *         Le format de destination
+	 * @param string $pDate La horodate au format source
+	 * @param string $pFormatSrc Le format source
+	 * @param string $pFormatDst Le format de destination
 	 * @return string La horodate au format de destination ou NULL si pb
 	 */
 	public static function changeDatetimeFormat($pDate, $pFormatSrc, $pFormatDst)
@@ -205,9 +202,8 @@ class plugin_vfa
 	/**
 	 * Change le format d'une date SGBD vers le format d'affichage.
 	 *
-	 * @param string $pDate
-	 *         La date au format SGBD
-	 * @return La date au format d'affichage
+	 * @param string $pDate La date au format SGBD
+	 * @return string La date au format d'affichage
 	 */
 	public static function toStringDateShow($pDate)
 	{
@@ -492,11 +488,15 @@ class plugin_vfa
 	 *
 	 * @param row_invitation $poInvitation
 	 *         L'invitation
+	 * @param bool $pEmailSubject
 	 * @return string Le titre de l'invitation
 	 */
-	public static function buildTitleInvitation($poInvitation)
+	public static function buildTitleInvitation($poInvitation, $pEmailSubject = false)
 	{
-		$titleInvit = '[' . _root::getConfigVar('vfa-app.title') . '] ';
+		$titleInvit = '';
+		if (true == $pEmailSubject) {
+			$titleInvit = '[' . _root::getConfigVar('vfa-app.title') . '] ';
+		}
 		switch ($poInvitation->category) {
 			case plugin_vfa::CATEGORY_INVITATION:
 				switch ($poInvitation->type) {
@@ -514,12 +514,12 @@ class plugin_vfa
 			case plugin_vfa::CATEGORY_CHANGE:
 				switch ($poInvitation->type) {
 					case plugin_vfa::TYPE_EMAIL:
-						$titleInvit .= 'Validation de changement d\'adresse Email';
+						$titleInvit .= 'Changement d\'adresse Email';
 						break;
 				}
 				break;
 		}
-		_root::getLog()->log($titleInvit);
+		//		_root::getLog()->log($titleInvit);
 		return $titleInvit;
 	}
 
