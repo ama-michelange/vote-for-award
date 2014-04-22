@@ -42,29 +42,44 @@ class module_autoreg extends abstract_module
 
 	private function doChangeEmail($poInvitation)
 	{
-		// TODO Comparer le datetime courant avec elle de création
-		// TODO Si dépassement de 48h, message d'erreur
+		// Compare le datetime courant avec celle de création
+		// Si dépassement de 48h, message d'erreur
+		$dt = new plugin_datetime($poInvitation->created_date, 'Y-m-d H:i:s');
+		$dt->addDay(2);
+		if (plugin_vfa::beforeDateTime(plugin_vfa::todayDateTime(), $dt)) {
+			// OK : changement d'adresse Email
+			$oConfirm = new row_confirm_invitation();
+			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+			$oConfirm->textInvit = 'Votre nouvelle adresse <strong>' . $poInvitation->email . '</strong> est validée.';
 
-		$oConfirm = new row_confirm_invitation();
-		$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
-		$oConfirm->textInvit = 'Votre nouvelle adresse <strong>' . $poInvitation->email . '</strong> est validée.';
+			$oView = new _view('autoreg::ok');
+			$oView->oConfirm = $oConfirm;
 
-		$oView = new _view('autoreg::ok');
-		$oView->oConfirm = $oConfirm;
+			$this->oLayout->add('work', $oView);
 
-		$this->oLayout->add('work', $oView);
-
-		// MAJ Email Utilisateur
-		$oUser = model_user::getInstance()->findById($poInvitation->created_user_id);
-		if (false == $oUser->isEmpty()) {
-			$oUser->email = $poInvitation->email;
-			model_user::getInstance()->update($oUser);
-			if (_root::getAuth()->isConnected()) {
-				// Met à jour la session
-				$oUserSession = _root::getAuth()->getUserSession();
-				$oUserSession->setUser($oUser);
-				_root::getAuth()->setUserSession($oUserSession);
+			// MAJ Email Utilisateur
+			$oUser = model_user::getInstance()->findById($poInvitation->created_user_id);
+			if (false == $oUser->isEmpty()) {
+				$oUser->email = $poInvitation->email;
+				model_user::getInstance()->update($oUser);
+				if (_root::getAuth()->isConnected()) {
+					// Met à jour la session
+					$oUserSession = _root::getAuth()->getUserSession();
+					$oUserSession->setUser($oUser);
+					_root::getAuth()->setUserSession($oUserSession);
+				}
 			}
+		} else {
+			// KO
+			$oConfirm = new row_confirm_invitation();
+			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+			$oConfirm->textInvit = 'Cet accès n\'est plus valide ! Recommencez votre changement d\'adresse et validez le plus rapidement.';
+
+			$oView = new _view('autoreg::ko');
+			$oView->oConfirm = $oConfirm;
+
+			$this->oLayout->add('work', $oView);
+
 		}
 		// Supprime l'invit
 		model_invitation::getInstance()->delete($poInvitation);

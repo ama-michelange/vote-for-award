@@ -27,7 +27,7 @@ class plugin_datetime extends plugin_date
 	 * @param string $sFormat
 	 *        	on definit leur format utilise, par exemple'Y-m-d'
 	 */
-	public function __construct($sDate = null, $sFormat = 'Y-m-d h:i:s')
+	public function __construct($sDate = null, $sFormat = 'Y-m-d H:i:s')
 	{
 		if ($sDate != null) {
 			if (! $this->loadFromFormat($sDate, $sFormat)) {
@@ -197,4 +197,89 @@ class plugin_datetime extends plugin_date
 			sprintf('%02d', $iSeconde)
 		);
 	}
+
+	/**
+	 * calcul date j+
+	 *
+	 * @access public
+	 * @param int $iNb
+	 *        	calcul date + $iNb jour
+	 */
+	public function addDay($iNb)
+	{
+		$newDate = mktime($this->iHour, $this->iMinute, $this->iSecond, $this->iMonth, $this->iDay + $iNb, $this->iYear);
+
+		$this->loadFromFormat(date('Y-m-d H:i:s', $newDate), 'Y-m-d H:i:s');
+	}
+
+	/**
+	 * calcul date m+
+	 *
+	 * @access public
+	 * @param int $iNb
+	 *        	calcul date + $iNb mois
+	 */
+	public function addMonth($iNb)
+	{
+		$newDate = mktime($this->iHour, $this->iMinute, $this->iSecond, $this->iMonth + $iNb, $this->iDay, $this->iYear);
+
+		$this->loadFromFormat(date('Y-m-d H:i:s', $newDate), 'Y-m-d H:i:s');
+	}
+
+	/**
+	 * calcul date a+
+	 *
+	 * @access public
+	 * @param int $iNb
+	 *        	calcul date + $iNb a
+	 */
+	public function addYear($iNb)
+	{
+		$newDate = mktime($this->iHour, $this->iMinute, $this->iSecond, $this->iMonth, $this->iDay, $this->iYear + $iNb);
+
+		$this->loadFromFormat(date('Y-m-d H:i:s', $newDate), 'Y-m-d H:i:s');
+	}
+
+	/**
+	 * calcul date j-
+	 *
+	 * @access public
+	 * @param int $iNb
+	 *        	calcul date - $iNb jour
+	 */
+	public function removeDay($iNb)
+	{
+		$newDate = mktime($this->iHour, $this->iMinute, $this->iSecond, $this->iMonth, $this->iDay - $iNb, $this->iYear);
+
+		$this->loadFromFormat(date('Y-m-d H:i:s', $newDate), 'Y-m-d H:i:s');
+	}
+
+	/**
+	 * calcul date m-
+	 *
+	 * @access public
+	 * @param int $iNb
+	 *        	calcul date - $iNb mois
+	 */
+	public function removeMonth($iNb)
+	{
+		$newDate = mktime($this->iHour, $this->iMinute, $this->iSecond, $this->iMonth - $iNb, $this->iDay, $this->iYear);
+
+		$this->loadFromFormat(date('Y-m-d H:i:s', $newDate), 'Y-m-d H:i:s');
+	}
+
+	/**
+	 * calcul date a-
+	 *
+	 * @access public
+	 * @param int $iNb
+	 *        	calcul date - $iNb a
+	 */
+	public function removeYear($iNb)
+	{
+		$newDate = mktime($this->iHour, $this->iMinute, $this->iSecond, $this->iMonth, $this->iDay, $this->iYear - $iNb);
+
+		$this->loadFromFormat(date('Y-m-d H:i:s', $newDate), 'Y-m-d H:i:s');
+	}
+
 }
