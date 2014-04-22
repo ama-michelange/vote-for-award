@@ -245,6 +245,39 @@ class plugin_vfa
 	}
 
 	/**
+	 * @param plugin_datetime $pDateTimeA
+	 * @param plugin_datetime $pDateTimeB
+	 * @return bool
+	 */
+	public static function beforeDateTime($pDateTimeA, $pDateTimeB)
+	{
+		$a = $pDateTimeA->getMkTime();
+		$b = $pDateTimeB->getMkTime();
+		return $a < $b;
+	}
+
+	/**
+	 * @param plugin_datetime $pDateTimeA
+	 * @param plugin_datetime $pDateTimeB
+	 * @return bool
+	 */
+	public static function afterDateTime($pDateTimeA, $pDateTimeB)
+	{
+		$a = $pDateTimeA->getMkTime();
+		$b = $pDateTimeB->getMkTime();
+		return $a > $b;
+	}
+
+	/**
+	 * Date et heure courante
+	 * @return plugin_datetime
+	 */
+	public static function todayDateTime()
+	{
+		return new plugin_datetime(date('Y-m-d H:i:s', time()));
+	}
+
+	/**
 	 * Copie les valeurs du tableau dans les clés.
 	 *
 	 * @param array $pArray

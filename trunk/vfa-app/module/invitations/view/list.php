@@ -119,7 +119,7 @@
 						echo $oGroup->group_name;
 					?>
 					</td>
-				</tr>	
+				</tr>
 				<?php endforeach;?>
 			</tbody>
 		</table>
