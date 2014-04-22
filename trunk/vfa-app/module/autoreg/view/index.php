@@ -23,7 +23,7 @@
 	</div>
 </div>
 <div class="well well-sm">
-	<h1 class="text-center">Bienvenue sur ALICES Award</h1>
+	<h1 class="text-center">Bienvenue sur <?php_root::getConfigVar('vfa-app.title') ?></h1>
 	<h3 class="text-center">Site de vote du Prix de la Bande Dessinée</h3>
 </div>
 <div class="panel panel-default">

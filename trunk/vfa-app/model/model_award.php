@@ -47,6 +47,7 @@ class model_award extends abstract_model
 	}
 
 	/**
+	 * @param $pType
 	 * @return array row_award
 	 */
 	public function findAllByType($pType)
@@ -64,14 +65,8 @@ class model_award extends abstract_model
 	{
 		$this->execute('DELETE FROM vfa_awards WHERE award_id=?', $pIdAward);
 		$this->execute('DELETE FROM vfa_award_selections WHERE award_id=?', $pIdAward);
-		// TODO A supprimer !
-//		$sql = 'DELETE FROM vfa_titles ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_award_titles)';
-//		$this->execute($sql);
-//		$sql = 'DELETE FROM vfa_title_docs ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_titles)';
-//		$this->execute($sql);
 	}
 
-	// TODO A conserver ?
 	/**
 	 * @param $pTitleId
 	 * @return array row_award
