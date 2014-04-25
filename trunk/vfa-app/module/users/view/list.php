@@ -10,8 +10,9 @@
 					<?php if(_root::getACL()->permit(array('users::update','users::delete','users::read'))):?>
 						<th></th>
 					<?php endif;?>
-					<th>Pseudo</th>
+					<th>Login</th>
 					<th>Email</th>
+					<th>Alias</th>
 					<th>Nom</th>
 					<th>Prénom</th>
 					<th>Groupes</th>
@@ -50,6 +51,7 @@
 						<td><?php echo wordwrap($oUser->login,20,'<br />', true) ?></td>
 					<?php endif;?>
 					<td><?php echo wordwrap($oUser->email,30,'<br />', true) ?></td>
+					<td><?php echo wordwrap($oUser->alias,30,'<br />', true) ?></td>
 					<td><?php echo wordwrap($oUser->last_name,30,'<br />', true) ?></td>
 					<td><?php echo wordwrap($oUser->first_name,30,'<br />', true) ?></td>
 					<td>

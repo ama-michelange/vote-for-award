@@ -414,6 +414,26 @@ class plugin_vfa
 	}
 
 	/**
+	 * @param int $pBirthYear
+	 * @return array
+	 */
+	public static function buildSelectedBirthYears($pBirthYear = null)
+	{
+		$tYear = array();
+		$date = new plugin_date(date('Y-m-d'));
+		$date->removeYear(10);
+		for ($i = 0; $i < 91; $i++) {
+			if (($pBirthYear) && ($pBirthYear == $date->getYear())) {
+				$tYear[$date->getYear()] = true;
+			} else {
+				$tYear[$date->getYear()] = false;
+			}
+			$date->removeYear(1);
+		}
+		return $tYear;
+	}
+
+	/**
 	 * Construit le texte sufixe du titre d'une invitation en fonction de l'action en cours.
 	 */
 	public static function makeSuffixTitleInvitation()

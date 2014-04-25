@@ -155,7 +155,7 @@ class module_autoreg extends abstract_module
 		$oView = new _view('autoreg::index');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = "";
-		$oView->tSelectedYears = $this->buildSelectedYears($oConfirm);
+		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
@@ -170,28 +170,12 @@ class module_autoreg extends abstract_module
 		$oView = new _view('autoreg::confirm');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = $oConfirm->getMessages();
-		$oView->tSelectedYears = $this->buildSelectedYears($oConfirm);
+		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 
 		$this->oLayout->add('work', $oView);
-	}
-
-	private function buildSelectedYears($poConfirm)
-	{
-		$tYear = array();
-		$date = new plugin_date(date('Y-m-d'));
-		$date->removeYear(10);
-		for ($i = 0; $i < 91; $i++) {
-			if (($poConfirm->birtyear) && ($poConfirm->birtyear == $date->getYear())) {
-				$tYear[$date->getYear()] = true;
-			} else {
-				$tYear[$date->getYear()] = false;
-			}
-			$date->removeYear(1);
-		}
-		return $tYear;
 	}
 
 	private function doVerifyPost($poInvitation)

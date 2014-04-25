@@ -198,10 +198,19 @@
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'first_name')?></span>
 							</div>
 							<div class="row">
-								<div class="col-sm-6 col-md-6">
+								<div class="col-sm-6 col-md-4">
 									<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear')?>">
 										<label for="inputBirthyear">Année de naissance</label>
-										<input class="form-control" type="text" id="inputBirthyear" name="birthyear" value="<?php echo $this->oUser->birthyear ?>" />
+										<select class="form-control"
+												  id="inputBirthyear" name="birthyear"
+												  data-placeholder="Sélectionnez">
+											<option></option>
+											<?php foreach($this->tSelectedYears as $year => $checked):?>
+												<option value="<?php echo $year ?>" <?php if($checked): echo 'selected'; endif;?>>
+													<?php echo $year?>
+												</option>
+											<?php endforeach;?>
+										</select>
 										<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'birthyear')?></span>
 									</div>
 								</div>
