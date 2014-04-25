@@ -65,6 +65,7 @@ class module_accounts extends abstract_module
 		if (isset($alias) && isset($email)) {
 			$oView->changeLogin = true;
 		}
+		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oUser->birthyear);
 
 		$this->oLayout->add('work', $oView);
 	}
