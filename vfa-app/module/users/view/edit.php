@@ -56,23 +56,39 @@
 			<div class="row">
 				<div class="col-sm-2">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear')?>">
-						<label for="inputBirthyear">Année de naissance</label> <input class="form-control" type="text"
-							id="inputBirthyear" name="birthyear" value="<?php echo $this->oUser->birthyear ?>" /> <span
-							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'birthyear')?></span>
+						<label for="inputBirthyear">Année de naissance</label>
+						<input class="form-control" type="text" id="inputBirthyear" name="birthyear" value="<?php echo $this->oUser->birthyear ?>" autocomplete="off" />
+						<span	class="help-block"><?php echo plugin_validation::show($this->tMessage, 'birthyear')?></span>
 					</div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-2">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'gender')?>">
 						<label>Genre</label>
 						<div>
 							<label class="radio-inline" for="inputHomme"> <input type="radio" id="inputHomme"
 								name="gender" value="M" <?php if('M'==$this->oUser->gender): echo 'checked'; endif; ?> />
 								Homme
-							</label> <label class="radio-inline" for="inputFemme"> <input type="radio" id="inputFemme"
+							</label>
+							<label class="radio-inline" for="inputFemme"> <input type="radio" id="inputFemme"
 								name="gender" value="F" <?php if('F'==$this->oUser->gender): echo 'checked'; endif; ?> />
 								Femme
-							</label> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'gender')?></span>
+							</label>
+							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'gender')?></span>
 						</div>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newPassword')?>">
+						<label for="inputNewPass">Nouveau mot de passe</label>
+						<input class="form-control" type="password" id="inputNewPass" name="newPassword" value="<?php echo $this->oUser->newPassword ?>" autocomplete="off" />
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newPassword')?></span>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'confirmPassword')?>">
+						<label for="inputNewPassConfirm">Confirmation du mot de passe</label>
+						<input class="form-control" type="password" id="inputNewPassConfirm" name="confirmPassword" value="<?php echo $this->oUser->confirmPassword ?>" autocomplete="off" />
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'confirmPassword')?></span>
 					</div>
 				</div>
 			</div>
@@ -99,7 +115,8 @@
 									<?php echo $tRole[1]?>
 								</option>
 							<?php endforeach;?>
-						</select> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_roles')?></span>
+						</select>
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_roles')?></span>
 					</div>
 				</div>
 			</div>

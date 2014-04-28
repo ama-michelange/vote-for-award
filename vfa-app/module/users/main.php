@@ -23,11 +23,11 @@ class module_users extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->setTitle('Utilisateurs', new NavLink('users', 'index'));
-		$navBar->addChild(new BarButtons('left'));
 
-		$bar = $navBar->getChild('left');
+		$navBar->addChild(new BarButtons('right'));
+		$bar = $navBar->getChild('right');
 		$bar->addChild(plugin_BsHtml::buildButtonItem('Liste par groupe', new NavLink('users', 'listByGroup'), 'glyphicon-list'));
-		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		plugin_BsContextBar::buildDefaultContextBar($bar);
 		return $navBar;
 	}
 
@@ -219,17 +219,45 @@ class module_users extends abstract_module
 		$tUserGroups = _root::getParam('user_groups', null);
 
 		if ($oUser->isValid()) {
-			if ($this->hasDuplicateLogin($oUser)) {
-				$oUser->setMessages(array('login' => array('doublon')));
-			} elseif (false == $this->isValidGroupsRoles($oUser, $tUserGroups, $tUserRoles)) {
-			} else {
-				$oUser->save();
-				$oUserModel->saveUserRoles($oUser->user_id, $tUserRoles);
-				$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
-				_root::redirect('users::read', array('id' => $oUser->user_id));
+			if (false == $this->hasDuplicateLogin($oUser)) {
+				if ($this->isValidGroupsRoles($oUser, $tUserGroups, $tUserRoles)) {
+					if ($this->checkPassword($oUser)) {
+						$oUser->save();
+						$oUserModel->saveUserRoles($oUser->user_id, $tUserRoles);
+						$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
+						_root::redirect('users::read', array('id' => $oUser->user_id));
+					}
+				}
 			}
 		}
 		return $oUser;
+	}
+
+	private function checkPassword($poUser)
+	{
+		$canSave = true;
+		$newPassword = _root::getParam('newPassword');
+		$confirmPassword = _root::getParam('confirmPassword');
+		if (null != $newPassword) {
+			$lenPassword = strlen($newPassword);
+			if (($lenPassword < 7) OR ($lenPassword > 30)) {
+				$poUser->newPassword = $newPassword;
+				$poUser->confirmPassword = $confirmPassword;
+				$poUser->setMessages(array('newPassword' => array('badSize')));
+				$canSave = false;
+			} else {
+				if ($newPassword === $confirmPassword) {
+					$poUser->password = sha1($newPassword);
+					$canSave = true;
+				} else {
+					$poUser->newPassword = $newPassword;
+					$poUser->confirmPassword = $confirmPassword;
+					$poUser->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
+					$canSave = false;
+				}
+			}
+		}
+		return $canSave;
 	}
 
 	private function hasDuplicateLogin($poUser)
@@ -241,36 +269,29 @@ class module_users extends abstract_module
 		} else if ((null != $poUser->getId()) && ($oUserDoublon->getId() == $poUser->getId())) {
 			$duplicate = false;
 		}
+		if ($duplicate) {
+			$poUser->setMessages(array('login' => array('doublon')));
+		}
 		return $duplicate;
 	}
 
 	private function isValidGroupsRoles($poUser, $ptUserGroups, $ptUserRoles)
 	{
 		$valid = true;
-		$tMess = array();
 		$toGroups = model_group::getInstance()->findAllByIds($ptUserGroups);
 		if ($this->isDuplicateTypeGroup($toGroups)) {
-			//$poUser->setMessages(array('user_groups' => array('notUniqueTypeGroup')));
-//			$tMess['user_groups'] = array('notUniqueTypeGroup');
 			$poUser->addMessage('user_groups', 'notUniqueTypeGroup');
 			$valid = false;
 		}
 		$toRoles = model_role::getInstance()->findAllByIds($ptUserRoles);
 		if (false == $this->validateGroupsWithRoles($toRoles, $toGroups)) {
-			//$poUser->setMessages(array('user_groups' => array('invalidGroupsWithRoles')));
-//			$tMess['user_groups'] = array('invalidGroupsWithRoles');
 			$poUser->addMessage('user_groups', 'invalidGroupsWithRoles');
 			$valid = false;
 		}
 		if (false == $this->validateRolesWithGroups($toRoles, $toGroups)) {
-			//$poUser->setMessages(array('user_roles' => array('invalidRolesWithGroups')));
-//			$tMess['user_roles'] = array('invalidRolesWithGroups');
 			$poUser->addMessage('user_roles', 'invalidRolesWithGroups');
 			$valid = false;
 		}
-//		if(false==$valid){
-//			$poUser->setMessages($tMess);
-//		}
 		return $valid;
 	}
 
