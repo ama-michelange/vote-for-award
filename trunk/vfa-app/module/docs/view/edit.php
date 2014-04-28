@@ -1,7 +1,7 @@
 <form action="" method="POST">
-	<input type="hidden" name="token" value="<?php echo $this->token?>" /> <input type="hidden"
-		name="doc_id" value="<?php echo $this->oDoc->doc_id ?>" /> <input type="hidden" name="date_legal"
-		value="<?php echo $this->oDoc->date_legal ?>" />
+	<input type="hidden" name="token" value="<?php echo $this->token?>" />
+	<input type="hidden"	name="doc_id" value="<?php echo $this->oDoc->doc_id ?>" />
+	<input type="hidden" name="date_legal" value="<?php echo $this->oDoc->date_legal ?>" />
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h3 class="panel-title"><?php echo $this->textTitle ?></h3>
