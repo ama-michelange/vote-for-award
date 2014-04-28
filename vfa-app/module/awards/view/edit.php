@@ -111,10 +111,10 @@
 				<div class="col-sm-6">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'selection')?>">
 						<label for="inputSelection">Sélection
-							<span class="btn btn-xs btn-link" data-rel="tooltip"
-									data-original-title="Choisissez la sélection à associer au prix.">
-								<i class="glyphicon glyphicon-info-sign"></i>
-							</span>
+								<span class="btn btn-xs btn-link" data-rel="tooltip"
+										data-original-title="Choisissez la sélection à associer au prix.">
+									<i class="glyphicon glyphicon-info-sign"></i>
+								</span>
 						</label>
 						<select id="inputSelection" class="form-control" name="selection" size="13">
 							<?php foreach($this->tSelectedSelections as $tSelection):?>

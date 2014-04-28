@@ -13,6 +13,10 @@
 					<div class="col-sm-2 col-md-1 view-label">Type</div>
 					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->oGroup->getTypeString() ?></div>
 				</div>
+<!--				<div class="row">-->
+<!--					<div class="col-sm-2 col-md-1 view-label">Rôle minimal</div>-->
+<!--					<div class="col-sm-10 col-md-11 view-value">--><?php //echo $this->oRole->toString() ?><!--</div>-->
+<!--				</div>-->
 			</div>
 		</div>
 		<?php if($this->toUsers):?>
@@ -20,7 +24,7 @@
 			<div class="panel-heading">
 				<h5 class="panel-title">
 					Utilisateurs du groupe <a class="pull-right accordion-toggle" data-toggle="collapse"
-						href="#users"><i data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+						href="#users"><i data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i></a>
 				</h5>
 			</div>
 			<div id="users" class="collapse in">
@@ -28,10 +32,10 @@
 					<table class="table table-striped table-condensed">
 						<thead>
 							<tr>
-									<?php if(_root::getACL()->permit('users::read')):?>
-										<th></th>
-									<?php endif;?>
-									<th>Pseudo</th>
+								<?php if(_root::getACL()->permit('users::read')):?>
+									<th></th>
+								<?php endif;?>
+								<th>Pseudo</th>
 								<th>Nom</th>
 								<th>Prénom</th>
 								<th>Email</th>

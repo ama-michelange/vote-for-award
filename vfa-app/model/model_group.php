@@ -9,24 +9,58 @@ class model_group extends abstract_model
 
 	protected $sConfig = 'mysql';
 
-	protected $tId = array(
-		'group_id'
-	);
+	protected $tId = array('group_id');
 
+	private $tTypeGroups;
+
+	/**
+	 * @return model_group
+	 */
 	public static function getInstance()
 	{
 		return self::_getInstance(__CLASS__);
 	}
 
+	/**
+	 * @param $uId string
+	 * @return row_group
+	 */
 	public function findById($uId)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE group_id=?', $uId);
 	}
 
+	/**
+	 * @return array row_group
+	 */
 	public function findAll()
 	{
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY group_name');
 	}
+
+	/**
+	 * @param $ptId array string
+	 * @return array row_group
+	 */
+	public function findAllByIds($ptId)
+	{
+		$ret = null;
+		if ($ptId) {
+			$sql = 'SELECT * FROM ' . $this->sTable;
+			$sql .= ' WHERE';
+			$i = 0;
+			foreach ($ptId as $id) {
+				if ($i > 0) {
+					$sql .= ' OR';
+				}
+				$sql .= ' group_id=' . $id;
+				$i++;
+			}
+			$ret = $this->findMany($sql);
+		}
+		return $ret;
+	}
+
 
 	public function findAllByUserId($pUserId)
 	{
@@ -66,6 +100,23 @@ class model_group extends abstract_model
 		}
 		return $tSelect;
 	}
+
+	/**
+	 * @param $pIdRole
+	 * @return string
+	 */
+	public function getStringTypeGroup($pIdRole)
+	{
+		if (!isset($this->tTypeGroups[$pIdRole])) {
+			if (!isset($this->tTypeGroups)) {
+				$this->tTypeGroups = array();
+			}
+			$oRole = model_role::getInstance()->findById($pIdRole);
+			$this->tTypeGroups[$pIdRole] = plugin_i18n::get('group.' . $oRole ->role_name);
+		}
+		return $this->tTypeGroups[$pIdRole];
+	}
+
 }
 
 class row_group extends abstract_row
@@ -80,17 +131,20 @@ class row_group extends abstract_row
 		return model_user::getInstance()->findAllByGroupId($this->group_id);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTypeString()
 	{
-		switch ($this->type) {
-			case plugin_vfa::TYPE_BOARD:
-				$s = "Comité de sélection";
-				break;
-			default:
-				$s = "Groupe de lecteurs";
-				break;
-		}
-		return $s;
+		return model_group::getInstance()->getStringTypeGroup($this->role_id_default);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRoleString()
+	{
+		return model_role::getInstance()->getStringRole($this->role_id_default);
 	}
 
 	private function getCheck()

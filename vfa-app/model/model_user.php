@@ -205,6 +205,18 @@ class row_user extends abstract_row
 		return $this->getCheck()->getListError();
 	}
 
+	public function addMessage($pField, $pMessages)
+	{
+		if (false == isset($this->tMessages)) {
+			$this->tMessages = array();
+		}
+		if (false == isset($this->tMessages[$pField])) {
+			$this->tMessages[$pField] = array($pMessages);
+		} else {
+			$this->tMessages[$pField][] = $pMessages;
+		}
+	}
+
 	public function setMessages($ptMessages)
 	{
 		$this->tMessages = $ptMessages;

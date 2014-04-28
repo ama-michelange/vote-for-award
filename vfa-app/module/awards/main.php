@@ -247,8 +247,8 @@ class module_awards extends abstract_module
 		if ($oAward->isValid()) {
 			// Doublon ?
 			$doublon = $oAwardModel->findByYearNameType($oAward->year, $oAward->name, $oAward->type);
+			// Sauvegarde si pas doublon ou soi-même
 			if (($doublon->isEmpty()) || ($doublon->getId() == $oAward->getId())) {
-				// Sauvegarde si pas doublon ou soi-même
 				$oAward->save();
 				_root::redirect('awards::read', array('id' => $oAward->award_id));
 			} else {
