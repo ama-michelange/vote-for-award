@@ -51,7 +51,7 @@ class module_groups extends abstract_module
 	public function _create()
 	{
 		$tMessage = null;
-		$oGroupModel = new model_group();
+		$tRoles = null;
 
 		$oGroup = $this->save();
 		if (null == $oGroup) {
@@ -63,6 +63,8 @@ class module_groups extends abstract_module
 
 		$oView = new _view('groups::edit');
 		$oView->oGroup = $oGroup;
+		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tRoles);
+
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un groupe';
 
@@ -80,12 +82,15 @@ class module_groups extends abstract_module
 		$oGroup = $this->save();
 		if (null == $oGroup) {
 			$oGroup = $oGroupModel->findById(_root::getParam('id'));
+			$tRoles = model_role::getInstance()->getSelectById($oGroup->role_id_default);
 		} else {
 			$tMessage = $oGroup->getMessages();
+			$tRoles = array(_root::getParam('role_id_default') => _root::getParam('role_id_default'));
 		}
 
 		$oView = new _view('groups::edit');
 		$oView->oGroup = $oGroup;
+		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tRoles);
 
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un groupe';
@@ -106,12 +111,13 @@ class module_groups extends abstract_module
 
 	public function buildViewShow()
 	{
-		$oGroupModel = new model_group();
-		$oGroup = $oGroupModel->findById(_root::getParam('id'));
+		$oGroup = model_group::getInstance()->findById(_root::getParam('id'));
+		$oRole = model_role::getInstance()->findById($oGroup->role_id_default);
 		$toUsers = $oGroup->findUsers();
 
 		$oView = new _view('groups::show');
 		$oView->oGroup = $oGroup;
+		$oView->oRole = $oRole;
 		$oView->toUsers = $toUsers;
 
 		return $oView;

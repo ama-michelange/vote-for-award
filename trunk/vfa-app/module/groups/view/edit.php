@@ -25,22 +25,38 @@
 				</label> <input class="form-control" type="text" id="inputName" name="group_name"
 					value="<?php echo $this->oGroup->group_name ?>" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'group_name')?></span>
 			</div>
-			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'type')?>">
-				<label>Type <span class="btn btn-xs btn-link" data-rel="tooltip"
-					data-original-title="Type de groupe"> <i class="glyphicon glyphicon-info-sign"></i>
-				</span>
+<!--			<div class="--><?php //echo plugin_validation::addClassError('form-group', $this->tMessage, 'type')?><!--">-->
+<!--				<label>Type <span class="btn btn-xs btn-link" data-rel="tooltip"-->
+<!--					data-original-title="Type de groupe"> <i class="glyphicon glyphicon-info-sign"></i>-->
+<!--				</span>-->
+<!--				</label>-->
+<!--				<div>-->
+<!--					<label class="radio-inline" for="inputTypeLecteur"> <input type="radio" id="inputTypeLecteur"-->
+<!--						name="type" value="--><?php //echo plugin_vfa::TYPE_READER ?><!--"-->
+<!--						--><?php //if(plugin_vfa::TYPE_READER==$this->oGroup->type): echo 'checked'; endif; ?><!-- />-->
+<!--						Groupe de lecteurs-->
+<!--					</label> <label class="radio-inline" for="inputTypeBoard"> <input type="radio"-->
+<!--						id="inputTypeBoard" name="type" value="--><?php //echo plugin_vfa::TYPE_BOARD ?><!--"-->
+<!--						--><?php //if(plugin_vfa::TYPE_BOARD==$this->oGroup->type): echo 'checked'; endif; ?><!-- />-->
+<!--						Comité de sélection-->
+<!--					</label> <span class="help-block">--><?php //echo plugin_validation::show($this->tMessage, 'type')?><!--</span>-->
+<!--				</div>-->
+<!--			</div>-->
+			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'role_id_default')?>">
+				<label for="inputRoleDefault">Rôle minimal
+					<span class="btn btn-xs btn-link" data-rel="tooltip"
+						data-original-title="Choisissez le rôle minimal des utilisateurs à associer au groupe.">
+						<i class="glyphicon glyphicon-info-sign"></i>
+					</span>
 				</label>
-				<div>
-					<label class="radio-inline" for="inputTypeLecteur"> <input type="radio" id="inputTypeLecteur"
-						name="type" value="<?php echo plugin_vfa::TYPE_READER ?>"
-						<?php if(plugin_vfa::TYPE_READER==$this->oGroup->type): echo 'checked'; endif; ?> />
-						Groupe de lecteurs
-					</label> <label class="radio-inline" for="inputTypeBoard"> <input type="radio"
-						id="inputTypeBoard" name="type" value="<?php echo plugin_vfa::TYPE_BOARD ?>"
-						<?php if(plugin_vfa::TYPE_BOARD==$this->oGroup->type): echo 'checked'; endif; ?> />
-						Comité de sélection
-					</label> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'type')?></span>
-				</div>
+				<select id="inputRoleDefault" class="form-control" name="role_id_default" size="13">
+					<?php foreach($this->tSelectedRoles as $tRole):?>
+						<option value="<?php echo $tRole[0] ?>" <?php if($tRole[2]): echo 'selected'; endif;?>>
+							<?php echo $tRole[1]?>
+						</option>
+					<?php endforeach;?>
+				</select>
+				<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'role_id_default')?></span>
 			</div>
 		</div>
 		<div class="panel-footer clearfix">

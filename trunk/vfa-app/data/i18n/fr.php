@@ -1,12 +1,25 @@
 <?php
-_root::setConfigVar('tLangue', 
+_root::setConfigVar('tLangue',
 	array(
-		
+
 		'BONJOUR' => 'Bonjour',
 		'BIENVENUE' => 'Bienvenue',
 		'CHOISISSEZ_LANGUE' => 'Choisissez la langue',
 		'DU_TEXTE_EN_FRANCAIS' => 'Du texte en francais',
 		'La_date' => 'La date',
+
+		// Rôles
+		'role.board' => 'Membre du comité de sélection',
+		'role.bookseller' => 'Libraire',
+		'role.organizer' => 'Organisateur',
+		'role.reader' => 'Lecteur',
+		'role.resp_group' => 'Correspondant d\'un groupe',
+
+		// Groupes
+		'group.board' => 'Comité de sélection',
+		'group.bookseller' => 'Groupe des libraires',
+		'group.reader' => 'Groupe de lecteurs',
+
 		// Messages d'erreurs
 		'token' => '<strong>Page invalide !</strong><p>Une page de saisie n\'est valable qu\'un certain temps qui est dépassé.</p>',
 		'isNotEmptyKO' => 'Saisie obligatoire !',
@@ -17,9 +30,8 @@ _root::setConfigVar('tLangue',
 		'isDateBeforeKO' => 'Cohérence des dates : date trop grande !',
 		'isDateAfterKO' => 'Cohérence des dates : date trop petite !',
 		'isNotContainsAtKO' => 'La valeur saisie contient un caractère interdit !',
-		
-		'doublon.login' => 'Ce nom d\'utilisateur ou pseudo existe déjà !',
-		'doublon.newLogin' => 'Cet identifiant est déjà pris par un autre utilisateur !',
+
+		'doublon' => 'Cet identifiant est déjà pris par un autre utilisateur !',
 		'matchExpressionKO.birthyear' => "La valeur saisie doit correspondre à une année valide (nombre)",
 		'isUpperOrEqualThanKO.birthyear' => "Pas possible, c'est trop vieux !",
 		'isLowerThanKO.birthyear' => "Pas possible, c'est trop jeune !",
@@ -29,6 +41,9 @@ _root::setConfigVar('tLangue',
 		'isEqualKO.confirmPassword' => 'Le mot de passe et sa confirmation ne correspondent pas !',
 		'badSize.newPassword' => 'Le mot de passe doit contenir entre 7 et 30 caractères !',
 		'isNotContainsAtKO.alias' => 'Le caractère "@" est interdit !',
+		'notUniqueTypeGroup' => 'Le type des groupes n\'est pas unique !',
+		'invalidGroupsWithRoles' => 'Les groupes sont invalides par rapport aux rôles !',
+		'invalidRolesWithGroups' => 'Les rôles sont invalides par rapport aux groupes !',
 
 
 		'matchExpressionKO.year' => "La valeur saisie doit correspondre à une année valide (nombre)",

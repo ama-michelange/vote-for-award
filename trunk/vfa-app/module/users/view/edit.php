@@ -1,6 +1,6 @@
 <form action="" method="POST">
-	<input type="hidden" name="token" value="<?php echo $this->token?>" /> <input type="hidden"
-		name="user_id" value="<?php echo $this->oUser->user_id ?>" />
+	<input type="hidden" name="token" value="<?php echo $this->token?>" />
+	<input type="hidden" name="user_id" value="<?php echo $this->oUser->user_id ?>" />
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h3 class="panel-title"><?php echo $this->textTitle ?></h3>
@@ -9,56 +9,60 @@
 		<div class="panel-body">
 			<div class="alert alert-warning clearfix">
 				<p><?php echo plugin_validation::show($this->tMessage, 'token')?>
-					<a class="btn btn-sm btn-warning pull-right"
-						href="<?php echo $this->getLink('users::index') ?>">Fermer</a>
+					<a class="btn btn-sm btn-warning pull-right" href="<?php echo $this->getLink('users::index') ?>">Fermer</a>
 				</p>
 			</div>
 		</div>		
 		<?php else:?>
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login')?>">
-						<label for="inputUsername">Pseudo</label> <input class="form-control" type="text"
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login')?>">
+						<label for="inputUsername">Identifiant</label> <input class="form-control" type="text"
 							id="inputUsername" name="login" value="<?php echo $this->oUser->login ?>" /> <span
 							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login')?></span>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?>">
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?>">
 						<label for="inputEmail">Email</label> <input class="form-control" type="text" id="inputEmail"
 							name="email" value="<?php echo $this->oUser->email ?>" /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email')?></span>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name')?>">
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'alias')?>">
+						<label for="inputAlias">Alias</label> <input class="form-control" type="text"
+							id="inputAlias" name="alias" value="<?php echo $this->oUser->alias ?>" /> <span
+							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'alias')?></span>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name')?>">
 						<label for="inputLastName">Nom</label> <input class="form-control" type="text"
 							id="inputLastName" name="last_name" value="<?php echo $this->oUser->last_name ?>" /> <span
 							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'last_name')?></span>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'first_name')?>">
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'first_name')?>">
 						<label for="inputFirstName">Prénom</label> <input class="form-control" type="text"
 							id="inputFirstName" name="first_name" value="<?php echo $this->oUser->first_name ?>" /> <span
 							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'first_name')?></span>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear')?>">
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear')?>">
 						<label for="inputBirthyear">Année de naissance</label> <input class="form-control" type="text"
 							id="inputBirthyear" name="birthyear" value="<?php echo $this->oUser->birthyear ?>" /> <span
 							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'birthyear')?></span>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'gender')?>">
+				<div class="col-sm-4">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'gender')?>">
 						<label>Genre</label>
 						<div>
 							<label class="radio-inline" for="inputHomme"> <input type="radio" id="inputHomme"
@@ -72,40 +76,32 @@
 					</div>
 				</div>
 			</div>
-			<?php 
-/*
-			       * Je ne sais plus à quoi peut servir ce champ !?! <div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'vote')?>"> <label for="inputVote">Electeur</label> <div class="controls"> <input type="checkbox" id="inputVote" name="vote" <?php if ($this->oUser->vote): echo 'checked'; endif; ?> /> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'vote')?></span> </div> </div>
-			       */
-			?>
-			<div
-				class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'user_groups')?>">
-				<label for="inputUserGroups">Groupes <span class="btn btn-xs btn-link" data-rel="tooltip"
-					data-original-title="Choisir un ou plusieurs groupes pour l'utilisateur."> <i
-						class="glyphicon glyphicon-info-sign"></i>
-				</span>
-				</label> <select id="inputUserGroups" class="form-control" name="user_groups[]" size="13"
-					multiple>
-						<?php foreach($this->tSelectedGroups as $tGroup):?>
-						<option value="<?php echo $tGroup[0] ?>" <?php if($tGroup[2]): echo 'selected'; endif;?>>
-							<?php echo $tGroup[1]?>
-						</option>
-						<?php endforeach;?>
-					</select> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_groups')?></span>
-			</div>
-			<div
-				class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'user_roles')?>">
-				<label for="inputUserRoles">Rôles <span class="btn btn-xs btn-link" data-rel="tooltip"
-					data-original-title="Choisir un ou plusieurs rôles pour l'utilisateur."> <i
-						class="glyphicon glyphicon-info-sign"></i>
-				</span>
-				</label> <select id="inputUserRoles" class="form-control" name="user_roles[]"
-					class="input-xxlarge" size="13" multiple>
-						<?php foreach($this->tSelectedRoles as $tRole):?>
-						<option value="<?php echo $tRole[0] ?>" <?php if($tRole[2]): echo 'selected'; endif;?>>
-							<?php echo $tRole[1]?>
-						</option>
-						<?php endforeach;?>
-					</select> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_roles')?></span>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'user_groups')?>">
+						<label for="inputUserGroups">Groupes</label>
+						<select id="inputUserGroups" class="form-control" name="user_groups[]" size="13"	multiple>
+							<?php foreach($this->tSelectedGroups as $tGroup):?>
+								<option value="<?php echo $tGroup[0] ?>" <?php if($tGroup[2]): echo 'selected'; endif;?>>
+									<?php echo $tGroup[1]?>
+								</option>
+							<?php endforeach;?>
+						</select>
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_groups')?></span>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'user_roles')?>">
+						<label for="inputUserRoles">Rôles</label>
+						<select id="inputUserRoles" class="form-control" name="user_roles[]"	size="13" multiple>
+							<?php foreach($this->tSelectedRoles as $tRole):?>
+								<option value="<?php echo $tRole[0] ?>" <?php if($tRole[2]): echo 'selected'; endif;?>>
+									<?php echo $tRole[1]?>
+								</option>
+							<?php endforeach;?>
+						</select> <span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_roles')?></span>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="panel-footer clearfix">

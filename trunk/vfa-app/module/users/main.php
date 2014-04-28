@@ -111,7 +111,7 @@ class module_users extends abstract_module
 	{
 		$tMessage = null;
 		$oUserModel = new model_user();
-		$tColumns = array('user_id', 'login', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
+		$tColumns = array('user_id', 'login', 'email', 'alias', 'last_name', 'first_name', 'birthyear', 'gender');
 
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
@@ -143,9 +143,6 @@ class module_users extends abstract_module
 	{
 		$oView = new _view('users::read');
 		$oView->oViewShow = $this->buildViewShow();
-		// $oView->oUser=$oUser;
-		// $oView->tColumn=$oUserModel->getListColumn();
-		// $oView->tId=$oUserModel->getIdTab();
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -208,12 +205,6 @@ class module_users extends abstract_module
 			}
 			if ('password' == $sColumn) {
 				$oUser->$sColumn = sha1(_root::getParam($sColumn, null));
-			} elseif ('vote' == $sColumn) {
-				if ('on' == _root::getParam($sColumn, null)) {
-					$oUser->$sColumn = 1;
-				} else {
-					$oUser->$sColumn = 0;
-				}
 			} else {
 				if ((_root::getParam($sColumn, null) == null) && (null != $oUser->$sColumn)) {
 					$oUser->$sColumn = null;
@@ -228,27 +219,118 @@ class module_users extends abstract_module
 		$tUserGroups = _root::getParam('user_groups', null);
 
 		if ($oUser->isValid()) {
-			$bSave = false;
-			$oUserDoublon = $oUserModel->findByLogin(_root::getParam('login', null));
-			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
-				$bSave = true;
-			} else if ((null != $oUser->getId()) && ($oUserDoublon->getId() == $oUser->getId())) {
-				$bSave = true;
-			}
-			if (true == $bSave) {
+			if ($this->hasDuplicateLogin($oUser)) {
+				$oUser->setMessages(array('login' => array('doublon')));
+			} elseif (false == $this->isValidGroupsRoles($oUser, $tUserGroups, $tUserRoles)) {
+			} else {
 				$oUser->save();
 				$oUserModel->saveUserRoles($oUser->user_id, $tUserRoles);
 				$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
 				_root::redirect('users::read', array('id' => $oUser->user_id));
-			} else {
-				$oUser->setMessages(array('login' => array('doublon')));
 			}
 		}
-		// return $oUser->getListError();
 		return $oUser;
 	}
 
-	public function delete()
+	private function hasDuplicateLogin($poUser)
+	{
+		$duplicate = true;
+		$oUserDoublon = model_user::getInstance()->findByLogin($poUser->login);
+		if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
+			$duplicate = false;
+		} else if ((null != $poUser->getId()) && ($oUserDoublon->getId() == $poUser->getId())) {
+			$duplicate = false;
+		}
+		return $duplicate;
+	}
+
+	private function isValidGroupsRoles($poUser, $ptUserGroups, $ptUserRoles)
+	{
+		$valid = true;
+		$tMess = array();
+		$toGroups = model_group::getInstance()->findAllByIds($ptUserGroups);
+		if ($this->isDuplicateTypeGroup($toGroups)) {
+			//$poUser->setMessages(array('user_groups' => array('notUniqueTypeGroup')));
+//			$tMess['user_groups'] = array('notUniqueTypeGroup');
+			$poUser->addMessage('user_groups', 'notUniqueTypeGroup');
+			$valid = false;
+		}
+		$toRoles = model_role::getInstance()->findAllByIds($ptUserRoles);
+		if (false == $this->validateGroupsWithRoles($toRoles, $toGroups)) {
+			//$poUser->setMessages(array('user_groups' => array('invalidGroupsWithRoles')));
+//			$tMess['user_groups'] = array('invalidGroupsWithRoles');
+			$poUser->addMessage('user_groups', 'invalidGroupsWithRoles');
+			$valid = false;
+		}
+		if (false == $this->validateRolesWithGroups($toRoles, $toGroups)) {
+			//$poUser->setMessages(array('user_roles' => array('invalidRolesWithGroups')));
+//			$tMess['user_roles'] = array('invalidRolesWithGroups');
+			$poUser->addMessage('user_roles', 'invalidRolesWithGroups');
+			$valid = false;
+		}
+//		if(false==$valid){
+//			$poUser->setMessages($tMess);
+//		}
+		return $valid;
+	}
+
+	private function isDuplicateTypeGroup($ptoGroups)
+	{
+		$ret = false;
+		if (count($ptoGroups) > 0) {
+			$types = array();
+			foreach ($ptoGroups as $oGroup) {
+				$types[$oGroup->role_id_default] = $oGroup->getId();
+			}
+			if (count($ptoGroups) != count($types)) {
+				$ret = true;
+			}
+		}
+		return $ret;
+	}
+
+	private function validateGroupsWithRoles($ptoRoles, $ptoGroups)
+	{
+		$roles = array();
+		if ($ptoRoles) {
+			foreach ($ptoRoles as $oRole) {
+				$roles[$oRole->getId()] = $oRole->role_name;
+			}
+		}
+		if ($ptoGroups) {
+			foreach ($ptoGroups as $oGroup) {
+				if (false == array_key_exists($oGroup->role_id_default, $roles)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private function validateRolesWithGroups($ptoRoles, $ptoGroups)
+	{
+		$group = array();
+		if ($ptoGroups) {
+			foreach ($ptoGroups as $Group) {
+				$group[$Group->role_id_default] = $Group->getId();
+			}
+		}
+		if ($ptoRoles) {
+			foreach ($ptoRoles as $oRole) {
+				switch ($oRole->role_name) {
+					case 'reader':
+					case 'board':
+						if (false == array_key_exists($oRole->role_id, $group)) {
+							return false;
+						}
+						break;
+				}
+			}
+		}
+		return true;
+	}
+
+	private function delete()
 	{
 		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;

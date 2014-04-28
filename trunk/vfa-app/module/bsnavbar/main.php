@@ -45,7 +45,7 @@ class module_bsnavbar extends abstract_module
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Vote', new NavLink('home_enable', 'index')));
 
 		$this->buildMenuPrix($bar);
-		$this->buildMenuInscription($bar);
+		$this->buildMenuInscrits($bar);
 		$this->buildMenuAdmin($bar);
 
 		$bar = $pNavBar->getChild('right');
@@ -101,9 +101,10 @@ class module_bsnavbar extends abstract_module
 		}
 	}
 
-	private function buildMenuInscription($pItems)
+	private function buildMenuInscrits($pItems)
 	{
-		$item = new DropdownMenuItem('Inscription');
+		$item = new DropdownMenuItem('Inscrits');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Invitations', new NavLink('invitations', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Invitation aux lecteurs', new NavLink('invitations', 'reader')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Inscriptions libres', new NavLink('invitations', 'free')));
