@@ -64,30 +64,30 @@ class model_award extends abstract_model
 	public function deleteAwardCascades($pIdAward)
 	{
 		$this->execute('DELETE FROM vfa_awards WHERE award_id=?', $pIdAward);
-		$this->execute('DELETE FROM vfa_award_selections WHERE award_id=?', $pIdAward);
+//		$this->execute('DELETE FROM vfa_award_selections WHERE award_id=?', $pIdAward);
 	}
 
 	/**
 	 * @param $pTitleId
 	 * @return array row_award
 	 */
-	public function findAllByTitleId($pTitleId)
-	{
-		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
-			'AND (vfa_award_titles.title_id = ?) ' . 'ORDER BY vfa_awards.name';
-		return $this->findMany($sql, $pTitleId);
-	}
+//	public function findAllByTitleId($pTitleId)
+//	{
+//		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
+//			'AND (vfa_award_titles.title_id = ?) ' . 'ORDER BY vfa_awards.name';
+//		return $this->findMany($sql, $pTitleId);
+//	}
 
 	/**
 	 * @param $pDocId
 	 * @return array row_award
 	 */
-	public function findAllByDocId($pDocId)
-	{
-		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
-			'AND (vfa_award_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ORDER BY vfa_awards.name';
-		return $this->findMany($sql, $pDocId);
-	}
+//	public function findAllByDocId($pDocId)
+//	{
+//		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
+//			'AND (vfa_award_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ORDER BY vfa_awards.name';
+//		return $this->findMany($sql, $pDocId);
+//	}
 
 	/**
 	 * @param $pSelectionId string|array

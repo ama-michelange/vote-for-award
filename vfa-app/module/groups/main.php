@@ -11,6 +11,11 @@ class module_groups extends abstract_module
 		$this->oLayout = new _layout('tpl_bs_bar_context');
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
 		$this->oLayout->add('bsnav-top', plugin_BsContextBar::buildViewContextBar($this->buildContextBar()));
+
+		$this->allTypes = false;
+		if (_root::getACL()->isInRole('owner')) {
+			$this->allTypes = true;
+		}
 	}
 
 	public function after()
@@ -22,9 +27,8 @@ class module_groups extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->setTitle('Groupes', new NavLink('groups', 'index'));
-		$navBar->addChild(new BarButtons('left'));
 		$navBar->addChild(new BarButtons('right'));
-		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
 		return $navBar;
 	}
 
@@ -39,8 +43,11 @@ class module_groups extends abstract_module
 		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
 		_root::getRequest()->setAction('list');
 
-		$oGroupModel = new model_group();
-		$tGroups = $oGroupModel->findAll();
+		if ($this->allTypes) {
+			$tGroups = model_group::getInstance()->findAll();
+		} else {
+			$tGroups = model_group::getInstance()->findAllReader();
+		}
 
 		$oView = new _view('groups::list');
 		$oView->tGroups = $tGroups;
@@ -56,15 +63,16 @@ class module_groups extends abstract_module
 		$oGroup = $this->save();
 		if (null == $oGroup) {
 			$oGroup = new row_group();
-			$oGroup->type = plugin_vfa::TYPE_READER;
+			$oGroup->role_id_default = model_role::getInstance()->findByName(plugin_vfa::TYPE_READER)->role_id;
 		} else {
 			$tMessage = $oGroup->getMessages();
 		}
 
 		$oView = new _view('groups::edit');
 		$oView->oGroup = $oGroup;
-		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tRoles);
-
+		if ($this->allTypes) {
+			$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tRoles);
+		}
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un groupe';
 
@@ -82,7 +90,9 @@ class module_groups extends abstract_module
 		$oGroup = $this->save();
 		if (null == $oGroup) {
 			$oGroup = $oGroupModel->findById(_root::getParam('id'));
-			$tRoles = model_role::getInstance()->getSelectById($oGroup->role_id_default);
+			if ($this->allTypes) {
+				$tRoles = model_role::getInstance()->getSelectById($oGroup->role_id_default);
+			}
 		} else {
 			$tMessage = $oGroup->getMessages();
 			$tRoles = array(_root::getParam('role_id_default') => _root::getParam('role_id_default'));
@@ -90,8 +100,9 @@ class module_groups extends abstract_module
 
 		$oView = new _view('groups::edit');
 		$oView->oGroup = $oGroup;
-		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tRoles);
-
+		if ($this->allTypes) {
+			$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tRoles);
+		}
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un groupe';
 
@@ -143,7 +154,8 @@ class module_groups extends abstract_module
 
 	public function save()
 	{
-		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		// si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) {
 			return null;
 		}
 
