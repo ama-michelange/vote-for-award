@@ -13,10 +13,10 @@ class plugin_vfa
 	const CATEGORY_INVITATION = 'INVITATION';
 	const CATEGORY_CHANGE = 'CHANGE';
 
-	const TYPE_BOARD = 'BOARD';
-	const TYPE_READER = 'READER';
-	const TYPE_RESPONSIBLE = 'RESPONSIBLE';
-	const TYPE_EMAIL = 'EMAIL';
+	const TYPE_BOARD = 'board';
+	const TYPE_READER = 'reader';
+	const TYPE_RESPONSIBLE = 'responsible';
+	const TYPE_EMAIL = 'email';
 
 	const STATE_OPEN = 'OPEN';
 	const STATE_SENT = 'SENT';
@@ -439,13 +439,13 @@ class plugin_vfa
 	public static function makeSuffixTitleInvitation()
 	{
 		switch (_root::getAction()) {
-			case 'reader':
+			case self::TYPE_READER:
 				$title = 'Lecteur';
 				break;
-			case 'responsible':
+			case self::TYPE_RESPONSIBLE:
 				$title = 'Correspondant pour un groupe';
 				break;
-			case 'board':
+			case self::TYPE_BOARD:
 				$title = 'Membre du comité de sélection';
 				break;
 			default:

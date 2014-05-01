@@ -94,7 +94,7 @@ class module_users extends abstract_module
 
 		$oView = new _view('users::edit');
 		$oView->oUser = $oUser;
-		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tUserRoles);
+		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tUserRoles);
 		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(), $tUserGroups);
 		$oView->tColumn = $tColumns;
 		$oView->tId = $oUserModel->getIdTab();
@@ -126,7 +126,7 @@ class module_users extends abstract_module
 
 		$oView = new _view('users::edit');
 		$oView->oUser = $oUser;
-		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelect(), $tUserRoles);
+		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tUserRoles);
 		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(), $tUserGroups);
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un utilisateur';
@@ -339,8 +339,8 @@ class module_users extends abstract_module
 		if ($ptoRoles) {
 			foreach ($ptoRoles as $oRole) {
 				switch ($oRole->role_name) {
-					case 'reader':
-					case 'board':
+					case plugin_vfa::TYPE_READER:
+					case plugin_vfa::TYPE_BOARD:
 						if (false == array_key_exists($oRole->role_id, $group)) {
 							return false;
 						}

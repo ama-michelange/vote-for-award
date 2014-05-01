@@ -39,6 +39,15 @@ class model_group extends abstract_model
 	}
 
 	/**
+	 * @return array row_group
+	 */
+	public function findAllReader()
+	{
+		$role_id=model_role::getInstance()->findByName(plugin_vfa::TYPE_READER)->role_id;
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' WHERE role_id_default=? ORDER BY group_name', $role_id);
+	}
+
+	/**
 	 * @param $ptId array string
 	 * @return array row_group
 	 */
@@ -151,6 +160,7 @@ class row_group extends abstract_row
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
 		$oPluginValid->isNotEmpty('group_name');
+		$oPluginValid->isNotEmpty('role_id_default');
 		return $oPluginValid;
 	}
 

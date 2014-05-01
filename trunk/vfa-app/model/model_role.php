@@ -21,11 +21,27 @@ class model_role extends abstract_model
 		return self::_getInstance(__CLASS__);
 	}
 
-	public function findById($uId)
+	/**
+	 * @param $pId
+	 * @return row_role
+	 */
+	public function findById($pId)
 	{
-		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE role_id=?', $uId);
+		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE role_id=?', $pId);
 	}
 
+	/**
+	 * @param $pName
+	 * @return row_role
+	 */
+	public function findByName($pName)
+	{
+		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE role_name=?', $pName);
+	}
+
+	/**
+	 * @return array row_role
+	 */
 	public function findAll()
 	{
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY role_name');
@@ -61,7 +77,7 @@ class model_role extends abstract_model
 		return $this->findMany($sql, $pUserId);
 	}
 
-	public function getSelect()
+	public function getSelectAll()
 	{
 		$tab = $this->findAll();
 		$tSelect = array();

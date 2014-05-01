@@ -13,10 +13,6 @@
 					<div class="col-sm-2 col-md-1 view-label">Type</div>
 					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->oGroup->getTypeString() ?></div>
 				</div>
-<!--				<div class="row">-->
-<!--					<div class="col-sm-2 col-md-1 view-label">Rôle minimal</div>-->
-<!--					<div class="col-sm-10 col-md-11 view-value">--><?php //echo $this->oRole->toString() ?><!--</div>-->
-<!--				</div>-->
 			</div>
 		</div>
 		<?php if($this->toUsers):?>
