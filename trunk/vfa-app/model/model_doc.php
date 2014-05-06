@@ -9,10 +9,11 @@ class model_doc extends abstract_model
 
 	protected $sConfig = 'mysql';
 
-	protected $tId = array(
-		'doc_id'
-	);
+	protected $tId = array('doc_id');
 
+	/**
+	 * @return model_doc
+	 */
 	public static function getInstance()
 	{
 		return self::_getInstance(__CLASS__);
@@ -27,24 +28,33 @@ class model_doc extends abstract_model
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE doc_id=?', $uId);
 	}
 
+	/**
+	 * @return row_doc[]
+	 */
 	public function findAll()
 	{
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY order_title,LENGTH(number),number,proper_title');
 	}
 
+	/**
+	 * @return row_doc[]
+	 */
 	public function findAllRecent()
 	{
 		$date = new plugin_date(date('Y-m-d'), 'Y-m-d');
-		$date->addYear(- 5);
-		return $this->findMany(
-			'SELECT * FROM ' . $this->sTable . ' WHERE date_legal >= DATE(\'' . $date->toString() .
-				 '\') ORDER BY order_title,LENGTH(number),number,proper_title');
+		$date->addYear(-5);
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' WHERE date_legal >= DATE(\'' . $date->toString() .
+			'\') ORDER BY order_title,LENGTH(number),number,proper_title');
 	}
 
+	/**
+	 * @param $pTitleId
+	 * @return row_doc[]
+	 */
 	public function findAllByTitleId($pTitleId)
 	{
 		$sql = 'SELECT * FROM vfa_docs, vfa_title_docs ' . 'WHERE (vfa_title_docs.doc_id = vfa_docs.doc_id) ' .
-			 'AND (vfa_title_docs.title_id = ?) ' . 'ORDER BY vfa_docs.order_title,LENGTH(number),number,proper_title';
+			'AND (vfa_title_docs.title_id = ?) ' . 'ORDER BY vfa_docs.order_title,LENGTH(number),number,proper_title';
 		return $this->findMany($sql, $pTitleId);
 	}
 
@@ -94,7 +104,7 @@ class row_doc extends abstract_row
 		}
 		return $tArray;
 	}
-	
+
 	/* validation */
 	private function getCheck()
 	{

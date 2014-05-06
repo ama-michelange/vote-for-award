@@ -29,7 +29,7 @@ class model_selection extends abstract_model
 	}
 
 	/**
-	 * @return array row_selection
+	 * @return row_selection[]
 	 */
 	public function findAll()
 	{
@@ -56,7 +56,7 @@ class model_selection extends abstract_model
 
 	/**
 	 * @param $pDate
-	 * @return array string
+	 * @return string[]
 	 */
 	// FIXME A conserver ?
 	public function getSelectByDate($pDate)
@@ -71,7 +71,7 @@ class model_selection extends abstract_model
 
 	/**
 	 * @param $pDate
-	 * @return array row_selection
+	 * @return row_selection[]
 	 */
 	// FIXME A conserver ?
 	public function findAllByDate($pDate)
@@ -82,7 +82,7 @@ class model_selection extends abstract_model
 
 	/**
 	 * @param $pType
-	 * @return array row_selection
+	 * @return row_selection[]
 	 */
 	public function findAllByType($pType)
 	{
@@ -106,24 +106,28 @@ class model_selection extends abstract_model
 		$this->execute($sql);
 	}
 
+	/**
+	 * @param $pTitleId
+	 * @return row_selection[]
+	 */
 	public function findAllByTitleId($pTitleId)
 	{
 		$sql = 'SELECT * FROM vfa_selections, vfa_selection_titles ' .
-			'WHERE (vfa_selection_titles.selection_id = vfa_selections.selection_id) ' .
-			'AND (vfa_selection_titles.title_id = ?) ' . 'ORDER BY vfa_selections.name';
+			'WHERE (vfa_selection_titles.selection_id = vfa_selections.selection_id) ' . 'AND (vfa_selection_titles.title_id = ?) ' .
+			'ORDER BY vfa_selections.name';
 		return $this->findMany($sql, $pTitleId);
 	}
 
 	/**
 	 * @param $pDocId
-	 * @return array row_selection
+	 * @return row_selection[]
 	 */
 	public function findAllByDocId($pDocId)
 	{
 		$sql = 'SELECT * FROM vfa_selections, vfa_selection_titles, vfa_title_docs ' .
 			'WHERE (vfa_selection_titles.selection_id = vfa_selections.selection_id) ' .
-			'AND (vfa_selection_titles.title_id = vfa_title_docs.title_id) ' .
-			'AND (vfa_title_docs.doc_id= ?) ' . 'ORDER BY vfa_selections.name';
+			'AND (vfa_selection_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ' .
+			'ORDER BY vfa_selections.name';
 		return $this->findMany($sql, $pDocId);
 	}
 }

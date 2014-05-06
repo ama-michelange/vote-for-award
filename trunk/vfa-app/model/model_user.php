@@ -59,7 +59,7 @@ class model_user extends abstract_model
 	}
 
 	/**
-	 * @return array row_user
+	 * @return row_user[]
 	 */
 	public function findAll()
 	{
@@ -68,7 +68,7 @@ class model_user extends abstract_model
 
 	/**
 	 * @param $pGroupId
-	 * @return array row_user
+	 * @return row_user[]
 	 */
 	public function findAllByGroupId($pGroupId)
 	{
@@ -81,7 +81,7 @@ class model_user extends abstract_model
 	/**
 	 * @param $pGroupId
 	 * @param $pAwardId
-	 * @return array row_user
+	 * @return row_user[]
 	 */
 	public function findAllByGroupIdByAwardId($pGroupId, $pAwardId)
 	{
