@@ -70,9 +70,13 @@ class model_role extends abstract_model
 		return $ret;
 	}
 
+	/**
+	 * @param $pUserId
+	 * @return array row_role
+	 */
 	public function findAllByUserId($pUserId)
 	{
-		$sql = 'SELECT * FROM vfa_roles, vfa_user_roles ' . 'WHERE (vfa_user_roles.role_id = vfa_roles.role_id) ' .
+		$sql = 'SELECT vfa_roles.role_id, vfa_roles.role_name FROM vfa_roles, vfa_user_roles ' . 'WHERE (vfa_user_roles.role_id = vfa_roles.role_id) ' .
 			'AND (vfa_user_roles.user_id = ?) ' . 'ORDER BY vfa_roles.role_name';
 		return $this->findMany($sql, $pUserId);
 	}
@@ -129,6 +133,9 @@ class row_role extends abstract_row
 
 	protected $sClassModel = 'model_role';
 
+	/**
+	 * @return row_authorization
+	 */
 	public function findAuthorizations()
 	{
 		return model_authorization::getInstance()->findAllByRoleId($this->role_id);

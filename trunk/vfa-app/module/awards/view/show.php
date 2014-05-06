@@ -45,7 +45,7 @@
 					<div class="panel-heading">
 						<h5 class="panel-title">Nominés
 							<a class="pull-right accordion-toggle btn btn-default btn-xs" data-toggle="collapse" href="#selection"><i
-									data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+									data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i></a>
 						</h5>
 					</div>
 					<div id="selection" class="collapse in">

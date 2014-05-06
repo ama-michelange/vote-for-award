@@ -39,15 +39,6 @@ class model_group extends abstract_model
 	}
 
 	/**
-	 * @return array row_group
-	 */
-	public function findAllReader()
-	{
-		$role_id=model_role::getInstance()->findByName(plugin_vfa::TYPE_READER)->role_id;
-		return $this->findMany('SELECT * FROM ' . $this->sTable . ' WHERE role_id_default=? ORDER BY group_name', $role_id);
-	}
-
-	/**
 	 * @param $ptId array string
 	 * @return array row_group
 	 */
@@ -70,31 +61,49 @@ class model_group extends abstract_model
 		return $ret;
 	}
 
-
+	/**
+	 * @param $pUserId
+	 * @return array row_group
+	 */
 	public function findAllByUserId($pUserId)
 	{
-		$sql = 'SELECT * FROM vfa_groups, vfa_user_groups ';
+		$sql = 'SELECT vfa_groups.group_id, vfa_groups.group_name, vfa_groups.role_id_default FROM vfa_groups, vfa_user_groups ';
 		$sql .= 'WHERE (vfa_user_groups.group_id = vfa_groups.group_id) AND (vfa_user_groups.user_id = ?) ';
 		$sql .= 'ORDER BY vfa_groups.group_name';
 		return $this->findMany($sql, $pUserId);
 	}
 
-	public function findAllByType($pType)
+	/**
+	 * @param $pRoleName
+	 * @return array row_group
+	 */
+	public function findAllByRoleName($pRoleName)
 	{
-		$sql = 'SELECT * FROM vfa_groups ';
-		$sql .= 'WHERE (vfa_groups.type = ?) ';
+		$sql = 'SELECT vfa_groups.group_id, vfa_groups.group_name, vfa_groups.role_id_default FROM vfa_groups, vfa_roles ';
+		$sql .= 'WHERE (vfa_groups.role_id_default = vfa_roles.role_id) AND (vfa_roles.role_name = ?) ';
 		$sql .= 'ORDER BY vfa_groups.group_name';
-		return $this->findMany($sql, $pType);
+		return $this->findMany($sql, $pRoleName);
 	}
 
-	public function findAllByUserIdByType($pUserId, $pType)
+	/**
+	 * @param $pUserId
+	 * @param $pRoleName
+	 * @return row_group
+	 */
+	public function findByUserIdByRoleName($pUserId, $pRoleName)
 	{
-		$sql = 'SELECT * FROM vfa_groups, vfa_user_groups ';
-		$sql .= 'WHERE (vfa_user_groups.group_id = vfa_groups.group_id) AND (vfa_user_groups.user_id = ?) AND (vfa_groups.type = ?) ';
-		$sql .= 'ORDER BY vfa_groups.group_name';
-		return $this->findMany($sql, $pUserId, $pType);
+		$sql = 'SELECT vfa_groups.group_id, vfa_groups.group_name, vfa_groups.role_id_default FROM vfa_groups, vfa_roles, vfa_user_groups ';
+		$sql .= 'WHERE (vfa_groups.role_id_default = vfa_roles.role_id) ';
+		$sql .= 'AND (vfa_user_groups.group_id = vfa_groups.group_id) ';
+		$sql .= 'AND (vfa_user_groups.user_id = ?) ';
+		$sql .= 'AND (vfa_roles.role_name = ?)';
+		return $this->findOne($sql, $pUserId, $pRoleName);
 	}
 
+	/**
+	 * @param $pName
+	 * @return row_group
+	 */
 	public function findByName($pName)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE group_name=?', $pName);

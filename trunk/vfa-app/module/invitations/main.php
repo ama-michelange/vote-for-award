@@ -215,10 +215,10 @@ class module_invitations extends abstract_module
 	{
 		switch (_root::getAction()) {
 			case 'board':
-				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::TYPE_BOARD);
+				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_BOARD);
 				break;
 			case 'responsible':
-				$tGroups = model_group::getInstance()->findAllByType(plugin_vfa::TYPE_READER);
+				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_READER);
 				break;
 			default:
 				$tGroups = _root::getAuth()->getUserSession()->getReaderGroups();
