@@ -9,9 +9,7 @@ class model_authorization extends abstract_model
 
 	protected $sConfig = 'mysql';
 
-	protected $tId = array(
-		'authorization_id'
-	);
+	protected $tId = array('authorization_id');
 
 	/**
 	 * @return model_authorization
@@ -65,8 +63,8 @@ class row_authorization extends abstract_row
 {
 
 	protected $sClassModel = 'model_authorization';
-	
-		private function getCheck()
+
+	private function getCheck()
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
 		return $oPluginValid;

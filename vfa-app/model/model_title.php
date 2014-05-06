@@ -74,8 +74,8 @@ class model_title extends abstract_model
 	public function findByDocIdSelectionId($pDocId, $pSelectionId)
 	{
 		$sql = 'SELECT DISTINCT * FROM vfa_titles, vfa_selection_titles, vfa_title_docs ' .
-			'WHERE (vfa_title_docs.title_id = vfa_titles.title_id) ' .
-			'AND (vfa_title_docs.doc_id= ?) ' . 'AND (vfa_selection_titles.selection_id= ?) ';
+			'WHERE (vfa_title_docs.title_id = vfa_titles.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ' .
+			'AND (vfa_selection_titles.selection_id= ?) ';
 		return $this->findOne($sql, $pDocId, $pSelectionId);
 	}
 

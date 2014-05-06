@@ -76,8 +76,8 @@ class model_role extends abstract_model
 	 */
 	public function findAllByUserId($pUserId)
 	{
-		$sql = 'SELECT vfa_roles.role_id, vfa_roles.role_name FROM vfa_roles, vfa_user_roles ' . 'WHERE (vfa_user_roles.role_id = vfa_roles.role_id) ' .
-			'AND (vfa_user_roles.user_id = ?) ' . 'ORDER BY vfa_roles.role_name';
+		$sql = 'SELECT vfa_roles.role_id, vfa_roles.role_name FROM vfa_roles, vfa_user_roles ' .
+			'WHERE (vfa_user_roles.role_id = vfa_roles.role_id) ' . 'AND (vfa_user_roles.user_id = ?) ' . 'ORDER BY vfa_roles.role_name';
 		return $this->findMany($sql, $pUserId);
 	}
 
