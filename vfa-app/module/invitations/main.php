@@ -19,10 +19,29 @@ class module_invitations extends abstract_module
 
 	private function buildContextBar()
 	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+//		$oReaderGroup = $oUserSession->getReaderGroup();
+		$tValidReaderAwards = $oUserSession->getValidReaderAwards();
+
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Invitations', new NavLink('nominees', 'index', array('idAward' => _root::getParam('idAward'))));
-		$navBar->addChild(new BarButtons('left'));
-		plugin_BsContextBar::buildDefaultContextBar($navBar);
+		$navBar->setTitle('Invités', new NavLink('invitations', 'index'));
+		$navBar->addChild(new Bar('left'));
+		$navBar->addChild(new BarButtons('right'));
+
+		if ('list' == _root::getAction()) {
+			if (count($tValidReaderAwards) > 0) {
+				$item = plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred'));
+				if ($item) {
+					$navBar->getChild('left')->addChild($item);
+				}
+			}
+			$item = plugin_BsHtml::buildMenuItem('Groupe', new NavLink('registred', 'listReaderGroup'));
+			if ($item) {
+				$navBar->getChild('left')->addChild($item);
+			}
+		}
+		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
 		return $navBar;
 	}
 
@@ -34,7 +53,10 @@ class module_invitations extends abstract_module
 
 	public function _list()
 	{
-		$tInvitations = model_invitation::getInstance()->findAllByCategory(plugin_vfa::CATEGORY_INVITATION);
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oReaderGroup = $oUserSession->getReaderGroup();
+
+		$tInvitations = model_invitation::getInstance()->findAllByCategoryByGroupId(plugin_vfa::CATEGORY_INVITATION, $oReaderGroup->group_id);
 
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
@@ -47,13 +69,6 @@ class module_invitations extends abstract_module
 		$oView = new _view('invitations::read');
 		$oView->oViewShow = $this->makeViewShow();
 		$this->oLayout->add('work', $oView);
-	}
-
-	public function before_reader()
-	{
-		if (false == _root::getACL()->permit('invitations::reader')) {
-			_root::redirect('default::index');
-		}
 	}
 
 	public function _reader()
@@ -69,13 +84,6 @@ class module_invitations extends abstract_module
 		$this->dispatch($oRegistry);
 	}
 
-	public function before_responsible()
-	{
-		if (false == _root::getACL()->permit('invitations::responsible')) {
-			_root::redirect('default::index');
-		}
-	}
-
 	public function _responsible()
 	{
 		$oRegistry = $this->verify();
@@ -88,13 +96,6 @@ class module_invitations extends abstract_module
 		$this->dispatch($oRegistry);
 	}
 
-	public function before_free()
-	{
-		if (false == _root::getACL()->permit('invitations::free')) {
-			_root::redirect('default::index');
-		}
-	}
-
 	public function _free()
 	{
 		$tMessage = null;
@@ -104,13 +105,6 @@ class module_invitations extends abstract_module
 		// $oView->oViewShow=$this->makeViewShow();
 
 		$this->oLayout->add('work', $oView);
-	}
-
-	public function before_board()
-	{
-		if (false == _root::getACL()->permit('invitations::board')) {
-			_root::redirect('default::index');
-		}
 	}
 
 	public function _board()

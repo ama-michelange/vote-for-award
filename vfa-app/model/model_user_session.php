@@ -29,6 +29,8 @@ class model_user_session
 		$oUserSession->setGroups($oGroups);
 		$oReaderGroup = model_group::getInstance()->findByUserIdByRoleName($pUser->user_id, plugin_vfa::TYPE_READER);
 		$oUserSession->setReaderGroup($oReaderGroup);
+		$oBoardGroup = model_group::getInstance()->findByUserIdByRoleName($pUser->user_id, plugin_vfa::TYPE_BOARD);
+		$oUserSession->setBoardGroup($oBoardGroup);
 
 		$oValidAwards = model_award::getInstance()->findAllValidByUserId($pUser->user_id);
 		$oUserSession->setValidAwards($oValidAwards);
@@ -235,7 +237,7 @@ class row_user_session
 	}
 
 	/**
-	 * Attribue un tableau de groupes de LECTEUR
+	 * Attribue le groupe de LECTEUR
 	 *
 	 * @param row_group $pGroup
 	 */
@@ -252,6 +254,25 @@ class row_user_session
 	public function getReaderGroup()
 	{
 		return $this->oReaderGroup;
+	}
+/**
+	 * Attribue le groupe de COMITE DE SELECTION
+	 *
+	 * @param row_group $pGroup
+	 */
+	public function setBoardGroup($pGroup)
+	{
+		$this->oBoardGroup = $pGroup;
+	}
+
+	/**
+	 * Renvoie le groupe de COMITE DE SELECTION de l'utilisateur
+	 *
+	 * @return row_group
+	 */
+	public function getBoardGroup()
+	{
+		return $this->oBoardGroup;
 	}
 
 	/**

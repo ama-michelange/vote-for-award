@@ -12,7 +12,8 @@
 					<th>Alias</th>
 					<th>Nom</th>
 					<th>Prénom</th>
-					<th>Rôles</th>
+					<th data-rel="tooltip" data-original-title="Correspondant du groupe">Corres.</th>
+					<th>Inscrit</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,11 +29,19 @@
 					<td><?php echo wordwrap($oUser->last_name,30,'<br />', true) ?></td>
 					<td><?php echo wordwrap($oUser->first_name,30,'<br />', true) ?></td>
 					<td>
+						<?php foreach ($oUser->findRoles() as $oRole) : ?>
+							<?php if (plugin_vfa::TYPE_RESPONSIBLE == $oRole->role_name) :	?>
+								<span class="glyphicon glyphicon-check"></span>
+							<?php endif; ?>
+						<?php endforeach;?>
+					</td>
+					<td>
 						<?php
 							$i = 0;
-							foreach ($oUser->findRoles() as $oRole) {
+							$tAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id);
+							foreach ($tAwards as $oAward) {
 								if ($i > 0) :	echo ', '; endif;
-								echo model_role::getInstance()->getI18nStringRole($oRole->role_id);
+								echo $oAward->toString();
 								$i ++;
 							}
 						?>
