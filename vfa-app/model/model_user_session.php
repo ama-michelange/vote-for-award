@@ -45,7 +45,8 @@ class model_user_session
 					break;
 			}
 		}
-
+		$oUserSession->setValidBoardAwards($oValidBoardAwards);
+		$oUserSession->setValidReaderAwards($oValidReaderAwards);
 
 		$tAuthorizations = array();
 		foreach ($oRoles as $oRole) {
@@ -256,7 +257,7 @@ class row_user_session
 	/**
 	 * Attribue un tableau de prix
 	 *
-	 * @param row_award $pValidAwards
+	 * @param row_award[] $pValidAwards
 	 */
 	public function setValidAwards($pValidAwards)
 	{
@@ -266,7 +267,7 @@ class row_user_session
 	/**
 	 * Renvoie le tableau de prix
 	 *
-	 * @return row_award
+	 * @return row_award[]
 	 */
 	public function getValidAwards()
 	{
@@ -276,7 +277,7 @@ class row_user_session
 	/**
 	 * Attribue un tableau de prix
 	 *
-	 * @param row_award $pValidAwards
+	 * @param row_award[] $pValidAwards
 	 */
 	public function setValidReaderAwards($pValidAwards)
 	{
@@ -286,7 +287,7 @@ class row_user_session
 	/**
 	 * Renvoie le tableau de prix
 	 *
-	 * @return row_award
+	 * @return row_award[]
 	 */
 	public function getValidReaderAwards()
 	{
@@ -296,7 +297,7 @@ class row_user_session
 	/**
 	 * Attribue un tableau de prix
 	 *
-	 * @param row_award $pValidAwards
+	 * @param row_award[] $pValidAwards
 	 */
 	public function setValidBoardAwards($pValidAwards)
 	{
@@ -306,7 +307,7 @@ class row_user_session
 	/**
 	 * Renvoie le tableau de prix
 	 *
-	 * @return row_award
+	 * @return row_award[]
 	 */
 	public function getValidBoardAwards()
 	{

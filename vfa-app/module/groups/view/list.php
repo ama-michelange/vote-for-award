@@ -19,7 +19,7 @@
 					<?php else:?>
 						<td><?php echo $oGroup->group_name ?></td>
 					<?php endif;?>
-					<td><?php echo $oGroup->getTypeString() ?></td>
+					<td><?php echo $oGroup->getI18nStringType() ?></td>
 				</tr>
 				<?php endforeach;?>
 			</tbody>

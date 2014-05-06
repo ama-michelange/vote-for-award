@@ -152,7 +152,7 @@ class row_group extends abstract_row
 	/**
 	 * @return string
 	 */
-	public function getTypeString()
+	public function getI18nStringType()
 	{
 		return model_group::getInstance()->getStringTypeGroup($this->role_id_default);
 	}
@@ -162,7 +162,7 @@ class row_group extends abstract_row
 	 */
 	public function getRoleString()
 	{
-		return model_role::getInstance()->getStringRole($this->role_id_default);
+		return model_role::getInstance()->getI18nStringRole($this->role_id_default);
 	}
 
 	private function getCheck()

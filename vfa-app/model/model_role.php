@@ -115,7 +115,7 @@ class model_role extends abstract_model
 	 * @param $pIdRole
 	 * @return string
 	 */
-	public function getStringRole($pIdRole)
+	public function getI18nStringRole($pIdRole)
 	{
 		if (!isset($this->tStringRoles[$pIdRole])) {
 			if (!isset($this->tStringRoles)) {

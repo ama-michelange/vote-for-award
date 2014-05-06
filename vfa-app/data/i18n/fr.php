@@ -12,8 +12,9 @@ _root::setConfigVar('tLangue',
 		'role.board' => 'Membre du comité de sélection',
 		'role.bookseller' => 'Libraire',
 		'role.organizer' => 'Organisateur',
+		'role.owner' => 'Propriétaire',
 		'role.reader' => 'Lecteur',
-		'role.resp_group' => 'Correspondant d\'un groupe',
+		'role.responsible' => 'Correspondant',
 
 		// Groupes
 		'group.board' => 'Comité de sélection',

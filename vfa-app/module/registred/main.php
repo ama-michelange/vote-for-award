@@ -20,7 +20,7 @@ class module_registred extends abstract_module
 	private function buildContextBar()
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Inscrits', new NavLink('registred', 'index'));
+		$navBar->setTitle('Groupe', new NavLink('registred', 'listGroup'));
 		$navBar->addChild(new BarButtons('left'));
 //		plugin_BsContextBar::buildDefaultContextBar($navBar);
 		return $navBar;
@@ -29,88 +29,44 @@ class module_registred extends abstract_module
 	public function _index()
 	{
 		// redirection vers la page par défaut
-		_root::redirect('registred::list');
+		_root::redirect('registred::listGroup');
 	}
 
-	public function _list()
+	public function _listGroup()
 	{
 		$oUserSession = _root::getAuth()->getUserSession();
 		$oReaderGroup = $oUserSession->getReaderGroup();
-		$oReaderAwards = $oUserSession->getValidReaderAwards();
 
+		$tUsers = model_user::getInstance()->findAllByGroupId($oReaderGroup->group_id);
 
-		$tUsers = model_user::getInstance()->findAllByGroupIdByAwardId($oReaderGroup->group_id, $oReaderAwards[0]->award_id);
-
-		$oView = new _view('registred::list');
+		$oView = new _view('registred::listGroup');
 		$oView->tUsers = $tUsers;
+		$oView->oGroup = $oReaderGroup;
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listRegistred()
+	{
+		$tUsers = null;
+		$oFirstAward = null;
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oReaderGroup = $oUserSession->getReaderGroup();
+		$tAwards = $oUserSession->getValidReaderAwards();
+		if (count($tAwards) > 0) {
+			$oFirstAward = $tAwards[0];
+			$tUsers = model_user::getInstance()->findAllByGroupIdByAwardId($oReaderGroup->group_id, $oFirstAward->award_id);
+		}
+		$oView = new _view('registred::listRegistred');
+		$oView->tUsers = $tUsers;
+		$oView->oGroup = $oReaderGroup;
+		$oView->oFirstAward = $oFirstAward;
+		$oView->tAwards = $tAwards;
+
 
 		$this->oLayout->add('work', $oView);
 	}
 
 
-	private function fillAwards($pView)
-	{
-		switch (_root::getAction()) {
-			case 'board':
-				$tAwards = model_award::getInstance()->findAllByType('PSBD');
-				break;
-			default:
-				$tAwards = model_award::getInstance()->findAllByType('PBD');
-				break;
-		}
-		$pView->countAwards = count($tAwards);
-		if ($pView->countAwards == 0) {
-			$tMessage = $pView->tMessage;
-			switch (_root::getAction()) {
-				case 'board':
-					$tMessage['awards'][] = 'nonePSBD';
-					break;
-				default:
-					$tMessage['awards'][] = 'nonePBD';
-					break;
-			}
-			$pView->tMessage = $tMessage;
-		} elseif ($pView->countAwards == 1) {
-			$pView->oAward = $tAwards[0];
-		} else {
-			$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'getTypeNameString');
-			if ($pView->oRegistry->awards_ids) {
-				$pView->oRegistry->awards_ids = array_flip($pView->oRegistry->awards_ids);
-			}
-			$pView->tSelectedAwards = plugin_vfa::buildOptionSelected($tSelect, $pView->oRegistry->awards_ids);
-		}
-	}
-
-	private function fillGroups($pView)
-	{
-		switch (_root::getAction()) {
-			case 'board':
-				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_BOARD);
-				break;
-			case 'responsible':
-				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_READER);
-				break;
-			default:
-				$tGroups = _root::getAuth()->getUserSession()->getReaderGroups();
-				break;
-		}
-		$pView->countGroups = count($tGroups);
-		if ($pView->countGroups == 0) {
-			$tMessage = $pView->tMessage;
-			switch (_root::getAction()) {
-				case 'board':
-					$pView->tMessage['groups'][] = 'noneCS';
-					break;
-				default:
-					$tMessage['groups'][] = 'none';
-					break;
-			}
-			$pView->tMessage = $tMessage;
-		} elseif ($pView->countGroups == 1) {
-			$pView->oGroup = $tGroups[0];
-		} else {
-			$tSelect = plugin_vfa::toSelect($tGroups, 'group_id', 'group_name', null, true);
-			$pView->tSelectedGroups = plugin_vfa::buildOptionSelected($tSelect, $pView->oRegistry->group_id);
-		}
-	}
 }
