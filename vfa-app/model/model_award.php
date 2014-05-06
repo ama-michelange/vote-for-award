@@ -29,7 +29,7 @@ class model_award extends abstract_model
 	}
 
 	/**
-	 * @return array row_award
+	 * @return row_award[]
 	 */
 	public function findAll()
 	{
@@ -48,7 +48,7 @@ class model_award extends abstract_model
 
 	/**
 	 * @param $pType
-	 * @return array row_award
+	 * @return row_award[]
 	 */
 	public function findAllByType($pType)
 	{
@@ -69,7 +69,7 @@ class model_award extends abstract_model
 
 	/**
 	 * @param $pSelectionId string|array
-	 * @return array row_award
+	 * @return row_award[]
 	 */
 	public function findAllBySelectionId($pSelectionId)
 	{
@@ -86,7 +86,7 @@ class model_award extends abstract_model
 
 	/**
 	 * @param $pUserId
-	 * @return array row_award
+	 * @return row_award[]
 	 */
 	public function findAllByUserId($pUserId)
 	{
@@ -97,7 +97,7 @@ class model_award extends abstract_model
 
 	/**
 	 * @param $pUserId
-	 * @return array row_award
+	 * @return row_award[]
 	 */
 	public function findAllValidByUserId($pUserId)
 	{

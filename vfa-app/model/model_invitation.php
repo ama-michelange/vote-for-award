@@ -11,11 +11,18 @@ class model_invitation extends abstract_model
 
 	protected $tId = array('invitation_id');
 
+	/**
+	 * @return model_invitation
+	 */
 	public static function getInstance()
 	{
 		return self::_getInstance(__CLASS__);
 	}
 
+	/**
+	 * @param $uId
+	 * @return row_invitation
+	 */
 	public function findById($uId)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE invitation_id=' . $uId);
@@ -23,17 +30,29 @@ class model_invitation extends abstract_model
 		// return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE invitation_id=?', $uId);
 	}
 
+	/**
+	 * @return row_invitation[]
+	 */
 	public function findAll()
 	{
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY email, type, created_date DESC');
 	}
 
+	/**
+	 * @param $pCategory
+	 * @return row_invitation[]
+	 */
 	public function findAllByCategory($pCategory)
 	{
 		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE category=? ORDER BY email, type, created_date DESC';
 		return $this->findMany($sql, $pCategory);
 	}
 
+	/**
+	 * @param $poRegistry
+	 * @param string $pState
+	 * @return row_invitation
+	 */
 	public function findByRegistry($poRegistry, $pState = 'OPEN')
 	{
 		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE type=?' . '	AND state=?' . '	AND email=?' . '	AND group_id=?' .

@@ -32,7 +32,7 @@ class model_title extends abstract_model
 	/**
 	 * @param $uTitle
 	 * @param $uNumbers
-	 * @return array row_title
+	 * @return row_title[]
 	 */
 	public function findByTitleAndNumbers($uTitle, $uNumbers)
 	{
@@ -40,7 +40,7 @@ class model_title extends abstract_model
 	}
 
 	/**
-	 * @return array row_title
+	 * @return row_title[]
 	 */
 	public function findAll()
 	{
@@ -49,7 +49,7 @@ class model_title extends abstract_model
 
 	/**
 	 * @param $pSelectionId string
-	 * @return array row_title
+	 * @return row_title[]
 	 */
 	public function findAllBySelectionId($pSelectionId)
 	{
@@ -59,7 +59,7 @@ class model_title extends abstract_model
 	}
 
 	/**
-	 * @return array row_title
+	 * @return row_title[]
 	 */
 	public function findAllByDocId($pDocId)
 	{
@@ -69,7 +69,7 @@ class model_title extends abstract_model
 	}
 
 	/**
-	 * @return array row_title
+	 * @return row_title[]
 	 */
 	public function findByDocIdSelectionId($pDocId, $pSelectionId)
 	{

@@ -31,7 +31,7 @@ class model_group extends abstract_model
 	}
 
 	/**
-	 * @return array row_group
+	 * @return row_group[]
 	 */
 	public function findAll()
 	{
@@ -40,7 +40,7 @@ class model_group extends abstract_model
 
 	/**
 	 * @param $ptId array string
-	 * @return array row_group
+	 * @return row_group[]
 	 */
 	public function findAllByIds($ptId)
 	{
@@ -63,7 +63,7 @@ class model_group extends abstract_model
 
 	/**
 	 * @param $pUserId
-	 * @return array row_group
+	 * @return row_group[]
 	 */
 	public function findAllByUserId($pUserId)
 	{
@@ -75,7 +75,7 @@ class model_group extends abstract_model
 
 	/**
 	 * @param $pRoleName
-	 * @return array row_group
+	 * @return row_group[]
 	 */
 	public function findAllByRoleName($pRoleName)
 	{

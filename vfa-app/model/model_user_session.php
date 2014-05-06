@@ -280,7 +280,7 @@ class row_user_session
 	 */
 	public function setValidReaderAwards($pValidAwards)
 	{
-		$this->oValidAwards = $pValidAwards;
+		$this->oValidReaderAwards = $pValidAwards;
 	}
 
 	/**
@@ -290,7 +290,7 @@ class row_user_session
 	 */
 	public function getValidReaderAwards()
 	{
-		return $this->oValidAwards;
+		return $this->oValidReaderAwards;
 	}
 
 	/**
@@ -300,7 +300,7 @@ class row_user_session
 	 */
 	public function setValidBoardAwards($pValidAwards)
 	{
-		$this->oValidAwards = $pValidAwards;
+		$this->oValidBoardAwards = $pValidAwards;
 	}
 
 	/**
@@ -310,7 +310,7 @@ class row_user_session
 	 */
 	public function getValidBoardAwards()
 	{
-		return $this->oValidAwards;
+		return $this->oValidBoardAwards;
 	}
 
 	public function getSelectValidAwards()
