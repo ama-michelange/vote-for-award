@@ -45,7 +45,7 @@ class module_users extends abstract_module
 
 		$oView = new _view('users::list');
 		$oView->tUsers = $tUsers;
-		$oView->tColumn = $oUserModel->getListColumn(); // array('id','titre');//
+		$oView->tColumn = $oUserModel->getListColumn();
 
 		$this->oLayout->add('work', $oView);
 	}

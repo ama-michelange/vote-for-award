@@ -244,11 +244,11 @@
 			</div>
 		</div>
 		<?php endif;?>
-		<?php
+		<?php        /*
 			$oUserSession = _root::getAuth()->getUserSession();
 			var_dump($oUserSession->getValidAwards());
 			var_dump($oUserSession->getReaderGroup());
-			var_dump($oUserSession->getReaderGroup());
+			*/
 		?>
 	</div>
 </form>
