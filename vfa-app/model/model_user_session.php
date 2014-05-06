@@ -24,15 +24,29 @@ class model_user_session
 		$oUserSession->setUser($pUser);
 		$oRoles = model_role::getInstance()->findAllByUserId($pUser->user_id);
 		$oUserSession->setRoles($oRoles);
-		
+
 		$oGroups = model_group::getInstance()->findAllByUserId($pUser->user_id);
 		$oUserSession->setGroups($oGroups);
-		$oReaderGroups = model_group::getInstance()->findAllByUserIdByType($pUser->user_id, plugin_vfa::TYPE_READER);
-		$oUserSession->setReaderGroups($oReaderGroups);
-		
-		$oAwards = model_award::getInstance()->findAllByUserId($pUser->user_id);
-		$oUserSession->setAwards($oAwards);
-		
+		$oReaderGroup = model_group::getInstance()->findByUserIdByRoleName($pUser->user_id, plugin_vfa::TYPE_READER);
+		$oUserSession->setReaderGroup($oReaderGroup);
+
+		$oValidAwards = model_award::getInstance()->findAllValidByUserId($pUser->user_id);
+		$oUserSession->setValidAwards($oValidAwards);
+
+		$oValidReaderAwards = array();
+		$oValidBoardAwards = array();
+		foreach ($oValidAwards as $oAward) {
+			switch ($oAward->type) {
+				case plugin_vfa::TYPE_AWARD_BOARD:
+					$oValidBoardAwards[] = $oAward;
+					break;
+				case plugin_vfa::TYPE_AWARD_READER:
+					$oValidReaderAwards[] = $oAward;
+					break;
+			}
+		}
+
+
 		$tAuthorizations = array();
 		foreach ($oRoles as $oRole) {
 			// _root::getLog()->log('AMA >>> $oRole = '.$oRole->role_name.', ID = '.$oRole->role_id);
@@ -54,51 +68,54 @@ class row_user_session
 {
 
 	/**
-	 *
 	 * @var row_user L'utilisateur propriétaire du compte
 	 */
 	private $oUser = null;
 
 	/**
-	 *
 	 * @var row_role[] Table des roles de l'utilisateur
 	 */
 	private $oRoles = null;
 
 	/**
-	 *
 	 * @var string[] Table des noms de roles de l'utilisateur
 	 */
 	private $tRoles = null;
 
 	/**
-	 *
 	 * @var string[] Table des habilitations de l'utilisateur
 	 */
 	private $tAuthorizations = null;
 
 	/**
-	 *
 	 * @var row_group[] Table des groupes de l'utilisateur
 	 */
 	private $oGroups = null;
 
 	/**
-	 *
-	 * @var row_group[] Table des groupes de LECTEUR de l'utilisateur
+	 * @var row_group Le groupe de LECTEUR de l'utilisateur
 	 */
-	private $oReaderGroups = null;
+	private $oReaderGroup = null;
 
 	/**
-	 *
-	 * @var row_award[] Table des prix de l'utilisateur
+	 * @var row_award[] Prix valides de l'utilisateur
 	 */
-	private $oAwards = null;
+	private $oValidAwards = null;
+
+	/**
+	 * @var row_award[] Prix de lecteur valides de l'utilisateur
+	 */
+	private $oValidReaderAwards = null;
+
+	/**
+	 * @var row_award[] Préselections valides de l'utilisateur
+	 */
+	private $oValidBoardAwards = null;
 
 	/**
 	 * Attribue l'utilisateur propriétaire du compte
 	 *
-	 * @param row_user $pUser        	
+	 * @param row_user $pUser
 	 */
 	public function setUser($pUser)
 	{
@@ -118,7 +135,7 @@ class row_user_session
 	/**
 	 * Attribue un tableau de roles
 	 *
-	 * @param row_role $pRoles        	
+	 * @param row_role $pRoles
 	 */
 	public function setRoles($pRoles)
 	{
@@ -154,7 +171,7 @@ class row_user_session
 	/**
 	 * Attribue le tableau des habilitations de l'utilisateur
 	 *
-	 * @param array $ptAuthorizations        	
+	 * @param array $ptAuthorizations
 	 */
 	public function setAuthorizations($ptAuthorizations)
 	{
@@ -174,7 +191,7 @@ class row_user_session
 	/**
 	 * Attribue un tableau de groupes
 	 *
-	 * @param row_group $pGroups        	
+	 * @param row_group $pGroups
 	 */
 	public function setGroups($pGroups)
 	{
@@ -219,37 +236,31 @@ class row_user_session
 	/**
 	 * Attribue un tableau de groupes de LECTEUR
 	 *
-	 * @param row_group $pGroups        	
+	 * @param row_group $pGroup
 	 */
-	public function setReaderGroups($pGroups)
+	public function setReaderGroup($pGroup)
 	{
-		$this->oReaderGroups = $pGroups;
+		$this->oReaderGroup = $pGroup;
 	}
 
 	/**
-	 * Renvoie le tableau de groupes de LECTEUR
+	 * Renvoie le groupe de LECTEUR de l'utilisateur
 	 *
 	 * @return row_group
 	 */
-	public function getReaderGroups()
+	public function getReaderGroup()
 	{
-		return $this->oReaderGroups;
+		return $this->oReaderGroup;
 	}
 
 	/**
 	 * Attribue un tableau de prix
 	 *
-	 * @param row_award $pAwards        	
+	 * @param row_award $pValidAwards
 	 */
-	public function setAwards($pAwards)
+	public function setValidAwards($pValidAwards)
 	{
-		$this->oAwards = $pAwards;
-		
-		$nbAward = count($this->oAwards);
-		if ($nbAward > 0) {
-			$oAward = $this->oAwards[0];
-			$this->setCurrentIdAward($oAward->award_id);
-		}
+		$this->oValidAwards = $pValidAwards;
 	}
 
 	/**
@@ -257,15 +268,55 @@ class row_user_session
 	 *
 	 * @return row_award
 	 */
-	public function getAwards()
+	public function getValidAwards()
 	{
-		return $this->oAwards;
+		return $this->oValidAwards;
 	}
 
-	public function getSelectAwards()
+	/**
+	 * Attribue un tableau de prix
+	 *
+	 * @param row_award $pValidAwards
+	 */
+	public function setValidReaderAwards($pValidAwards)
+	{
+		$this->oValidAwards = $pValidAwards;
+	}
+
+	/**
+	 * Renvoie le tableau de prix
+	 *
+	 * @return row_award
+	 */
+	public function getValidReaderAwards()
+	{
+		return $this->oValidAwards;
+	}
+
+	/**
+	 * Attribue un tableau de prix
+	 *
+	 * @param row_award $pValidAwards
+	 */
+	public function setValidBoardAwards($pValidAwards)
+	{
+		$this->oValidAwards = $pValidAwards;
+	}
+
+	/**
+	 * Renvoie le tableau de prix
+	 *
+	 * @return row_award
+	 */
+	public function getValidBoardAwards()
+	{
+		return $this->oValidAwards;
+	}
+
+	public function getSelectValidAwards()
 	{
 		$tSelect = array();
-		foreach ($this->oAwards as $oRow) {
+		foreach ($this->oValidAwards as $oRow) {
 			$tSelect[$oRow->award_id] = $oRow->award_name;
 		}
 		return $tSelect;
