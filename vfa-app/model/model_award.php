@@ -68,28 +68,6 @@ class model_award extends abstract_model
 	}
 
 	/**
-	 * @param $pTitleId
-	 * @return array row_award
-	 */
-//	public function findAllByTitleId($pTitleId)
-//	{
-//		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
-//			'AND (vfa_award_titles.title_id = ?) ' . 'ORDER BY vfa_awards.name';
-//		return $this->findMany($sql, $pTitleId);
-//	}
-
-	/**
-	 * @param $pDocId
-	 * @return array row_award
-	 */
-//	public function findAllByDocId($pDocId)
-//	{
-//		$sql = 'SELECT * FROM vfa_awards, vfa_award_titles, vfa_title_docs ' . 'WHERE (vfa_award_titles.award_id = vfa_awards.award_id) ' .
-//			'AND (vfa_award_titles.title_id = vfa_title_docs.title_id) ' . 'AND (vfa_title_docs.doc_id= ?) ORDER BY vfa_awards.name';
-//		return $this->findMany($sql, $pDocId);
-//	}
-
-	/**
 	 * @param $pSelectionId string|array
 	 * @return array row_award
 	 */
@@ -97,9 +75,9 @@ class model_award extends abstract_model
 	{
 		$sql = 'SELECT * FROM vfa_awards WHERE (selection_id = ?)';
 		if (is_array($pSelectionId)) {
-		 $nbWhere = count($pSelectionId) -1;
+			$nbWhere = count($pSelectionId) - 1;
 			for ($i = 0; $i < $nbWhere; $i++) {
-				$sql.=' OR (selection_id = ?)';
+				$sql .= ' OR (selection_id = ?)';
 			}
 		}
 		$sql .= ' ORDER BY year DESC, name, type';
@@ -115,6 +93,17 @@ class model_award extends abstract_model
 		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' . 'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' .
 			'AND (vfa_user_awards.user_id = ?)';
 		return $this->findMany($sql, $pUserId);
+	}
+
+	/**
+	 * @param $pUserId
+	 * @return array row_award
+	 */
+	public function findAllValidByUserId($pUserId)
+	{
+		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' . 'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' .
+			'AND (vfa_user_awards.user_id = ?) AND (vfa_awards.end_date > ?)';
+		return $this->findMany($sql, $pUserId, plugin_vfa::dateSgbd());
 	}
 
 	/**

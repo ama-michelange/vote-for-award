@@ -11,29 +11,27 @@ class model_user extends abstract_model
 
 	protected $tId = array('user_id');
 
+	/**
+	 * @return model_user
+	 */
 	public static function getInstance()
 	{
 		return self::_getInstance(__CLASS__);
 	}
 
+	/**
+	 * @param $uId
+	 * @return row_user
+	 */
 	public function findById($uId)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE user_id=?', $uId);
 	}
 
-	public function findAll()
-	{
-		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY vfa_users.login');
-	}
-
-	public function findAllByGroupId($pGroupId)
-	{
-		$sql = 'SELECT * FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
-			'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.login';
-		// .'AND (vfa_user_groups.group_id = vfa_groups.group_id) '
-		return $this->findMany($sql, $pGroupId);
-	}
-
+	/**
+	 * @param $login
+	 * @return row_user
+	 */
 	public function findByLogin($login)
 	{
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE login=?', $login);
@@ -47,7 +45,7 @@ class model_user extends abstract_model
 	 *         Le login (ou login) unique dans la table
 	 * @param String $pPass
 	 *         Le mot de passe crypté SHA1
-	 * @return L'utilisateur correspondant ou null si non trouvé ou si le mot de passe ne correspond pas
+	 * @return row_user L'utilisateur correspondant ou null si non trouvé ou si le mot de passe ne correspond pas
 	 */
 	public function findByLoginAndCheckPass($pLogin, $pPass)
 	{
@@ -58,6 +56,39 @@ class model_user extends abstract_model
 			}
 		}
 		return $oUser;
+	}
+
+	/**
+	 * @return array row_user
+	 */
+	public function findAll()
+	{
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY vfa_users.login');
+	}
+
+	/**
+	 * @param $pGroupId
+	 * @return array row_user
+	 */
+	public function findAllByGroupId($pGroupId)
+	{
+		$sql = 'SELECT * FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
+			'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.login';
+		// .'AND (vfa_user_groups.group_id = vfa_groups.group_id) '
+		return $this->findMany($sql, $pGroupId);
+	}
+
+	/**
+	 * @param $pGroupId
+	 * @param $pAwardId
+	 * @return array row_user
+	 */
+	public function findAllByGroupIdByAwardId($pGroupId, $pAwardId)
+	{
+		$sql = 'SELECT * FROM vfa_users, vfa_user_groups, vfa_user_awards ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
+			'AND (vfa_user_awards.user_id = vfa_users.user_id) ' . 'AND (vfa_user_groups.group_id = ?) ' .
+			'AND (vfa_user_awards.award_id = ?) ' . 'ORDER BY vfa_users.login';
+		return $this->findMany($sql, $pGroupId, $pAwardId);
 	}
 
 	public function getSelect()

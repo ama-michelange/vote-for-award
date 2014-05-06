@@ -13,6 +13,9 @@ class model_authorization extends abstract_model
 		'authorization_id'
 	);
 
+	/**
+	 * @return model_authorization
+	 */
 	public static function getInstance()
 	{
 		return self::_getInstance(__CLASS__);

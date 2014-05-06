@@ -41,7 +41,7 @@
 					<div class="panel-heading">
 						<h5 class="panel-title">
 							Groupes <a class="pull-right accordion-toggle" data-toggle="collapse" href="#groups"><i
-								data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+								data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i></a>
 						</h5>
 					</div>
 					<div id="groups" class="collapse in">
@@ -71,7 +71,7 @@
 					<div class="panel-heading">
 						<h5 class="panel-title">
 							Prix <a class="pull-right accordion-toggle" data-toggle="collapse" href="#awards"><i
-								data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+								data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i></a>
 						</h5>
 					</div>
 					<div id="awards" class="collapse in">
@@ -97,34 +97,35 @@
 			<?php endif;?>
 			<?php if(_root::getACL()->permit('roles')):?>
 				<?php if($this->toRoles):?>
-				<div class="col-sm-4 col-md-4">
-				<div class="panel panel-default panel-inner">
-					<div class="panel-heading">
-						<h5 class="panel-title">
-							Rôles <a class="pull-right accordion-toggle" data-toggle="collapse" href="#roles"><i
-								data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
-						</h5>
+					<div class="col-sm-4 col-md-4">
+						<div class="panel panel-default panel-inner">
+							<div class="panel-heading">
+								<h5 class="panel-title">Rôles
+									<a class="pull-right accordion-toggle" data-toggle="collapse" href="#roles">
+										<i data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i>
+									</a>
+								</h5>
+							</div>
+							<div id="roles" class="collapse in">
+								<table class="table table-striped">
+									<tbody>
+										<?php foreach($this->toRoles as $oRole):?>
+										<tr>
+											<td>
+												<?php if(_root::getACL()->permit('roles::read')):?>
+													<a href="<?php echo $this->getLink('roles::read',array('id'=>$oRole->getId()))?>"
+													rel="tooltip" data-original-title="Voir le role : <?php echo $oRole->role_name ?>"><i
+													class="glyphicon glyphicon-eye-open with-text"></i></a>
+												<?php endif;?>
+												<?php echo $oRole->role_name?>
+											</td>
+										</tr>
+										<?php endforeach;?>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
-					<div id="roles" class="collapse in">
-						<table class="table table-striped">
-							<tbody>
-									<?php foreach($this->toRoles as $oRole):?>
-									<tr>
-									<td>
-											<?php if(_root::getACL()->permit('roles::read')):?>
-												<a href="<?php echo $this->getLink('roles::read',array('id'=>$oRole->getId()))?>"
-										rel="tooltip" data-original-title="Voir le role : <?php echo $oRole->role_name ?>"><i
-											class="glyphicon glyphicon-eye-open with-text"></i></a>
-											<?php endif;?>
-											<?php echo $oRole->role_name?>
-										</td>
-								</tr>	
-									<?php endforeach;?>
-								</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
 				<?php endif;?>
 			<?php endif;?>
 		</div>

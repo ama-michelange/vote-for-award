@@ -18,6 +18,9 @@ class plugin_vfa
 	const TYPE_RESPONSIBLE = 'responsible';
 	const TYPE_EMAIL = 'email';
 
+	const TYPE_AWARD_BOARD = 'PSBD';
+	const TYPE_AWARD_READER = 'PBD';
+
 	const STATE_OPEN = 'OPEN';
 	const STATE_SENT = 'SENT';
 	const STATE_ACCEPTED = 'ACCEPTED';
@@ -215,7 +218,7 @@ class plugin_vfa
 	 *
 	 * @param string $pDateTime
 	 *         La date et heure au format SGBD
-	 * @return La date et l'haure au format d'affichage
+	 * @return string La date et l'haure au format d'affichage
 	 */
 	public static function toStringDateTimeShow($pDate)
 	{
@@ -227,7 +230,7 @@ class plugin_vfa
 	 *
 	 * @param string $pDate
 	 *         La date au format d'affichage
-	 * @return La date au format SGBD
+	 * @return string La date au format SGBD
 	 */
 	public static function toStringDateSgbd($pDate)
 	{
@@ -235,9 +238,19 @@ class plugin_vfa
 	}
 
 	/**
+	 * La date courante au format du SGBD.
+	 *
+	 * @return string La date au format SGBD
+	 */
+	public static function dateSgbd()
+	{
+		return date('Y-m-d');
+	}
+
+	/**
 	 * La date et heure courante au format du SGBD.
 	 *
-	 * @return La date et heure au format SGBD
+	 * @return string La date et heure au format SGBD
 	 */
 	public static function dateTimeSgbd()
 	{
