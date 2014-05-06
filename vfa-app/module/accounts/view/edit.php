@@ -246,8 +246,9 @@
 		<?php endif;?>
 		<?php
 			$oUserSession = _root::getAuth()->getUserSession();
-			var_dump($oUserSession->getReaderGroups());
-
+			var_dump($oUserSession->getValidAwards());
+			var_dump($oUserSession->getReaderGroup());
+			var_dump($oUserSession->getReaderGroup());
 		?>
 	</div>
 </form>
