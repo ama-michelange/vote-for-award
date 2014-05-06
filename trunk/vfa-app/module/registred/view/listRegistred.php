@@ -2,7 +2,16 @@
 	<div class="panel-heading">
 		<h3 class="panel-title">
 			Inscrits
-			<?php if ($this->oFirstAward) : echo 'au '.$this->oFirstAward->toString(); endif; ?>
+			<?php
+				if ($this->tAwards) {
+					$i = 0;
+					foreach ($this->tAwards as $oAward) {
+						if ($i > 0) :   echo ', '; endif;
+						echo '&laquo; '.$oAward->toString().' &raquo;';
+						$i++;
+					}
+				}
+			?>
 		</h3>
 	</div>
 	<?php if($this->oFirstAward && $this->tUsers):?>
@@ -15,7 +24,6 @@
 					<th>Alias</th>
 					<th>Nom</th>
 					<th>Prénom</th>
-					<th>Rôles</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -26,20 +34,10 @@
 					<?php else:?>
 						<td><?php echo wordwrap($oUser->login,20,'<br />', true) ?></td>
 					<?php endif;?>
-					<td><?php echo wordwrap($oUser->email,30,'<br />', true) ?></td>
+					<td><?php echo wordwrap($oUser->email,50,'<br />', true) ?></td>
 					<td><?php echo wordwrap($oUser->alias,30,'<br />', true) ?></td>
 					<td><?php echo wordwrap($oUser->last_name,30,'<br />', true) ?></td>
 					<td><?php echo wordwrap($oUser->first_name,30,'<br />', true) ?></td>
-					<td>
-						<?php
-							$i = 0;
-							foreach ($oUser->findRoles() as $oRole) {
-								if ($i > 0) :	echo ', '; endif;
-								echo model_role::getInstance()->getI18nStringRole($oRole->role_id);
-								$i ++;
-							}
-						?>
-					</td>
 				</tr>
 				<?php endforeach;?>
 			</tbody>
@@ -48,7 +46,7 @@
 	<?php else:?>
 		<div class="panel-body">
 			<?php if(!$this->oFirstAward):?>
-				Vous n'êtes inscrit à aucun prix en cours !
+				<h4>Vous n'êtes inscrit à aucun prix en cours !</h4>
 			<?php endif;?>
 		</div>
 	<?php endif;?>

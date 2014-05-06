@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Invitations d'inscriptions envoyées</h3>
+		<h3 class="panel-title">Invités</h3>
 	</div>
 
 	<?php if($this->tInvitations):?>
@@ -93,7 +93,7 @@
 						</div>
 					</td>
 					<?php endif;?>
-					<td><?php echo wordwrap( $oInvitation->email,30,'<br />', true) ?></td>
+					<td><?php echo wordwrap( $oInvitation->email,30,' ', true) ?></td>
 					<td>
 						<span class="label <?php echo $labelColor?>" data-rel="tooltip"
 						data-original-title="<?php echo $labelTip ?>"><?php echo $oInvitation->showState()?></span>
@@ -124,5 +124,9 @@
 			</tbody>
 		</table>
 	</div>
+	<?php else: ?>
+		<div class="panel-body">
+			<h4>Aucune invitation !</h4>
+		</div>
 	<?php endif;?>
 </div>
