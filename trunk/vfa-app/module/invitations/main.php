@@ -41,7 +41,8 @@ class module_invitations extends abstract_module
 				$navBar->getChild('left')->addChild($item);
 			}
 		}
-		$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'), 'glyphicon-envelope'));
+		$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'),
+			'glyphicon-envelope'));
 		plugin_BsContextBar::buildRDContextBar($navBar->getChild('right'));
 		return $navBar;
 	}
@@ -74,22 +75,24 @@ class module_invitations extends abstract_module
 
 	public function _reader()
 	{
-		$oRegistry = $this->verify();
+		$oRegistry = $this->verifyPost();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
 			$oRegistry->category = plugin_vfa::CATEGORY_INVITATION;
 			$oRegistry->type = plugin_vfa::TYPE_READER;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
+			$this->verifyGet($oRegistry);
 		}
 		$this->dispatch($oRegistry);
 	}
 
 	public function _responsible()
 	{
-		$oRegistry = $this->verify();
+		$oRegistry = $this->verifyPost();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
+			$oRegistry->category = plugin_vfa::CATEGORY_INVITATION;
 			$oRegistry->type = plugin_vfa::TYPE_RESPONSIBLE;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
@@ -110,9 +113,10 @@ class module_invitations extends abstract_module
 
 	public function _board()
 	{
-		$oRegistry = $this->verify();
+		$oRegistry = $this->verifyPost();
 		if (null == $oRegistry) {
 			$oRegistry = new row_registry_invitation();
+			$oRegistry->category = plugin_vfa::CATEGORY_INVITATION;
 			$oRegistry->type = plugin_vfa::TYPE_BOARD;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
@@ -216,7 +220,7 @@ class module_invitations extends abstract_module
 				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_READER);
 				break;
 			default:
-				$tGroups =array( _root::getAuth()->getUserSession()->getReaderGroup());
+				$tGroups = array(_root::getAuth()->getUserSession()->getReaderGroup());
 				break;
 		}
 		$pView->countGroups = count($tGroups);
@@ -309,7 +313,21 @@ class module_invitations extends abstract_module
 		return $oView;
 	}
 
-	private function verify()
+	private function verifyGet($poRegistry)
+	{
+		if (!_root::getRequest()->isGet()) {
+			return;
+		}
+		$idUser = _root::getParam('idUser');
+		if ($idUser) {
+			$oUser = model_user::getInstance()->findById($idUser);
+			if (false == $oUser->isEmpty()) {
+				$poRegistry->email = $oUser->email;
+			}
+		}
+	}
+
+	private function verifyPost()
 	{
 		if (!_root::getRequest()->isPost()) {
 			return null;

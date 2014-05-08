@@ -152,6 +152,32 @@ class row_user extends abstract_row
 
 	protected $tMessages = null;
 
+	/**
+	 * @return string
+	 */
+	public function toString()
+	{
+		$s = '';
+		if ($this->last_name) {
+			$s .= $this->last_name;
+			if ($this->first_name) {
+				$s .= ' ';
+				$s .= $this->first_name;
+			}
+			$s .= ' (' . $this->email . ')';
+		}
+		else{
+			$s .= $this->login;
+			if ($this->login != $this->email) {
+				$s .= ' (' . $this->email . ')';
+			}
+		}
+		return $s;
+	}
+
+	/**
+	 * @return null|row_group[]
+	 */
 	public function findGroups()
 	{
 		$tGroups = null;
@@ -161,6 +187,9 @@ class row_user extends abstract_row
 		return $tGroups;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSelectedGroups()
 	{
 		$tSelect = array();
@@ -173,6 +202,9 @@ class row_user extends abstract_row
 		return $tSelect;
 	}
 
+	/**
+	 * @return null|row_role[]
+	 */
 	public function findRoles()
 	{
 		$tRoles = null;
@@ -182,6 +214,9 @@ class row_user extends abstract_row
 		return $tRoles;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSelectedRoles()
 	{
 		$tSelect = array();
@@ -194,6 +229,9 @@ class row_user extends abstract_row
 		return $tSelect;
 	}
 
+	/**
+	 * @return null|row_award[]
+	 */
 	public function findAwards()
 	{
 		$tAwards = null;

@@ -91,7 +91,7 @@
 									</a>
 								<?php endif;?>
 							</div>
-					</td>
+						</td>
 					<?php endif;?>
 					<td><?php echo wordwrap( $oInvitation->email,30,' ', true) ?></td>
 					<td>
