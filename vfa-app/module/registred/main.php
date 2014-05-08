@@ -58,7 +58,6 @@ class module_registred extends abstract_module
 		if ($item) {
 			$navBar->getChild('left')->addChild($item);
 		}
-		$navBar->getChild('left')->addChild(plugin_BsHtml::buildSeparator());
 		if (count($tValidBoardAwards) > 0) {
 			$item = plugin_BsHtml::buildMenuItem('Inscrits au comité', new NavLink('registred', 'listBoardRegistred'));
 			if ($item) {
