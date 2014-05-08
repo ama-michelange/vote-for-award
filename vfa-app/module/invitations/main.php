@@ -21,28 +21,38 @@ class module_invitations extends abstract_module
 	{
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
-//		$oReaderGroup = $oUserSession->getReaderGroup();
-		$tValidReaderAwards = $oUserSession->getValidReaderAwards();
 
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Invités', new NavLink('invitations', 'index'));
 		$navBar->addChild(new Bar('left'));
 		$navBar->addChild(new BarButtons('right'));
 
-		if ('list' == _root::getAction()) {
-			if (count($tValidReaderAwards) > 0) {
-				$item = plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred'));
-				if ($item) {
-					$navBar->getChild('left')->addChild($item);
-				}
-			}
-			$item = plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup'));
-			if ($item) {
-				$navBar->getChild('left')->addChild($item);
-			}
+		switch (_root::getAction()) {
+			case 'listReader':
+				$navBar->setTitle('Lecteurs invités', new NavLink('invitations', 'listReader'));
+				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'),
+					'glyphicon-envelope'));
+				break;
+			case 'listBoard':
+				$navBar->setTitle('Membres invités', new NavLink('invitations', 'listBoard'));
+				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'board'),
+					'glyphicon-envelope'));
+				break;
+			case 'reader':
+				$navBar->setTitle('Invitation', new NavLink('invitations', 'reader'));
+				break;
+			case 'board':
+				$navBar->setTitle('Invitation', new NavLink('invitations', 'board'));
+				break;
+			default:
+				$navBar->setTitle('Invitation');
+				break;
 		}
-		$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'),
-			'glyphicon-envelope'));
+
+		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
+		module_registred::buildMenuGuests($navBar->getChild('left'), $oUserSession);
+		module_registred::buildMenuGroups($navBar->getChild('left'), $oUserSession);
+
+
 		plugin_BsContextBar::buildRDContextBar($navBar->getChild('right'));
 		return $navBar;
 	}
@@ -50,11 +60,17 @@ class module_invitations extends abstract_module
 	public function _index()
 	{
 		// redirection vers la page par défaut
-		_root::redirect('invitations::list');
+		_root::redirect('invitations::listReader');
 	}
 
 	public function _list()
 	{
+		_root::redirect('invitations::listReader');
+	}
+
+	public function _listReader()
+	{
+		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
 		$oReaderGroup = $oUserSession->getReaderGroup();
 
@@ -62,6 +78,22 @@ class module_invitations extends abstract_module
 
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
+		$oView->title = 'Invitations du groupe &laquo; ' . $oReaderGroup->group_name . ' &raquo;';
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listBoard()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oBoardGroup = $oUserSession->getBoardGroup();
+
+		$tInvitations = model_invitation::getInstance()->findAllByCategoryByGroupId(plugin_vfa::CATEGORY_INVITATION, $oBoardGroup->group_id);
+
+		$oView = new _view('invitations::list');
+		$oView->tInvitations = $tInvitations;
+		$oView->title = 'Invités du &laquo; ' . $oBoardGroup->group_name . ' &raquo;';
 
 		$this->oLayout->add('work', $oView);
 	}

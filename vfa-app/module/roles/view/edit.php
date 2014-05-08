@@ -41,7 +41,7 @@
 				</label>
 				<div id="acl" class="controls collapse in">			
 					<?php if($this->tCompleteAclModules):?>
-					<table class="table table-hover" style="background-color: white;">
+					<table class="table table-hover table-roles">
 						<thead>
 							<tr>
 								<td class="col-md-1">Modules</td>

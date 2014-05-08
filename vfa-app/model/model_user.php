@@ -81,13 +81,19 @@ class model_user extends abstract_model
 	/**
 	 * @param $pGroupId
 	 * @param $pAwardId
+	 * @param string|null $pOrderBy
 	 * @return row_user[]
 	 */
-	public function findAllByGroupIdByAwardId($pGroupId, $pAwardId)
+	public function findAllByGroupIdByAwardId($pGroupId, $pAwardId, $pOrderBy = null)
 	{
 		$sql = 'SELECT * FROM vfa_users, vfa_user_groups, vfa_user_awards ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
 			'AND (vfa_user_awards.user_id = vfa_users.user_id) ' . 'AND (vfa_user_groups.group_id = ?) ' .
-			'AND (vfa_user_awards.award_id = ?) ' . 'ORDER BY vfa_users.login';
+			'AND (vfa_user_awards.award_id = ?) ';
+		if (null == $pOrderBy) {
+			$sql .= 'ORDER BY vfa_users.login';
+		} else {
+			$sql .= 'ORDER BY vfa_users.' . $pOrderBy;
+		}
 		return $this->findMany($sql, $pGroupId, $pAwardId);
 	}
 
@@ -165,8 +171,7 @@ class row_user extends abstract_row
 				$s .= $this->first_name;
 			}
 			$s .= ' (' . $this->email . ')';
-		}
-		else{
+		} else {
 			$s .= $this->login;
 			if ($this->login != $this->email) {
 				$s .= ' (' . $this->email . ')';
