@@ -1,6 +1,6 @@
 <div class="panel panel-default panel-root">
 	<div class="panel-heading">
-		<h3 class="panel-title">Invités</h3>
+		<h3 class="panel-title"><?php echo $this->title ?></h3>
 	</div>
 
 	<?php if($this->tInvitations):?>

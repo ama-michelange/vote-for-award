@@ -247,7 +247,7 @@ class NavBar extends DefaultItem
 	public function toHtmlTitle()
 	{
 		if ($this->_sTitle) {
-			$ret = '<span class="navbar-brand visible-xs">' . $this->_sTitle . '</span>';
+			$ret = '<span class="navbar-brand">' . $this->_sTitle . '</span>';
 		} else {
 			$ret = $this->_oTitle->toHtml();
 			if ($this->_oTitle->hasChildren()) {

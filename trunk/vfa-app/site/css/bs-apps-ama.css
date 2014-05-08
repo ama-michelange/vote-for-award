@@ -145,6 +145,10 @@
     color: #DDECF3;
 }
 
+.table-role {
+    background-color: white;
+}
+
 .nowrap {
     white-space: nowrap;
 }
