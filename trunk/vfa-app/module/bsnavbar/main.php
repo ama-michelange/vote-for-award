@@ -103,9 +103,9 @@ class module_bsnavbar extends abstract_module
 
 	private function buildMenuInscrits($pItems)
 	{
-		$item = new DropdownMenuItem('Inscrits');
-		$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits au prix', new NavLink('registred', 'listReaderRegistred')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Invités à s\'inscrire', new NavLink('invitations', 'list')));
+		$item = new DropdownMenuItem('Lecteurs');
+		$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Invités', new NavLink('invitations', 'list')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup')));
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Comité', new NavLink('registred', 'listBoardGroup')));

@@ -422,12 +422,11 @@ class BarButtons extends Bar
 		if ($this->hasChildren()) {
 			foreach ($this->getChildren() as $item) {
 				if (plugin_BsHtml::isSeparator($item)) {
-					$ret .= '&nbsp;';
-					$ret .= '&nbsp;';
+					$ret .= '<span class="btn-separator"></span>';
 				} else {
+					$ret .= '<span class="btn-space"></span>';
 					$ret .= $item->toHtml();
 				}
-				$ret .= '&nbsp;';
 			}
 		}
 		$ret .= '</div>';

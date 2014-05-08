@@ -8,14 +8,14 @@
 <meta name="author" content="">
 
 <!-- Le styles -->
-<link href="site/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+<link href="site/assets/css/bootstrap-slate.css" rel="stylesheet" media="screen">
 <style>
 body {
 	padding-top: 83px;
 	/* 60px to make the container go all the way to the bottom of the topbar */
 }
 </style>
-<link href="site/css/bs-apps.css" rel="stylesheet">
+<link href="site/css/bs-apps-slate.css" rel="stylesheet">
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>

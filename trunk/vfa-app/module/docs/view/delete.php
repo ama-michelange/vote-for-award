@@ -1,4 +1,4 @@
-<div class="panel panel-danger">
+<div class="panel panel-danger panel-root">
 	<div class="panel-heading">
 		<h3 class="panel-title">Supprimer <?php echo $this->oViewShow->oDoc->toString() ?></h3>
 	</div>

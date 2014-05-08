@@ -15,7 +15,7 @@
 	<?php endif;?>
 		
 		
-	<div class="panel panel-success">
+	<div class="panel panel-success panel-root">
 		<div class="panel-body panel-condensed">
 			<div class="panel panel-success panel-inner">
 				<div class="panel-heading">

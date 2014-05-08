@@ -8,7 +8,7 @@
 <meta name="author" content="">
 
 <!-- Le styles -->
-<link href="site/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+<link href="site/assets/css/bootstrap-slate.css" rel="stylesheet" media="screen">
 <!-- <link href="site/assets/css/bootstrap-theme.css" rel="stylesheet" media="screen"> -->
 <style>
 body {
@@ -19,7 +19,7 @@ body {
 <link href="site/assets/css/datepicker.css" rel="stylesheet">
 <link href="site/select2/select2.css" rel="stylesheet">
 <link href="site/select2/select2-bootstrap.css" rel="stylesheet">
-<link href="site/css/bs-apps.css" rel="stylesheet" media="screen">
+<link href="site/css/bs-apps-slate.css" rel="stylesheet" media="screen">
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>

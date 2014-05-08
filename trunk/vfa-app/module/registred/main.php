@@ -28,45 +28,48 @@ class module_registred extends abstract_module
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->addChild(new Bar('left'));
 
+
+
+		switch (_root::getAction()) {
+			case 'listReaderGroup':
+				$navBar->setTitle('Mon groupe', new NavLink('registred', 'listReaderGroup'));
+				break;
+			case 'listReaderRegistred':
+				$navBar->setTitle('Lecteurs', new NavLink('registred', 'listReaderRegistred'));
+				break;
+			case 'listBoardGroup':
+				$navBar->setTitle('Comité', new NavLink('registred', 'listBoardGroup'));
+				break;
+			case 'listBoardRegistred':
+				$navBar->setTitle('Inscrits au comité', new NavLink('registred', 'listBoardRegistred'));
+				break;
+		}
+		if (count($tValidReaderAwards) > 0) {
+			$item = plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred'));
+			if ($item) {
+				$navBar->getChild('left')->addChild($item);
+			}
+		}
 		$item = plugin_BsHtml::buildMenuItem('Invités', new NavLink('invitations', 'index'));
 		if ($item) {
 			$navBar->getChild('left')->addChild($item);
 		}
-
-		$item = null;
-		$item2 = null;
-		switch (_root::getAction()) {
-			case 'listReaderGroup':
-				$navBar->setTitle('Mon groupe', new NavLink('registred', 'listReaderGroup'));
-				if (count($tValidReaderAwards) > 0) {
-					$item = plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred'));
-				}
-				$item2 = plugin_BsHtml::buildMenuItem('Comité', new NavLink('registred', 'listBoardGroup'));
-				break;
-			case 'listReaderRegistred':
-				$navBar->setTitle('Inscrits', new NavLink('registred', 'listReaderRegistred'));
-				$item = plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup'));
-				$item2 = plugin_BsHtml::buildMenuItem('Comité', new NavLink('registred', 'listBoardGroup'));
-				break;
-			case 'listBoardGroup':
-				$navBar->setTitle('Comité', new NavLink('registred', 'listBoardGroup'));
-				if (count($tValidBoardAwards) > 0) {
-					$item = plugin_BsHtml::buildMenuItem('Inscrits comité', new NavLink('registred', 'listBoardRegistred'));
-				}
-				$item2 = plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup'));
-				break;
-			case 'listBoardRegistred':
-				$navBar->setTitle('Inscrits', new NavLink('registred', 'listBoardRegistred'));
-				$item = plugin_BsHtml::buildMenuItem('Comité', new NavLink('registred', 'listBoardGroup'));
-				$item2 = plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup'));
-				break;
-		}
+		$item = plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup'));
 		if ($item) {
 			$navBar->getChild('left')->addChild($item);
 		}
-		if ($item2) {
-			$navBar->getChild('left')->addChild($item2);
+		$navBar->getChild('left')->addChild(plugin_BsHtml::buildSeparator());
+		if (count($tValidBoardAwards) > 0) {
+			$item = plugin_BsHtml::buildMenuItem('Inscrits au comité', new NavLink('registred', 'listBoardRegistred'));
+			if ($item) {
+				$navBar->getChild('left')->addChild($item);
+			}
 		}
+		$item = plugin_BsHtml::buildMenuItem('Comité', new NavLink('registred', 'listBoardGroup'));
+		if ($item) {
+			$navBar->getChild('left')->addChild($item);
+		}
+
 		return $navBar;
 	}
 

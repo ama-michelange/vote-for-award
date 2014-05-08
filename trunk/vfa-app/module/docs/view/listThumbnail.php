@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default panel-root">
 	<?php if($this->tDocs):?>
 	<div class="panel-body">
 		<?php foreach($this->tDocs as $oDoc):?>

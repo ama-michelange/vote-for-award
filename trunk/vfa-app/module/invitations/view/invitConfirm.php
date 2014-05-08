@@ -15,7 +15,7 @@
 		<input type="hidden" name="group_id" value="<?php echo $this->oRegistry->group_id ?>" /> 
 	<?php endif;?>
 	
-	<div class="panel panel-info">
+	<div class="panel panel-info panel-root">
 		<?php if(plugin_validation::exist($this->tMessage, 'token')):?>
 			<div class="panel-body">
 			<div class="alert alert-warning clearfix">

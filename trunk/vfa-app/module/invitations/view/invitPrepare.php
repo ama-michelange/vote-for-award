@@ -4,7 +4,7 @@
 		value="<?php echo $this->oRegistry->type ?>" />
 
 
-	<div class="panel panel-info">
+	<div class="panel panel-info panel-root">
 		<?php if(plugin_validation::exist($this->tMessage, 'token')):?>
 		<div class="panel-body">
 			<div class="alert alert-warning clearfix">
