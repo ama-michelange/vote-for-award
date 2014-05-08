@@ -18,7 +18,7 @@ class plugin_BsContextBar
 	}
 
 	/**
-	 * Construit la barre de boutons de gauche du menu contextuel
+	 * Construit la barre de boutons du menu contextuel
 	 * @param Bar $pBar
 	 * @param null $pOtherParams
 	 */
@@ -31,9 +31,9 @@ class plugin_BsContextBar
 	}
 
 	/**
-	 * Construit la barre de boutons RUD (Read, Update, Delete) de gauche du menu contextuel
-	 * @param Bar $pNavBar
-	 * @param null $pOtherParams
+	 * Construit la barre de boutons RUD (Read, Update, Delete) du menu contextuel
+	 * @param $pBar
+	 * @param array|null $pOtherParams
 	 */
 	public static function buildRUDContextBar($pBar, $pOtherParams = null)
 	{
@@ -49,6 +49,28 @@ class plugin_BsContextBar
 			case 'delete':
 				$pBar->addChild(plugin_BsHtml::buildButtonItem('Détail', new NavLink($sModule, 'read', $tParams), 'glyphicon-eye-open'));
 				$pBar->addChild(plugin_BsHtml::buildButtonItem('Modifier', new NavLink($sModule, 'update', $tParams), 'glyphicon-edit'));
+				$pBar->addChild(plugin_BsHtml::buildButtonItem('Supprimer', new NavLink($sModule, 'delete', $tParams), 'glyphicon-trash'));
+				break;
+		}
+	}
+
+	/**
+	 * Construit la barre de boutons RD (Read, Delete) du menu contextuel
+	 * @param $pBar
+	 * @param array|null $pOtherParams
+	 */
+	public static function buildRDContextBar($pBar, $pOtherParams = null)
+	{
+		$sModule = _root::getModule();
+
+		$tParams = array('id' => _root::getParam('id'));
+		if (null != $pOtherParams) {
+			$tParams = array_merge($tParams, $pOtherParams);
+		}
+		switch (_root::getAction()) {
+			case 'read':
+			case 'delete':
+				$pBar->addChild(plugin_BsHtml::buildButtonItem('Détail', new NavLink($sModule, 'read', $tParams), 'glyphicon-eye-open'));
 				$pBar->addChild(plugin_BsHtml::buildButtonItem('Supprimer', new NavLink($sModule, 'delete', $tParams), 'glyphicon-trash'));
 				break;
 		}

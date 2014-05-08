@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default panel-root">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo $this->oGroup->group_name ?></h3>
 	</div>
@@ -7,6 +7,9 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					<?php if(_root::getACL()->permit(array('invitations::reader','invitations::board'))):?>
+						<th></th>
+					<?php endif;?>
 					<th>Login</th>
 					<th>Email</th>
 					<th>Alias</th>

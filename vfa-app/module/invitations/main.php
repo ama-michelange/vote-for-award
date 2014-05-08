@@ -36,12 +36,13 @@ class module_invitations extends abstract_module
 					$navBar->getChild('left')->addChild($item);
 				}
 			}
-			$item = plugin_BsHtml::buildMenuItem('Groupe', new NavLink('registred', 'listReaderGroup'));
+			$item = plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup'));
 			if ($item) {
 				$navBar->getChild('left')->addChild($item);
 			}
 		}
-		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
+		$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'), 'glyphicon-envelope'));
+		plugin_BsContextBar::buildRDContextBar($navBar->getChild('right'));
 		return $navBar;
 	}
 
@@ -215,7 +216,7 @@ class module_invitations extends abstract_module
 				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_READER);
 				break;
 			default:
-				$tGroups = _root::getAuth()->getUserSession()->getReaderGroups();
+				$tGroups =array( _root::getAuth()->getUserSession()->getReaderGroup());
 				break;
 		}
 		$pView->countGroups = count($tGroups);

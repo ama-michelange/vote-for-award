@@ -1,9 +1,10 @@
-<div class="panel panel-default">
+<div class="panel panel-default panel-root">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			Inscrits
+			Lecteurs &laquo; <?php echo $this->oGroup->group_name ?> &raquo; inscrits
 			<?php
 				if ($this->tAwards) {
+					echo 'à ';
 					$i = 0;
 					foreach ($this->tAwards as $oAward) {
 						if ($i > 0) :   echo ', '; endif;

@@ -295,28 +295,27 @@ class module_docs extends abstract_module
 
 		$navBar->addChild(new BarButtons('right'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
-		$this->buildContextButtonBar($navBar);
+		$this->buildContextButtonBar($navBar->getChild('right'));
 		return $navBar;
 	}
 
-	private function buildContextButtonBar($pNavBar)
+	private function buildContextButtonBar($pBar)
 	{
-		$bar = $pNavBar->getChild('right');
-		$bar->addChild(plugin_BsHtml::buildSeparator());
 
 		$group = new GroupButtonItem('list');
 		switch (_root::getAction()) {
 			case 'list':
 			case 'listThumbnail':
 			case 'listThumbnailLarge':
-				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('docs', 'list'), 'glyphicon-list'));
-				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('docs', 'listThumbnail'), 'glyphicon-th'));
-				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges', new NavLink('docs', 'listThumbnailLarge'),
+			$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('docs', 'list'), 'glyphicon-list'));
+			$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('docs', 'listThumbnail'), 'glyphicon-th'));
+			$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges', new NavLink('docs', 'listThumbnailLarge'),
 					'glyphicon-th-large'));
-				break;
+			break;
 		}
 		if ($group->hasRealChildren()) {
-			$bar->addChild($group);
+			$pBar->addChild(plugin_BsHtml::buildSeparator());
+			$pBar->addChild($group);
 		}
 	}
 }

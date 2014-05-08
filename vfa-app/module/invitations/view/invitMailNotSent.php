@@ -15,7 +15,7 @@
 	<?php endif;?>
 		
 		
-	<div class="panel panel-success">
+	<div class="panel panel-success panel-root">
 		<div class="panel-body panel-condensed">
 			<div class="panel panel-success panel-inner">
 				<div class="panel-heading">
@@ -23,7 +23,7 @@
 				</div>
 				<div class="panel-body panel-condensed">
 					<div class="alert alert-warning">
-						<h3>L'invitation est ouverte mais l'email pour <strong><?php echo $this->oRegistry->email ?></strong> n'a pas pu être envoyé !</h3> 
+						<h3>L'invitation est ouverte mais n'a pas pu être envoyée à l'adresse <strong><?php echo $this->oRegistry->email ?></strong> !</h3>
 						Retentez l'envoi de l'email de cette invitation plus tard en accédant à la liste des invitations. 
 					</div>
 				</div>
