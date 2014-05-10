@@ -193,6 +193,19 @@ class row_user extends abstract_row
 	}
 
 	/**
+	 * @param $pRoleName
+	 * @return null|row_group
+	 */
+	public function findGroupByRoleName($pRoleName)
+	{
+		$tGroup = null;
+		if (null != $this->user_id) {
+			$tGroup = model_group::getInstance()->findByUserIdByRoleName($this->user_id, $pRoleName);
+		}
+		return $tGroup;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getSelectedGroups()
@@ -217,6 +230,20 @@ class row_user extends abstract_row
 			$tRoles = model_role::getInstance()->findAllByUserId($this->user_id);
 		}
 		return $tRoles;
+	}
+	/**
+	 * @return null|string[]
+	 */
+	public function findRoleNames()
+	{
+		$tRolenames = array();
+		$tRoles = $this->findRoles();
+		if (null != $tRoles) {
+			foreach ($tRoles as $oRow) {
+				$tRolenames[$oRow->role_name] = $oRow->role_name;
+			}
+		}
+		return $tRolenames;
 	}
 
 	/**

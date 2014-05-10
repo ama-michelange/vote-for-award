@@ -38,6 +38,9 @@ class module_registred extends abstract_module
 			case 'listBoardRegistred':
 				$navBar->setTitle('Inscrits', new NavLink('registred', 'listBoardRegistred'));
 				break;
+			default:
+				$navBar->setTitle('Lecteur');
+				break;
 		}
 
 		$this->buildMenuRegistred($navBar->getChild('left'), $oUserSession);
@@ -238,7 +241,7 @@ class module_registred extends abstract_module
 		$oView = new _view('registred::listGroup');
 		$oView->tUsers = $tUsers;
 		$oView->oGroup = $oBoardGroup;
-		$oView->invite =_root::getACL()->permit('invitations::board');
+		$oView->invite = _root::getACL()->permit('invitations::board');
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -263,6 +266,42 @@ class module_registred extends abstract_module
 
 
 		$this->oLayout->add('work', $oView);
+	}
+
+	public function _read()
+	{
+		$oView = new _view('registred::read');
+		$oView->oViewShow = $this->buildViewShow();
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function buildViewShow()
+	{
+		$oUserModel = new model_user();
+		$oUser = $oUserModel->findById(_root::getParam('id'));
+
+		$oView = new _view('registred::show');
+		$oView->oUser = $oUser;
+
+		$tRoleNames = $oUser->findRoleNames();
+		$responsibleRole = false;
+		if (isset($tRoleNames[plugin_vfa::ROLE_RESPONSIBLE])) {
+			$responsibleRole = true;
+		}
+		$oView->responsibleRole = $responsibleRole;
+
+		$boardRole = false;
+		if (isset($tRoleNames[plugin_vfa::ROLE_BOARD])) {
+			$boardRole = true;
+		}
+		$oView->boardRole = $boardRole;
+
+		$oView->oReaderGroup = $oUser->findGroupByRoleName(plugin_vfa::ROLE_READER);
+		$oView->oBoardGroup = $oUser->findGroupByRoleName(plugin_vfa::ROLE_BOARD);
+		$oView->toValidAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id);
+
+		return $oView;
 	}
 
 

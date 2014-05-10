@@ -1,6 +1,6 @@
 <div class="panel panel-default panel-root">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo $this->oGroup->group_name ?></h3>
+		<h3 class="panel-title"><?php echo $this->oGroup->toString() ?></h3>
 	</div>
 	<?php if($this->tUsers):?>
 	<div class="table-responsive">
@@ -40,8 +40,8 @@
 								<?php endif;?>
 							</td>
 						<?php endif;?>
-						<?php if(_root::getACL()->permit('users::read')):?>
-							<td><a href="<?php echo $this->getLink('users::read',array('id'=>$oUser->getId()))?>"><?php echo wordwrap($oUser->login,20,'<br />', true) ?></a></td>
+						<?php if(_root::getACL()->permit('registred::read')):?>
+							<td><a href="<?php echo $this->getLink('registred::read',array('id'=>$oUser->getId()))?>"><?php echo wordwrap($oUser->login,20,'<br />', true) ?></a></td>
 						<?php else:?>
 							<td><?php echo wordwrap($oUser->login,20,'<br />', true) ?></td>
 						<?php endif;?>

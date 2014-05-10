@@ -13,6 +13,10 @@ class plugin_vfa
 	const CATEGORY_INVITATION = 'INVITATION';
 	const CATEGORY_CHANGE = 'CHANGE';
 
+	const ROLE_BOARD = 'board';
+	const ROLE_READER = 'reader';
+	const ROLE_RESPONSIBLE = 'responsible';
+
 	const TYPE_BOARD = 'board';
 	const TYPE_READER = 'reader';
 	const TYPE_RESPONSIBLE = 'responsible';

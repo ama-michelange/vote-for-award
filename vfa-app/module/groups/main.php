@@ -46,7 +46,7 @@ class module_groups extends abstract_module
 		if ($this->allTypes) {
 			$tGroups = model_group::getInstance()->findAll();
 		} else {
-			$tGroups = model_group::getInstance()->findAllReader();
+			$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::ROLE_READER);
 		}
 
 		$oView = new _view('groups::list');
@@ -63,7 +63,7 @@ class module_groups extends abstract_module
 		$oGroup = $this->save();
 		if (null == $oGroup) {
 			$oGroup = new row_group();
-			$oGroup->role_id_default = model_role::getInstance()->findByName(plugin_vfa::TYPE_READER)->role_id;
+			$oGroup->role_id_default = model_role::getInstance()->findByName(plugin_vfa::ROLE_READER)->role_id;
 		} else {
 			$tMessage = $oGroup->getMessages();
 		}

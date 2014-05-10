@@ -68,8 +68,12 @@ class model_invitation extends abstract_model
 	{
 		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE type=?' . '	AND state=?' . '	AND email=?' . '	AND group_id=?' .
 			'	AND awards_ids=?';
-		return $this->findOne($sql, $poRegistry->type, $pState, $poRegistry->email, $poRegistry->group_id,
-			implode(',', $poRegistry->awards_ids));
+		if ($poRegistry->awards_ids) {
+			$awardsIds = implode(',', $poRegistry->awards_ids);
+		} else {
+			$awardsIds = strval($poRegistry->award_id);
+		}
+		return $this->findOne($sql, $poRegistry->type, $pState, $poRegistry->email, $poRegistry->group_id, $awardsIds);
 	}
 }
 
