@@ -1,21 +1,24 @@
 <div class="panel panel-default panel-root">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			Lecteurs &laquo; <?php echo $this->oGroup->group_name ?> &raquo; inscrits
+			<?php echo $this->oGroup->toString() ?>
+			<small>
+			inscrits
 			<?php
-				if ($this->tAwards) {
+				if ($this->tValidReaderAwards) {
 					echo 'à ';
 					$i = 0;
-					foreach ($this->tAwards as $oAward) {
+					foreach ($this->tValidReaderAwards as $oAward) {
 						if ($i > 0) :   echo ', '; endif;
 						echo '&laquo; '.$oAward->toString().' &raquo;';
 						$i++;
 					}
 				}
 			?>
+			</small>
 		</h3>
 	</div>
-	<?php if($this->oFirstAward && $this->tUsers):?>
+	<?php if($this->oFirstValidReaderAward && $this->tUsers):?>
 	<div class="table-responsive">
 		<table class="table table-striped">
 			<thead>
@@ -46,7 +49,7 @@
 	</div>
 	<?php else:?>
 		<div class="panel-body">
-			<?php if(!$this->oFirstAward):?>
+			<?php if(!$this->oFirstValidReaderAward):?>
 				<h4>Vous n'êtes inscrit à aucun prix en cours !</h4>
 			<?php endif;?>
 		</div>

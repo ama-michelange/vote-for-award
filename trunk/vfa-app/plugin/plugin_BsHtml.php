@@ -515,6 +515,14 @@ abstract class DefaultItem
 		return $this->_sName;
 	}
 
+	/**
+	 * @param string $pName
+	 */
+	public function setName($pName)
+	{
+		$this->_sName = $pName;
+	}
+
 	public function getChild($pName)
 	{
 		$ret = null;
