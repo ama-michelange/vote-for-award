@@ -28,12 +28,12 @@ class module_invitations extends abstract_module
 
 		switch (_root::getAction()) {
 			case 'listReader':
-				$navBar->setTitle('Lecteurs invités', new NavLink('invitations', 'listReader'));
+				$navBar->setTitle('Invités', new NavLink('invitations', 'listReader'));
 				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'),
 					'glyphicon-envelope'));
 				break;
 			case 'listBoard':
-				$navBar->setTitle('Membres invités', new NavLink('invitations', 'listBoard'));
+				$navBar->setTitle('Invités', new NavLink('invitations', 'listBoard'));
 				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'board'),
 					'glyphicon-envelope'));
 				break;
@@ -234,7 +234,7 @@ class module_invitations extends abstract_module
 		} elseif ($pView->countAwards == 1) {
 			$pView->oAward = $tAwards[0];
 		} else {
-			$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'getTypeNameString');
+			$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'toString');
 			if ($pView->oRegistry->awards_ids) {
 				$pView->oRegistry->awards_ids = array_flip($pView->oRegistry->awards_ids);
 			}

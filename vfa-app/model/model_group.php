@@ -152,6 +152,14 @@ class row_group extends abstract_row
 	/**
 	 * @return string
 	 */
+	public function toString()
+	{
+		return $this->group_name;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getI18nStringType()
 	{
 		return model_group::getInstance()->getStringTypeGroup($this->role_id_default);

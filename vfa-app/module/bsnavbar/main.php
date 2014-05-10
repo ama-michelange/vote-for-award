@@ -39,23 +39,29 @@ class module_bsnavbar extends abstract_module
 
 	private function buildConnectedBar($pNavBar)
 	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+
 		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Accueil', new NavLink('home_enable', 'index')));
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Vote', new NavLink('home_enable', 'index')));
 
 		$this->buildMenuPrix($bar);
-		$this->buildMenuInscrits($bar);
+		$this->buildMenuInscrits($bar, $oUserSession);
 		$this->buildMenuAdmin($bar);
 
 		$bar = $pNavBar->getChild('right');
-		$this->buildMenuAccount($bar);
+		$this->buildMenuAccount($bar,$oUserSession);
 	}
 
-	private function buildMenuAccount($pItems)
+	/**
+	 * @param Bar $pItems
+	 * @param row_user_session $poUserSession
+	 */
+	private function buildMenuAccount($pItems,$poUserSession)
 	{
-		$userSession = _root::getAuth()->getUserSession();
-		$item = new DropdownMenuItem($userSession->getUser()->login, null, 'glyphicon-user');
+		$item = new DropdownMenuItem($poUserSession->getUser()->login, null, 'glyphicon-user');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Mon compte', new NavLink('accounts', 'index', null, true)), 'glyphicon-user');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Déconnexion', new NavLink('bsnavbar', 'logout', null, true)), 'glyphicon-remove-sign');
 
@@ -101,14 +107,23 @@ class module_bsnavbar extends abstract_module
 		}
 	}
 
-	private function buildMenuInscrits($pItems)
+	/**
+	 * @param Bar $pItems
+	 * @param row_user_session $poUserSession
+	 */
+	private function buildMenuInscrits($pItems,$poUserSession)
 	{
 		$item = new DropdownMenuItem('Lecteurs');
-		$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Invités', new NavLink('invitations', 'list')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup')));
+
+		$tValidReaderAwards = $poUserSession->getValidReaderAwards();
+		if (count($tValidReaderAwards) > 0) {
+			$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred')));
+			$item->addChild(plugin_BsHtml::buildMenuItem('Invités', new NavLink('invitations', 'list')));
+		}
+		$item->addChild(plugin_BsHtml::buildMenuItem('Groupe', new NavLink('registred', 'listReaderGroup')));
+
 		$item->addChildSeparator();
-		$item->addChild(plugin_BsHtml::buildMenuItem('Comité', new NavLink('registred', 'listBoardGroup')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Comité de sélection', new NavLink('registred', 'listBoardGroup')));
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Invitation aux lecteurs', new NavLink('invitations', 'reader')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Inscriptions libres', new NavLink('invitations', 'free')));
