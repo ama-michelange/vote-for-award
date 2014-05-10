@@ -211,12 +211,17 @@ class module_invitations extends abstract_module
 
 	private function fillAwards($pView)
 	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+
 		switch (_root::getAction()) {
 			case 'board':
-				$tAwards = model_award::getInstance()->findAllByType('PSBD');
+				//	$tAwards = model_award::getInstance()->findAllByType('PSBD');
+				$tAwards = $oUserSession->getValidBoardAwards();
 				break;
 			default:
-				$tAwards = model_award::getInstance()->findAllByType('PBD');
+				// $tAwards = model_award::getInstance()->findAllByType('PBD');
+				$tAwards = $oUserSession->getValidReaderAwards();
 				break;
 		}
 		$pView->countAwards = count($tAwards);
@@ -470,7 +475,7 @@ class module_invitations extends abstract_module
 		$oInvit->email = $poRegistry->email;
 		$oInvit->group_id = $poRegistry->group_id;
 		if ($poRegistry->award_id) {
-			$oInvit->awards_ids = array($poRegistry->award_id);
+			$oInvit->awards_ids = strval($poRegistry->award_id);
 		} else {
 			$oInvit->awards_ids = implode(',', $poRegistry->awards_ids);
 		}
