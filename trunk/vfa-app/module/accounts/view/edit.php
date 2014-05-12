@@ -92,11 +92,6 @@
 															<?php echo $this->oUser->email ?>
 														</option>
 													</optgroup>
-													<optgroup label="Alias">
-														<option value="<?php echo $this->oUser->alias ?>">
-															<?php echo $this->oUser->alias ?>
-														</option>
-													</optgroup>
 												</select>
 												<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newLogin')?></span>
 											</div>
@@ -182,11 +177,6 @@
 <!--							<h3 class="panel-title">Infos personnelles</h3>-->
 <!--						</div>-->
 						<div class="panel-body">
-							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'alias')?>">
-								<label for="inputAlias">Alias</label>
-								<input class="form-control" type="text" id="inputAlias" name="alias" value="<?php echo $this->oUser->alias ?>"/>
-								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'alias')?></span>
-							</div>
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name')?>">
 								<label for="inputLastName">Nom</label>
 								<input class="form-control" type="text" id="inputLastName" name="last_name" value="<?php echo $this->oUser->last_name ?>" />

@@ -111,7 +111,7 @@ class module_users extends abstract_module
 	{
 		$tMessage = null;
 		$oUserModel = new model_user();
-		$tColumns = array('user_id', 'login', 'email', 'alias', 'last_name', 'first_name', 'birthyear', 'gender');
+		$tColumns = array('user_id', 'login', 'email', 'last_name', 'first_name', 'birthyear', 'gender');
 
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {

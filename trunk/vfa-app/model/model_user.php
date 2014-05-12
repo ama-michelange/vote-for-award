@@ -278,7 +278,6 @@ class row_user extends abstract_row
 	{
 		$oPluginValid = new plugin_valid($this->getTab());
 		$oPluginValid->isNotEmpty('login');
-		$oPluginValid->isNotContains('alias', '@', 'isNotContainsAtKO');
 		$oPluginValid->isNotEmpty('email');
 		if (null != $this->__get('email')) {
 			$oPluginValid->isEmailValid('email');

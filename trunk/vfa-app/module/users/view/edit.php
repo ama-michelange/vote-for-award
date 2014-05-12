@@ -32,13 +32,6 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-4">
-					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'alias')?>">
-						<label for="inputAlias">Alias</label> <input class="form-control" type="text"
-							id="inputAlias" name="alias" value="<?php echo $this->oUser->alias ?>" /> <span
-							class="help-block"><?php echo plugin_validation::show($this->tMessage, 'alias')?></span>
-					</div>
-				</div>
-				<div class="col-sm-4">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name')?>">
 						<label for="inputLastName">Nom</label> <input class="form-control" type="text"
 							id="inputLastName" name="last_name" value="<?php echo $this->oUser->last_name ?>" /> <span

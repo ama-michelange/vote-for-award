@@ -14,10 +14,6 @@
 					<div class="col-sm-9 col-md-9 col-lg-10 view-value"><?php echo $this->oUser->email ?></div>
 				</div>
 				<div class="row">
-					<div class="col-sm-3 col-md-3 col-lg-2 view-label">Alias</div>
-					<div class="col-sm-9 col-md-9 col-lg-10 view-value"><?php echo $this->oUser->alias ?></div>
-				</div>
-				<div class="row">
 					<div class="col-sm-3 col-md-3 col-lg-2 view-label">Nom Prénom</div>
 					<div class="col-sm-9 col-md-9 col-lg-10 view-value">
 						<?php echo $this->oUser->last_name?>

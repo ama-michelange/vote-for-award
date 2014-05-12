@@ -50,8 +50,8 @@
 						<div class="panel-body">
 							<div
 								class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'cf_login')?>">
-								<label for="cfLogin">Nom d'utilisateur</label> <input class="form-control" type="text"
-									id="cfLogin" name="cf_login" placeholder="Votre nom d'utilisateur ou pseudo" /> <span
+								<label for="cfLogin">Identifiant</label> <input class="form-control" type="text"
+									id="cfLogin" name="cf_login" placeholder="Votre identifiant de connexion" /> <span
 									class="help-block"><?php echo plugin_validation::show($this->tMessage, 'cf_login')?></span>
 							</div>
 							<div
