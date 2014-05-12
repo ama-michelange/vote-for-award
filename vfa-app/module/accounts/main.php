@@ -108,7 +108,7 @@ class module_accounts extends abstract_module
 	private function saveDefault($poUser)
 	{
 		// Copie la saisie dans un enregistrement
-		$tColumns = array('alias', 'last_name', 'first_name', 'birthyear', 'gender');
+		$tColumns = array('last_name', 'first_name', 'birthyear', 'gender');
 		foreach ($tColumns as $sColumn) {
 			$param = _root::getParam($sColumn, null);
 			if (0 == strlen($param)) {

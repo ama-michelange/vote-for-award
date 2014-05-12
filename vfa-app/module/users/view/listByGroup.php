@@ -36,7 +36,7 @@
 					<?php if(_root::getACL()->permit(array('users::update','users::delete','users::read'))):?>
 						<th></th>
 					<?php endif;?>
-					<th>Pseudo</th>
+					<th>Identifiant</th>
 					<th>Email</th>
 					<th>Nom</th>
 					<th>Prénom</th>

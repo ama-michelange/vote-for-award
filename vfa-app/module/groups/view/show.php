@@ -31,10 +31,10 @@
 								<?php if(_root::getACL()->permit('users::read')):?>
 									<th></th>
 								<?php endif;?>
-								<th>Pseudo</th>
+								<th>Identifiant</th>
+								<th>Email</th>
 								<th>Nom</th>
 								<th>Prénom</th>
-								<th>Email</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -46,10 +46,10 @@
 										class="glyphicon glyphicon-eye-open"></i></a></td>
 									<?php endif;?>
 									<td><?php echo $oUser->login ?></td>
-								<td><?php echo $oUser->last_name ?></td>
-								<td><?php echo $oUser->first_name ?></td>
-								<td><?php echo $oUser->email ?></td>
-							</tr>	
+									<td><?php echo $oUser->email ?></td>
+									<td><?php echo $oUser->last_name ?></td>
+									<td><?php echo $oUser->first_name ?></td>
+							</tr>
 								<?php endforeach;?>
 							</tbody>
 					</table>
