@@ -166,7 +166,7 @@ class sgbd_mysql extends abstract_sgbd
 	private function query($sReq)
 	{
 		$this->connect();
-		$this->sReq = $sReq;
+		$this->_sReq = $sReq;
 		return mysql_query($sReq);
 	}
 
