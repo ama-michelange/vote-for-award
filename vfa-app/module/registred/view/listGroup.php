@@ -35,7 +35,7 @@
 						$tAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id, $typeAward);
 					?>
 					<tr>
-						<?php if($this->invite && _root::getACL()->permit(array('invitations::reader','invitations::board'))):?>
+						<?php if($this->invite /*&& _root::getACL()->permit(array('invitations::reader','invitations::board'))*/ ):?>
 							<td>
 								<?php if (0==count($tAwards)): ?>
 									<div class="btn-group">
@@ -64,11 +64,9 @@
 						<td><?php echo wordwrap($oUser->last_name,30,'<br />', true) ?></td>
 						<td><?php echo wordwrap($oUser->first_name,30,'<br />', true) ?></td>
 						<td style="text-align:center;">
-							<?php foreach ($oUser->findRoles() as $oRole) : ?>
-								<?php if (plugin_vfa::TYPE_RESPONSIBLE == $oRole->role_name) :	?>
-									<span class="glyphicon glyphicon-check"></span>
-								<?php endif; ?>
-							<?php endforeach;?>
+							<?php if ($oUser->isInRole(plugin_vfa::TYPE_RESPONSIBLE)) :	?>
+								<span class="glyphicon glyphicon-check"></span>
+							<?php endif; ?>
 						</td>
 						<td>
 							<?php
