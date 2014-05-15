@@ -48,7 +48,7 @@ class module_bsnavbar extends abstract_module
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Vote', new NavLink('home_enable', 'index')));
 
 		$this->buildMenuPrix($bar);
-		$this->buildMenuInscrits($bar, $oUserSession);
+		$this->buildMenuRegistred($bar, $oUserSession);
 		$this->buildMenuAdmin($bar);
 
 		$bar = $pNavBar->getChild('right');
@@ -111,7 +111,7 @@ class module_bsnavbar extends abstract_module
 	 * @param Bar $pItems
 	 * @param row_user_session $poUserSession
 	 */
-	private function buildMenuInscrits($pItems,$poUserSession)
+	private function buildMenuRegistred($pItems,$poUserSession)
 	{
 		$item = new DropdownMenuItem('Lecteurs');
 

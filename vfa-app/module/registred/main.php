@@ -27,13 +27,13 @@ class module_registred extends abstract_module
 
 		switch (_root::getAction()) {
 			case 'listReaderGroup':
-				$navBar->setTitle('Groupe', new NavLink('registred', 'listReaderGroup'));
+				$navBar->setTitle('Mon groupe', new NavLink('registred', 'listReaderGroup'));
 				break;
 			case 'listReaderRegistred':
 				$navBar->setTitle('Inscrits', new NavLink('registred', 'listReaderRegistred'));
 				break;
 			case 'listBoardGroup':
-				$navBar->setTitle('Groupe', new NavLink('registred', 'listBoardGroup'));
+				$navBar->setTitle('Comité', new NavLink('registred', 'listBoardGroup'));
 				break;
 			case 'listBoardRegistred':
 				$navBar->setTitle('Inscrits', new NavLink('registred', 'listBoardRegistred'));
@@ -42,10 +42,20 @@ class module_registred extends abstract_module
 				$navBar->setTitle('Lecteur');
 				break;
 		}
+		switch (_root::getAction()) {
+			case 'listReaderGroup':
+			case 'listReaderRegistred':
+			case 'listBoardGroup':
+			case 'listBoardRegistred':
+				$this->buildMenuRegistred($navBar->getChild('left'), $oUserSession);
+				$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
+				$this->buildMenuGroups($navBar->getChild('left'), $oUserSession);
+				break;
+			default:
+				$this->buildMenuGroups($navBar->getChild('left'), $oUserSession);
+				break;
+		}
 
-		$this->buildMenuRegistred($navBar->getChild('left'), $oUserSession);
-		$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
-		$this->buildMenuGroups($navBar->getChild('left'), $oUserSession);
 
 		return $navBar;
 	}
@@ -299,7 +309,22 @@ class module_registred extends abstract_module
 
 		$oView->oReaderGroup = $oUser->findGroupByRoleName(plugin_vfa::ROLE_READER);
 		$oView->oBoardGroup = $oUser->findGroupByRoleName(plugin_vfa::ROLE_BOARD);
-		$oView->toValidAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id);
+
+		$toValidAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id);
+		$toValidReaderAwards = array();
+		$toValidBoardAwards = array();
+		foreach ($toValidAwards as $oAward) {
+			switch ($oAward->type) {
+				case plugin_vfa::TYPE_AWARD_BOARD:
+					$toValidBoardAwards[] = $oAward;
+					break;
+				case plugin_vfa::TYPE_AWARD_READER:
+					$toValidReaderAwards[] = $oAward;
+					break;
+			}
+		}
+		$oView->toValidReaderAwards = $toValidReaderAwards;
+		$oView->toValidBoardAwards = $toValidBoardAwards;
 
 		return $oView;
 	}
