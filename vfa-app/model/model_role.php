@@ -40,6 +40,22 @@ class model_role extends abstract_model
 	}
 
 	/**
+	 * @param $pName
+	 * @param $pUserId
+	 * @return boolean
+	 */
+	public function isInRole($pName, $pUserId)
+	{
+		$sql = 'SELECT vfa_roles.role_id, vfa_roles.role_name FROM vfa_roles, vfa_user_roles ' . 'WHERE vfa_roles.role_name=? ' .
+			'AND (vfa_user_roles.role_id = vfa_roles.role_id) ' . 'AND (vfa_user_roles.user_id = ?)';
+		$role = $this->findOne($sql, $pName, $pUserId);
+		if ($role->isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * @return row_role[]
 	 */
 	public function findAll()
