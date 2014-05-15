@@ -75,6 +75,10 @@ class module_registred extends abstract_module
 			if ($item) {
 				$tItems[] = $item;
 			}
+			$item = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('registred', 'listResponsibleRegistred'));
+			if ($item) {
+				$tItems[] = $item;
+			}
 		}
 		$tValidBoardAwards = $poUserSession->getValidBoardAwards();
 		if (count($tValidBoardAwards) > 0) {
@@ -84,6 +88,7 @@ class module_registred extends abstract_module
 				$tItems[] = $item;
 			}
 		}
+
 
 		switch (count($tItems)) {
 			case 0:
@@ -118,11 +123,16 @@ class module_registred extends abstract_module
 		if ($item) {
 			$tItems[] = $item;
 		}
+		$item = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('registred', 'listResponsibleGroup'));
+		if ($item) {
+			$tItems[] = $item;
+		}
 		$oBoardGroup = $poUserSession->getBoardGroup();
 		$item = plugin_BsHtml::buildMenuItem($oBoardGroup->toString(), new NavLink('registred', 'listBoardGroup'));
 		if ($item) {
 			$tItems[] = $item;
 		}
+
 
 		switch (count($tItems)) {
 			case 0:
@@ -156,6 +166,10 @@ class module_registred extends abstract_module
 		if (count($tValidReaderAwards) > 0) {
 			$oReaderGroup = $poUserSession->getReaderGroup();
 			$item = plugin_BsHtml::buildMenuItem($oReaderGroup->toString(), new NavLink('invitations', 'listReader'));
+			if ($item) {
+				$tItems[] = $item;
+			}
+			$item = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'listResponsible'));
 			if ($item) {
 				$tItems[] = $item;
 			}
@@ -274,6 +288,42 @@ class module_registred extends abstract_module
 		$oView->oFirstAward = $oFirstAward;
 		$oView->tAwards = $tAwards;
 
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listResponsibleGroup()
+	{
+		$tUsers = model_user::getInstance()->findAllByRoleName(plugin_vfa::ROLE_RESPONSIBLE);
+
+		$oView = new _view('registred::listGroup');
+		$oView->tUsers = $tUsers;
+		$oTitleGroup = new row_group();
+		$oTitleGroup->group_name = 'Correspondants';
+		$oView->oGroup = $oTitleGroup;
+		$oView->invite = _root::getACL()->permit('invitations::responsible');
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listResponsibleRegistred()
+	{
+		$tUsers = null;
+		$oFirstAward = null;
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$tAwards = $oUserSession->getValidReaderAwards();
+		if (count($tAwards) > 0) {
+			$oFirstAward = $tAwards[0];
+			$tUsers = model_user::getInstance()->findAllByRoleNameByAwardId(plugin_vfa::ROLE_RESPONSIBLE, $oFirstAward->award_id, 'email');
+		}
+		$oView = new _view('registred::listRegistred');
+		$oView->tUsers = $tUsers;
+		$oTitleGroup = new row_group();
+		$oTitleGroup->group_name = 'Correspondants';
+		$oView->oGroup = $oTitleGroup;
+		$oView->oFirstAward = $oFirstAward;
+		$oView->tAwards = $tAwards;
 
 		$this->oLayout->add('work', $oView);
 	}

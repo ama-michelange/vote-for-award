@@ -97,6 +97,43 @@ class model_user extends abstract_model
 		return $this->findMany($sql, $pGroupId, $pAwardId);
 	}
 
+	/**
+	 * @param string $pRolename
+	 * @param string|null $pOrderBy
+	 * @return row_user[]
+	 */
+	public function findAllByRoleName($pRolename, $pOrderBy = null)
+	{
+		$sql = 'SELECT * FROM vfa_users, vfa_user_roles, vfa_roles ' . 'WHERE (vfa_user_roles.user_id = vfa_users.user_id) ' .
+			'AND (vfa_user_roles.role_id = vfa_roles.role_id) ' . 'AND (vfa_roles.role_name = ?) ';
+		if (null == $pOrderBy) {
+			$sql .= 'ORDER BY vfa_users.login';
+		} else {
+			$sql .= 'ORDER BY vfa_users.' . $pOrderBy;
+		}
+		return $this->findMany($sql, $pRolename);
+	}
+
+	/**
+	 * @param string $pRoleName
+	 * @param $pAwardId
+	 * @param string|null $pOrderBy
+	 * @return row_user[]
+	 */
+	public function findAllByRoleNameByAwardId($pRoleName, $pAwardId, $pOrderBy = null)
+	{
+		$sql =
+			'SELECT * FROM vfa_users, vfa_user_roles, vfa_roles, vfa_user_awards ' . 'WHERE (vfa_user_roles.user_id = vfa_users.user_id) ' .
+			'AND (vfa_user_awards.user_id = vfa_users.user_id) ' . 'AND (vfa_user_roles.role_id = vfa_roles.role_id) ' .
+			'AND (vfa_roles.role_name = ?) ' . 'AND (vfa_user_awards.award_id = ?) ';
+		if (null == $pOrderBy) {
+			$sql .= 'ORDER BY vfa_users.login';
+		} else {
+			$sql .= 'ORDER BY vfa_users.' . $pOrderBy;
+		}
+		return $this->findMany($sql, $pRoleName, $pAwardId);
+	}
+
 	public function getSelect()
 	{
 		$tab = $this->findAll();
@@ -221,6 +258,19 @@ class row_user extends abstract_row
 	}
 
 	/**
+	 * @param string $pRoleName
+	 * @return boolean
+	 */
+	public function isInRole($pRoleName)
+	{
+		$in = false;
+		if (null != $this->user_id) {
+			$in = model_role::getInstance()->isInRole($pRoleName, $this->user_id);
+		}
+		return $in;
+	}
+
+	/**
 	 * @return null|row_role[]
 	 */
 	public function findRoles()
@@ -231,6 +281,7 @@ class row_user extends abstract_row
 		}
 		return $tRoles;
 	}
+
 	/**
 	 * @return null|string[]
 	 */
