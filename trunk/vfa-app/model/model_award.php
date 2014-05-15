@@ -97,12 +97,17 @@ class model_award extends abstract_model
 
 	/**
 	 * @param $pUserId
+	 * @param string|null $pType
 	 * @return row_award[]
 	 */
-	public function findAllValidByUserId($pUserId)
+	public function findAllValidByUserId($pUserId, $pType = null)
 	{
+		$andType = '';
+		if (null != $pType) {
+			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
+		}
 		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' . 'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' .
-			'AND (vfa_user_awards.user_id = ?) AND (vfa_awards.end_date > ?)';
+			'AND (vfa_user_awards.user_id = ?) AND (vfa_awards.end_date > ?)' . $andType;
 		return $this->findMany($sql, $pUserId, plugin_vfa::dateSgbd());
 	}
 

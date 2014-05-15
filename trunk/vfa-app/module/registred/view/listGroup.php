@@ -14,24 +14,40 @@
 					<th>Email</th>
 					<th>Nom</th>
 					<th>Prénom</th>
-					<th data-rel="tooltip" data-original-title="Correspondant du groupe">Corres.</th>
+					<th class="col-xs-1" style="text-align:center;" data-rel="tooltip" data-original-title="Correspondant du groupe">Corres.</th>
 					<th>Inscrit</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach($this->tUsers as $oUser):?>
 					<?php
-						$tAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id);
+						switch (_root::getAction()) {
+							case 'listReadGroup':
+								$typeAward = plugin_vfa::TYPE_AWARD_READER;
+								break;
+							case 'listBoardGroup':
+								$typeAward = plugin_vfa::TYPE_AWARD_BOARD;
+								break;
+							default:
+								$typeAward = null;
+								break;
+						}
+						$tAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id, $typeAward);
 					?>
 					<tr>
-						<?php if($this->invite && _root::getACL()->permit(array('invitations::reader'))):?>
-							<td class="col-xs-1">
+						<?php if($this->invite && _root::getACL()->permit(array('invitations::reader','invitations::board'))):?>
+							<td>
 								<?php if (0==count($tAwards)): ?>
 									<div class="btn-group">
 										<?php if(_root::getACL()->permit('invitations::reader')):?>
-											<a rel="tooltip"
-												data-original-title="Inviter <?php echo $oUser->toString() ?>"
+											<a rel="tooltip" data-original-title="Inviter <?php echo $oUser->toString() ?>"
 												href="<?php echo $this->getLink('invitations::reader',array('idUser'=>$oUser->getId()))?>">
+												<i class="glyphicon glyphicon-envelope"></i>
+											</a>
+										<?php endif;?>
+										<?php if(_root::getACL()->permit('invitations::board')):?>
+											<a rel="tooltip" data-original-title="Inviter <?php echo $oUser->toString() ?>"
+												href="<?php echo $this->getLink('invitations::board',array('idUser'=>$oUser->getId()))?>">
 												<i class="glyphicon glyphicon-envelope"></i>
 											</a>
 										<?php endif;?>
@@ -47,7 +63,7 @@
 						<td><?php echo wordwrap($oUser->email,30,'<br />', true) ?></td>
 						<td><?php echo wordwrap($oUser->last_name,30,'<br />', true) ?></td>
 						<td><?php echo wordwrap($oUser->first_name,30,'<br />', true) ?></td>
-						<td>
+						<td style="text-align:center;">
 							<?php foreach ($oUser->findRoles() as $oRole) : ?>
 								<?php if (plugin_vfa::TYPE_RESPONSIBLE == $oRole->role_name) :	?>
 									<span class="glyphicon glyphicon-check"></span>

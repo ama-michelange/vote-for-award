@@ -59,12 +59,6 @@ class module_accounts extends abstract_module
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 
-		$alias = $oUser->alias;
-		$email = $oUser->email;
-		$oView->changeLogin = false;
-		if (isset($alias) && isset($email)) {
-			$oView->changeLogin = true;
-		}
 		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oUser->birthyear);
 
 		$this->oLayout->add('work', $oView);
@@ -130,7 +124,6 @@ class module_accounts extends abstract_module
 			_root::getAuth()->setUserSession($oUserSession);
 			// Prepare et Affiche la popup
 			$scriptView = new _view('accounts::scriptSaved');
-			$scriptView->title = 'Données personnelles';
 			$scriptView->text = 'Les données de votre compte sont enregistrées';
 			$this->oLayout->add('script', $scriptView);
 		}
@@ -172,7 +165,6 @@ class module_accounts extends abstract_module
 			_root::getAuth()->setUserSession($oUserSession);
 			// Prepare et Affiche la popup
 			$scriptView = new _view('accounts::scriptSaved');
-			$scriptView->title = "Changer mon mot de passe";
 			$scriptView->text = 'Votre nouveau mot de passe est enregistré';
 			$this->oLayout->add('script', $scriptView);
 		}
@@ -183,15 +175,21 @@ class module_accounts extends abstract_module
 	{
 		$canSave = false;
 		$newLogin = _root::getParam('newLogin');
-		if ($newLogin != $poUser->login) {
-			$oUserDoublon = model_user::getInstance()->findByLogin($newLogin);
-			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
-				$poUser->login = $newLogin;
-				$canSave = true;
-			} else {
-				$poUser->setMessages(array('newLogin' => array('doublon')));
-				$poUser->openLogin = true;
+		if ((null != $newLogin) && (strlen($newLogin) > 0)) {
+			if ($newLogin != $poUser->login) {
+				$oUserDoublon = model_user::getInstance()->findByLogin($newLogin);
+				if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
+					$poUser->login = $newLogin;
+					$canSave = true;
+				} else {
+					$poUser->setMessages(array('newLogin' => array('doublon')));
+					$poUser->newLogin = $newLogin;
+					$poUser->openLogin = true;
+				}
 			}
+		} else {
+			$poUser->setMessages(array('newLogin' => array('NotEmpty')));
+			$poUser->openLogin = true;
 		}
 
 		if (true == $canSave && $poUser->isValid()) {
@@ -203,9 +201,8 @@ class module_accounts extends abstract_module
 			_root::getAuth()->setUserSession($oUserSession);
 			// Prepare et Affiche la popup
 			$scriptView = new _view('accounts::scriptSaved');
-			$scriptView->title = "Changer mon identifiant";
-			$scriptView->text = '<p>Votre nouvel identifiant <strong>' . $poUser->login .
-				'</strong> est enregistré.</p><p><br>N\'oubliez de l\'utiliser lors de votre prochaine connexion.';
+			$scriptView->text = '<p>Votre nouvel identifiant <strong>&laquo; ' . $poUser->login .
+				' &raquo</strong> est enregistré.</p><p><br>N\'oubliez pas de l\'utiliser lors de votre prochaine connexion.';
 			$this->oLayout->add('script', $scriptView);
 		}
 		return $poUser;

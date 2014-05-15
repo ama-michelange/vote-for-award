@@ -1,9 +1,11 @@
 
-<form action="" method="POST">
+<form action="" method="POST" autocomplete="off">
 	<input type="hidden" name="token" value="<?php echo $this->token ?>" />
 	<input type="hidden" name="user_id" value="<?php echo $this->oUser->user_id ?>" />
 	<input type="hidden" name="login" value="<?php echo $this->oUser->login ?>" />
 	<input type="hidden" name="email" value="<?php echo $this->oUser->email ?>" />
+	<input type="text" name="hiddenLogin" value="" style="display: none" />
+	<input type="password" name="hiddenPassword" value="" style="display: none" />
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h3 class="panel-title">Mon compte</h3>
@@ -22,21 +24,12 @@
 			<div class="row">
 				<div class="col-sm-6 col-md-6">
 					<div class="panel panel-info panel-inner">
-<!--						<div class="panel-heading">-->
-<!--							<h3 class="panel-title">Paramètres d'identification</h3>-->
-<!--						</div>-->
 						<div class="panel-body">
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login')?>">
 								<label for="inputLogin">Identifiant</label>
 								<input class="form-control" type="text" id="inputLogin" name="loginDisabled" value="<?php echo $this->oUser->login ?>" disabled />
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login')?></span>
 							</div>
-<!--							<div>-->
-<!--								<a class="btn btn-info btn-block" href="#changeEmail">-->
-<!--									Changer mon email-->
-<!--									<i class="glyphicon glyphicon-mail with-text"></i>-->
-<!--								</a>-->
-<!--							</div>-->
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email')?>">
 								<label for="inputEmail">Adresse Email</label>
 								<input class="form-control" type="email" id="inputEmail" name="emailDisabled" value="<?php echo $this->oUser->email ?>" disabled />
@@ -70,7 +63,6 @@
 								}
 							?>
 							<div class="panel-group" id="accordion">
-								<?php if ($this->changeLogin): ?>
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
@@ -85,14 +77,8 @@
 									<div id="collapseLogin" class="panel-collapse collapse<?php echo $collapseInLogin ?>">
 										<div class="panel-body">
 											<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newLogin')?>">
-												<select id="inputNewLogin" class="form-control" name="newLogin" size="2" data-placeholder="Sélectionnez votre identifiant">
-													<option></option>
-													<optgroup label="Email">
-														<option value="<?php echo $this->oUser->email ?>">
-															<?php echo $this->oUser->email ?>
-														</option>
-													</optgroup>
-												</select>
+												<label for="inputNewLogin">Nouvel identifiant de connexion</label>
+												<input class="form-control" type="text" id="inputNewLogin" name="newLogin" value="<?php echo $this->oUser->newLogin ?>" autocomplete="off" />
 												<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newLogin')?></span>
 											</div>
 										</div>
@@ -105,7 +91,6 @@
 										</div>
 									</div>
 								</div>
-								<?php endif; ?>
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
@@ -188,7 +173,7 @@
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'first_name')?></span>
 							</div>
 							<div class="row">
-								<div class="col-sm-6 col-md-4">
+								<div class="col-sm-6 col-md-6">
 									<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear')?>">
 										<label for="inputBirthyear">Année de naissance</label>
 										<select class="form-control"
