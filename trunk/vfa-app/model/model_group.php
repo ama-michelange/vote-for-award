@@ -149,6 +149,11 @@ class row_group extends abstract_row
 		return model_user::getInstance()->findAllByGroupId($this->group_id);
 	}
 
+	public function countUsers()
+	{
+		return model_user::getInstance()->countByGroupId($this->group_id);
+	}
+
 	/**
 	 * @return string
 	 */

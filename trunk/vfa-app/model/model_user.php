@@ -134,6 +134,19 @@ class model_user extends abstract_model
 		return $this->findMany($sql, $pRoleName, $pAwardId);
 	}
 
+
+	/**
+	 * @param $pGroupId
+	 * @return int
+	 */
+	public function countByGroupId($pGroupId)
+	{
+		$sql = 'SELECT count(*) as total FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
+			'AND (vfa_user_groups.group_id = ?)';
+		$res = $this->findOneSimple($sql, $pGroupId);
+		return intval($res->total);
+	}
+
 	public function getSelect()
 	{
 		$tab = $this->findAll();

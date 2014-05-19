@@ -124,12 +124,17 @@ class module_groups extends abstract_module
 	{
 		$oGroup = model_group::getInstance()->findById(_root::getParam('id'));
 		$oRole = model_role::getInstance()->findById($oGroup->role_id_default);
-		$toUsers = $oGroup->findUsers();
+		$toUsers = null;
+		if (_root::getAction() == 'read') {
+			$toUsers = $oGroup->findUsers();
+		}
+		$countUsers = $oGroup->countUsers();
 
 		$oView = new _view('groups::show');
 		$oView->oGroup = $oGroup;
 		$oView->oRole = $oRole;
 		$oView->toUsers = $toUsers;
+		$oView->countUsers = $countUsers;
 
 		return $oView;
 	}
@@ -142,7 +147,7 @@ class module_groups extends abstract_module
 		$oView->oViewShow = $this->buildViewShow();
 
 		$oView->ok = true;
-		if ($oView->oViewShow->toUsers) {
+		if ($oView->oViewShow->countUsers) {
 			$oView->ok = false;
 		}
 		$oPluginXsrf = new plugin_xsrf();
