@@ -9,7 +9,6 @@
 				<tr>
 					<th>Nom</th>
 					<th>Type</th>
-					<th>Comptes</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -21,7 +20,6 @@
 						<td><?php echo $oGroup->group_name ?></td>
 					<?php endif;?>
 					<td><?php echo $oGroup->getI18nStringType() ?></td>
-					<td><?php echo $oGroup->countUsers() ?></td>
 				</tr>
 				<?php endforeach;?>
 			</tbody>

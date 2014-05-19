@@ -14,7 +14,7 @@
 					<th>Email</th>
 					<th>Nom</th>
 					<th>Prénom</th>
-					<th class="col-xs-1" style="text-align:center;" data-rel="tooltip" data-original-title="Correspondant du groupe">Corres.</th>
+					<th class="col-xs-1" style="text-align:center;" data-rel="tooltip" data-original-title="Correspondant de son groupe">Corres.</th>
 					<th>Inscrit</th>
 				</tr>
 			</thead>

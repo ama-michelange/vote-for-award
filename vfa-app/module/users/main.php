@@ -149,14 +149,77 @@ class module_users extends abstract_module
 
 	public function buildViewShow()
 	{
-		$oUserModel = new model_user();
-		$oUser = $oUserModel->findById(_root::getParam('id'));
+		$oUser = model_user::getInstance()->findById(_root::getParam('id'));
 
 		$oView = new _view('users::show');
 		$oView->oUser = $oUser;
-		$oView->toRoles = $oUser->findRoles();
-		$oView->toGroups = $oUser->findGroups();
-		$oView->toAwards = $oUser->findAwards();
+		$oView->oViewShowUser = $this->buildViewShowUser($oUser);
+		$oView->oViewShowReaderGroup = $this->buildViewShowReaderGroup($oUser);
+		$oView->oViewShowBoardGroup = $this->buildViewShowBoardGroup($oUser);
+
+//		$oView->toRoles = $oUser->findRoles();
+//		$oView->toGroups = $oUser->findGroups();
+//		$oView->toAwards = $oUser->findAwards();
+
+		return $oView;
+	}
+
+	/**
+	 * @param row_user $poUser
+	 * @return _view
+	 */
+	public function buildViewShowUser($poUser)
+	{
+		$oView = new _view('users::showUser');
+		$oView->oUser = $poUser;
+
+		return $oView;
+	}
+
+	/**
+	 * @param row_user $poUser
+	 * @return _view
+	 */
+	public function buildViewShowReaderGroup($poUser)
+	{
+		$oGroup = $poUser->findGroupByRoleName(plugin_vfa::ROLE_READER);
+		if ($oGroup->isEmpty()) {
+			return null;
+		}
+		$oView = new _view('users::showGroup');
+		$oView->oUser = $poUser;
+		$oView->oGroup = $oGroup;
+
+		$roles = 'Lecteur';
+		if ($poUser->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
+			$roles .= ' et Correspondant';
+		}
+		$oView->roles = $roles;
+		$oView->toValidAwards = model_award::getInstance()->findAllValidByUserId($poUser->user_id, plugin_vfa::TYPE_AWARD_READER);
+
+		return $oView;
+	}
+
+	/**
+	 * @param row_user $poUser
+	 * @return _view
+	 */
+	public function buildViewShowBoardGroup($poUser)
+	{
+		$oGroup = $poUser->findGroupByRoleName(plugin_vfa::ROLE_BOARD);
+		if ($oGroup->isEmpty()) {
+			return null;
+		}
+		$oView = new _view('users::showGroup');
+		$oView->oUser = $poUser;
+		$oView->oGroup = $oGroup;
+
+		$roles = '';
+		if ($poUser->isInRole(plugin_vfa::ROLE_BOARD)) {
+			$roles .= 'Membre';
+		}
+		$oView->roles = $roles;
+		$oView->toValidAwards = model_award::getInstance()->findAllValidByUserId($poUser->user_id, plugin_vfa::TYPE_AWARD_BOARD);
 
 		return $oView;
 	}

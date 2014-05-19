@@ -120,9 +120,10 @@ class module_bsnavbar extends abstract_module
 			$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred')));
 			$item->addChild(plugin_BsHtml::buildMenuItem('Invités', new NavLink('invitations', 'list')));
 		}
-		$item->addChild(plugin_BsHtml::buildMenuItem('Groupe', new NavLink('registred', 'listReaderGroup')));
 
 		$item->addChildSeparator();
+		$item->addChild(plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('registred', 'listReaderGroup')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('registred', 'listResponsibleGroup')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Comité de sélection', new NavLink('registred', 'listBoardGroup')));
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Invitation aux lecteurs', new NavLink('invitations', 'reader')));

@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default panel-root">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo $this->oGroup->group_name ?></h3>
 	</div>
@@ -13,17 +13,22 @@
 					<div class="col-sm-2 col-md-1 view-label">Type</div>
 					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->oGroup->getI18nStringType() ?></div>
 				</div>
+				<div class="row">
+					<div class="col-sm-2 col-md-1 view-label">Comptes</div>
+					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->countUsers ?></div>
+				</div>
 			</div>
 		</div>
 		<?php if($this->toUsers):?>
 			<div class="panel panel-default panel-inner">
 			<div class="panel-heading">
 				<h5 class="panel-title">
-					Utilisateurs du groupe <a class="pull-right accordion-toggle" data-toggle="collapse"
-						href="#users"><i data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i></a>
+					Comptes
+					<a class="pull-right accordion-toggle" data-toggle="collapse"
+						href="#users"><i data-chevron="collapse" class="glyphicon glyphicon-collapse-down"></i></a>
 				</h5>
 			</div>
-			<div id="users" class="collapse in">
+			<div id="users" class="collapse">
 				<div class="table-responsive">
 					<table class="table table-striped table-condensed">
 						<thead>

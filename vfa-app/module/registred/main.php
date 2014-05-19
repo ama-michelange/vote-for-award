@@ -47,6 +47,7 @@ class module_registred extends abstract_module
 			case 'listReaderRegistred':
 			case 'listBoardGroup':
 			case 'listBoardRegistred':
+			case 'listAllUsers':
 				$this->buildMenuRegistred($navBar->getChild('left'), $oUserSession);
 				$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
 				$this->buildMenuGroups($navBar->getChild('left'), $oUserSession);
@@ -129,6 +130,10 @@ class module_registred extends abstract_module
 		}
 		$oBoardGroup = $poUserSession->getBoardGroup();
 		$item = plugin_BsHtml::buildMenuItem($oBoardGroup->toString(), new NavLink('registred', 'listBoardGroup'));
+		if ($item) {
+			$tItems[] = $item;
+		}
+		$item = plugin_BsHtml::buildMenuItem('Tous les groupes', new NavLink('registred', 'listAllGroups'));
 		if ($item) {
 			$tItems[] = $item;
 		}
@@ -223,7 +228,7 @@ class module_registred extends abstract_module
 
 		$tUsers = model_user::getInstance()->findAllByGroupId($oReaderGroup->group_id);
 
-		$oView = new _view('registred::listGroup');
+		$oView = new _view('registred::listUsers');
 		$oView->tUsers = $tUsers;
 		$oView->oGroup = $oReaderGroup;
 		$oView->invite = $invite;
@@ -262,7 +267,7 @@ class module_registred extends abstract_module
 
 		$tUsers = model_user::getInstance()->findAllByGroupId($oBoardGroup->group_id);
 
-		$oView = new _view('registred::listGroup');
+		$oView = new _view('registred::listUsers');
 		$oView->tUsers = $tUsers;
 		$oView->oGroup = $oBoardGroup;
 		$oView->invite = _root::getACL()->permit('invitations::board');
@@ -296,7 +301,7 @@ class module_registred extends abstract_module
 	{
 		$tUsers = model_user::getInstance()->findAllByRoleName(plugin_vfa::ROLE_RESPONSIBLE);
 
-		$oView = new _view('registred::listGroup');
+		$oView = new _view('registred::listUsers');
 		$oView->tUsers = $tUsers;
 		$oTitleGroup = new row_group();
 		$oTitleGroup->group_name = 'Correspondants';
@@ -324,6 +329,16 @@ class module_registred extends abstract_module
 		$oView->oGroup = $oTitleGroup;
 		$oView->oFirstAward = $oFirstAward;
 		$oView->tAwards = $tAwards;
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listAllGroups()
+	{
+		$tGroups = model_group::getInstance()->findAll();
+
+		$oView = new _view('registred::listGroups');
+		$oView->tGroups = $tGroups;
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -378,6 +393,7 @@ class module_registred extends abstract_module
 
 		return $oView;
 	}
+
 
 
 }
