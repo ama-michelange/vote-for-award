@@ -6,16 +6,16 @@
 		<div class="panel panel-default panel-inner">
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-sm-2 col-md-1 view-label">Nom</div>
-					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->oGroup->group_name ?></div>
+					<div class="col-sm-3 col-md-2 view-label">Nom</div>
+					<div class="col-sm-9 col-md-10 view-value"><?php echo $this->oGroup->group_name ?></div>
 				</div>
 				<div class="row">
-					<div class="col-sm-2 col-md-1 view-label">Type</div>
-					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->oGroup->getI18nStringType() ?></div>
+					<div class="col-sm-3 col-md-2 view-label">Type de groupe</div>
+					<div class="col-sm-9 col-md-10 view-value"><?php echo $this->oGroup->getI18nStringType() ?></div>
 				</div>
 				<div class="row">
-					<div class="col-sm-2 col-md-1 view-label">Comptes</div>
-					<div class="col-sm-10 col-md-11 view-value"><?php echo $this->countUsers ?></div>
+					<div class="col-sm-3 col-md-2 view-label">Nombre de comptes</div>
+					<div class="col-sm-9 col-md-10 view-value"><?php echo $this->countUsers ?></div>
 				</div>
 			</div>
 		</div>

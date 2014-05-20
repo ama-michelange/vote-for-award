@@ -18,8 +18,15 @@ _root::setConfigVar('tLangue',
 
 		// Groupes
 		'group.board' => 'Comité de sélection',
-		'group.bookseller' => 'Groupe des libraires',
-		'group.reader' => 'Groupe de lecteurs',
+		'group.bookseller' => 'Libraires',
+		'group.reader' => 'Lecteurs',
+
+		'title.users' => 'Comptes',
+		'title.users.listBoardGroup' => 'Comité de sélection',
+		'title.users.listDetailed' => 'Comptes détaillés',
+		'title.users.listResponsibleGroup' => 'Correspondants',
+
+		'menu.users' => 'Comptes',
 
 		// Messages d'erreurs
 		'token' => '<strong>Page invalide !</strong><p>Une page de saisie n\'est valable qu\'un certain temps qui est dépassé.</p>',
