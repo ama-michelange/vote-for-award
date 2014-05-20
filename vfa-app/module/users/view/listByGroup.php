@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default panel-root">
 	<!-- 	<div class="panel-heading"> -->
 	<!-- 		<h3 class="panel-title">Liste des utilisateurs par groupe</h3> -->
 	<!-- 	</div> -->

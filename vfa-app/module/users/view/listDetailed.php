@@ -1,7 +1,4 @@
-<div class="panel panel-default">
-	<!-- 	<div class="panel-heading"> -->
-	<!-- 		<h3 class="panel-title">Liste des utilisateurs</h3> -->
-	<!-- 	</div> -->
+<div class="panel panel-default panel-root">
 	<?php if($this->tUsers):?>
 	<div class="table-responsive">
 		<table class="table table-striped">
