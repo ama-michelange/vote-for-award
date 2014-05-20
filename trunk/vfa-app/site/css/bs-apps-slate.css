@@ -346,6 +346,9 @@
 .panel-root {
     margin-right: -15px;
 }
+.panel-inner .panel-root {
+    margin-right: 0px;
+}
 
 .panel-default {
     /*border-color: #BBDAE8;*/
