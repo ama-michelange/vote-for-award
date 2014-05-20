@@ -1,7 +1,7 @@
 <form action="" method="POST">
 	<input type="hidden" name="token" value="<?php echo $this->token?>" />
 	<input type="hidden" name="user_id" value="<?php echo $this->oUser->user_id ?>" />
-	<div class="panel panel-info">
+	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
 			<h3 class="panel-title"><?php echo $this->textTitle ?></h3>
 		</div>

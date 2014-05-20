@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default panel-root">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo $this->oUser->login ?></h3>
 	</div>

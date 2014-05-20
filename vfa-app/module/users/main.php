@@ -7,7 +7,6 @@ class module_users extends abstract_module
 	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-
 		$this->oLayout = new _layout('tpl_bs_bar_context');
 	}
 
@@ -15,20 +14,110 @@ class module_users extends abstract_module
 	{
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
 		$this->oLayout->add('bsnav-top', plugin_BsContextBar::buildViewContextBar($this->buildContextBar()));
-
 		$this->oLayout->show();
 	}
 
 	private function buildContextBar()
 	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Utilisateurs', new NavLink('users', 'index'));
+//		$navBar->setTitle('Comptes', new NavLink('users', 'index'));
+//		$navBar->setTitle(_root::getParamNav());
+//		$navBar->setTitle('Comptes');
+
+
+		switch (_root::getAction()) {
+			case 'listMyGroup':
+				$title = $oUserSession->getReaderGroup()->toString();
+				break;
+			case 'create':
+			case 'delete':
+			case 'update':
+			case 'read':
+				$title = 'Compte';
+				break;
+			default:
+				$title = plugin_i18n::getFirst('title', _root::getModule(), _root::getAction());
+				break;
+		}
+		$navBar->setTitle($title);
+
+
+		$navBar->addChild(new Bar('left'));
+		$this->buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
 
 		$navBar->addChild(new BarButtons('right'));
 		$bar = $navBar->getChild('right');
 		$bar->addChild(plugin_BsHtml::buildButtonItem('Liste par groupe', new NavLink('users', 'listByGroup'), 'glyphicon-list'));
 		plugin_BsContextBar::buildDefaultContextBar($bar);
 		return $navBar;
+	}
+
+	/**
+	 * @param Bar $pBar
+	 * @param row_user_session $poUserSession
+	 */
+	public static function buildMenuUsersByGroup($pBar, $poUserSession)
+	{
+		$tItems = array();
+
+		$oReaderGroup = $poUserSession->getReaderGroup();
+		$item = plugin_BsHtml::buildMenuItem($oReaderGroup->toString(), new NavLink('users', 'listMyGroup'));
+		if ($item) {
+			$tItems[] = $item;
+		}
+		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listResponsibleGroup'),
+			new NavLink('users', 'listResponsibleGroup'));
+		if ($item) {
+			$tItems[] = $item;
+		}
+		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listBoardGroup'),
+			new NavLink('users', 'listBoardGroup'));
+		if ($item) {
+			$tItems[] = $item;
+		}
+		$tItems[] = plugin_BsHtml::buildSeparator();
+		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'list'), new NavLink('users', 'list'));
+		if ($item) {
+			$tItems[] = $item;
+		}
+		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listDetailed'), new NavLink('users', 'listDetailed'));
+		if ($item) {
+			$tItems[] = $item;
+		}
+//		$tItems[] = plugin_BsHtml::buildSeparator();
+//		$item = plugin_BsHtml::buildMenuItem('Tous les groupes', new NavLink('groups', 'list'));
+//		if ($item) {
+//			$tItems[] = $item;
+//		}
+
+
+		switch (count($tItems)) {
+			case 0:
+				break;
+			case 1:
+				if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
+					$tItems[0]->setLabel('Compte');
+					$tItems[0]->setName('Compte');
+					$pBar->addChild($tItems[0]);
+				}
+				break;
+			default:
+				$drop = new DropdownMenuItem('Autres Comptes');
+				foreach ($tItems as $item) {
+					if (plugin_BsHtml::isSeparator($item)) {
+						$drop->addChild($item);
+					} elseif (_root::getParamNav() != $item->getLink()->getNav()) {
+						$drop->addChild($item);
+					}
+				}
+				if ($drop->hasRealChildren()) {
+					$pBar->addChild($drop);
+				}
+				break;
+		}
 	}
 
 	public function _index()
@@ -44,6 +133,18 @@ class module_users extends abstract_module
 		$tUsers = $oUserModel->findAll();
 
 		$oView = new _view('users::list');
+		$oView->tUsers = $tUsers;
+		$oView->title = 'Tous les comptes';
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listDetailed()
+	{
+		$oUserModel = new model_user();
+		$tUsers = $oUserModel->findAll();
+
+		$oView = new _view('users::listDetailed');
 		$oView->tUsers = $tUsers;
 		$oView->tColumn = $oUserModel->getListColumn();
 
@@ -71,6 +172,47 @@ class module_users extends abstract_module
 		$oView->tUsers = $tUsers;
 		$oView->tGroups = $tGroups;
 		$oView->SelectedIdGroup = $SelectedIdGroup;
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listMyGroup()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oReaderGroup = $oUserSession->getReaderGroup();
+
+		$tUsers = model_user::getInstance()->findAllByGroupId($oReaderGroup->group_id);
+
+		$oView = new _view('users::list');
+		$oView->tUsers = $tUsers;
+		$oView->title = $oReaderGroup->toString();
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listBoardGroup()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oBoardGroup = $oUserSession->getBoardGroup();
+
+		$tUsers = model_user::getInstance()->findAllByGroupId($oBoardGroup->group_id);
+
+		$oView = new _view('users::list');
+		$oView->tUsers = $tUsers;
+		$oView->title = $oBoardGroup->toString();
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _listResponsibleGroup()
+	{
+		$tUsers = model_user::getInstance()->findAllByRoleName(plugin_vfa::ROLE_RESPONSIBLE);
+
+		$oView = new _view('users::list');
+		$oView->tUsers = $tUsers;
+		$oView->title = 'Correspondants';
 
 		$this->oLayout->add('work', $oView);
 	}
