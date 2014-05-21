@@ -44,9 +44,10 @@ class module_users extends abstract_module
 		}
 		$navBar->setTitle($title);
 
-
 		$navBar->addChild(new Bar('left'));
 		$this->buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
+		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
+		module_invitations::buildMenuGuests($navBar->getChild('left'), $oUserSession);
 
 		$navBar->addChild(new BarButtons('right'));
 		$bar = $navBar->getChild('right');
@@ -63,61 +64,17 @@ class module_users extends abstract_module
 	{
 		$tItems = array();
 
-		$oReaderGroup = $poUserSession->getReaderGroup();
-		$item = plugin_BsHtml::buildMenuItem($oReaderGroup->toString(), new NavLink('users', 'listMyGroup'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listResponsibleGroup'),
+		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(), new NavLink('users', 'listMyGroup'));
+		$tItems[] = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listResponsibleGroup'),
 			new NavLink('users', 'listResponsibleGroup'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listBoardGroup'),
+		$tItems[]  = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listBoardGroup'),
 			new NavLink('users', 'listBoardGroup'));
-		if ($item) {
-			$tItems[] = $item;
-		}
+
 		$tItems[] = plugin_BsHtml::buildSeparator();
-		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'list'), new NavLink('users', 'list'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-		$item = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listDetailed'), new NavLink('users', 'listDetailed'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-//		$tItems[] = plugin_BsHtml::buildSeparator();
-//		$item = plugin_BsHtml::buildMenuItem('Tous les groupes', new NavLink('groups', 'list'));
-//		if ($item) {
-//			$tItems[] = $item;
-//		}
+		$tItems[]  = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'list'), new NavLink('users', 'list'));
+		$tItems[]  = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listDetailed'), new NavLink('users', 'listDetailed'));
 
-
-		switch (count($tItems)) {
-			case 0:
-				break;
-			case 1:
-				if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
-					$tItems[0]->setLabel('Compte');
-					$tItems[0]->setName('Compte');
-					$pBar->addChild($tItems[0]);
-				}
-				break;
-			default:
-				$drop = new DropdownMenuItem('Autres Comptes');
-				foreach ($tItems as $item) {
-					if (plugin_BsHtml::isSeparator($item)) {
-						$drop->addChild($item);
-					} elseif (_root::getParamNav() != $item->getLink()->getNav()) {
-						$drop->addChild($item);
-					}
-				}
-				if ($drop->hasRealChildren()) {
-					$pBar->addChild($drop);
-				}
-				break;
-		}
+		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Comptes', 'Comptes'));
 	}
 
 	public function _index()
