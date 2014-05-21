@@ -49,14 +49,32 @@ class module_invitations extends abstract_module
 		}
 
 		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
-		module_registred::buildMenuGuests($navBar->getChild('left'), $oUserSession);
-		module_registred::buildMenuGroups($navBar->getChild('left'), $oUserSession);
+		$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
+		module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
 
 
 		plugin_BsContextBar::buildRDContextBar($navBar->getChild('right'));
 		return $navBar;
 	}
+	/**
+	 * @param Bar $pBar
+	 * @param row_user_session $poUserSession
+	 */
+	public static function buildMenuGuests($pBar, $poUserSession)
+	{
+		$tItems = array();
 
+		$tValidReaderAwards = $poUserSession->getValidReaderAwards();
+		if (count($tValidReaderAwards) > 0) {
+			$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(), new NavLink('invitations', 'listReader'));
+			$tItems[] = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'listResponsible'));
+		}
+		$tValidBoardAwards = $poUserSession->getValidBoardAwards();
+		if (count($tValidBoardAwards) > 0) {
+			$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getBoardGroup()->toString(), new NavLink('invitations', 'listBoard'));
+		}
+		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Invités', 'Invités'));
+	}
 	public function _index()
 	{
 		// redirection vers la page par défaut
@@ -78,7 +96,7 @@ class module_invitations extends abstract_module
 
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
-		$oView->title = 'Invitations du groupe &laquo; ' . $oReaderGroup->group_name . ' &raquo;';
+		$oView->title = 'Invités <small>du groupe</small> ' . $oReaderGroup->toString();
 
 		$this->oLayout->add('work', $oView);
 	}

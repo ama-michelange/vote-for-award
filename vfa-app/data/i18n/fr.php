@@ -22,6 +22,7 @@ _root::setConfigVar('tLangue',
 		'group.reader' => 'Lecteurs',
 
 		'title.users' => 'Comptes',
+		'title.users.list' => 'Comptes',
 		'title.users.listBoardGroup' => 'Comité de sélection',
 		'title.users.listDetailed' => 'Comptes détaillés',
 		'title.users.listResponsibleGroup' => 'Correspondants',

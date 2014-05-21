@@ -42,20 +42,26 @@ class module_registred extends abstract_module
 				$navBar->setTitle('Lecteur');
 				break;
 		}
-		switch (_root::getAction()) {
-			case 'listReaderGroup':
-			case 'listReaderRegistred':
-			case 'listBoardGroup':
-			case 'listBoardRegistred':
-			case 'listAllUsers':
-				$this->buildMenuRegistred($navBar->getChild('left'), $oUserSession);
-				$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
-				$this->buildMenuGroups($navBar->getChild('left'), $oUserSession);
-				break;
-			default:
-				$this->buildMenuGroups($navBar->getChild('left'), $oUserSession);
-				break;
-		}
+
+		$this->buildMenuRegistred($navBar->getChild('left'), $oUserSession);
+		module_invitations::buildMenuGuests($navBar->getChild('left'), $oUserSession);
+		module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
+
+
+//		switch (_root::getAction()) {
+//			case 'listReaderGroup':
+//			case 'listReaderRegistred':
+//			case 'listBoardGroup':
+//			case 'listBoardRegistred':
+//			case 'listAllUsers':
+//				$this->buildMenuRegistred($navBar->getChild('left'), $oUserSession);
+//				$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
+//				module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
+//				break;
+//			default:
+//				module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
+//				break;
+//		}
 
 
 		return $navBar;
@@ -71,209 +77,86 @@ class module_registred extends abstract_module
 
 		$tValidReaderAwards = $poUserSession->getValidReaderAwards();
 		if (count($tValidReaderAwards) > 0) {
-			$oReaderGroup = $poUserSession->getReaderGroup();
-			$item = plugin_BsHtml::buildMenuItem($oReaderGroup->toString(), new NavLink('registred', 'listReaderRegistred'));
-			if ($item) {
-				$tItems[] = $item;
-			}
-			$item = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('registred', 'listResponsibleRegistred'));
-			if ($item) {
-				$tItems[] = $item;
-			}
+			$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(),
+				new NavLink('registred', 'listReaderRegistred'));
+			$tItems[] = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('registred', 'listResponsibleRegistred'));
 		}
 		$tValidBoardAwards = $poUserSession->getValidBoardAwards();
 		if (count($tValidBoardAwards) > 0) {
-			$oBoardGroup = $poUserSession->getBoardGroup();
-			$item = plugin_BsHtml::buildMenuItem($oBoardGroup->toString(), new NavLink('registred', 'listBoardRegistred'));
-			if ($item) {
-				$tItems[] = $item;
-			}
+			$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getBoardGroup()->toString(),
+				new NavLink('registred', 'listBoardRegistred'));
 		}
 
-
-		switch (count($tItems)) {
-			case 0:
-				break;
-			case 1:
-				if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
-					$tItems[0]->setLabel('Inscrits');
-					$tItems[0]->setName('Inscrits');
-					$pBar->addChild($tItems[0]);
-				}
-				break;
-			default:
-				$drop = new DropdownMenuItem('Inscrits');
-				foreach ($tItems as $item) {
-					$drop->addChild($item);
-				}
-				$pBar->addChild($drop);
-				break;
-		}
+		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Inscrits', 'Inscrits'));
 	}
 
-	/**
-	 * @param Bar $pBar
-	 * @param row_user_session $poUserSession
-	 */
-	public static function buildMenuGroups($pBar, $poUserSession)
-	{
-		$tItems = array();
-
-		$oReaderGroup = $poUserSession->getReaderGroup();
-		$item = plugin_BsHtml::buildMenuItem($oReaderGroup->toString(), new NavLink('registred', 'listReaderGroup'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-		$item = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('registred', 'listResponsibleGroup'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-		$oBoardGroup = $poUserSession->getBoardGroup();
-		$item = plugin_BsHtml::buildMenuItem($oBoardGroup->toString(), new NavLink('registred', 'listBoardGroup'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-		$item = plugin_BsHtml::buildMenuItem('Tous les groupes', new NavLink('registred', 'listAllGroups'));
-		if ($item) {
-			$tItems[] = $item;
-		}
-
-
-		switch (count($tItems)) {
-			case 0:
-				break;
-			case 1:
-				if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
-					$tItems[0]->setLabel('Groupe');
-					$tItems[0]->setName('Groupe');
-					$pBar->addChild($tItems[0]);
-				}
-				break;
-			default:
-				$drop = new DropdownMenuItem('Groupes');
-				foreach ($tItems as $item) {
-					$drop->addChild($item);
-				}
-				$pBar->addChild($drop);
-				break;
-		}
-	}
-
-	/**
-	 * @param Bar $pBar
-	 * @param row_user_session $poUserSession
-	 */
-	public static function buildMenuGuests($pBar, $poUserSession)
-	{
-		$tItems = array();
-
-		$tValidReaderAwards = $poUserSession->getValidReaderAwards();
-		if (count($tValidReaderAwards) > 0) {
-			$oReaderGroup = $poUserSession->getReaderGroup();
-			$item = plugin_BsHtml::buildMenuItem($oReaderGroup->toString(), new NavLink('invitations', 'listReader'));
-			if ($item) {
-				$tItems[] = $item;
-			}
-			$item = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'listResponsible'));
-			if ($item) {
-				$tItems[] = $item;
-			}
-		}
-		$tValidBoardAwards = $poUserSession->getValidBoardAwards();
-		if (count($tValidBoardAwards) > 0) {
-			$oBoardGroup = $poUserSession->getBoardGroup();
-			$item = plugin_BsHtml::buildMenuItem($oBoardGroup->toString(), new NavLink('invitations', 'listBoard'));
-			if ($item) {
-				$tItems[] = $item;
-			}
-		}
-
-		switch (count($tItems)) {
-			case 0:
-				break;
-			case 1:
-				if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
-					$tItems[0]->setLabel('Invités');
-					$tItems[0]->setName('Invités');
-					$pBar->addChild($tItems[0]);
-				}
-				break;
-			default:
-				$drop = new DropdownMenuItem('Invités');
-				foreach ($tItems as $item) {
-					$drop->addChild($item);
-				}
-				$pBar->addChild($drop);
-				break;
-		}
-	}
 
 	public function _index()
 	{
 		// redirection vers la page par défaut
-		_root::redirect('registred::listReaderGroup');
+		_root::redirect('registred::listReaderRegistred');
 	}
 
-	public function _listReaderGroup()
-	{
-		$invite = false;
-
-		/* @var $oUserSession row_user_session */
-		$oUserSession = _root::getAuth()->getUserSession();
-		$oReaderGroup = $oUserSession->getReaderGroup();
-		$tValidReaderAwards = $oUserSession->getValidReaderAwards();
-		if (count($tValidReaderAwards) > 0) {
-			$invite = true;
-		}
-
-		$tUsers = model_user::getInstance()->findAllByGroupId($oReaderGroup->group_id);
-
-		$oView = new _view('registred::listUsers');
-		$oView->tUsers = $tUsers;
-		$oView->oGroup = $oReaderGroup;
-		$oView->invite = $invite;
-
-		$this->oLayout->add('work', $oView);
-	}
+//	public function _listReaderGroup()
+//	{
+//		$invite = false;
+//
+//		/* @var $oUserSession row_user_session */
+//		$oUserSession = _root::getAuth()->getUserSession();
+//		$oReaderGroup = $oUserSession->getReaderGroup();
+//		$tValidReaderAwards = $oUserSession->getValidReaderAwards();
+//		if (count($tValidReaderAwards) > 0) {
+//			$invite = true;
+//		}
+//
+//		$tUsers = model_user::getInstance()->findAllByGroupId($oReaderGroup->group_id);
+//
+//		$oView = new _view('registred::listUsers');
+//		$oView->tUsers = $tUsers;
+//		$oView->oGroup = $oReaderGroup;
+//		$oView->invite = $invite;
+//
+//		$this->oLayout->add('work', $oView);
+//	}
 
 	public function _listReaderRegistred()
 	{
 		$tUsers = null;
-		$oFirstValidReaderAward = null;
+		$oFirstAward = null;
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
 		$oReaderGroup = $oUserSession->getReaderGroup();
-		$tValidReaderAwards = $oUserSession->getValidReaderAwards();
-		if (count($tValidReaderAwards) > 0) {
-			$oFirstValidReaderAward = $tValidReaderAwards[0];
+		$tAwards = $oUserSession->getValidReaderAwards();
+		if (count($tAwards) > 0) {
+			$oFirstAward = $tAwards[0];
 			$tUsers = model_user::getInstance()
-				->findAllByGroupIdByAwardId($oReaderGroup->group_id, $oFirstValidReaderAward->award_id, 'email');
+				->findAllByGroupIdByAwardId($oReaderGroup->group_id, $oFirstAward->award_id, 'email');
 		}
 		$oView = new _view('registred::listRegistred');
 		$oView->tUsers = $tUsers;
 		$oView->oGroup = $oReaderGroup;
-		$oView->oFirstValidReaderAward = $oFirstValidReaderAward;
-		$oView->tValidReaderAwards = $tValidReaderAwards;
+		$oView->oFirstAward = $oFirstAward;
+		$oView->tAwards = $tAwards;
 
 
 		$this->oLayout->add('work', $oView);
 	}
 
-	public function _listBoardGroup()
-	{
-		/* @var $oUserSession row_user_session */
-		$oUserSession = _root::getAuth()->getUserSession();
-		$oBoardGroup = $oUserSession->getBoardGroup();
-
-		$tUsers = model_user::getInstance()->findAllByGroupId($oBoardGroup->group_id);
-
-		$oView = new _view('registred::listUsers');
-		$oView->tUsers = $tUsers;
-		$oView->oGroup = $oBoardGroup;
-		$oView->invite = _root::getACL()->permit('invitations::board');
-
-		$this->oLayout->add('work', $oView);
-	}
+//	public function _listBoardGroup()
+//	{
+//		/* @var $oUserSession row_user_session */
+//		$oUserSession = _root::getAuth()->getUserSession();
+//		$oBoardGroup = $oUserSession->getBoardGroup();
+//
+//		$tUsers = model_user::getInstance()->findAllByGroupId($oBoardGroup->group_id);
+//
+//		$oView = new _view('registred::listUsers');
+//		$oView->tUsers = $tUsers;
+//		$oView->oGroup = $oBoardGroup;
+//		$oView->invite = _root::getACL()->permit('invitations::board');
+//
+//		$this->oLayout->add('work', $oView);
+//	}
 
 	public function _listBoardRegistred()
 	{
@@ -393,7 +276,6 @@ class module_registred extends abstract_module
 
 		return $oView;
 	}
-
 
 
 }

@@ -35,6 +35,54 @@ class plugin_BsHtml
 	}
 
 	/**
+	 * @param string $pLabelDrop
+	 * @param MenuItem[] $ptMenuItems
+	 * @param string|null $pLabelMenuItem
+	 * @return MenuItem|DropdownMenuItem|null
+	 */
+	public static function buildDropdownMenuItem($ptMenuItems, $pLabelDrop, $pLabelMenuItem = null)
+	{
+		$tItems = array();
+		foreach ($ptMenuItems as $item) {
+			if ($item) {
+				$tItems[] = $item;
+			}
+		}
+		$ret = null;
+		switch (count($tItems)) {
+			case 0:
+				break;
+			case 1:
+				if (false == plugin_BsHtml::isSeparator($tItems[0])) {
+					if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
+						$name = $pLabelMenuItem;
+						if (null == $name) {
+							$name = $pLabelDrop;
+						}
+						$tItems[0]->setLabel($name);
+						$tItems[0]->setName($name);
+						$ret = $tItems[0];
+					}
+				}
+				break;
+			default:
+				$drop = new DropdownMenuItem($pLabelDrop);
+				foreach ($tItems as $item) {
+					if (plugin_BsHtml::isSeparator($item)) {
+						$drop->addChild($item);
+					} elseif (_root::getParamNav() != $item->getLink()->getNav()) {
+						$drop->addChild($item);
+					}
+				}
+				if ($drop->hasRealChildren()) {
+					$ret = $drop;
+				}
+				break;
+		}
+		return $ret;
+	}
+
+	/**
 	 * @param $pLabel
 	 * @param null $pLink
 	 * @param null $pIcon
