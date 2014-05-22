@@ -8,11 +8,13 @@
 			<thead>
 				<tr>
 					<th>Identifiant</th>
+					<th class="col-xs-1" style="text-align:center;" data-rel="tooltip" data-original-title="Correspondant de son groupe">
+						Corres.
+					</th>
+					<th>Inscrit</th>
 					<th>Email</th>
 					<th>Nom</th>
 					<th>Prénom</th>
-					<th class="col-xs-1" style="text-align:center;" data-rel="tooltip" data-original-title="Correspondant de son groupe">Corres.</th>
-					<th>Inscrit</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -23,9 +25,6 @@
 						<?php else:?>
 							<td><?php echo wordwrap($oUser->login,20,'<br />', true) ?></td>
 						<?php endif;?>
-						<td><?php echo wordwrap($oUser->email,30,'<br />', true) ?></td>
-						<td><?php echo wordwrap($oUser->last_name,30,'<br />', true) ?></td>
-						<td><?php echo wordwrap($oUser->first_name,30,'<br />', true) ?></td>
 						<td style="text-align:center;">
 							<?php if ($oUser->isInRole(plugin_vfa::TYPE_RESPONSIBLE)) :	?>
 								<span class="glyphicon glyphicon-check"></span>
@@ -42,6 +41,9 @@
 								}
 							?>
 						</td>
+						<td><?php echo wordwrap($oUser->email, 30, '<br />', true) ?></td>
+						<td><?php echo wordwrap($oUser->last_name, 30, '<br />', true) ?></td>
+						<td><?php echo wordwrap($oUser->first_name, 30, '<br />', true) ?></td>
 					</tr>
 				<?php endforeach;?>
 			</tbody>

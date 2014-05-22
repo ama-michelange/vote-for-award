@@ -50,6 +50,17 @@ class model_invitation extends abstract_model
 
 	/**
 	 * @param $pCategory
+	 * @param $pType
+	 * @return row_invitation[]
+	 */
+	public function findAllByCategoryByType($pCategory, $pType)
+	{
+		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE category=? AND type=? ORDER BY email, type, created_date DESC';
+		return $this->findMany($sql, $pCategory, $pType);
+	}
+
+	/**
+	 * @param $pCategory
 	 * @param $pGroupId
 	 * @return row_invitation[]
 	 */

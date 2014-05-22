@@ -116,10 +116,10 @@ class module_bsnavbar extends abstract_module
 		$item = new DropdownMenuItem('Lecteurs');
 
 		$tValidReaderAwards = $poUserSession->getValidReaderAwards();
-		if (count($tValidReaderAwards) > 0) {
-			$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'listReaderRegistred')));
-			$item->addChild(plugin_BsHtml::buildMenuItem('Invités', new NavLink('invitations', 'list')));
-		}
+//		if (count($tValidReaderAwards) > 0) {
+		$item->addChild(plugin_BsHtml::buildMenuItem('Inscrits', new NavLink('registred', 'index')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Invités', new NavLink('invitations', 'index')));
+//		}
 
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Mon groupe', new NavLink('users', 'listMyGroup')));
