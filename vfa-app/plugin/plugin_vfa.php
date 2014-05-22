@@ -14,6 +14,7 @@ class plugin_vfa
 	const CATEGORY_CHANGE = 'CHANGE';
 
 	const ROLE_BOARD = 'board';
+	const ROLE_ORGANIZER = 'organizer';
 	const ROLE_READER = 'reader';
 	const ROLE_RESPONSIBLE = 'responsible';
 

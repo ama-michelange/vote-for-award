@@ -172,6 +172,19 @@ class row_user_session
 	}
 
 	/**
+	 * @param string $pRoleName
+	 * @return boolean
+	 */
+	public function isInRole($pRoleName)
+	{
+		$roles = $this->getNameRoles();
+		if (isset($roles[$pRoleName])) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Attribue le tableau des habilitations de l'utilisateur
 	 *
 	 * @param array $ptAuthorizations
@@ -255,7 +268,8 @@ class row_user_session
 	{
 		return $this->oReaderGroup;
 	}
-/**
+
+	/**
 	 * Attribue le groupe de COMITE DE SELECTION
 	 *
 	 * @param row_group $pGroup
