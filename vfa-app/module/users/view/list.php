@@ -12,9 +12,14 @@
 						Corres.
 					</th>
 					<th>Inscrit</th>
-					<th>Email</th>
-					<th>Nom</th>
-					<th>Prénom</th>
+					<?php if ($this->__isset('showGroup')): ?>
+						<th>Groupe</th>
+					<?php endif; ?>
+					<?php if ($this->__isset('showPersonal')): ?>
+						<th>Email</th>
+						<th>Nom</th>
+						<th>Prénom</th>
+					<?php endif; ?>
 				</tr>
 			</thead>
 			<tbody>
@@ -41,9 +46,14 @@
 								}
 							?>
 						</td>
-						<td><?php echo wordwrap($oUser->email, 30, '<br />', true) ?></td>
-						<td><?php echo wordwrap($oUser->last_name, 30, '<br />', true) ?></td>
-						<td><?php echo wordwrap($oUser->first_name, 30, '<br />', true) ?></td>
+						<?php if ($this->__isset('showGroup')): ?>
+							<td><?php echo $oUser->findGroupByRoleName(plugin_vfa::ROLE_READER)->toString(); ?></td>
+						<?php endif; ?>
+						<?php if ($this->__isset('showPersonal')): ?>
+							<td><?php echo wordwrap($oUser->email, 30, '<br />', true) ?></td>
+							<td><?php echo wordwrap($oUser->last_name, 30, '<br />', true) ?></td>
+							<td><?php echo wordwrap($oUser->first_name, 30, '<br />', true) ?></td>
+						<?php endif; ?>
 					</tr>
 				<?php endforeach;?>
 			</tbody>

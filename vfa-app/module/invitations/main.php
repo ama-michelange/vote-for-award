@@ -30,12 +30,12 @@ class module_invitations extends abstract_module
 			case 'listReader':
 				$navBar->setTitle('Invités', new NavLink('invitations', 'listReader'));
 				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'),
-					'glyphicon-envelope'));
+					'glyphicon-send'));
 				break;
 			case 'listBoard':
 				$navBar->setTitle('Invités', new NavLink('invitations', 'listBoard'));
 				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'board'),
-					'glyphicon-envelope'));
+					'glyphicon-send'));
 				break;
 			case 'reader':
 				$navBar->setTitle('Invitation', new NavLink('invitations', 'reader'));
@@ -48,9 +48,9 @@ class module_invitations extends abstract_module
 				break;
 		}
 
-		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
+//		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
 		$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
-		module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
+//		module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
 
 
 		plugin_BsContextBar::buildRDContextBar($navBar->getChild('right'));
@@ -65,27 +65,45 @@ class module_invitations extends abstract_module
 	{
 		$tItems = array();
 
-		$tValidReaderAwards = $poUserSession->getValidReaderAwards();
-//		if (count($tValidReaderAwards) > 0) {
-			$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(), new NavLink('invitations', 'listReader'));
-			$tItems[] = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'listResponsible'));
-//		}
-		$tValidBoardAwards = $poUserSession->getValidBoardAwards();
-//		if (count($tValidBoardAwards) > 0) {
-			$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getBoardGroup()->toString(), new NavLink('invitations', 'listBoard'));
-//		}
-		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Invités', 'Invités'));
+		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(), new NavLink('invitations', 'listReader'));
+		$tItems[] = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'listResponsible'));
+		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getBoardGroup()->toString(), new NavLink('invitations', 'listBoard'));
+		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres invités', 'Invités'));
+	}
+
+	/**
+	 * @param Bar $pBar
+	 * @param row_user_session $poUserSession
+	 */
+	public static function buildMenuInvitations($pBar, $poUserSession)
+	{
+		$tItems = array();
+
+		$paramUser = null;
+		$idUser = _root::getParam('id');
+		if ($idUser) {
+			$paramUser = array('idUser' => $idUser);
+		}
+
+		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(),
+			new NavLink('invitations', 'reader', $paramUser));
+		$tItems[] = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'responsible', $paramUser));
+		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getBoardGroup()->toString(),
+			new NavLink('invitations', 'board', $paramUser));
+		$pBar->addChild(plugin_BsHtml::buildDropdownButtonItem($tItems, 'Inviter', 'glyphicon-send'));
 	}
 
 	public function _index()
 	{
-		// redirection vers la page par défaut
-		_root::redirect('invitations::listReader');
-	}
-
-	public function _list()
-	{
-		_root::redirect('invitations::listReader');
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER)) {
+			_root::getRequest()->setAction('listResponsible');
+			$this->_listResponsible();
+		} else {
+			_root::getRequest()->setAction('listReader');
+			$this->_listReader();
+		}
 	}
 
 	public function _listReader()
@@ -98,7 +116,7 @@ class module_invitations extends abstract_module
 
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
-		$oView->title = 'Invités <small>du groupe</small> ' . $oReaderGroup->toString();
+		$oView->title = '<small>Invités du groupe</small> ' . $oReaderGroup->toString();
 
 		$this->oLayout->add('work', $oView);
 	}

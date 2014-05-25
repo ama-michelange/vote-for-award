@@ -83,6 +83,53 @@ class plugin_BsHtml
 	}
 
 	/**
+	 * @param MenuItem[] $ptMenuItems
+	 * @param string $pLabelDrop
+	 * @param string|null $pIconDrop
+	 * @param string|null $pLabelButtonItem
+	 * @return ButtonItem|DropdownButtonItem|null
+	 */
+	public static function buildDropdownButtonItem($ptMenuItems, $pLabelDrop, $pIconDrop = null, $pLabelButtonItem = null)
+	{
+		$tItems = array();
+		foreach ($ptMenuItems as $item) {
+			if ($item) {
+				$tItems[] = $item;
+			}
+		}
+		$ret = null;
+		switch (count($tItems)) {
+			case 0:
+				break;
+			case 1:
+				if (false == plugin_BsHtml::isSeparator($tItems[0])) {
+					if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
+						$name = $pLabelButtonItem;
+						if (null == $name) {
+							$name = $pLabelDrop;
+						}
+						$ret = new ButtonItem($name, $tItems[0]->getLink(), $pIconDrop);
+					}
+				}
+				break;
+			default:
+				$drop = new DropdownButtonItem($pLabelDrop, null, $pIconDrop);
+				foreach ($tItems as $item) {
+					if (plugin_BsHtml::isSeparator($item)) {
+						$drop->addChild($item);
+					} elseif (_root::getParamNav() != $item->getLink()->getNav()) {
+						$drop->addChild($item);
+					}
+				}
+				if ($drop->hasRealChildren()) {
+					$ret = $drop;
+				}
+				break;
+		}
+		return $ret;
+	}
+
+	/**
 	 * @param $pLabel
 	 * @param null $pLink
 	 * @param null $pIcon
@@ -446,7 +493,7 @@ class DropdownButtonItem extends DropdownMenuItem
 
 	protected function toHtmlDropdownMenuToggle()
 	{
-		$ret = '<a href="#" class="btn btn-default btn-link btn-sm dropdown-toggle" data-toggle="dropdown">';
+		$ret = '<a href="#" class="btn btn-default btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">';
 		$ret .= $this->toHtmlIconText();
 		$ret .= '<b class="caret with-text"></b>';
 		$ret .= '</a>';
