@@ -23,35 +23,21 @@ class module_users extends abstract_module
 		$oUserSession = _root::getAuth()->getUserSession();
 
 		$navBar = plugin_BsHtml::buildNavBar();
-//		$navBar->setTitle('Comptes', new NavLink('users', 'index'));
-//		$navBar->setTitle(_root::getParamNav());
-//		$navBar->setTitle('Comptes');
-
-
-		switch (_root::getAction()) {
-			case 'listMyGroup':
-				$title = $oUserSession->getReaderGroup()->toString();
-				break;
-			case 'create':
-			case 'delete':
-			case 'update':
-			case 'read':
-				$title = 'Compte';
-				break;
-			default:
-				$title = plugin_i18n::getFirst('title', _root::getModule(), _root::getAction());
-				break;
+		if (strpos(_root::getAction(), 'list') === 0) {
+			$navBar->setTitle('Utilisateurs', new NavLink('users', _root::getAction()));
+		} else {
+			$navBar->setTitle('Utilisateur', new NavLink('users', 'read', array('id' => _root::getParam('id'))));
 		}
-		$navBar->setTitle($title);
 
 		$navBar->addChild(new Bar('left'));
 		$this->buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
-		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
-		module_invitations::buildMenuGuests($navBar->getChild('left'), $oUserSession);
+//		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
+//		module_invitations::buildMenuGuests($navBar->getChild('left'), $oUserSession);
 
 		$navBar->addChild(new BarButtons('right'));
 		$bar = $navBar->getChild('right');
 		$bar->addChild(plugin_BsHtml::buildButtonItem('Liste par groupe', new NavLink('users', 'listByGroup'), 'glyphicon-list'));
+		module_invitations::buildMenuInvitations($bar, $oUserSession);
 		plugin_BsContextBar::buildDefaultContextBar($bar);
 		return $navBar;
 	}
@@ -67,14 +53,15 @@ class module_users extends abstract_module
 		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(), new NavLink('users', 'listMyGroup'));
 		$tItems[] = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listResponsibleGroup'),
 			new NavLink('users', 'listResponsibleGroup'));
-		$tItems[]  = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listBoardGroup'),
+		$tItems[] = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listBoardGroup'),
 			new NavLink('users', 'listBoardGroup'));
 
 		$tItems[] = plugin_BsHtml::buildSeparator();
-		$tItems[]  = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'list'), new NavLink('users', 'list'));
-		$tItems[]  = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listDetailed'), new NavLink('users', 'listDetailed'));
+		$tItems[] = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'list'), new NavLink('users', 'list'));
+		$tItems[] = plugin_BsHtml::buildMenuItem(plugin_i18n::getFirst('title', 'users', 'listDetailed'),
+			new NavLink('users', 'listDetailed'));
 
-		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Comptes', 'Comptes'));
+		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres utilisateurs'));
 	}
 
 	public function _index()
@@ -91,7 +78,7 @@ class module_users extends abstract_module
 
 		$oView = new _view('users::list');
 		$oView->tUsers = $tUsers;
-		$oView->title = 'Tous les comptes';
+		$oView->title = 'Tous les utilisateurs';
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -143,7 +130,8 @@ class module_users extends abstract_module
 
 		$oView = new _view('users::list');
 		$oView->tUsers = $tUsers;
-		$oView->title = $oReaderGroup->toString();
+		$oView->title = '<small>Utilisateurs du groupe</small> ' . $oReaderGroup->toString();
+		$oView->showPersonal = true;
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -160,6 +148,9 @@ class module_users extends abstract_module
 		$oView->tUsers = $tUsers;
 		$oView->title = $oBoardGroup->toString();
 
+		$oView->showGroup = true;
+		$oView->showPersonal = true;
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -170,6 +161,9 @@ class module_users extends abstract_module
 		$oView = new _view('users::list');
 		$oView->tUsers = $tUsers;
 		$oView->title = 'Correspondants';
+
+		$oView->showGroup = true;
+		$oView->showPersonal = true;
 
 		$this->oLayout->add('work', $oView);
 	}

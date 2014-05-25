@@ -112,6 +112,20 @@ class model_award extends abstract_model
 	}
 
 	/**
+	 * @param string|null $pType
+	 * @return row_award[]
+	 */
+	public function findAllValid($pType = null)
+	{
+		$andType = '';
+		if (null != $pType) {
+			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
+		}
+		$sql = 'SELECT * FROM vfa_awards ' . 'WHERE (vfa_awards.end_date > ?)' . $andType;
+		return $this->findMany($sql, plugin_vfa::dateSgbd());
+	}
+
+	/**
 	 * @param $pYear
 	 * @param $pName
 	 * @param $pType
