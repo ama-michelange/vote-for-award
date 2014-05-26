@@ -1,0 +1,12 @@
+
+Bleu
+Originaux	Nouveau
+#74cae3		#6497e1
+#5bc0de		#4b71a9
+#4ab9db		#214e92
+
+#20829f		#103150
+#2596b8		#184a77
+#28a4c9		#1b5387
+
+

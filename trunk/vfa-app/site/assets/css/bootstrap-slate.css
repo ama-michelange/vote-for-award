@@ -544,7 +544,7 @@ a.bg-success:hover {
   background-color: #42b142;
 }
 .bg-info {
-  background-color: #5bc0de;
+    background-color: #4b71a9;
 }
 a.bg-info:hover {
   background-color: #31b0d5;
@@ -1533,7 +1533,7 @@ table th[class*="col-"] {
 .table > thead > tr.info > th,
 .table > tbody > tr.info > th,
 .table > tfoot > tr.info > th {
-  background-color: #5bc0de;
+    background-color: #4b71a9;
 }
 .table-hover > tbody > tr > td.info:hover,
 .table-hover > tbody > tr > th.info:hover,
@@ -2162,8 +2162,8 @@ fieldset[disabled] .btn-success.active {
 }
 .btn-info {
   color: #ffffff;
-  background-color: #5bc0de;
-  border-color: #5bc0de;
+    background-color: #4b71a9;
+    border-color: #4b71a9;
 }
 .btn-info:hover,
 .btn-info:focus,
@@ -2194,11 +2194,11 @@ fieldset[disabled] .btn-info:active,
 .btn-info.disabled.active,
 .btn-info[disabled].active,
 fieldset[disabled] .btn-info.active {
-  background-color: #5bc0de;
-  border-color: #5bc0de;
+    background-color: #4b71a9;
+    border-color: #4b71a9;
 }
 .btn-info .badge {
-  color: #5bc0de;
+    color: #4b71a9;
   background-color: #ffffff;
 }
 .btn-warning {
@@ -4301,8 +4301,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .label-success[href]:focus {
   background-color: #42b142;
 }
+
 .label-info {
-  background-color: #5bc0de;
+    background-color: #4b71a9;
 }
 .label-info[href]:hover,
 .label-info[href]:focus {
@@ -4461,8 +4462,9 @@ a.thumbnail.active {
 .alert-success .alert-link {
   color: #e6e6e6;
 }
+
 .alert-info {
-  background-color: #5bc0de;
+    background-color: #4b71a9;
   border-color: #3dced8;
   color: #ffffff;
 }
@@ -4550,7 +4552,7 @@ a.thumbnail.active {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 .progress-bar-info {
-  background-color: #5bc0de;
+    background-color: #4b71a9;
 }
 .progress-striped .progress-bar-info {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -4677,8 +4679,8 @@ a.list-group-item-success.active:focus {
   border-color: #ffffff;
 }
 .list-group-item-info {
-  color: #ffffff;
-  background-color: #5bc0de;
+    color: #ffffff;
+    background-color: #4b71a9;
 }
 a.list-group-item-info {
   color: #ffffff;
@@ -4993,8 +4995,8 @@ a.list-group-item-danger.active:focus {
   border-color: rgba(0, 0, 0, 0.6);
 }
 .panel-info > .panel-heading {
-  color: #ffffff;
-  background-color: #5bc0de;
+    color: #ffffff;
+    background-color: #4b71a9;
   border-color: rgba(0, 0, 0, 0.6);
 }
 .panel-info > .panel-heading + .panel-collapse .panel-body {
@@ -5865,18 +5867,20 @@ button.close {
   background-image: linear-gradient(#2f7d2f, #379337 40%, #3da23d);
   background-repeat: no-repeat;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff2f7d2f', endColorstr='#ff3da23d', GradientType=0);
-  filter: none;
+    filter: none;
 }
+
 .btn-info {
-  background-image: -webkit-linear-gradient(#74cae3, #5bc0de 60%, #4ab9db);
-  background-image: linear-gradient(#74cae3, #5bc0de 60%, #4ab9db);
+    background-image: -webkit-linear-gradient(#6497e1, #4b71a9 60%, #214e92);
+    background-image: linear-gradient(#6497e1, #4b71a9 60%, #214e92);
   background-repeat: no-repeat;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff74cae3', endColorstr='#ff4ab9db', GradientType=0);
-  filter: none;
+    filter: none;
 }
+
 .btn-info:hover {
-  background-image: -webkit-linear-gradient(#20829f, #2596b8 40%, #28a4c9);
-  background-image: linear-gradient(#20829f, #2596b8 40%, #28a4c9);
+    background-image: -webkit-linear-gradient(#103150, #184a77 40%, #1b5387);
+    background-image: linear-gradient(#103150, #184a77 40%, #1b5387);
   background-repeat: no-repeat;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff20829f', endColorstr='#ff28a4c9', GradientType=0);
   filter: none;
@@ -5937,9 +5941,10 @@ h6 {
 .text-warning:hover {
   color: #f89406;
 }
+
 .text-info,
 .text-info:hover {
-  color: #5bc0de;
+  color: #4b71a9;
 }
 .table a {
   text-decoration: underline;
