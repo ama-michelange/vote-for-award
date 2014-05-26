@@ -461,7 +461,7 @@ class plugin_vfa
 				$title = 'Lecteur';
 				break;
 			case self::TYPE_RESPONSIBLE:
-				$title = 'Correspondant pour un groupe';
+				$title = 'Correspondant';
 				break;
 			case self::TYPE_BOARD:
 				$title = 'Membre du comité de sélection';

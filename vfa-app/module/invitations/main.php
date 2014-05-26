@@ -178,6 +178,7 @@ class module_invitations extends abstract_module
 			$oRegistry->type = plugin_vfa::TYPE_RESPONSIBLE;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
+			$this->verifyGet($oRegistry);
 		}
 		$this->dispatch($oRegistry);
 	}
@@ -202,6 +203,7 @@ class module_invitations extends abstract_module
 			$oRegistry->type = plugin_vfa::TYPE_BOARD;
 			$oRegistry->phase = 'prepare';
 			$oRegistry->new = true;
+			$this->verifyGet($oRegistry);
 		}
 		$this->dispatch($oRegistry);
 	}
