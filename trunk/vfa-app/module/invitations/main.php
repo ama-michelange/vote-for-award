@@ -50,6 +50,7 @@ class module_invitations extends abstract_module
 
 //		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
 		$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
+		module_invitations::buildMenuInvitations($navBar->getChild('right'), $oUserSession);
 //		module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
 
 
