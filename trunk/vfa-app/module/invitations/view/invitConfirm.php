@@ -16,6 +16,12 @@
 	<?php endif;?>
 	
 	<div class="panel panel-info panel-root">
+		<div class="panel-heading">
+			<h3 class="panel-title">Invitation
+				<small>pour l'inscription d'un</small>
+				<strong><?php echo plugin_vfa::makeSuffixTitleInvitation() ?></strong>
+			</h3>
+		</div>
 		<?php if(plugin_validation::exist($this->tMessage, 'token')):?>
 			<div class="panel-body">
 			<div class="alert alert-warning clearfix">
@@ -27,33 +33,19 @@
 		</div>
 		<?php else:?>
 			<div class="panel-body panel-condensed">
-			<div class="panel panel-info panel-inner">
-				<div class="panel-heading">
-					<h3 class="panel-title">Invitation prête à envoyer par mail</h3>
-				</div>
-				<div class="panel-body panel-condensed">
-					<dl class="dl-horizontal">
-						<dt>Destinataire</dt>
-						<dd><?php echo $this->oRegistry->email ?></dd>
-					</dl>
-				</div>
+				<dl class="dl-horizontal">
+					<dt>Destinataire</dt>
+					<dd><?php echo $this->oRegistry->email ?></dd>
+					<!--					</dl>-->
+					<!--					<dl class="dl-horizontal">-->
+					<dt>Prix</dt>
+					<?php foreach ($this->tAwards as $oAward): ?>
+						<dd><?php echo $oAward->toString() ?></dd>
+					<?php endforeach; ?>
+					<dt>Groupe</dt>
+					<dd><?php echo $this->oGroup->group_name ?></dd>
+				</dl>
 			</div>
-			<div class="panel panel-info panel-inner">
-				<div class="panel-heading">
-					<h3 class="panel-title">Pour l'inscription d'un <?php echo plugin_vfa::makeSuffixTitleInvitation()?></h3>
-				</div>
-				<div class="panel-body panel-condensed">
-					<dl class="dl-horizontal">
-						<dt>Prix</dt>
-								<?php foreach($this->tAwards as $oAward):?>
-									<dd><?php echo $oAward->toString() ?></dd>
-								<?php endforeach;?>
-				  			<dt>Groupe</dt>
-						<dd><?php echo $this->oGroup->group_name ?></dd>
-					</dl>
-				</div>
-			</div>
-		</div>
 		<div class="panel-footer clearfix">
 			<button class="btn btn-default" type="submit" name="cancel" value="confirm">
 				<i class="glyphicon glyphicon-arrow-left with-text"></i>Précédent
