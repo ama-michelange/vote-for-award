@@ -17,15 +17,14 @@
 				</dl>
 				<dl class="dl-horizontal">
 					<dt>Dernière modification</dt>
-					<dd><?php echo plugin_vfa::toStringDatetimeShow($this->oInvitation->modified_date) ?></dd>
+					<dd><?php echo plugin_vfa::toStringDatetimeShow($this->oInvitation->modified_date) ?>&nbsp;</dd>
 				</dl>
 				<dl class="dl-horizontal">
 					<dt>
 						<i class="glyphicon glyphicon-share-alt"></i>
 					</dt>
 					<dd>
-						<a href="<?php echo plugin_vfa::generateURLInvitation($this->oInvitation)?>" target="_new">Voir
-							l'invitation</a>
+						<a href="<?php echo plugin_vfa::generateURLInvitation($this->oInvitation) ?>" target="_new">Voir l'invitation</a>
 					</dd>
 				</dl>
 			</div>

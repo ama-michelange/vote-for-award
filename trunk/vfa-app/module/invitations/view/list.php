@@ -5,8 +5,8 @@
 
 	<?php if($this->tInvitations):?>
 	<div class="table-responsive">
-		<table class="table table-hover table-condensed table-color">
-			<thead>
+		<table class="table table-striped table-hover table-condensed">
+		<thead>
 				<tr>
 					<?php if(_root::getACL()->permit(array('invitations::update','invitations::delete','invitations::read'))):?>
 						<th></th>
@@ -23,42 +23,42 @@
 				<?php
 				switch ($oInvitation->type) {
 					case plugin_vfa::TYPE_BOARD:
-						$color = 'danger';
+						$typeColor = 'label-danger';
 						break;
 					case plugin_vfa::TYPE_RESPONSIBLE:
-						$color = 'warning';
+						$typeColor = 'label-warning';
 						break;
 					case plugin_vfa::TYPE_READER:
-						$color = '';
+						$typeColor = '';
 						break;
 					default:
-						$color = '';
+						$typeColor = '';
 						break;
 				}
 				switch ($oInvitation->state) {
 					case plugin_vfa::STATE_OPEN:
-						$labelColor = 'label-warning';
-						$labelTip = 'L\'invitation est ouverte mais l\'email n\'a pas été envoyé à '.$oInvitation->email;
+						$stateColor = 'label-warning';
+						$stateTip = 'L\'invitation est ouverte mais l\'email n\'a pas été envoyé à ' . $oInvitation->email;
 						break;
 					case plugin_vfa::STATE_SENT:
-						$labelColor = 'label-info';
-						$labelTip = 'L\'invitation a été envoyé par email';
+						$stateColor = 'label-info';
+						$stateTip = 'L\'invitation a été envoyé par email';
 						break;
 					case plugin_vfa::STATE_ACCEPTED:
-						$labelColor = 'label-success';
-						$labelTip = $oInvitation->email.' a accepté l\'invitation.';
+						$stateColor = 'label-success';
+						$stateTip = $oInvitation->email . ' a accepté l\'invitation.';
 						break;
 					case plugin_vfa::STATE_REJECTED:
-						$labelColor = 'label-danger';
-						$labelTip = 'Le destinataire, '.$oInvitation->email.',  a refusé l\'invitation.';
+						$stateColor = 'label-danger';
+						$stateTip = 'Le destinataire, ' . $oInvitation->email . ',  a refusé l\'invitation.';
 						break;
 					default:
-						$labelColor = '';
-						$labelTip = '';
+						$stateColor = '';
+						$stateTip = '';
 						break;
 				}
-				?>
-				<tr class="<?php echo $color ?>">
+					?>
+				<tr>
 					<?php if(_root::getACL()->permit(array('invitations::update','invitations::delete','invitations::read'))):?>
 						<td class="col-xs-1">
 							<div class="btn-group">
@@ -95,10 +95,10 @@
 					<?php endif;?>
 					<td><?php echo wordwrap( $oInvitation->email,30,' ', true) ?></td>
 					<td>
-						<span class="label <?php echo $labelColor?>" data-rel="tooltip"
-						data-original-title="<?php echo $labelTip ?>"><?php echo $oInvitation->showState()?></span>
+						<span class="label <?php echo $stateColor ?>" data-rel="tooltip"
+								data-original-title="<?php echo $stateTip ?>"><?php echo $oInvitation->showState() ?></span>
 					</td>
-					<td><?php echo $oInvitation->showType() ?></td>
+					<td><span class="label <?php echo $typeColor ?>"><?php echo $oInvitation->showType() ?></span></td>
 					<td>
 					<?php
 						$tAwards = $oInvitation->findAwards();
