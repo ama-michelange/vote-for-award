@@ -132,7 +132,7 @@ class module_invitations extends abstract_module
 
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
-		$oView->title = 'Invités du &laquo; ' . $oBoardGroup->group_name . ' &raquo;';
+		$oView->title = '<small>Invités du groupe</small> ' . $oBoardGroup->group_name;
 
 		$this->oLayout->add('work', $oView);
 	}
@@ -144,7 +144,7 @@ class module_invitations extends abstract_module
 
 		$oView = new _view('invitations::list');
 		$oView->tInvitations = $tInvitations;
-		$oView->title = 'Correspondants invités';
+		$oView->title = 'Correspondants <small>invités</small>';
 
 		$this->oLayout->add('work', $oView);
 	}
