@@ -8,9 +8,6 @@
 		<table class="table table-striped table-hover table-condensed">
 		<thead>
 				<tr>
-					<?php if(_root::getACL()->permit(array('invitations::update','invitations::delete','invitations::read'))):?>
-						<th></th>
-					<?php endif;?>
 					<th>Destinataire</th>
 					<th>Etat</th>
 					<th>Type</th>
@@ -59,44 +56,25 @@
 				}
 					?>
 				<tr>
-					<?php if(_root::getACL()->permit(array('invitations::update','invitations::delete','invitations::read'))):?>
-						<td class="col-xs-1">
-							<div class="btn-group">
-								<?php if(_root::getACL()->permit('invitations::send')):?>
-									<a rel="tooltip"
-										data-original-title="Envoyer l'invitation par email à <?php echo $oInvitation->email ?>"
-										href="<?php echo $this->getLink('invitations::send',array('id'=>$oInvitation->getId()))?>">
-										<i class="glyphicon glyphicon-envelope"></i>
-									</a>
-								<?php endif;?>
-								<?php if(_root::getACL()->permit('invitations::update')):?>
-									<a rel="tooltip"
-										data-original-title="Accéder à l'invitation pour <?php echo $oInvitation->email ?>" target="_new"
-										href="<?php echo plugin_vfa::generateURLInvitation($oInvitation) ?>"> <i
-										class="glyphicon glyphicon-share-alt"></i>
-									</a>
-								<?php endif;?>
-								<?php if(_root::getACL()->permit('invitations::delete')):?>
-									<a rel="tooltip"
-										data-original-title="Supprimer l'invitation pour <?php echo $oInvitation->email ?>"
-										href="<?php echo $this->getLink('invitations::delete',array('id'=>$oInvitation->getId()))?>">
-										<i class="glyphicon glyphicon-trash"></i>
-									</a>
-								<?php endif;?>
-								<?php if(_root::getACL()->permit('invitations::read')):?>
-									<a rel="tooltip"
-										data-original-title="Voir l'invitation pour <?php echo $oInvitation->email ?>"
-										href="<?php echo $this->getLink('invitations::read',array('id'=>$oInvitation->getId()))?>">
-										<i class="glyphicon glyphicon-eye-open"></i>
-									</a>
-								<?php endif;?>
-							</div>
-						</td>
-					<?php endif;?>
-					<td><?php echo wordwrap( $oInvitation->email,30,' ', true) ?></td>
+					<td>
+						<?php if (_root::getACL()->permit('invitations::read')): ?>
+							<a href="<?php echo $this->getLink('invitations::read', array('id' => $oInvitation->getId())) ?>">
+								<?php echo wordwrap($oInvitation->email, 30, ' ', true) ?>
+							</a>
+						<?php else: ?>
+							<?php echo wordwrap($oInvitation->email, 30, ' ', true) ?>
+						<?php endif; ?>
+					</td>
 					<td>
 						<span class="label <?php echo $stateColor ?>" data-rel="tooltip"
 								data-original-title="<?php echo $stateTip ?>"><?php echo $oInvitation->showState() ?></span>
+						<?php if (_root::getACL()->permit('invitations::send') && $oInvitation->state == plugin_vfa::STATE_OPEN) : ?>
+							&nbsp;
+							<a rel="tooltip" data-original-title="Renvoyer l'invitation par email à <?php echo $oInvitation->email ?>"
+								href="<?php echo $this->getLink('invitations::send', array('id' => $oInvitation->getId())) ?>">
+								<i class="glyphicon glyphicon-envelope"></i>
+							</a>
+						<?php endif;?>
 					</td>
 					<td><span class="label <?php echo $typeColor ?>"><?php echo $oInvitation->showType() ?></span></td>
 					<td>

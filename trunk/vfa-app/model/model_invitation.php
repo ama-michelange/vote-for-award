@@ -39,6 +39,16 @@ class model_invitation extends abstract_model
 	}
 
 	/**
+	 * @param $pUserId
+	 * @return row_invitation[]
+	 */
+	public function findAllByUserId($pUserId)
+	{
+		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE created_user_id=? ORDER BY email, type, created_date DESC';
+		return $this->findMany($sql, $pUserId);
+	}
+
+	/**
 	 * @param $pCategory
 	 * @return row_invitation[]
 	 */

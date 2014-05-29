@@ -26,33 +26,15 @@ class module_invitations extends abstract_module
 		$navBar->addChild(new Bar('left'));
 		$navBar->addChild(new BarButtons('right'));
 
-		switch (_root::getAction()) {
-			case 'listReader':
-				$navBar->setTitle('Invités', new NavLink('invitations', 'listReader'));
-				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'reader'),
-					'glyphicon-send'));
-				break;
-			case 'listBoard':
-				$navBar->setTitle('Invités', new NavLink('invitations', 'listBoard'));
-				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Inviter', new NavLink('invitations', 'board'),
-					'glyphicon-send'));
-				break;
-			case 'reader':
-				$navBar->setTitle('Invitation', new NavLink('invitations', 'reader'));
-				break;
-			case 'board':
-				$navBar->setTitle('Invitation', new NavLink('invitations', 'board'));
-				break;
-			default:
-				$navBar->setTitle('Invitation');
-				break;
+
+		if (strpos(_root::getAction(), 'list') === 0) {
+			$navBar->setTitle('Invités', new NavLink('invitations', _root::getAction()));
+		} else {
+			$navBar->setTitle('Invitation', new NavLink('invitations', _root::getAction()));
 		}
 
-//		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
 		$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
 		module_invitations::buildMenuInvitations($navBar->getChild('right'), $oUserSession);
-//		module_users::buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
-
 
 		plugin_BsContextBar::buildRDContextBar($navBar->getChild('right'));
 		return $navBar;
@@ -69,6 +51,8 @@ class module_invitations extends abstract_module
 		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(), new NavLink('invitations', 'listReader'));
 		$tItems[] = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'listResponsible'));
 		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getBoardGroup()->toString(), new NavLink('invitations', 'listBoard'));
+		$tItems[] = plugin_BsHtml::buildSeparator();
+		$tItems[] = plugin_BsHtml::buildMenuItem('Tous mes invités', new NavLink('invitations', 'listAllMyInvitations'));
 		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres invités', 'Invités'));
 	}
 
@@ -86,10 +70,10 @@ class module_invitations extends abstract_module
 			$paramUser = array('idUser' => $idUser);
 		}
 
-		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getReaderGroup()->toString(),
+		$tItems[] = plugin_BsHtml::buildMenuItem('Un lecteur pour ' . $poUserSession->getReaderGroup()->toString(),
 			new NavLink('invitations', 'reader', $paramUser));
-		$tItems[] = plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('invitations', 'responsible', $paramUser));
-		$tItems[] = plugin_BsHtml::buildMenuItem($poUserSession->getBoardGroup()->toString(),
+		$tItems[] = plugin_BsHtml::buildMenuItem('Un correspondant', new NavLink('invitations', 'responsible', $paramUser));
+		$tItems[] = plugin_BsHtml::buildMenuItem('Un membre du ' . $poUserSession->getBoardGroup()->toString(),
 			new NavLink('invitations', 'board', $paramUser));
 		$pBar->addChild(plugin_BsHtml::buildDropdownButtonItem($tItems, 'Inviter', 'glyphicon-send'));
 	}
@@ -105,6 +89,21 @@ class module_invitations extends abstract_module
 			_root::getRequest()->setAction('listReader');
 			$this->_listReader();
 		}
+	}
+
+	public function _listAllMyInvitations()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oUser = $oUserSession->getUser();
+
+		$tInvitations = model_invitation::getInstance()->findAllByUserId($oUser->getId());
+
+		$oView = new _view('invitations::list');
+		$oView->tInvitations = $tInvitations;
+		$oView->title = '<small>Invités par</small> ' . $oUser->toString();
+
+		$this->oLayout->add('work', $oView);
 	}
 
 	public function _listReader()

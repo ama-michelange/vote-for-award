@@ -310,6 +310,14 @@
     }
 }
 
+.dl-horizontal dt {
+    font-weight: normal;
+}
+
+.dl-horizontal dd {
+    font-weight: bold;
+}
+
 .table .btn-group {
     white-space: nowrap;
 }

@@ -220,7 +220,7 @@ class row_user extends abstract_row
 				$s .= ' ';
 				$s .= $this->first_name;
 			}
-			$s .= ' (' . $this->email . ')';
+			$s .= ' (' . $this->login . ')';
 		} else {
 			$s .= $this->login;
 			if ($this->login != $this->email) {
