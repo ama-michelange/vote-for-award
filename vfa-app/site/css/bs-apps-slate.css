@@ -286,10 +286,6 @@
     font-weight: normal;
 }
 
-.panel-footer {
-    font-size: 16px;
-}
-
 .glyphicon.with-text {
     padding-right: 0.5em;
 }
@@ -317,6 +313,26 @@
         padding-left: 15px;
         margin-bottom: 0;
     }
+}
+
+.dl-horizontal dt {
+    font-weight: normal;
+}
+
+.dl-horizontal dd {
+    font-weight: bold;
+}
+
+.label-danger {
+    color: #331111;
+}
+
+.label-success {
+    color: #113300;
+}
+
+.label-warning {
+    color: #331111;
 }
 
 .table a {
@@ -356,6 +372,7 @@
 }
 
 .panel-footer {
+    font-size: 16px;
     /*background-color: #DDECF3;*/
     /*border-top: 1px solid #BBDAE8;*/
 }

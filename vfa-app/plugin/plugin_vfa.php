@@ -15,6 +15,7 @@ class plugin_vfa
 
 	const ROLE_BOARD = 'board';
 	const ROLE_ORGANIZER = 'organizer';
+	const ROLE_OWNER = 'owner';
 	const ROLE_READER = 'reader';
 	const ROLE_RESPONSIBLE = 'responsible';
 
@@ -221,13 +222,23 @@ class plugin_vfa
 	/**
 	 * Change le format d'une date et d'une heure SGBD vers le format d'affichage.
 	 *
-	 * @param string $pDateTime
-	 *         La date et heure au format SGBD
+	 * @param string $pDate La date et heure au format SGBD
 	 * @return string La date et l'haure au format d'affichage
 	 */
 	public static function toStringDateTimeShow($pDate)
 	{
 		return self::changeDatetimeFormat($pDate, 'Y-m-d H:i:s', 'd/m/Y H:i:s');
+	}
+
+	/**
+	 * Change le format d'une date et d'une heure SGBD vers le format d'affichage.
+	 *
+	 * @param string $pDate La date et heure au format SGBD
+	 * @return string La date et l'haure au format d'affichage
+	 */
+	public static function toStringTimeShow($pDate)
+	{
+		return self::changeDatetimeFormat($pDate, 'Y-m-d H:i:s', 'H:i:s');
 	}
 
 	/**
