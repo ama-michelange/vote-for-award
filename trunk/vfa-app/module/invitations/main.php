@@ -27,15 +27,28 @@ class module_invitations extends abstract_module
 		$navBar->addChild(new BarButtons('right'));
 
 
-		if (strpos(_root::getAction(), 'list') === 0) {
+		$listAction = (strpos(_root::getAction(), 'list') === 0);
+		if ($listAction) {
 			$navBar->setTitle('Invités', new NavLink('invitations', _root::getAction()));
 		} else {
-			$navBar->setTitle('Invitation', new NavLink('invitations', _root::getAction(), array('id' => _root::getParam('id'))));
+			$invitAction = (strpos(_root::getAction(), 'invit') === 0);
+			if ($invitAction) {
+				$navBar->setTitle('Invitation', new NavLink('invitations', _root::getAction()));
+			} else {
+				$navBar->setTitle('Invitation', new NavLink('invitations', 'read', array('id' => _root::getParam('id'))));
+			}
 		}
 
 		$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
-		module_invitations::buildMenuInvitations($navBar->getChild('right'), $oUserSession);
-
+		if ($listAction) {
+			module_invitations::buildMenuInvitations($navBar->getChild('right'), $oUserSession);
+		}
+		if ($this->oLayout->__isset('oInvitation')) {
+			if ($this->oLayout->oInvitation->state == plugin_vfa::STATE_OPEN) {
+				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Renvoyer',
+					new NavLink('invitations', 'send', array('id' => $this->oLayout->oInvitation->getId())), 'glyphicon-envelope'));
+			}
+		}
 		plugin_BsContextBar::buildRDContextBar($navBar->getChild('right'));
 		return $navBar;
 	}
@@ -71,10 +84,10 @@ class module_invitations extends abstract_module
 		}
 
 		$tItems[] = plugin_BsHtml::buildMenuItem('Un lecteur pour ' . $poUserSession->getReaderGroup()->toString(),
-			new NavLink('invitations', 'reader', $paramUser));
-		$tItems[] = plugin_BsHtml::buildMenuItem('Un correspondant', new NavLink('invitations', 'responsible', $paramUser));
+			new NavLink('invitations', 'invitReader', $paramUser));
+		$tItems[] = plugin_BsHtml::buildMenuItem('Un correspondant', new NavLink('invitations', 'invitResponsible', $paramUser));
 		$tItems[] = plugin_BsHtml::buildMenuItem('Un membre du ' . $poUserSession->getBoardGroup()->toString(),
-			new NavLink('invitations', 'board', $paramUser));
+			new NavLink('invitations', 'invitBoard', $paramUser));
 		$pBar->addChild(plugin_BsHtml::buildDropdownButtonItem($tItems, 'Inviter', 'glyphicon-send'));
 	}
 
@@ -172,7 +185,7 @@ class module_invitations extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	public function _reader()
+	public function _invitReader()
 	{
 		$oRegistry = $this->verifyPost();
 		if (null == $oRegistry) {
@@ -186,7 +199,7 @@ class module_invitations extends abstract_module
 		$this->dispatch($oRegistry);
 	}
 
-	public function _responsible()
+	public function _invitResponsible()
 	{
 		$oRegistry = $this->verifyPost();
 		if (null == $oRegistry) {
@@ -200,7 +213,7 @@ class module_invitations extends abstract_module
 		$this->dispatch($oRegistry);
 	}
 
-	public function _free()
+	public function _invitFree()
 	{
 		$tMessage = null;
 		$oView = new _view('invitations::prepare');
@@ -211,7 +224,7 @@ class module_invitations extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	public function _board()
+	public function _invitBoard()
 	{
 		$oRegistry = $this->verifyPost();
 		if (null == $oRegistry) {
@@ -434,6 +447,8 @@ class module_invitations extends abstract_module
 
 		$oView = new _view('invitations::show');
 		$oView->oInvitation = $oInvitation;
+		$this->oLayout->oInvitation = $oInvitation;
+
 		$oView->tAwards = $oInvitation->findAwards();
 		$oView->oGroup = $oInvitation->findGroup();
 		$oView->oCreatedUser = $oInvitation->findCreatedUser();

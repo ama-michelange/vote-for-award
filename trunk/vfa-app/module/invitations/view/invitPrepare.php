@@ -1,16 +1,14 @@
 <form action="" method="POST">
-	<input type="hidden" name="token" value="<?php echo $this->token ?>"/> <input type="hidden"
-																											name="phase"
-																											value="<?php echo $this->oRegistry->phase ?>"/> <input
-		type="hidden" name="type"
-		value="<?php echo $this->oRegistry->type ?>"/>
-
+	<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
+	<input type="hidden" name="phase" value="<?php echo $this->oRegistry->phase ?>"/>
+	<input type="hidden" name="type" value="<?php echo $this->oRegistry->type ?>"/>
 
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
 			<h3 class="panel-title">Invitation
 				<small>pour l'inscription d'un</small>
-				<strong><?php echo plugin_vfa::makeSuffixTitleInvitation() ?></strong></h3>
+				<strong><?php echo $this->oRegistry->toStringType() ?></strong>
+			</h3>
 		</div>
 		<?php if (plugin_validation::exist($this->tMessage, 'token')): ?>
 			<div class="panel-body">
