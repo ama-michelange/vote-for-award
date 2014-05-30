@@ -16,35 +16,27 @@
 		
 		
 	<div class="panel panel-success panel-root">
-		<div class="panel-body panel-condensed">
-			<div class="panel panel-success panel-inner">
-				<div class="panel-heading">
-					<h3 class="panel-title">Invitation ouverte</h3>
-				</div>
-				<div class="panel-body panel-condensed">
-					<div class="alert alert-warning">
-						<h3>L'invitation est ouverte mais n'a pas pu être envoyée à l'adresse <strong><?php echo $this->oRegistry->email ?></strong> !</h3>
-						Retentez l'envoi de l'email de cette invitation plus tard en accédant à la liste des invitations. 
-					</div>
+		<div class="panel-heading">
+			<h3 class="panel-title">Invitation prête pour l'inscription d'un <?php echo plugin_vfa::makeSuffixTitleInvitation() ?></h3>
+		</div>
+		<div class="panel-body panel-condensed panel-inner">
+
+			<div class="panel panel-success">
+			<div class="panel-body panel-condensed">
+				<dl class="dl-horizontal">
+					<dt>Inscription</dt>
+					<?php foreach ($this->tAwards as $oAward): ?>
+						<dd><?php echo $oAward->toString() ?></dd>
+					<?php endforeach; ?>
+					<dt>Groupe</dt>
+					<dd><?php echo $this->oGroup->group_name ?></dd>
+					</dl>
 				</div>
 			</div>
-
-			<div class="panel panel-success panel-inner">
-				<div class="panel-heading">
-					<h3 class="panel-title">Pour l'inscription d'un <?php echo plugin_vfa::makeSuffixTitleInvitation()?></h3>
-				</div>
-				<div class="panel-body panel-condensed">
-					<dl class="dl-horizontal">
-						<dt>au Prix</dt>
-						<?php foreach($this->tAwards as $oAward):?>
-						<dd><?php echo $oAward->toString() ?></dd>
-						<?php endforeach;?>
-					</dl>
-					<dl class="dl-horizontal">
-						<dt>au Groupe</dt>
-						<dd><?php echo $this->oGroup->group_name ?></dd>
-					</dl>
-				</div>
+			<div class="alert alert-warning">
+				<h3>L'invitation est prête mais n'a pas pu être envoyée à l'adresse <strong><?php echo $this->oRegistry->email ?></strong> !
+				</h3>
+				Retentez l'envoi de l'email de cette invitation plus tard en accédant à la liste des invitations.
 			</div>
 		</div>
 		<div class="panel-footer clearfix">

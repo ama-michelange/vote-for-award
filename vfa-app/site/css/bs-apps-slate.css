@@ -264,6 +264,14 @@
     /*border-color: #d6e9c6;*/
 }
 
+.panel-warning > .panel-body {
+    background-color: #7C4A03;
+}
+
+.panel-warning > .panel-footer {
+    background-color: #3E2502;
+}
+
 .panel-body.panel-condensed {
     padding-bottom: 0;
 }

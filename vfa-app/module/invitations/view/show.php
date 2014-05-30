@@ -13,7 +13,7 @@
 							<dd><?php echo $this->oInvitation->email ?></dd>
 						</dl>
 						<dl class="dl-horizontal">
-							<dt>Envoyée le</dt>
+							<dt>Créée le</dt>
 							<dd>
 								<?php echo plugin_vfa::toStringDateShow($this->oInvitation->created_date) ?>
 								à
@@ -24,7 +24,7 @@
 						</dl>
 						<?php if ($this->oInvitation->modified_date): ?>
 							<dl class="dl-horizontal">
-								<dt>Modifiée le</dt>
+								<dt>Envoyée le</dt>
 								<dd>
 									<?php echo plugin_vfa::toStringDateShow($this->oInvitation->modified_date) ?>
 									à

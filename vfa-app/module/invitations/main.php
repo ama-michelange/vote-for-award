@@ -30,7 +30,7 @@ class module_invitations extends abstract_module
 		if (strpos(_root::getAction(), 'list') === 0) {
 			$navBar->setTitle('Invités', new NavLink('invitations', _root::getAction()));
 		} else {
-			$navBar->setTitle('Invitation', new NavLink('invitations', _root::getAction()));
+			$navBar->setTitle('Invitation', new NavLink('invitations', _root::getAction(), array('id' => _root::getParam('id'))));
 		}
 
 		$this->buildMenuGuests($navBar->getChild('left'), $oUserSession);
@@ -155,6 +155,23 @@ class module_invitations extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
+	public function _send()
+	{
+		$oInvitation = $this->send();
+
+		$oView = new _view('invitations::send');
+		$oView->oViewShow = $this->makeViewShow($oInvitation);
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$oView->tMessage = null;
+		if ($oInvitation) {
+			$oView->tMessage = $oInvitation->getMessages();
+		}
+
+		$this->oLayout->add('work', $oView);
+	}
+
 	public function _reader()
 	{
 		$oRegistry = $this->verifyPost();
@@ -252,7 +269,7 @@ class module_invitations extends abstract_module
 		$oView = new _view('invitations::invitPrepare');
 		$oView->oRegistry = $oRegistry;
 		$oView->tMessage = $tMessage;
-		$this->fillAwards($oView);
+		$this->fillAwards($oView, $poRegistry);
 		$this->fillGroups($oView);
 
 		$oPluginXsrf = new plugin_xsrf();
@@ -261,19 +278,37 @@ class module_invitations extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function fillAwards($pView)
+	private function fillAwards($pView, $poRegistry)
 	{
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
 
 		switch (_root::getAction()) {
 			case 'board':
-				//	$tAwards = model_award::getInstance()->findAllByType('PSBD');
 				$tAwards = $oUserSession->getValidBoardAwards();
 				break;
 			default:
-				// $tAwards = model_award::getInstance()->findAllByType('PBD');
 				$tAwards = $oUserSession->getValidReaderAwards();
+				// Verifie si l'utilisateur n'est pas déjà inscrit au prix
+				if ($poRegistry->oUser) {
+					$oUser = $poRegistry->oUser;
+					$tRegistredAwards = model_award::getInstance()->findAllValidByUserId($oUser->getId());
+					$tCommons = array();
+					foreach ($tAwards as $oAward) {
+						foreach ($tRegistredAwards as $oRegistredAward) {
+							if ($oAward->getId() == $oRegistredAward->getId()) {
+								$tCommons[$oAward->getId()] = $oAward;
+							}
+						}
+					}
+					if (count($tCommons) > 0) {
+						foreach ($tCommons as $oCommon) {
+							$tMessage = $pView->tMessage;
+							$tMessage['registredAward'][] = $oCommon->toString();
+							$pView->tMessage = $tMessage;
+						}
+					}
+				}
 				break;
 		}
 		$pView->countAwards = count($tAwards);
@@ -389,10 +424,13 @@ class module_invitations extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function makeViewShow()
+	private function makeViewShow($poInvitation = null)
 	{
-		$oInvitationModel = new model_invitation();
-		$oInvitation = $oInvitationModel->findById(_root::getParam('id'));
+		if ($poInvitation) {
+			$oInvitation = $poInvitation;
+		} else {
+			$oInvitation = model_invitation::getInstance()->findById(_root::getParam('id'));
+		}
 
 		$oView = new _view('invitations::show');
 		$oView->oInvitation = $oInvitation;
@@ -412,6 +450,7 @@ class module_invitations extends abstract_module
 			$oUser = model_user::getInstance()->findById($idUser);
 			if (false == $oUser->isEmpty()) {
 				$poRegistry->email = $oUser->email;
+				$poRegistry->oUser = $oUser;
 			}
 		}
 	}
@@ -570,6 +609,7 @@ class module_invitations extends abstract_module
 		}
 		if ($sent) {
 			$poInvitation->state = plugin_vfa::STATE_SENT;
+			$poInvitation->modified_date = plugin_vfa::dateTimeSgbd();
 			$poInvitation->update();
 		}
 		return $sent;
@@ -594,6 +634,33 @@ class module_invitations extends abstract_module
 			$oInvitation = $oInvitationModel->findById($iId);
 			$oInvitation->delete();
 		}
-		_root::redirect('invitations::list');
+		_root::redirect('invitations::index');
+	}
+
+	private function send()
+	{
+		// si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) {
+			return null;
+		}
+
+		$oInvitation = new row_invitation();
+		$oPluginXsrf = new plugin_xsrf();
+		// on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+			$oInvitation->setMessages(array('token' => $oPluginXsrf->getMessage()));
+			return $oInvitation;
+		}
+
+		$iId = _root::getParam('id', null);
+		if ($iId != null) {
+			$oInvitation = model_invitation::getInstance()->findById($iId);
+			if ($this->sendMail($oInvitation)) {
+				$oInvitation->sent = true;
+			} else {
+				$oInvitation->notSent = true;
+			}
+		}
+		return $oInvitation;
 	}
 }
