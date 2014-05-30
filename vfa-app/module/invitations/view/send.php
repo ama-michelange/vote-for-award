@@ -5,11 +5,11 @@ if ($this->oViewShow->oInvitation->sent) {
 	$button = 0;
 } elseif ($this->oViewShow->oInvitation->notSent) {
 	$color = 'warning';
-	$title = 'Problème pour envoyer l\'invitation';
+	$title = 'Problème pour envoyer l\'invitation par mail';
 	$button = 1;
 } else {
 	$color = 'info';
-	$title = 'Envoyer une invitation';
+	$title = 'Envoyer une invitation par mail';
 	$button = 2;
 }
 ?>

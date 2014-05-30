@@ -51,4 +51,9 @@ class row_registry_invitation extends abstract_row
 		}
 		return $this->getListError();
 	}
+
+	public function toStringType()
+	{
+		return plugin_i18n::get('role.' . $this->type);
+	}
 }

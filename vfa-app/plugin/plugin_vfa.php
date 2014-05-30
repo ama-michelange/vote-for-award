@@ -463,28 +463,6 @@ class plugin_vfa
 	}
 
 	/**
-	 * Construit le texte sufixe du titre d'une invitation en fonction de l'action en cours.
-	 */
-	public static function makeSuffixTitleInvitation()
-	{
-		switch (_root::getAction()) {
-			case self::TYPE_READER:
-				$title = 'Lecteur';
-				break;
-			case self::TYPE_RESPONSIBLE:
-				$title = 'Correspondant';
-				break;
-			case self::TYPE_BOARD:
-				$title = 'Membre du comité de sélection';
-				break;
-			default:
-				$title = '???' . _root::getModule() . '::' . _root::getAction() . '???';
-				break;
-		}
-		return $title;
-	}
-
-	/**
 	 * Génère l'URL d'une invitation.
 	 */
 	public static function generateURLInvitation($poInvitation)
