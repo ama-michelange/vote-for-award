@@ -618,7 +618,11 @@ class module_invitations extends abstract_module
 
 		// Envoi le mail
 		try {
-			$sent = $oMail->send();
+			if (_root::getConfigVar('vfa-app.mail.enabled')) {
+				$sent = $oMail->send();
+			} else {
+				$sent = true;
+			}
 		} catch (Exception $e) {
 			$sent = false;
 		}

@@ -95,3 +95,5 @@ ini.var=db
 title=Vote For Award
 mail.from=alicesaward@free.fr
 mail.from.label=Alices Award
+mail.enabled=0
+invitation.access.enabled=1

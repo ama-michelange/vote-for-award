@@ -507,11 +507,12 @@ class plugin_vfa
 		}
 		switch ($poInvitation->type) {
 			case plugin_vfa::TYPE_BOARD:
-				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à vous inscrire à la présélection suivante : ', $creator);
+				$textInvit = sprintf('%1s, l\'organisateur du Prix Bande Dessinée, vous invite à vous inscrire à la présélection suivante : ',
+					$creator);
 				break;
 			case plugin_vfa::TYPE_READER:
-				$textInvit = sprintf('%1s, le correspondant du Prix BD pour "%2s", vous invite à vous inscrire %3s : ', $creator,
-					$oGroup->group_name, $xPrix);
+//				$textInvit = sprintf('%1s, le correspondant du Prix de la Bande Dessinée, vous invite à vous inscrire %2s : ', $creator, $xPrix);
+				$textInvit = sprintf('%1s, le correspondant du Prix de la Bande Dessinée, vous invite à vous inscrire.', $creator);
 				break;
 			case plugin_vfa::TYPE_RESPONSIBLE:
 				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et à vous inscrire %3s : ',
@@ -522,24 +523,24 @@ class plugin_vfa
 				break;
 		}
 
-		$beforeHtml = '';
-		$afterHtml = '';
-		if ($pHtml) {
-			$textInvit .= '<strong>';
-			$beforeHtml = '<span class="nowrap">';
-			$afterHtml = '</span>';
-		}
-		$i = 0;
-		foreach ($tPrix as $prix) {
-			if ($i > 0) {
-				$textInvit .= ', ';
-			}
-			$textInvit .= sprintf('%1s%2s%3s', $beforeHtml, $prix, $afterHtml);
-			$i++;
-		}
-		if ($pHtml) {
-			$textInvit .= '</strong>';
-		}
+//		$beforeHtml = '';
+//		$afterHtml = '';
+//		if ($pHtml) {
+//			$textInvit .= '<strong>';
+//			$beforeHtml = '<span class="nowrap">';
+//			$afterHtml = '</span>';
+//		}
+//		$i = 0;
+//		foreach ($tPrix as $prix) {
+//			if ($i > 0) {
+//				$textInvit .= ', ';
+//			}
+//			$textInvit .= sprintf('%1s%2s%3s', $beforeHtml, $prix, $afterHtml);
+//			$i++;
+//		}
+//		if ($pHtml) {
+//			$textInvit .= '</strong>';
+//		}
 		return $textInvit;
 	}
 
@@ -564,10 +565,10 @@ class plugin_vfa
 						$titleInvit .= 'Invitation pour voter avec le Comité de sélection';
 						break;
 					case plugin_vfa::TYPE_READER:
-						$titleInvit .= 'Invitation pour voter au Prix BD';
+						$titleInvit .= 'Invitation pour voter au Prix de la Bande Dessinée';
 						break;
 					case plugin_vfa::TYPE_RESPONSIBLE:
-						$titleInvit .= 'Invitation pour devenir correspondant du Prix BD et voter';
+						$titleInvit .= 'Invitation pour voter au Prix de la Bande Dessinée et être le correspondant';
 						break;
 				}
 				break;
