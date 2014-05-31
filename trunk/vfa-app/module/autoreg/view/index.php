@@ -23,15 +23,16 @@
 	</div>
 </div>
 <div class="well well-sm">
-	<h1 class="text-center">Bienvenue sur <?php_root::getConfigVar('vfa-app.title') ?></h1>
+	<h1 class="text-center"><?php echo _root::getConfigVar('vfa-app.title') ?></h1>
+
 	<h3 class="text-center">Site de vote du Prix de la Bande Dessinée</h3>
 </div>
-<div class="panel panel-default">
+<div class="panel panel-info">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo $this->oConfirm->titleInvit ?></h3>
 	</div>
 	<div class="panel-body">
-		<h3><?php echo $this->oConfirm->textInvit ?></h3>
+		<h4><?php echo $this->oConfirm->textInvit ?></h4>
 		<form id="toConfirm" action="<?php echo $this->getLink('autoreg::toConfirm') ?>" method="POST">
 			<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>" />
 			<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>" />

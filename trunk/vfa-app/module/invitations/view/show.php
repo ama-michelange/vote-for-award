@@ -32,7 +32,8 @@
 								</dd>
 							</dl>
 						<?php endif; ?>
-						<?php if (_root::getACL()->isInRole(plugin_vfa::ROLE_OWNER)): ?>
+						<?php if (_root::getACL()->isInRole(plugin_vfa::ROLE_OWNER) || _root::getConfigVar('vfa-app.invitation.access.enabled')
+						): ?>
 							<dl class="dl-horizontal">
 								<dt>
 									<i class="glyphicon glyphicon-share-alt"></i>
