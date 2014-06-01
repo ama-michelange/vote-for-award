@@ -8,7 +8,7 @@ class module_autoreg extends abstract_module
 		_root::startSession();
 		plugin_vfa::loadI18n();
 
-		$this->oLayout = new _layout('tpl_bs_bar');
+		$this->oLayout = new _layout('tpl_bs_base');
 		// $this->oLayout->addModule('bsnavbar','bsnavbar::index');
 	}
 
@@ -175,6 +175,17 @@ class module_autoreg extends abstract_module
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 
+		$oView->oViewFormAccount = new _view('autoreg::formAccount');
+		$oView->oViewFormAccount->oConfirm = $oConfirm;
+		$oView->oViewFormAccount->tMessage = $oConfirm->getMessages();
+		$oView->oViewFormAccount->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
+		$oView->oViewFormAccount->token = $oView->token;
+
+		$oView->oViewFormIdent = new _view('autoreg::formIdent');
+		$oView->oViewFormIdent->oConfirm = $oConfirm;
+		$oView->oViewFormIdent->tMessage = $oConfirm->getMessages();
+		$oView->oViewFormIdent->token = $oView->token;
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -260,7 +271,6 @@ class module_autoreg extends abstract_module
 	{
 		$tAwards = $poInvitation->findAwards();
 		$oGroup = $poInvitation->findGroup();
-		$oCreatedUser = $poInvitation->findCreatedUser();
 
 		$tPrix = array();
 		foreach ($tAwards as $oAward) {
@@ -279,22 +289,19 @@ class module_autoreg extends abstract_module
 		}
 
 		$tInscription = array();
-
+		$tInscription['Adresse'] = $poInvitation->email;
 		switch ($poInvitation->type) {
 			case plugin_vfa::TYPE_BOARD:
 				$tInscription['Rôle'] = 'Membre du comité de sélection';
 				$poConfirm->titleInvit = 'Inscription pour voter avec le Comité de sélection';
 				break;
 			case plugin_vfa::TYPE_READER:
-				$tInscription['Rôle'] = 'Electeur';
-				$poConfirm->titleInvit = 'Inscription pour voter au Prix BD';
+				$tInscription['Rôle'] = 'Lecteur';
+				$poConfirm->titleInvit = 'Inscription pour voter au Prix de la Bande Dessinée';
 				break;
 			case plugin_vfa::TYPE_RESPONSIBLE:
-				$tInscription['Rôle'] = 'Responsable de groupe, Electeur';
-				$poConfirm->titleInvit = 'Inscription pour devenir Responsable de groupe et voter au Prix BD';
-				break;
-			default:
-				$textInvit = '';
+				$tInscription['Rôle'] = 'Correspondant, Lecteur';
+				$poConfirm->titleInvit = 'Inscription pour devenir Correspondant de votre groupe et voter au  Prix de la Bande Dessinée';
 				break;
 		}
 		$tInscription['Groupe'] = $oGroup->group_name;

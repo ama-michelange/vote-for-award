@@ -44,7 +44,9 @@ class module_invitations extends abstract_module
 			module_invitations::buildMenuInvitations($navBar->getChild('right'), $oUserSession);
 		}
 		if ($this->oLayout->__isset('oInvitation')) {
-			if ($this->oLayout->oInvitation->state == plugin_vfa::STATE_OPEN) {
+			if ($this->oLayout->oInvitation->state == plugin_vfa::STATE_OPEN ||
+				$this->oLayout->oInvitation->state == plugin_vfa::STATE_REJECTED
+			) {
 				$navBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Renvoyer',
 					new NavLink('invitations', 'send', array('id' => $this->oLayout->oInvitation->getId())), 'glyphicon-envelope'));
 			}

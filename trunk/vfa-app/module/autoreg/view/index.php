@@ -15,8 +15,8 @@
 					<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>" />
 					<input type="hidden" name="invitation_key"
 						value="<?php echo $this->oConfirm->invitation_key ?>" />
-					<button class="btn btn-primary btn-sm" type="submit">Oui</button>
-					<button class="btn btn-default btn-lg" data-dismiss="modal">Non</button>
+					<button class="btn btn-default btn-sm" type="submit">Oui</button>
+					<button class="btn btn-info btn-lg" data-dismiss="modal">Non</button>
 				</form>
 			</div>
 		</div>
@@ -24,7 +24,6 @@
 </div>
 <div class="well well-sm">
 	<h1 class="text-center"><?php echo _root::getConfigVar('vfa-app.title') ?></h1>
-
 	<h3 class="text-center">Site de vote du Prix de la Bande Dessinée</h3>
 </div>
 <div class="panel panel-info">
@@ -37,9 +36,10 @@
 			<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>" />
 			<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>" />
 			<h1>
-				<i class="glyphicon glyphicon-hand-right with-text"></i>Souhaitez-vous vous inscrire ? <span
+				<i class="glyphicon glyphicon-hand-right with-text"></i>Souhaitez-vous vous inscrire ?
+				<span
 					class="nowrap">
-					<button class="btn btn-primary btn-lg" type="submit" name="action" value="toConfirm">Oui</button>
+					<button class="btn btn-info btn-lg" type="submit" name="action" value="toConfirm">Oui</button>
 					<a class="btn btn-default btn-sm" href="#modalReject" data-toggle="modal">Non</a>
 				</span>
 			</h1>
