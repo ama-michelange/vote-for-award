@@ -512,7 +512,7 @@ class plugin_vfa
 				break;
 			case plugin_vfa::TYPE_READER:
 //				$textInvit = sprintf('%1s, le correspondant du Prix de la Bande Dessinée, vous invite à vous inscrire %2s : ', $creator, $xPrix);
-				$textInvit = sprintf('%1s, le correspondant du Prix de la Bande Dessinée, vous invite à vous inscrire.', $creator);
+				$textInvit = sprintf('%1s, le correspondant du Prix de la Bande Dessinée, vous invite à participer au prix.', $creator);
 				break;
 			case plugin_vfa::TYPE_RESPONSIBLE:
 				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et à vous inscrire %3s : ',
@@ -562,13 +562,13 @@ class plugin_vfa
 			case plugin_vfa::CATEGORY_INVITATION:
 				switch ($poInvitation->type) {
 					case plugin_vfa::TYPE_BOARD:
-						$titleInvit .= 'Invitation pour voter avec le Comité de sélection';
+						$titleInvit .= 'Invitation pour participer au Comité de sélection';
 						break;
 					case plugin_vfa::TYPE_READER:
 						$titleInvit .= 'Invitation pour voter au Prix de la Bande Dessinée';
 						break;
 					case plugin_vfa::TYPE_RESPONSIBLE:
-						$titleInvit .= 'Invitation pour voter au Prix de la Bande Dessinée et être le correspondant';
+						$titleInvit .= 'Invitation pour devenir Correspondant de votre groupe et voter au Prix de la Bande Dessinée';
 						break;
 				}
 				break;
