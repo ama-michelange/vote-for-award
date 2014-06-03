@@ -39,22 +39,26 @@
 		</div>
 		<div class="panel-body panel-condensed">
 			<?php
+			$displayAccount = '';
+			$displayLogin = '';
 			// Gère l'ouverture ou la fermeture du panel d'ouverture du compte
 			if ($this->oConfirm->openAccount) {
 				$collapseInAccount = ' in';
+				$displayLogin = 'style="display:none;"';
 			} else {
 				$collapseInAccount = '';
 			}
 			// Gère l'ouverture ou la fermeture du panel d'identification
 			if ($this->oConfirm->openLogin) {
 				$collapseInLogin = ' in';
+				$displayAccount = 'style="display:none;"';
 			} else {
 				$collapseInLogin = '';
 			}
 			?>
 			<div class="panel-group" id="accordion">
-				<div class="panel panel-info">
-					<div class="panel-body panel-inner">
+				<div id="panelAccount" class="panel panel-info" <?php echo $displayAccount ?>>
+				<div class="panel-body panel-inner">
 						<div class="row">
 							<div class="col-sm-1">
 								<h1 class="text-center text-warning"><i class="glyphicon glyphicon-star-empty"></i></h1>
@@ -63,7 +67,8 @@
 								<h3>
 									Vous n'avez pas de compte sur ce site ...
 									<a id="btnAccount" data-toggle="collapse" data-parent="#accordion" href="#collapseAccount"
-										class="btn btn-default"><i class="glyphicon glyphicon-record with-text"></i>Enregistrez-vous !</a>
+										class="btn btn-default" <?php echo $displayLogin ?>><i class="glyphicon glyphicon-record with-text"></i>Enregistrez-vous
+										!</a>
 								</h3>
 							</div>
 						</div>
@@ -79,21 +84,22 @@
 						</div>
 					</div>
 				</div>
-				<div class="panel panel-info">
-				<div class="panel-body panel-inner">
-					<div class="row">
-						<div class="col-sm-1">
-							<h1 class="text-center text-warning"><i class="glyphicon glyphicon-star"></i></h1>
-						</div>
-						<div class="col-sm-11">
-							<h3>
-								Vous avez déjà un compte sur ce site ...
-								<a id="btnLogin" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin" class="btn btn-default"><i
-										class="glyphicon glyphicon-user with-text"></i>Identifiez-vous !</a>
-							</h3>
+				<div id="panelLogin" class="panel panel-info" <?php echo $displayLogin ?>>
+					<div class="panel-body panel-inner">
+						<div class="row">
+							<div class="col-sm-1">
+								<h1 class="text-center text-warning"><i class="glyphicon glyphicon-star"></i></h1>
+							</div>
+							<div class="col-sm-11">
+								<h3>
+									Vous avez déjà un compte sur ce site ...
+									<a id="btnLogin" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin"
+										class="btn btn-default" <?php echo $displayAccount ?>><i
+											class="glyphicon glyphicon-user with-text"></i>Identifiez-vous !</a>
+								</h3>
+							</div>
 						</div>
 					</div>
-				</div>
 					<div id="collapseLogin" class="panel-info collapse<?php echo $collapseInLogin ?>">
 						<div class="panel-body panel-inner">
 							<div class="row">
