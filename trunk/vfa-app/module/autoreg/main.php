@@ -187,6 +187,11 @@ class module_autoreg extends abstract_module
 		$oView->oViewFormIdent->token = $oView->token;
 
 		$this->oLayout->add('work', $oView);
+
+
+		// Prepare et Affiche la popup
+		$scriptView = new _view('autoreg::scriptConfirm');
+		$this->oLayout->add('script', $scriptView);
 	}
 
 	private function doVerifyPost($poInvitation)
@@ -209,6 +214,7 @@ class module_autoreg extends abstract_module
 		switch (_root::getParam('action')) {
 			case 'toConfirm':
 				// $this->doVerifyToRegistry($poInvitation, $oConfirm);
+				$oConfirm->email = $poInvitation->email;
 				break;
 			case 'toIdentify':
 				$this->doVerifyToIdentify($poInvitation, $oConfirm);
@@ -229,6 +235,10 @@ class module_autoreg extends abstract_module
 		$poConfirm->cf_login = _root::getParam('cf_login', null);
 		$poConfirm->cf_password = _root::getParam('cf_password', null);
 
+		// Force l'ouverture du panel d'identification
+		$poConfirm->openLogin = true;
+
+		// Validation
 		if ($poConfirm->isValid()) {
 			$poConfirm->validation = true;
 		}
@@ -249,6 +259,10 @@ class module_autoreg extends abstract_module
 		$poConfirm->birthyear = _root::getParam('birthyear', null);
 		$poConfirm->gender = _root::getParam('gender', null);
 
+		// Force l'ouverture du panel d'enregistrement du compte
+		$poConfirm->openAccount = true;
+
+		// Validation
 		if ($poConfirm->isValid()) {
 			// Doublon ?
 			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->login);
