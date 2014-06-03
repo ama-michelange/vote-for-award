@@ -2,10 +2,12 @@
 	$(document).ready(function () {
 		$('#collapseAccount').on({
 			'shown.bs.collapse': function () {
+				$('#panelLogin').hide();
 				$('#btnAccount').hide();
 				$('#bottomAccount').get(0).click();
 			},
 			'hide.bs.collapse': function () {
+				$('#panelLogin').show();
 				$('#btnAccount').show();
 			}
 		});
@@ -13,11 +15,13 @@
 			$('#collapseAccount').collapse('hide');
 		});
 		$('#collapseLogin').on({
-			'shown.bs.collapse': function () {
+			'show.bs.collapse': function () {
+				$('#panelAccount').hide();
 				$('#btnLogin').hide();
 				$('#bottomLogin').get(0).click();
 			},
-			'hidden.bs.collapse': function () {
+			'hide.bs.collapse': function () {
+				$('#panelAccount').show();
 				$('#btnLogin').show();
 			}
 		});

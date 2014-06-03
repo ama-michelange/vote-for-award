@@ -9,7 +9,6 @@ class module_autoreg extends abstract_module
 		plugin_vfa::loadI18n();
 
 		$this->oLayout = new _layout('tpl_bs_base');
-		// $this->oLayout->addModule('bsnavbar','bsnavbar::index');
 	}
 
 	public function _index()

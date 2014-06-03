@@ -6,8 +6,8 @@
 	<input type="password" name="hiddenPassword" value="" style="display: none"/>
 
 	<div class="panel panel-default panel-inner">
-	<div class="panel-heading">
-			<h3 class="panel-title">
+		<div class="panel-heading">
+		<h3 class="panel-title">
 				Enregistrez-vous
 				<small>sur <?php echo _root::getConfigVar('vfa-app.title') ?> pour confirmer votre inscription</small>
 			</h3>
