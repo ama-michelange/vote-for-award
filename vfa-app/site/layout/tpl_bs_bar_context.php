@@ -43,12 +43,12 @@ body {
 		
 
 <!-- 	<script src="http://code.jquery.com/jquery-latest.js"></script> -->
-	<script src="site/assets/js/jquery-1.11.0.min.js"></script>
-	<script src="site/assets/js/bootstrap.min.js"></script>
-	<script src="site/assets/js/bootstrap-datepicker.js"></script>
-	<script src="site/select2/select2.min.js"></script>
-	<script src="site/js/bs-apps.js"></script>
-	
+<script src="site/assets/js/jquery-1.11.0.min.js"></script>
+<script src="site/assets/js/bootstrap.min.js"></script>
+<script src="site/assets/js/bootstrap-datepicker.js"></script>
+<script src="site/select2/select2.min.js"></script>
+<script src="site/js/bs-apps.js"></script>
+<?php echo $this->load('script') ?>
 </body>
 
 
