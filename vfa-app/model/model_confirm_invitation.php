@@ -32,15 +32,15 @@ class row_confirm_invitation extends abstract_row
 				if (null != $this->__get('email')) {
 					$bEmailValid = $oPluginValid->isEmailValid('email');
 				}
-				$oPluginValid->isNotEmpty('email_bis');
-				$bEmailBisValid = false;
-				if (null != $this->__get('email_bis')) {
-					$bEmailBisValid = $oPluginValid->isEmailValid('email_bis');
-				}
-				if ($bEmailValid && $bEmailBisValid) {
-					$oPluginValid->isEqual('email', 'email_bis');
-					$oPluginValid->isEqual('email_bis', 'email');
-				}
+//				$oPluginValid->isNotEmpty('email_bis');
+//				$bEmailBisValid = false;
+//				if (null != $this->__get('email_bis')) {
+//					$bEmailBisValid = $oPluginValid->isEmailValid('email_bis');
+//				}
+//				if ($bEmailValid && $bEmailBisValid) {
+//					$oPluginValid->isEqual('email', 'email_bis');
+//					$oPluginValid->isEqual('email_bis', 'email');
+//				}
 				$oPluginValid->isNotEmpty('password');
 				$oPluginValid->isNotEmpty('password_bis');
 				if ((null != $this->__get('password')) && (null != $this->__get('password_bis'))) {
