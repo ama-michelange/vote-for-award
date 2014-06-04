@@ -21,12 +21,12 @@
 			<!--			<div class="col-sm-6 col-md-6">-->
 			<!--				<div class="panel panel-default panel-inner">-->
 			<!--					<div class="panel-body">-->
-			<?php foreach ($this->oConfirm->tInscription as $label => $value): ?>
-				<div class="row">
-					<div class="col-sm-3 col-md-3 col-lg-2 view-label"><?php echo $label ?></div>
-					<div class="col-sm-9 col-md-9 col-lg-10 view-value"><?php echo $value ?></div>
-				</div>
-			<?php endforeach; ?>
+			<div class="row">
+				<?php foreach ($this->oConfirm->tInscription as $label => $value): ?>
+					<div class="col-sm-1 col-md-2 col-lg-1 view-label"><?php echo $label ?></div>
+					<div class="col-sm-5 col-md-4 col-lg-5 view-value"><?php echo $value ?></div>
+				<?php endforeach; ?>
+			</div>
 			<!--					</div>-->
 			<!--				</div>-->
 			<!--			</div>-->

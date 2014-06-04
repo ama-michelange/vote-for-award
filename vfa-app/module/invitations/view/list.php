@@ -59,10 +59,10 @@
 						<td>
 							<?php if (_root::getACL()->permit('invitations::read')): ?>
 								<a href="<?php echo $this->getLink('invitations::read', array('id' => $oInvitation->getId())) ?>">
-									<?php echo wordwrap($oInvitation->email, 30, ' ', true) ?>
+									<?php echo wordwrap($oInvitation->email, 36, ' ', true) ?>
 								</a>
 							<?php else: ?>
-								<?php echo wordwrap($oInvitation->email, 30, ' ', true) ?>
+								<?php echo wordwrap($oInvitation->email, 36, ' ', true) ?>
 							<?php endif; ?>
 						</td>
 						<td>

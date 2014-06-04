@@ -7,8 +7,8 @@
 
 	<div class="panel panel-default panel-inner">
 		<div class="panel-heading">
-		<h3 class="panel-title">
-				Enregistrez-vous
+			<h3 class="panel-title">
+			Enregistrez-vous
 				<small>sur <?php echo _root::getConfigVar('vfa-app.title') ?> pour confirmer votre inscription</small>
 			</h3>
 		</div>
@@ -16,30 +16,31 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login') ?>">
-						<label for="login">Nom d'utilisateur</label>
-						<input class="form-control" type="text" id="login" name="login"
-								 value="<?php echo $this->oConfirm->login ?>" placeholder="Votre nom d'utilisateur ou pseudo"/>
+						<label for="login">Identifiant</label>
+						<input class="form-control" type="text" id="login" name="login" autofocus="true"
+								 value="<?php echo $this->oConfirm->login ?>" placeholder="Votre identifiant ou pseudo"/>
 						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login') ?></span>
 					</div>
 				</div>
-			</div>
-			<div class="row">
 				<div class="col-sm-6">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email') ?>">
 						<label for="email">Email</label>
-						<input class="form-control" type="text" id="email" name="email"
+						<input type="hidden" name="email" value="<?php echo $this->oConfirm->email ?>"/>
+						<input class="form-control" type="text" id="email" name="email" disabled="disabled"
 								 value="<?php echo $this->oConfirm->email ?>" placeholder="Votre Email"/>
 						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email') ?></span>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email_bis') ?>">
-						<label for="email_bis">Confirmation de l'email</label>
-						<input class="form-control" type="text" id="email_bis" name="email_bis"
-								 value="<?php echo $this->oConfirm->email_bis ?>" placeholder="Confirmez votre Email"/>
-						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email_bis') ?></span>
-					</div>
-				</div>
+				<!--				<div class="col-sm-6">-->
+				<!--					<div class="-->
+				<?php //echo plugin_validation::addClassError('form-group', $this->tMessage, 'email_bis') ?><!--">-->
+				<!--						<label for="email_bis">Confirmation de l'email</label>-->
+				<!--						<input class="form-control" type="text" id="email_bis" name="email_bis"-->
+				<!--								 value="--><?php //echo $this->oConfirm->email_bis ?><!--" placeholder="Confirmez votre Email"/>-->
+				<!--						<span class="help-block">-->
+				<?php //echo plugin_validation::show($this->tMessage, 'email_bis') ?><!--</span>-->
+				<!--					</div>-->
+				<!--				</div>-->
 			</div>
 			<div class="row">
 				<div class="col-sm-6">
@@ -85,7 +86,7 @@
 						<label for="inputBirthyear">Année de naissance</label>
 						<select class="form-control" id="inputBirthyear" name="birthyear"
 								  data-placeholder="Sélectionner votre année de naissance">
-						<option></option>
+							<option></option>
 							<?php foreach ($this->tSelectedYears as $year => $checked): ?>
 								<option value="<?php echo $year ?>" <?php if ($checked): echo 'selected'; endif; ?>>
 									<?php echo $year ?>
@@ -97,7 +98,7 @@
 				</div>
 				<div class="col-sm-6">
 					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'gender') ?>">
-					<label>Genre</label>
+						<label>Genre</label>
 
 						<div>
 							<label class="radio-inline" for="inputHomme">

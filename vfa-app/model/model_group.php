@@ -101,6 +101,20 @@ class model_group extends abstract_model
 	}
 
 	/**
+	 * @param $pUserId
+	 * @param $pGroupId
+	 * @return row_group
+	 */
+	public function findByUserIdByGroupId($pUserId, $pGroupId)
+	{
+		$sql = 'SELECT vfa_groups.group_id, vfa_groups.group_name, vfa_groups.role_id_default FROM vfa_groups, vfa_user_groups ';
+		$sql .= 'WHERE (vfa_user_groups.group_id = vfa_groups.group_id) ';
+		$sql .= 'AND (vfa_user_groups.user_id = ?) ';
+		$sql .= 'AND (vfa_user_groups.group_id = ?)';
+		return $this->findOne($sql, $pUserId, $pGroupId);
+	}
+
+	/**
 	 * @param $pName
 	 * @return row_group
 	 */

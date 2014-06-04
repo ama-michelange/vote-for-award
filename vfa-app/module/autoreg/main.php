@@ -193,9 +193,44 @@ class module_autoreg extends abstract_module
 		$this->oLayout->add('script', $scriptView);
 	}
 
-	private function doVerifyPost($poInvitation)
+	private function makeConfirmWithParams($poInvitation)
 	{
 		$oConfirm = new row_confirm_invitation();
+
+		// Récupère les params cachés nécessaire au Token (entre autre)
+		$oConfirm->invitation_id = _root::getParam('invitation_id');
+		$oConfirm->invitation_key = _root::getParam('invitation_key');
+
+		// Copie la saisie Identification
+		$oConfirm->action = _root::getParam('action');
+		$oConfirm->cf_login = _root::getParam('cf_login');
+		$oConfirm->cf_password = _root::getParam('cf_password');
+
+		// Copie la saisie Compte Utilisateur
+		$oConfirm->action = _root::getParam('action');
+		$oConfirm->login = _root::getParam('login', $poInvitation->email);
+		$oConfirm->email = _root::getParam('email', $poInvitation->email);
+		$oConfirm->password = _root::getParam('password');
+		$oConfirm->password_bis = _root::getParam('password_bis');
+		$oConfirm->last_name = _root::getParam('last_name');
+		$oConfirm->first_name = _root::getParam('first_name');
+		$oConfirm->birthyear = _root::getParam('birthyear');
+		$oConfirm->gender = _root::getParam('gender');
+
+		$oConfirm->email = $poInvitation->email;
+		$oConfirm->login = $poInvitation->email;
+
+		return $oConfirm;
+	}
+
+	private function doVerifyPost($poInvitation)
+	{
+		$oConfirm = $this->makeConfirmWithParams($poInvitation);
+
+		// Récupère les params cachés nécessaire au Token (entre autre)
+//		$oConfirm->invitation_id = _root::getParam('invitation_id');
+//		$oConfirm->invitation_key = _root::getParam('invitation_key');
+
 		// Verifie le token
 		if (_root::getParam('token')) {
 			$oPluginXsrf = new plugin_xsrf();
@@ -204,16 +239,14 @@ class module_autoreg extends abstract_module
 				return $oConfirm;
 			}
 		}
-
-		// Récupère les params cachés et reconstruit le texte
-		$oConfirm->invitation_id = _root::getParam('invitation_id');
-		$oConfirm->invitation_key = _root::getParam('invitation_key');
+		// Reconstruit le texte
 		$this->makeTextConfirmation($poInvitation, $oConfirm);
-
+		// Dispatch
 		switch (_root::getParam('action')) {
 			case 'toConfirm':
 				// $this->doVerifyToRegistry($poInvitation, $oConfirm);
-				$oConfirm->email = $poInvitation->email;
+//				$oConfirm->email = $poInvitation->email;
+//				$oConfirm->login = $poInvitation->email;
 				break;
 			case 'toIdentify':
 				$this->doVerifyToIdentify($poInvitation, $oConfirm);
@@ -227,12 +260,13 @@ class module_autoreg extends abstract_module
 		return $oConfirm;
 	}
 
+
 	private function doVerifyToIdentify($poInvitation, $poConfirm)
 	{
 		// Copie la saisie dans un enregistrement
-		$poConfirm->action = _root::getParam('action', null);
-		$poConfirm->cf_login = _root::getParam('cf_login', null);
-		$poConfirm->cf_password = _root::getParam('cf_password', null);
+//		$poConfirm->action = _root::getParam('action', null);
+//		$poConfirm->cf_login = _root::getParam('cf_login', null);
+//		$poConfirm->cf_password = _root::getParam('cf_password', null);
 
 		// Force l'ouverture du panel d'identification
 		$poConfirm->openLogin = true;
@@ -247,16 +281,16 @@ class module_autoreg extends abstract_module
 	private function doVerifyToRegistry($poInvitation, $poConfirm)
 	{
 		// Copie la saisie dans un enregistrement
-		$poConfirm->action = _root::getParam('action', null);
-		$poConfirm->login = _root::getParam('login', null);
-		$poConfirm->email = _root::getParam('email', null);
-		$poConfirm->email_bis = _root::getParam('email_bis', null);
-		$poConfirm->password = _root::getParam('password', null);
-		$poConfirm->password_bis = _root::getParam('password_bis', null);
-		$poConfirm->last_name = _root::getParam('last_name', null);
-		$poConfirm->first_name = _root::getParam('first_name', null);
-		$poConfirm->birthyear = _root::getParam('birthyear', null);
-		$poConfirm->gender = _root::getParam('gender', null);
+//		$poConfirm->action = _root::getParam('action', null);
+//		$poConfirm->login = _root::getParam('login', null);
+//		$poConfirm->email = _root::getParam('email', null);
+//		$poConfirm->email_bis = _root::getParam('email_bis', null);
+//		$poConfirm->password = _root::getParam('password', null);
+//		$poConfirm->password_bis = _root::getParam('password_bis', null);
+//		$poConfirm->last_name = _root::getParam('last_name', null);
+//		$poConfirm->first_name = _root::getParam('first_name', null);
+//		$poConfirm->birthyear = _root::getParam('birthyear', null);
+//		$poConfirm->gender = _root::getParam('gender', null);
 
 		// Force l'ouverture du panel d'enregistrement du compte
 		$poConfirm->openAccount = true;
@@ -303,6 +337,9 @@ class module_autoreg extends abstract_module
 
 		$tInscription = array();
 		$tInscription['Adresse'] = $poInvitation->email;
+
+		$tInscription['Groupe'] = $oGroup->group_name;
+
 		switch ($poInvitation->type) {
 			case plugin_vfa::TYPE_BOARD:
 				$tInscription['Rôle'] = 'Membre du comité de sélection';
@@ -317,7 +354,7 @@ class module_autoreg extends abstract_module
 				$poConfirm->titleInvit = 'Inscription pour devenir Correspondant de votre groupe et voter au  Prix de la Bande Dessinée';
 				break;
 		}
-		$tInscription['Groupe'] = $oGroup->group_name;
+
 		$tInscription['Prix'] = $textPrix;
 		$poConfirm->tInscription = $tInscription;
 	}
