@@ -79,14 +79,18 @@ class module_invitations extends abstract_module
 	{
 		$tItems = array();
 
+		$sameGroup = false;
 		$paramUser = null;
 		$idUser = _root::getParam('id');
 		if ($idUser) {
 			$paramUser = array('idUser' => $idUser);
+			$oUser = model_user::getInstance()->findById($idUser);
+			$sameGroup = $oUser->isInGroup($poUserSession->getReaderGroup()->getId());
 		}
-
-		$tItems[] = plugin_BsHtml::buildMenuItem('Un lecteur pour ' . $poUserSession->getReaderGroup()->toString(),
-			new NavLink('invitations', 'invitReader', $paramUser));
+		if ($sameGroup) {
+			$tItems[] = plugin_BsHtml::buildMenuItem('Un lecteur pour ' . $poUserSession->getReaderGroup()->toString(),
+				new NavLink('invitations', 'invitReader', $paramUser));
+		}
 		$tItems[] = plugin_BsHtml::buildMenuItem('Un correspondant', new NavLink('invitations', 'invitResponsible', $paramUser));
 		$tItems[] = plugin_BsHtml::buildMenuItem('Un membre du ' . $poUserSession->getBoardGroup()->toString(),
 			new NavLink('invitations', 'invitBoard', $paramUser));

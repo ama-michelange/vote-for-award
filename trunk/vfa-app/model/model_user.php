@@ -284,6 +284,22 @@ class row_user extends abstract_row
 	}
 
 	/**
+	 * @param string $pGroupId
+	 * @return boolean
+	 */
+	public function isInGroup($pGroupId)
+	{
+		$in = false;
+		if (null != $this->user_id) {
+			$oGroup = model_group::getInstance()->findByUserIdByGroupId($this->user_id, $pGroupId);
+			if (false == $oGroup->isEmpty()) {
+				$in = true;
+			}
+		}
+		return $in;
+	}
+
+	/**
 	 * @return null|row_role[]
 	 */
 	public function findRoles()

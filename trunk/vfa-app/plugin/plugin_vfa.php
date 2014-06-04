@@ -507,7 +507,7 @@ class plugin_vfa
 		}
 		switch ($poInvitation->type) {
 			case plugin_vfa::TYPE_BOARD:
-				$textInvit = sprintf('%1s, l\'organisateur du Prix Bande Dessinée, vous invite à vous inscrire à la présélection suivante : ',
+				$textInvit = sprintf('%1s, l\'organisateur du Prix de la Bande Dessinée, vous invite à devenir membre du Comité de sélection.',
 					$creator);
 				break;
 			case plugin_vfa::TYPE_READER:
@@ -515,8 +515,8 @@ class plugin_vfa
 				$textInvit = sprintf('%1s, le correspondant du Prix de la Bande Dessinée, vous invite à participer au prix.', $creator);
 				break;
 			case plugin_vfa::TYPE_RESPONSIBLE:
-				$textInvit = sprintf('%1s, l\'organisateur du Prix BD, vous invite à devenir correspondant pour "%2s" et à vous inscrire %3s : ',
-					$creator, $oGroup->group_name, $xPrix);
+				$textInvit = sprintf('%1s, l\'organisateur du Prix de la Bande Dessinée, vous invite à devenir Correspondant du groupe %2s et à vous inscrire au prix',
+					$creator, $oGroup->group_name);
 				break;
 			default:
 				$textInvit = '';
