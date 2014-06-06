@@ -178,8 +178,13 @@ class model_user extends abstract_model
 		$this->execute('DELETE FROM vfa_users WHERE user_id=?', $pIdUser);
 		$this->execute('DELETE FROM vfa_user_roles WHERE user_id=?', $pIdUser);
 		$this->execute('DELETE FROM vfa_user_groups WHERE user_id=?', $pIdUser);
+		$this->execute('DELETE FROM vfa_user_awards WHERE user_id=?', $pIdUser);
 	}
 
+	/**
+	 * @param int $pIdUser
+	 * @param int[] $pIdGroups
+	 */
 	public function saveUserGroups($pIdUser, $pIdGroups)
 	{
 		$this->execute('DELETE FROM vfa_user_groups WHERE user_id=?', $pIdUser);
@@ -190,12 +195,29 @@ class model_user extends abstract_model
 		}
 	}
 
+	/**
+	 * @param int $pIdUser
+	 * @param int[] $pIdRoles
+	 */
 	public function saveUserRoles($pIdUser, $pIdRoles)
 	{
 		$this->execute('DELETE FROM vfa_user_roles WHERE user_id=?', $pIdUser);
 		if ($pIdRoles) {
 			foreach ($pIdRoles as $idRole) {
 				$this->execute('INSERT INTO vfa_user_roles (user_id, role_id) VALUES (?,?)', $pIdUser, $idRole);
+			}
+		}
+	}
+
+	/**
+	 * @param int $pIdUser
+	 * @param int[] $pIdAwards
+	 */
+	public function saveUserAwards($pIdUser, $pIdAwards)
+	{
+		if ($pIdAwards) {
+			foreach ($pIdAwards as $idAward) {
+				$this->execute('INSERT INTO vfa_user_awards (user_id, award_id) VALUES (?,?)', $pIdUser, $idAward);
 			}
 		}
 	}

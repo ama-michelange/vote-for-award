@@ -196,40 +196,33 @@ class module_autoreg extends abstract_module
 	private function makeConfirmWithParams($poInvitation)
 	{
 		$oConfirm = new row_confirm_invitation();
+		$oConfirm->action = _root::getParam('action');
 
 		// Récupère les params cachés nécessaire au Token (entre autre)
 		$oConfirm->invitation_id = _root::getParam('invitation_id');
 		$oConfirm->invitation_key = _root::getParam('invitation_key');
 
 		// Copie la saisie Identification
-		$oConfirm->action = _root::getParam('action');
 		$oConfirm->cf_login = _root::getParam('cf_login');
 		$oConfirm->cf_password = _root::getParam('cf_password');
 
 		// Copie la saisie Compte Utilisateur
-		$oConfirm->action = _root::getParam('action');
-		$oConfirm->login = _root::getParam('login', $poInvitation->email);
+		$oConfirm->login = _root::getParam('login');
 		$oConfirm->email = _root::getParam('email', $poInvitation->email);
-		$oConfirm->password = _root::getParam('password');
-		$oConfirm->password_bis = _root::getParam('password_bis');
+		$oConfirm->newPassword = _root::getParam('newPassword');
+		$oConfirm->confirmPassword = _root::getParam('confirmPassword');
 		$oConfirm->last_name = _root::getParam('last_name');
 		$oConfirm->first_name = _root::getParam('first_name');
 		$oConfirm->birthyear = _root::getParam('birthyear');
 		$oConfirm->gender = _root::getParam('gender');
-
-		$oConfirm->email = $poInvitation->email;
-		$oConfirm->login = $poInvitation->email;
 
 		return $oConfirm;
 	}
 
 	private function doVerifyPost($poInvitation)
 	{
+		// Récupère les params
 		$oConfirm = $this->makeConfirmWithParams($poInvitation);
-
-		// Récupère les params cachés nécessaire au Token (entre autre)
-//		$oConfirm->invitation_id = _root::getParam('invitation_id');
-//		$oConfirm->invitation_key = _root::getParam('invitation_key');
 
 		// Verifie le token
 		if (_root::getParam('token')) {
@@ -244,9 +237,8 @@ class module_autoreg extends abstract_module
 		// Dispatch
 		switch (_root::getParam('action')) {
 			case 'toConfirm':
-				// $this->doVerifyToRegistry($poInvitation, $oConfirm);
-//				$oConfirm->email = $poInvitation->email;
-//				$oConfirm->login = $poInvitation->email;
+				$oConfirm->email = $poInvitation->email;
+				$oConfirm->login = $poInvitation->email;
 				break;
 			case 'toIdentify':
 				$this->doVerifyToIdentify($poInvitation, $oConfirm);
@@ -263,11 +255,6 @@ class module_autoreg extends abstract_module
 
 	private function doVerifyToIdentify($poInvitation, $poConfirm)
 	{
-		// Copie la saisie dans un enregistrement
-//		$poConfirm->action = _root::getParam('action', null);
-//		$poConfirm->cf_login = _root::getParam('cf_login', null);
-//		$poConfirm->cf_password = _root::getParam('cf_password', null);
-
 		// Force l'ouverture du panel d'identification
 		$poConfirm->openLogin = true;
 
@@ -280,18 +267,6 @@ class module_autoreg extends abstract_module
 
 	private function doVerifyToRegistry($poInvitation, $poConfirm)
 	{
-		// Copie la saisie dans un enregistrement
-//		$poConfirm->action = _root::getParam('action', null);
-//		$poConfirm->login = _root::getParam('login', null);
-//		$poConfirm->email = _root::getParam('email', null);
-//		$poConfirm->email_bis = _root::getParam('email_bis', null);
-//		$poConfirm->password = _root::getParam('password', null);
-//		$poConfirm->password_bis = _root::getParam('password_bis', null);
-//		$poConfirm->last_name = _root::getParam('last_name', null);
-//		$poConfirm->first_name = _root::getParam('first_name', null);
-//		$poConfirm->birthyear = _root::getParam('birthyear', null);
-//		$poConfirm->gender = _root::getParam('gender', null);
-
 		// Force l'ouverture du panel d'enregistrement du compte
 		$poConfirm->openAccount = true;
 
@@ -300,12 +275,93 @@ class module_autoreg extends abstract_module
 			// Doublon ?
 			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->login);
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
-				$poConfirm->validation = true;
+				if ($this->checkPassword($poConfirm)) {
+					if ($this->createUser($poInvitation, $poConfirm)) {
+						if ($this->acceptInvitation($poInvitation)) {
+							// TODO A finir vers le nouvel ecran
+						}
+					}
+				}
 			} else {
 				$poConfirm->setMessages(array('login' => array('doublon')));
 			}
+		} else {
+			if (!$poConfirm->login) {
+				$poConfirm->login = $poInvitation->email;
+			}
 		}
-		// var_dump($poConfirm);
+	}
+
+	private function checkPassword($poConfirm)
+	{
+		$canSave = false;
+		$newPassword = _root::getParam('newPassword');
+		$confirmPassword = _root::getParam('confirmPassword');
+		if (null != $newPassword) {
+			$lenPassword = strlen($newPassword);
+			if (($lenPassword < 7) OR ($lenPassword > 30)) {
+				$poConfirm->setMessages(array('newPassword' => array('badSize')));
+			} else {
+				if ($newPassword === $confirmPassword) {
+					$poConfirm->password = sha1($newPassword);
+					$canSave = true;
+				} else {
+					$poConfirm->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
+				}
+			}
+		}
+		return $canSave;
+	}
+
+	private function createUser($poInvitation, $poConfirm)
+	{
+		$oUser = new row_user();
+		$oUser->created_date = plugin_vfa::dateTimeSgbd();
+		$oUser->modified_date = plugin_vfa::dateTimeSgbd();
+
+		$oUser->login = $poConfirm->login;
+		$oUser->email = $poConfirm->email;
+		$oUser->password = $poConfirm->password;
+		$oUser->last_name = $poConfirm->last_name;
+		$oUser->first_name = $poConfirm->first_name;
+		$oUser->birthyear = $poConfirm->birthyear;
+		$oUser->gender = $poConfirm->gender;
+
+		$tIdGroups = array($poInvitation->group_id);
+		$tIdAwards = explode(',', $poInvitation->awards_ids);
+
+		$tIdRoles = array();
+		switch ($poInvitation->type) {
+			case plugin_vfa::ROLE_RESPONSIBLE:
+				$oRole = model_role::getInstance()->findByName(plugin_vfa::ROLE_READER);
+				$tIdRoles[] = $oRole->getId();
+			default:
+				$oRole = model_role::getInstance()->findByName($poInvitation->type);
+				$tIdRoles[] = $oRole->getId();
+		}
+
+		$oUser->save();
+		model_user::getInstance()->saveUserRoles($oUser->user_id, $tIdRoles);
+		model_user::getInstance()->saveUserGroups($oUser->user_id, $tIdGroups);
+		model_user::getInstance()->saveUserAwards($oUser->user_id, $tIdAwards);
+
+//		var_dump($oUser);
+//		var_dump($poInvitation);
+//		var_dump($tIdGroups);
+//		var_dump($tIdAwards);
+//		var_dump($tIdRoles);
+		return true;
+	}
+
+	private function acceptInvitation($poInvitation)
+	{
+		$poInvitation->state = plugin_vfa::STATE_ACCEPTED;
+		$poInvitation->modified_date = plugin_vfa::dateTimeSgbd();
+
+		// Sauve en base
+		$poInvitation->save();
+
+		return true;
 	}
 
 	private function makeTextInvitation($poInvitation, $poConfirm)
