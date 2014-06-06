@@ -247,13 +247,11 @@ class module_users extends abstract_module
 		$oView = new _view('users::show');
 		$oView->oUser = $oUser;
 		$oView->oViewShowUser = $this->buildViewShowUser($oUser);
-		$oView->oViewShowReaderGroup = $this->buildViewShowReaderGroup($oUser);
-		$oView->oViewShowBoardGroup = $this->buildViewShowBoardGroup($oUser);
-
-//		$oView->toRoles = $oUser->findRoles();
-//		$oView->toGroups = $oUser->findGroups();
-//		$oView->toAwards = $oUser->findAwards();
-
+		if (_root::getAction() == 'read') {
+			$oView->oViewShowReaderGroup = $this->buildViewShowReaderGroup($oUser);
+			$oView->oViewShowBoardGroup = $this->buildViewShowBoardGroup($oUser);
+			$oView->oViewShowParticipations = $this->buildViewShowParticipations($oUser);
+		}
 		return $oView;
 	}
 
@@ -313,6 +311,23 @@ class module_users extends abstract_module
 		}
 		$oView->roles = $roles;
 		$oView->toValidAwards = model_award::getInstance()->findAllValidByUserId($poUser->user_id, plugin_vfa::TYPE_AWARD_BOARD);
+
+		return $oView;
+	}
+
+	/**
+	 * @param row_user $poUser
+	 * @return _view
+	 */
+	public function buildViewShowParticipations($poUser)
+	{
+		$tAwards = model_award::getInstance()->findAllByUserId($poUser->user_id);
+		if (count($tAwards) == 0) {
+			return null;
+		}
+		$oView = new _view('users::showParticipation');
+		$oView->oUser = $poUser;
+		$oView->toParticipationAwards = $tAwards;
 
 		return $oView;
 	}
