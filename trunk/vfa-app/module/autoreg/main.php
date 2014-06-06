@@ -86,15 +86,42 @@ class module_autoreg extends abstract_module
 
 	private function doInvitation($poInvitation)
 	{
-		$oConfirm = new row_confirm_invitation();
-		$oConfirm->invitation_id = _root::getParam('id');
-		$oConfirm->invitation_key = _root::getParam('key');
-		$this->makeTextInvitation($poInvitation, $oConfirm);
+		if (true == $this->isValidInvitation($poInvitation)) {
+			$oConfirm = new row_confirm_invitation();
+			$oConfirm->invitation_id = _root::getParam('id');
+			$oConfirm->invitation_key = _root::getParam('key');
+			$this->makeTextInvitation($poInvitation, $oConfirm);
 
-		$oView = new _view('autoreg::index');
-		$oView->oConfirm = $oConfirm;
+			$oView = new _view('autoreg::index');
+			$oView->oConfirm = $oConfirm;
 
-		$this->oLayout->add('work', $oView);
+			$this->oLayout->add('work', $oView);
+		}
+	}
+
+	private function isValidInvitation($poInvitation)
+	{
+		$ok = true;
+		if (plugin_vfa::STATE_ACCEPTED == $poInvitation->state) {
+			$textInvit = 'Cet accès n\'est plus valide ! L\'invitation a déjà été acceptée.';
+			$ok = false;
+		}
+
+
+		// TODO Vérifier la validité des prix et du groupe
+
+
+		if (false == $ok) {
+			$oConfirm = new row_confirm_invitation();
+			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+			$oConfirm->textInvit = $textInvit;
+
+			$oView = new _view('autoreg::ko');
+			$oView->oConfirm = $oConfirm;
+
+			$this->oLayout->add('work', $oView);
+		}
+		return $ok;
 	}
 
 
@@ -130,9 +157,7 @@ class module_autoreg extends abstract_module
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
 			if (_root::getRequest()->isPost()) {
 				$this->doPost($oInvitation);
-			} /*
-			   * else { $this->doGet($oInvitation); }
-			   */
+			}
 		} else {
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
@@ -144,79 +169,63 @@ class module_autoreg extends abstract_module
 		$this->oLayout->show();
 	}
 
-	private function doGet($poInvitation)
-	{
-		$oConfirm = new row_confirm_invitation();
-		$oConfirm->invitation_id = _root::getParam('id');
-		$oConfirm->invitation_key = _root::getParam('key');
-		$this->makeTextInvitation($poInvitation, $oConfirm);
-
-		$oView = new _view('autoreg::index');
-		$oView->oConfirm = $oConfirm;
-		$oView->tMessage = "";
-		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
-
-		$oPluginXsrf = new plugin_xsrf();
-		$oView->token = $oPluginXsrf->getToken();
-
-		$this->oLayout->add('work', $oView);
-	}
+//	private function doGet($poInvitation)
+//	{
+//		$oConfirm = new row_confirm_invitation();
+//		$oConfirm->invitation_id = _root::getParam('id');
+//		$oConfirm->invitation_key = _root::getParam('key');
+//		$this->makeTextInvitation($poInvitation, $oConfirm);
+//
+//		$oView = new _view('autoreg::index');
+//		$oView->oConfirm = $oConfirm;
+//		$oView->tMessage = "";
+//		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
+//
+//		$oPluginXsrf = new plugin_xsrf();
+//		$oView->token = $oPluginXsrf->getToken();
+//
+//		$this->oLayout->add('work', $oView);
+//	}
 
 	private function doPost($poInvitation)
 	{
 		$oConfirm = $this->doVerifyPost($poInvitation);
+		if ($oConfirm->validate) {
+			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+			$oConfirm->textInvit =
+				'L\'inscription est terminée et vous êtes enregistré avec l\'identifiant <strong>' . $oConfirm->oUser->login . '</strong>.';
 
-		$oView = new _view('autoreg::confirm');
-		$oView->oConfirm = $oConfirm;
-		$oView->tMessage = $oConfirm->getMessages();
-		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
+			$oView = new _view('autoreg::ok');
+			$oView->oConfirm = $oConfirm;
 
-		$oPluginXsrf = new plugin_xsrf();
-		$oView->token = $oPluginXsrf->getToken();
+			$this->oLayout->add('work', $oView);
+		} else {
+			// Affiche la vue de confirmation
+			$oView = new _view('autoreg::confirm');
+			$oView->oConfirm = $oConfirm;
+			$oView->tMessage = $oConfirm->getMessages();
+			$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
 
-		$oView->oViewFormAccount = new _view('autoreg::formAccount');
-		$oView->oViewFormAccount->oConfirm = $oConfirm;
-		$oView->oViewFormAccount->tMessage = $oConfirm->getMessages();
-		$oView->oViewFormAccount->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
-		$oView->oViewFormAccount->token = $oView->token;
+			$oPluginXsrf = new plugin_xsrf();
+			$oView->token = $oPluginXsrf->getToken();
 
-		$oView->oViewFormIdent = new _view('autoreg::formIdent');
-		$oView->oViewFormIdent->oConfirm = $oConfirm;
-		$oView->oViewFormIdent->tMessage = $oConfirm->getMessages();
-		$oView->oViewFormIdent->token = $oView->token;
+			$oView->oViewFormAccount = new _view('autoreg::formAccount');
+			$oView->oViewFormAccount->oConfirm = $oConfirm;
+			$oView->oViewFormAccount->tMessage = $oConfirm->getMessages();
+			$oView->oViewFormAccount->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
+			$oView->oViewFormAccount->token = $oView->token;
 
-		$this->oLayout->add('work', $oView);
+			$oView->oViewFormIdent = new _view('autoreg::formIdent');
+			$oView->oViewFormIdent->oConfirm = $oConfirm;
+			$oView->oViewFormIdent->tMessage = $oConfirm->getMessages();
+			$oView->oViewFormIdent->token = $oView->token;
 
+			$this->oLayout->add('work', $oView);
 
-		// Prepare et Affiche la popup
-		$scriptView = new _view('autoreg::scriptConfirm');
-		$this->oLayout->add('script', $scriptView);
-	}
-
-	private function makeConfirmWithParams($poInvitation)
-	{
-		$oConfirm = new row_confirm_invitation();
-		$oConfirm->action = _root::getParam('action');
-
-		// Récupère les params cachés nécessaire au Token (entre autre)
-		$oConfirm->invitation_id = _root::getParam('invitation_id');
-		$oConfirm->invitation_key = _root::getParam('invitation_key');
-
-		// Copie la saisie Identification
-		$oConfirm->cf_login = _root::getParam('cf_login');
-		$oConfirm->cf_password = _root::getParam('cf_password');
-
-		// Copie la saisie Compte Utilisateur
-		$oConfirm->login = _root::getParam('login');
-		$oConfirm->email = _root::getParam('email', $poInvitation->email);
-		$oConfirm->newPassword = _root::getParam('newPassword');
-		$oConfirm->confirmPassword = _root::getParam('confirmPassword');
-		$oConfirm->last_name = _root::getParam('last_name');
-		$oConfirm->first_name = _root::getParam('first_name');
-		$oConfirm->birthyear = _root::getParam('birthyear');
-		$oConfirm->gender = _root::getParam('gender');
-
-		return $oConfirm;
+			// Prepare l'affichage du bon panel
+			$scriptView = new _view('autoreg::scriptConfirm');
+			$this->oLayout->add('script', $scriptView);
+		}
 	}
 
 	private function doVerifyPost($poInvitation)
@@ -252,6 +261,31 @@ class module_autoreg extends abstract_module
 		return $oConfirm;
 	}
 
+	private function makeConfirmWithParams($poInvitation)
+	{
+		$oConfirm = new row_confirm_invitation();
+		$oConfirm->action = _root::getParam('action');
+
+		// Récupère les params cachés nécessaire au Token (entre autre)
+		$oConfirm->invitation_id = _root::getParam('invitation_id');
+		$oConfirm->invitation_key = _root::getParam('invitation_key');
+
+		// Copie la saisie Identification
+		$oConfirm->cf_login = _root::getParam('cf_login');
+		$oConfirm->cf_password = _root::getParam('cf_password');
+
+		// Copie la saisie Compte Utilisateur
+		$oConfirm->login = _root::getParam('login');
+		$oConfirm->email = _root::getParam('email', $poInvitation->email);
+		$oConfirm->newPassword = _root::getParam('newPassword');
+		$oConfirm->confirmPassword = _root::getParam('confirmPassword');
+		$oConfirm->last_name = _root::getParam('last_name');
+		$oConfirm->first_name = _root::getParam('first_name');
+		$oConfirm->birthyear = _root::getParam('birthyear');
+		$oConfirm->gender = _root::getParam('gender');
+
+		return $oConfirm;
+	}
 
 	private function doVerifyToIdentify($poInvitation, $poConfirm)
 	{
@@ -260,7 +294,7 @@ class module_autoreg extends abstract_module
 
 		// Validation
 		if ($poConfirm->isValid()) {
-			$poConfirm->validation = true;
+			$poConfirm->validate = true;
 		}
 		// var_dump($poConfirm);
 	}
@@ -278,7 +312,7 @@ class module_autoreg extends abstract_module
 				if ($this->checkPassword($poConfirm)) {
 					if ($this->createUser($poInvitation, $poConfirm)) {
 						if ($this->acceptInvitation($poInvitation)) {
-							// TODO A finir vers le nouvel ecran
+							$poConfirm->validate = true;
 						}
 					}
 				}
@@ -345,6 +379,7 @@ class module_autoreg extends abstract_module
 		model_user::getInstance()->saveUserGroups($oUser->user_id, $tIdGroups);
 		model_user::getInstance()->saveUserAwards($oUser->user_id, $tIdAwards);
 
+		$poConfirm->oUser = $oUser;
 //		var_dump($oUser);
 //		var_dump($poInvitation);
 //		var_dump($tIdGroups);
