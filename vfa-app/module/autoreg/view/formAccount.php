@@ -44,20 +44,20 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'password') ?>">
-						<label for="password">Mot de passe</label>
-						<input class="form-control" type="password" id="password" name="password"
-								 value="<?php echo $this->oConfirm->password ?>" placeholder="Votre mot de passe"/>
-						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'password') ?></span>
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newPassword') ?>">
+						<label for="newPassword">Mot de passe</label>
+						<input class="form-control" type="password" id="newPassword" name="newPassword"
+								 value="<?php echo $this->oConfirm->newPassword ?>" placeholder="Votre mot de passe"/>
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newPassword') ?></span>
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div
-						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'password_bis') ?>">
-						<label for="password_bis">Confirmation du mot de passe</label>
-						<input class="form-control" type="password" id="password_bis" name="password_bis"
-								 value="<?php echo $this->oConfirm->password_bis ?>" placeholder="Confirmez votre mot de passe"/>
-						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'password_bis') ?></span>
+						class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'confirmPassword') ?>">
+						<label for="confirmPassword">Confirmation du mot de passe</label>
+						<input class="form-control" type="password" id="confirmPassword" name="confirmPassword"
+								 value="<?php echo $this->oConfirm->confirmPassword ?>" placeholder="Confirmez votre mot de passe"/>
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'confirmPassword') ?></span>
 					</div>
 				</div>
 			</div>

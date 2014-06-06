@@ -41,12 +41,12 @@ class row_confirm_invitation extends abstract_row
 //					$oPluginValid->isEqual('email', 'email_bis');
 //					$oPluginValid->isEqual('email_bis', 'email');
 //				}
-				$oPluginValid->isNotEmpty('password');
-				$oPluginValid->isNotEmpty('password_bis');
-				if ((null != $this->__get('password')) && (null != $this->__get('password_bis'))) {
-					$oPluginValid->isEqual('password', 'password_bis');
-					$oPluginValid->isEqual('password_bis', 'password');
-				}
+				$oPluginValid->isNotEmpty('newPassword');
+				$oPluginValid->isNotEmpty('confirmPassword');
+//				if ((null != $this->__get('newPassword')) && (null != $this->__get('confirmPassword'))) {
+//					$oPluginValid->isEqual('newPassword', 'confirmPassword');
+//					$oPluginValid->isEqual('confirmPassword', 'newPassword');
+//				}
 				break;
 			default:
 				// Valeur non vérifiable de manière à ne jamais être valide !
