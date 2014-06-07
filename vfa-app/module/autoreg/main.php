@@ -72,7 +72,7 @@ class module_autoreg extends abstract_module
 			// KO
 			$oConfirm = new row_confirm_invitation();
 			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
-			$oConfirm->textInvit = 'Cet accès n\'est plus valide ! Recommencez votre changement d\'adresse et validez le plus rapidement.';
+			$oConfirm->textInvit = 'Cet accès n\'est plus valide ! Recommencez votre changement d\'adresse et validez-le plus rapidement.';
 
 			$oView = new _view('autoreg::ko');
 			$oView->oConfirm = $oConfirm;
@@ -105,11 +105,13 @@ class module_autoreg extends abstract_module
 		if (plugin_vfa::STATE_ACCEPTED == $poInvitation->state) {
 			$textInvit = 'Cet accès n\'est plus valide ! L\'invitation a déjà été acceptée.';
 			$ok = false;
+		} elseif (false == $this->isValidGroupInvitation($poInvitation)) {
+			$textInvit = 'Cet accès n\'est pas valide ! Le groupe de l\'invitation n\'existe pas.';
+			$ok = false;
+		} elseif (false == $this->isValidAwardInvitation($poInvitation)) {
+			$textInvit = 'Cet accès n\'est pas valide ! Un prix de l\'invitation est terminé.';
+			$ok = false;
 		}
-
-
-		// TODO Vérifier la validité des prix et du groupe
-
 
 		if (false == $ok) {
 			$oConfirm = new row_confirm_invitation();
@@ -122,6 +124,31 @@ class module_autoreg extends abstract_module
 			$this->oLayout->add('work', $oView);
 		}
 		return $ok;
+	}
+
+	private function isValidGroupInvitation($poInvitation)
+	{
+		$oGroup = $poInvitation->findGroup();
+		if ($oGroup->isEmpty()) {
+			// Supprime l'invit
+			model_invitation::getInstance()->delete($poInvitation);
+			return false;
+		}
+		return true;
+	}
+
+	private function isValidAwardInvitation($poInvitation)
+	{
+		$tAwards = $poInvitation->findAwards();
+		foreach ($tAwards as $oAward) {
+			$dt = new plugin_date($oAward->end_date, 'Y-m-d');
+			if (plugin_vfa::afterDate(plugin_vfa::todayDate(), $dt)) {
+				// Supprime l'invit
+				model_invitation::getInstance()->delete($poInvitation);
+				return false;
+			}
+		}
+		return true;
 	}
 
 
@@ -190,14 +217,17 @@ class module_autoreg extends abstract_module
 	private function doPost($poInvitation)
 	{
 		$oConfirm = $this->doVerifyPost($poInvitation);
-		if ($oConfirm->validate) {
+		if ($oConfirm->completed) {
+			// Affiche la vue de fin
+			if ($oConfirm->completedRegistration) {
+				$oConfirm->textInvit =
+					'L\'inscription est validée et vous êtes enregistré avec l\'identifiant <strong>' . $oConfirm->oUser->login . '</strong>';
+			} else {
+				$oConfirm->textInvit = 'L\'inscription est validée';
+			}
 			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
-			$oConfirm->textInvit =
-				'L\'inscription est terminée et vous êtes enregistré avec l\'identifiant <strong>' . $oConfirm->oUser->login . '</strong>.';
-
 			$oView = new _view('autoreg::ok');
 			$oView->oConfirm = $oConfirm;
-
 			$this->oLayout->add('work', $oView);
 		} else {
 			// Affiche la vue de confirmation
@@ -291,12 +321,27 @@ class module_autoreg extends abstract_module
 	{
 		// Force l'ouverture du panel d'identification
 		$poConfirm->openLogin = true;
-
 		// Validation
 		if ($poConfirm->isValid()) {
-			$poConfirm->validate = true;
+			// Recup params
+			$sLogin = $poConfirm->cf_login;
+			$sPass = sha1($poConfirm->cf_password);
+			// Recherche et vérifie "login/pass" dans la base
+			$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);
+			// Connexion si utilisateur autorisé
+			if (null != $oUser) {
+				if ($this->updateUser($oUser, $poInvitation, $poConfirm)) {
+					if ($this->acceptInvitation($poInvitation)) {
+						$poConfirm->completed = true;
+						$poConfirm->completedIdentify = true;
+						$oUserSession = model_user_session::getInstance()->create($oUser);
+						_root::getAuth()->connect($oUserSession);
+					}
+				}
+			} else {
+				$poConfirm->setMessages(array('cf_login' => array('badIdentity'), 'cf_password' => array('badIdentity')));
+			}
 		}
-		// var_dump($poConfirm);
 	}
 
 	private function doVerifyToRegistry($poInvitation, $poConfirm)
@@ -312,7 +357,10 @@ class module_autoreg extends abstract_module
 				if ($this->checkPassword($poConfirm)) {
 					if ($this->createUser($poInvitation, $poConfirm)) {
 						if ($this->acceptInvitation($poInvitation)) {
-							$poConfirm->validate = true;
+							$poConfirm->completed = true;
+							$poConfirm->completedRegistration = true;
+							$oUserSession = model_user_session::getInstance()->create($poConfirm->oUser);
+							_root::getAuth()->connect($oUserSession);
 						}
 					}
 				}
@@ -365,26 +413,43 @@ class module_autoreg extends abstract_module
 		$tIdAwards = explode(',', $poInvitation->awards_ids);
 
 		$tIdRoles = array();
-		switch ($poInvitation->type) {
-			case plugin_vfa::ROLE_RESPONSIBLE:
-				$oRole = model_role::getInstance()->findByName(plugin_vfa::ROLE_READER);
-				$tIdRoles[] = $oRole->getId();
-			default:
-				$oRole = model_role::getInstance()->findByName($poInvitation->type);
-				$tIdRoles[] = $oRole->getId();
+		$oRole = model_role::getInstance()->findByName($poInvitation->type);
+		$tIdRoles[] = $oRole->getId();
+		if ($poInvitation->type == plugin_vfa::ROLE_RESPONSIBLE) {
+			$oRole = model_role::getInstance()->findByName(plugin_vfa::ROLE_READER);
+			$tIdRoles[] = $oRole->getId();
 		}
 
 		$oUser->save();
-		model_user::getInstance()->saveUserRoles($oUser->user_id, $tIdRoles);
-		model_user::getInstance()->saveUserGroups($oUser->user_id, $tIdGroups);
-		model_user::getInstance()->saveUserAwards($oUser->user_id, $tIdAwards);
+		model_user::getInstance()->saveUserRoles($oUser->getId(), $tIdRoles);
+		model_user::getInstance()->saveUserGroups($oUser->getId(), $tIdGroups);
+		model_user::getInstance()->saveUserAwards($oUser->getId(), $tIdAwards);
 
 		$poConfirm->oUser = $oUser;
-//		var_dump($oUser);
-//		var_dump($poInvitation);
-//		var_dump($tIdGroups);
-//		var_dump($tIdAwards);
-//		var_dump($tIdRoles);
+		return true;
+	}
+
+	private function updateUser($poUser, $poInvitation, $poConfirm)
+	{
+		$poUser->modified_date = plugin_vfa::dateTimeSgbd();
+
+		$tIdGroups = array($poInvitation->group_id);
+		$tIdAwards = explode(',', $poInvitation->awards_ids);
+
+		$tIdRoles = array();
+		$oRole = model_role::getInstance()->findByName($poInvitation->type);
+		$tIdRoles[] = $oRole->getId();
+		if ($poInvitation->type == plugin_vfa::ROLE_RESPONSIBLE) {
+			$oRole = model_role::getInstance()->findByName(plugin_vfa::ROLE_READER);
+			$tIdRoles[] = $oRole->getId();
+		}
+
+		$poUser->save();
+		model_user::getInstance()->mergeUserRoles($poUser, $tIdRoles);
+		model_user::getInstance()->mergeUserGroups($poUser, $tIdGroups);
+		model_user::getInstance()->mergeUserAwards($poUser, $tIdAwards);
+
+		$poConfirm->oUser = $poUser;
 		return true;
 	}
 
