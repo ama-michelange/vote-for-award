@@ -298,12 +298,33 @@ class plugin_vfa
 	}
 
 	/**
+	 * @param plugin_date $pDateA
+	 * @param plugin_date $pDateB
+	 * @return bool
+	 */
+	public static function afterDate($pDateA, $pDateB)
+	{
+		$a = $pDateA->getMkTime();
+		$b = $pDateB->getMkTime();
+		return $a > $b;
+	}
+
+	/**
 	 * Date et heure courante
 	 * @return plugin_datetime
 	 */
 	public static function todayDateTime()
 	{
 		return new plugin_datetime(date('Y-m-d H:i:s', time()));
+	}
+
+	/**
+	 * Date courante
+	 * @return plugin_date
+	 */
+	public static function todayDate()
+	{
+		return new plugin_date(date('Y-m-d'));
 	}
 
 	/**

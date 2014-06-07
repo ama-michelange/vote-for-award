@@ -303,8 +303,9 @@ class module_invitations extends abstract_module
 		$oUserSession = _root::getAuth()->getUserSession();
 
 		switch (_root::getAction()) {
-			case 'board':
-				$tAwards = $oUserSession->getValidBoardAwards();
+			case 'invitBoard':
+				$tAwards = model_award::getInstance()->findAllValid(plugin_vfa::TYPE_AWARD_BOARD);
+//				$tAwards = $oUserSession->getValidBoardAwards();
 				break;
 			default:
 				$tAwards = $oUserSession->getValidReaderAwards();
@@ -356,11 +357,11 @@ class module_invitations extends abstract_module
 	private function fillGroups($pView)
 	{
 		switch (_root::getAction()) {
-			case 'board':
-				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_BOARD);
+			case 'invitBoard':
+				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::ROLE_BOARD);
 				break;
-			case 'responsible':
-				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::TYPE_READER);
+			case 'invitResponsible':
+				$tGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::ROLE_READER);
 				break;
 			default:
 				$tGroups = array(_root::getAuth()->getUserSession()->getReaderGroup());

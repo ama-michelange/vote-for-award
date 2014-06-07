@@ -28,25 +28,11 @@ class row_confirm_invitation extends abstract_row
 			case 'toRegistry':
 				$oPluginValid->isNotEmpty('login');
 				$oPluginValid->isNotEmpty('email');
-				$bEmailValid = false;
 				if (null != $this->__get('email')) {
-					$bEmailValid = $oPluginValid->isEmailValid('email');
+					$oPluginValid->isEmailValid('email');
 				}
-//				$oPluginValid->isNotEmpty('email_bis');
-//				$bEmailBisValid = false;
-//				if (null != $this->__get('email_bis')) {
-//					$bEmailBisValid = $oPluginValid->isEmailValid('email_bis');
-//				}
-//				if ($bEmailValid && $bEmailBisValid) {
-//					$oPluginValid->isEqual('email', 'email_bis');
-//					$oPluginValid->isEqual('email_bis', 'email');
-//				}
 				$oPluginValid->isNotEmpty('newPassword');
 				$oPluginValid->isNotEmpty('confirmPassword');
-//				if ((null != $this->__get('newPassword')) && (null != $this->__get('confirmPassword'))) {
-//					$oPluginValid->isEqual('newPassword', 'confirmPassword');
-//					$oPluginValid->isEqual('confirmPassword', 'newPassword');
-//				}
 				break;
 			default:
 				// Valeur non vérifiable de manière à ne jamais être valide !

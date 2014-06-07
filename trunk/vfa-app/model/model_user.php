@@ -196,6 +196,26 @@ class model_user extends abstract_model
 	}
 
 	/**
+	 * @param row_user $poUser
+	 * @param int[] $pNewIdGroups
+	 */
+	public function mergeUserGroups($poUser, $pNewIdGroups)
+	{
+		if ($pNewIdGroups) {
+			$tGroups = $poUser->findGroups();
+			$tIdGroups = array();
+			foreach ($tGroups as $oGroup) {
+				$tIdGroups[$oGroup->role_id_default] = $oGroup->getId();
+			}
+			foreach ($pNewIdGroups as $idGroup) {
+				$oGroup = model_group::getInstance()->findById($idGroup);
+				$tIdGroups[$oGroup->role_id_default] = $idGroup;
+			}
+			$this->saveUserGroups($poUser->getId(), $tIdGroups);
+		}
+	}
+
+	/**
 	 * @param int $pIdUser
 	 * @param int[] $pIdRoles
 	 */
@@ -210,17 +230,57 @@ class model_user extends abstract_model
 	}
 
 	/**
+	 * @param row_user $poUser
+	 * @param int[] $pNewIdRoles
+	 */
+	public function mergeUserRoles($poUser, $pNewIdRoles)
+	{
+		if ($pNewIdRoles) {
+			$tRoles = $poUser->findRoles();
+			$tIdRoles = array();
+			foreach ($tRoles as $oRole) {
+				$tIdRoles[$oRole->getId()] = $oRole->getId();
+			}
+			foreach ($pNewIdRoles as $idRole) {
+				$tIdRoles[$idRole] = $idRole;
+			}
+			$this->saveUserRoles($poUser->getId(), $tIdRoles);
+		}
+	}
+
+	/**
 	 * @param int $pIdUser
 	 * @param int[] $pIdAwards
 	 */
 	public function saveUserAwards($pIdUser, $pIdAwards)
 	{
+		$this->execute('DELETE FROM vfa_user_awards WHERE user_id=?', $pIdUser);
 		if ($pIdAwards) {
 			foreach ($pIdAwards as $idAward) {
 				$this->execute('INSERT INTO vfa_user_awards (user_id, award_id) VALUES (?,?)', $pIdUser, $idAward);
 			}
 		}
 	}
+
+	/**
+	 * @param row_user $poUser
+	 * @param int[] $pNewIdAwards
+	 */
+	public function mergeUserAwards($poUser, $pNewIdAwards)
+	{
+		if ($pNewIdAwards) {
+			$tAwards = $poUser->findAwards();
+			$tIdAwards = array();
+			foreach ($tAwards as $oAward) {
+				$tIdAwards[$oAward->getId()] = $oAward->getId();
+			}
+			foreach ($pNewIdAwards as $idAward) {
+				$tIdAwards[$idAward] = $idAward;
+			}
+			$this->saveUserAwards($poUser->getId(), $tIdAwards);
+		}
+	}
+
 }
 
 class row_user extends abstract_row
