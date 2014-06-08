@@ -52,13 +52,16 @@
 						<dl class="dl-horizontal">
 							<dt>Inscription</dt>
 							<dd><?php echo $this->oInvitation->showState() ?></dd>
-							<dt>comme</dt>
-							<dd><?php echo $this->oInvitation->showFullType() ?></dd>
-							<dd><?php echo $this->oGroup->group_name ?></dd>
-							<dt>au</dt>
+							<dt>pour</dt>
 							<?php foreach ($this->tAwards as $oAward): ?>
 								<dd><?php echo $oAward->toString() ?></dd>
 							<?php endforeach; ?>
+						</dl>
+						<dl class="dl-horizontal">
+							<dt>en tant que</dt>
+							<dd><?php echo $this->oInvitation->showType() ?></dd>
+							<dt>du groupe</dt>
+							<dd><?php echo $this->oGroup->group_name ?></dd>
 						</dl>
 					</div>
 				</div>

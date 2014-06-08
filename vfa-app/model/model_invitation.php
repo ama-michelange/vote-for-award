@@ -148,19 +148,6 @@ class row_invitation extends abstract_row
 		return $this->type;
 	}
 
-	public function showFullType()
-	{
-		switch ($this->type) {
-			case plugin_vfa::TYPE_READER:
-				return 'Lecteur d\'un groupe';
-			case plugin_vfa::TYPE_BOARD:
-				return 'Membre du comité de sélection';
-			case plugin_vfa::TYPE_RESPONSIBLE:
-				return 'Correspondant pour un groupe';
-		}
-		return $this->type;
-	}
-
 	public function showState()
 	{
 		switch ($this->state) {

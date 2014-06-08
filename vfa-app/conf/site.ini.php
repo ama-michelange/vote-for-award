@@ -1,4 +1,4 @@
-;<?php die();?>
+;<?php die(); ?>
 [cache]
 enabled=0
 lifetime= 0
@@ -67,7 +67,12 @@ class=plugin_vfa_check
 [site]
 ;Redirection
 ;header : header('location:$url ')
-;http: <html><head><META http-equiv="refresh" content="0; URL=$url" /></head></html>
+;http:
+<html>
+<head>
+	<META http-equiv="refresh" content="0; URL=$url"/>
+</head>
+</html>
 redirection.default=header
 timezone=Europe/Paris
 
@@ -95,5 +100,5 @@ ini.var=db
 title=Vote For Award
 mail.from=alicesaward@free.fr
 mail.from.label=Alices Award
-mail.enabled=0
+mail.enabled=1
 invitation.access.enabled=1

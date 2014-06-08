@@ -88,11 +88,11 @@ class module_invitations extends abstract_module
 			$sameGroup = $oUser->isInGroup($poUserSession->getReaderGroup()->getId());
 		}
 		if ($sameGroup) {
-			$tItems[] = plugin_BsHtml::buildMenuItem('Un lecteur pour ' . $poUserSession->getReaderGroup()->toString(),
+			$tItems[] = plugin_BsHtml::buildMenuItem('Lecteur pour ' . $poUserSession->getReaderGroup()->toString(),
 				new NavLink('invitations', 'invitReader', $paramUser));
 		}
-		$tItems[] = plugin_BsHtml::buildMenuItem('Un correspondant', new NavLink('invitations', 'invitResponsible', $paramUser));
-		$tItems[] = plugin_BsHtml::buildMenuItem('Un membre du ' . $poUserSession->getBoardGroup()->toString(),
+		$tItems[] = plugin_BsHtml::buildMenuItem('Correspondant', new NavLink('invitations', 'invitResponsible', $paramUser));
+		$tItems[] = plugin_BsHtml::buildMenuItem('Membre du ' . $poUserSession->getBoardGroup()->toString(),
 			new NavLink('invitations', 'invitBoard', $paramUser));
 		$pBar->addChild(plugin_BsHtml::buildDropdownButtonItem($tItems, 'Inviter', 'glyphicon-send'));
 	}
@@ -305,32 +305,36 @@ class module_invitations extends abstract_module
 		switch (_root::getAction()) {
 			case 'invitBoard':
 				$tAwards = model_award::getInstance()->findAllValid(plugin_vfa::TYPE_AWARD_BOARD);
-//				$tAwards = $oUserSession->getValidBoardAwards();
+				break;
+			case 'invitResponsible':
+				$tAwards = model_award::getInstance()->findAllValid(plugin_vfa::TYPE_AWARD_READER);
 				break;
 			default:
 				$tAwards = $oUserSession->getValidReaderAwards();
-				// Verifie si l'utilisateur n'est pas déjà inscrit au prix
-				if ($poRegistry->oUser) {
-					$oUser = $poRegistry->oUser;
-					$tRegistredAwards = model_award::getInstance()->findAllValidByUserId($oUser->getId());
-					$tCommons = array();
-					foreach ($tAwards as $oAward) {
-						foreach ($tRegistredAwards as $oRegistredAward) {
-							if ($oAward->getId() == $oRegistredAward->getId()) {
-								$tCommons[$oAward->getId()] = $oAward;
-							}
-						}
-					}
-					if (count($tCommons) > 0) {
-						foreach ($tCommons as $oCommon) {
-							$tMessage = $pView->tMessage;
-							$tMessage['registredAward'][] = $oCommon->toString();
-							$pView->tMessage = $tMessage;
-						}
-					}
-				}
 				break;
 		}
+		// Verifie si l'utilisateur n'est pas déjà inscrit au prix
+		if ($poRegistry->oUser) {
+			$oUser = $poRegistry->oUser;
+			$tRegistredAwards = model_award::getInstance()->findAllValidByUserId($oUser->getId());
+			$tCommons = array();
+			foreach ($tAwards as $oAward) {
+				foreach ($tRegistredAwards as $oRegistredAward) {
+					if ($oAward->getId() == $oRegistredAward->getId()) {
+						$tCommons[$oAward->getId()] = $oAward;
+					}
+				}
+			}
+			if (count($tCommons) > 0) {
+				foreach ($tCommons as $oCommon) {
+					$tMessage = $pView->tMessage;
+					$tMessage['registredAward'][] = $oCommon->toString();
+					$pView->tMessage = $tMessage;
+				}
+			}
+		}
+
+
 		$pView->countAwards = count($tAwards);
 		if ($pView->countAwards == 0) {
 			$tMessage = $pView->tMessage;

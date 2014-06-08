@@ -18,7 +18,8 @@
 
 	<div class="panel panel-success panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Invitation prête pour l'inscription d'un <?php echo $this->oRegistry->toStringType() ?></h3>
+			<h3 class="panel-title">Invitation prête
+				<small>pour l'inscription d'un</small> <?php echo $this->oRegistry->toStringType() ?></h3>
 		</div>
 		<div class="panel-body panel-condensed panel-inner">
 
@@ -37,7 +38,7 @@
 			<div class="alert alert-warning">
 				<h3>L'invitation est prête mais n'a pas pu être envoyée à l'adresse <strong><?php echo $this->oRegistry->email ?></strong> !
 				</h3>
-				Retentez l'envoi de l'email de cette invitation plus tard en accédant à la liste des invitations.
+				Retentez l'envoi de l'email plus tard en accédant à l'invitation.
 			</div>
 		</div>
 		<div class="panel-footer clearfix">
