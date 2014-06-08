@@ -310,6 +310,16 @@
     }
 }
 
+@media (min-width: 768px) {
+    .dl-horizontal dt {
+        width: 100px;
+    }
+
+    .dl-horizontal dd {
+        margin-left: 120px;
+    }
+}
+
 .dl-horizontal dt {
     font-weight: normal;
 }

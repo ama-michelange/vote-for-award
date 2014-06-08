@@ -1,6 +1,5 @@
 <div class="container">
 	<div class="row">
-		<!-- 	<div class="col-md-12"> -->
 		<div class="jumbotron">
 			<h1>
 				Bureau de votes
@@ -17,9 +16,7 @@
 
 			<p>Vous pourrez voir les résultats du Prix 2013 dès sa fin à partir du 30 avril 2013 minuit.</p>
 		</div>
-		<!-- 			</div> -->
 	</div>
-	<!--/row-->
 
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
