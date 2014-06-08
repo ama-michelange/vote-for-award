@@ -10,15 +10,15 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="inputIdent">Identifiant</label>
-						<input type="text" id="inputIdent" name="login" class="form-control" placeholder="Mon identifiant" required autofocus />
+						<input type="text" id="inputIdent" name="login" class="form-control" placeholder="Mon identifiant" required autofocus/>
 					</div>
 					<div class="form-group">
 						<label for="inputPassword">Mot de passe</label>
-						<input type="password" id="inputPassword" name="password" class="form-control" required />
+						<input type="password" id="inputPassword" name="password" class="form-control" required/>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary" >
+					<button type="submit" class="btn btn-primary">
 						<i class="glyphicon glyphicon-ok with-text"></i>Ok
 					</button>
 					<button class="btn btn-default" data-dismiss="modal">
@@ -35,10 +35,10 @@
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-bsnavbar">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
-			<?php  echo $this->oNavBar->toHtmlTitle();  ?>
+			<?php echo $this->oNavBar->toHtmlTitle(); ?>
 		</div>
 		<div class="navbar-collapse collapse navbar-bsnavbar">
-		<?php  echo $this->oNavBar->toHtml();  ?>
+			<?php echo $this->oNavBar->toHtml(); ?>
 		</div>
 	</div>
 </div>

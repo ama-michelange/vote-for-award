@@ -18,8 +18,7 @@
 
 	<div class="panel panel-success panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Invitation prête
-				<small>pour l'inscription d'un</small> <?php echo $this->oRegistry->toStringType() ?></h3>
+			<h3 class="panel-title">Invitation prête <small>pour l'inscription d'un</small> <?php echo $this->oRegistry->toStringType() ?></h3>
 		</div>
 		<div class="panel-body panel-condensed panel-inner">
 

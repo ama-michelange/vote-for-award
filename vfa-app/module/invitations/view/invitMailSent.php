@@ -28,29 +28,28 @@
 						<dt>En copie</dt>
 						<dd><?php echo _root::getAuth()->getUserSession()->getUser()->email ?></dd>
 					</dl>
-					<!--					<dl class="dl-horizontal">-->
-					<!--						<dt>Contenant</dt>-->
-					<!--						<dd>-->
-					<!--							<a href="--><?php //echo plugin_vfa::generateURLInvitation($this->oRegistry->invit) ?><!--"-->
-					<!--								target="_new">Adresse d'inscription</a>-->
-					<!--						</dd>-->
-					<!--					</dl>-->
-					<!--				</div>-->
-					<!--			</div>-->
-					<!---->
-					<!--			<div class="panel panel-success panel-inner">-->
-					<!--				<div class="panel-heading">-->
-					<!--					<h3 class="panel-title">Pour l'inscription d'un -->
-					<?php //echo $this->oRegistry->toStringType() ?><!--</h3>-->
-					<!--				</div>-->
-					<!--				<div class="panel-body panel-condensed">-->
+<!--					<dl class="dl-horizontal">-->
+<!--						<dt>Contenant</dt>-->
+<!--						<dd>-->
+<!--							<a href="--><?php //echo plugin_vfa::generateURLInvitation($this->oRegistry->invit) ?><!--"-->
+<!--								target="_new">Adresse d'inscription</a>-->
+<!--						</dd>-->
+<!--					</dl>-->
+<!--				</div>-->
+<!--			</div>-->
+<!---->
+<!--			<div class="panel panel-success panel-inner">-->
+<!--				<div class="panel-heading">-->
+<!--					<h3 class="panel-title">Pour l'inscription d'un --><?php //echo $this->oRegistry->toStringType() ?><!--</h3>-->
+<!--				</div>-->
+<!--				<div class="panel-body panel-condensed">-->
 					<dl class="dl-horizontal">
 						<dt>Prix</dt>
 						<?php foreach ($this->tAwards as $oAward): ?>
 							<dd><?php echo $oAward->toString() ?></dd>
 						<?php endforeach; ?>
-						<!--					</dl>-->
-						<!--					<dl class="dl-horizontal">-->
+<!--					</dl>-->
+<!--					<dl class="dl-horizontal">-->
 						<dt>Groupe</dt>
 						<dd><?php echo $this->oGroup->group_name ?></dd>
 					</dl>
