@@ -13,15 +13,13 @@
 			</h3>
 		</div>
 		<div class="panel-body">
-			<div
-				class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'cf_login') ?>">
+			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'cf_login') ?>">
 				<label for="cfLogin">Identifiant</label>
 				<input class="form-control" type="text" id="cfLogin" name="cf_login" placeholder="Votre identifiant de connexion"
 						 value="<?php echo $this->oConfirm->cf_login ?>"/>
 				<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'cf_login') ?></span>
 			</div>
-			<div
-				class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'cf_password') ?>">
+			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'cf_password') ?>">
 				<label for="cfPassword">Mot de passe</label>
 				<input class="form-control" type="password" id="cfPassword" name="cf_password" placeholder="Votre mot de passe"
 						 value="<?php echo $this->oConfirm->cf_password ?>"/>
@@ -35,7 +33,7 @@
 					<i class="glyphicon glyphicon-ok with-text"></i>S'identifier
 				</button>
 			</div>
-			<a href="#">Mot de passe oublié ?</a>
+			<a href="#modalForgottenPassword" class="btn btn-info" data-toggle="modal">Mot de passe oublié ?</a>
 		</div>
 	</div>
 </form>

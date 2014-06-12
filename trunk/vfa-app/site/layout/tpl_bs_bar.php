@@ -9,7 +9,6 @@
 
 	<!-- Le styles -->
 	<link href="site/assets/css/bootstrap-slate.css" rel="stylesheet" media="screen">
-	<!-- <link href="site/assets/css/bootstrap-theme.css" rel="stylesheet" media="screen"> -->
 	<style>
 		body {
 			padding-top: 60px;
