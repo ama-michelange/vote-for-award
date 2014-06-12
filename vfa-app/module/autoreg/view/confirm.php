@@ -58,7 +58,7 @@
 			?>
 			<div class="panel-group" id="accordion">
 				<div id="panelAccount" class="panel panel-info" <?php echo $displayAccount ?>>
-				<div class="panel-body panel-inner">
+					<div class="panel-body panel-inner">
 						<div class="row">
 							<div class="col-sm-1">
 								<h1 class="text-center text-warning"><i class="glyphicon glyphicon-star-empty"></i></h1>
@@ -94,8 +94,9 @@
 								<h3>
 									Vous avez déjà un compte sur ce site ...
 									<a id="btnLogin" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin"
-										class="btn btn-default" <?php echo $displayAccount ?>><i
-											class="glyphicon glyphicon-user with-text"></i>Identifiez-vous !</a>
+										class="btn btn-default" <?php echo $displayAccount ?>>
+										<i class="glyphicon glyphicon-user with-text"></i>Identifiez-vous !
+									</a>
 								</h3>
 							</div>
 						</div>
@@ -114,4 +115,5 @@
 			</div>
 		</div>
 	</div>
+	<?php echo $this->oViewForgottenPassword->show(); ?>
 <?php endif; ?>

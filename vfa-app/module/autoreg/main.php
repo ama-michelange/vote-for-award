@@ -2,6 +2,7 @@
 
 class module_autoreg extends abstract_module
 {
+	private $_oInvitation = null;
 
 	public function before()
 	{
@@ -9,6 +10,11 @@ class module_autoreg extends abstract_module
 		plugin_vfa::loadI18n();
 
 		$this->oLayout = new _layout('tpl_bs_base');
+	}
+
+	public function after()
+	{
+		$this->oLayout->show();
 	}
 
 	public function _index()
@@ -137,6 +143,7 @@ class module_autoreg extends abstract_module
 		return true;
 	}
 
+
 	private function isValidAwardInvitation($poInvitation)
 	{
 		$tAwards = $poInvitation->findAwards();
@@ -150,7 +157,6 @@ class module_autoreg extends abstract_module
 		}
 		return true;
 	}
-
 
 	public function _invalid()
 	{
@@ -180,6 +186,7 @@ class module_autoreg extends abstract_module
 	{
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
+		$this->_oInvitation = $oInvitation;
 
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
 			if (_root::getRequest()->isPost()) {
@@ -189,11 +196,6 @@ class module_autoreg extends abstract_module
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
 		}
-	}
-
-	public function after()
-	{
-		$this->oLayout->show();
 	}
 
 //	private function doGet($poInvitation)
@@ -250,10 +252,20 @@ class module_autoreg extends abstract_module
 			$oView->oViewFormIdent->tMessage = $oConfirm->getMessages();
 			$oView->oViewFormIdent->token = $oView->token;
 
+			$oView->oViewForgottenPassword = new _view('connection::forgottenPassword');
+			$oView->oViewForgottenPassword->tHidden = array('invitation_id' => $poInvitation->invitation_id,
+				'invitation_key' => $poInvitation->invitation_key);
+			$oView->oViewForgottenPassword->oConnection = $oConfirm->oConnection;
+			$oView->oViewForgottenPassword->tMessage = $oConfirm->oConnection->getMessages();
+
 			$this->oLayout->add('work', $oView);
 
-			// Prepare l'affichage du bon panel
+			// Gestion de l'affichage du bon panel
 			$scriptView = new _view('autoreg::scriptConfirm');
+			$this->oLayout->add('script', $scriptView);
+			// Gestion de l'affichage de la boite modale
+			$scriptView = new _view('autoreg::scriptForgottenPassword');
+			$scriptView->oConnection = $oConfirm->oConnection;
 			$this->oLayout->add('script', $scriptView);
 		}
 	}
@@ -285,8 +297,14 @@ class module_autoreg extends abstract_module
 			case 'toRegistry':
 				$this->doVerifyToRegistry($poInvitation, $oConfirm);
 				break;
+			case 'submitForgottenPassword':
+				$this->doVerifyForgottenPassword($poInvitation, $oConfirm);
+				break;
 			default:
 				_root::redirect('autoreg::invalid');
+		}
+		if (!$oConfirm->oConnection) {
+			$oConfirm ->oConnection = new row_connection();
 		}
 		return $oConfirm;
 	}
@@ -315,6 +333,25 @@ class module_autoreg extends abstract_module
 		$oConfirm->gender = _root::getParam('gender');
 
 		return $oConfirm;
+	}
+
+	private function doVerifyForgottenPassword($poInvitation, $poConfirm)
+	{
+		// Force l'ouverture du panel d'identification
+		$poConfirm->openLogin = true;
+
+		// Valide la saisie de l'email
+		$oConnection = new row_connection;
+		$oConnection->action = _root::getParam('action');
+		$oConnection->myEmail = _root::getParam('myEmail');
+		// Validation
+		if ($oConnection->isValid()) {
+			// TODO A finir
+		} else {
+			$oConnection->openModalForgottenPassword = true;
+		}
+		$poConfirm->oConnection = $oConnection;
+
 	}
 
 	private function doVerifyToIdentify($poInvitation, $poConfirm)

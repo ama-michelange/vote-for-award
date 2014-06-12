@@ -33,11 +33,9 @@
 </head>
 
 <body>
-<?php //echo $this->load('bsnavbar') ?>
 <div class="container">
 	<?php echo $this->load('work') ?>
 </div>
-
 
 <!-- 	<script src="http://code.jquery.com/jquery-latest.js"></script> -->
 <script src="site/assets/js/jquery-1.11.0.min.js"></script>

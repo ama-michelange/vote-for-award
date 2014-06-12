@@ -31,16 +31,6 @@
 						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email') ?></span>
 					</div>
 				</div>
-				<!--				<div class="col-sm-6">-->
-				<!--					<div class="-->
-				<?php //echo plugin_validation::addClassError('form-group', $this->tMessage, 'email_bis') ?><!--">-->
-				<!--						<label for="email_bis">Confirmation de l'email</label>-->
-				<!--						<input class="form-control" type="text" id="email_bis" name="email_bis"-->
-				<!--								 value="--><?php //echo $this->oConfirm->email_bis ?><!--" placeholder="Confirmez votre Email"/>-->
-				<!--						<span class="help-block">-->
-				<?php //echo plugin_validation::show($this->tMessage, 'email_bis') ?><!--</span>-->
-				<!--					</div>-->
-				<!--				</div>-->
 			</div>
 			<div class="row">
 				<div class="col-sm-6">

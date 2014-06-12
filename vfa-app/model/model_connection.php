@@ -1,19 +1,19 @@
 <?php
 
-class model_confirm_invitation extends abstract_model
+class model_connection extends abstract_model
 {
 
-	protected $sClassRow = 'row_confirm_invitation';
+	protected $sClassRow = 'row_connection';
 
 	protected $sTable = null;
 
 	protected $sConfig = null;
 }
 
-class row_confirm_invitation extends abstract_row
+class row_connection extends abstract_row
 {
 
-	protected $sClassModel = 'model_confirm_invitation';
+	protected $sClassModel = 'model_connection';
 
 	protected $tMessages = null;
 
@@ -22,18 +22,11 @@ class row_confirm_invitation extends abstract_row
 		$oPluginValid = new plugin_valid($this->getTab());
 
 		switch ($this->__get('action')) {
-			case 'toIdentify':
-				$oPluginValid->isNotEmpty('cf_login');
-				$oPluginValid->isNotEmpty('cf_password');
-				break;
-			case 'toRegistry':
-				$oPluginValid->isNotEmpty('login');
-				$oPluginValid->isNotEmpty('email');
-				if (null != $this->__get('email')) {
-					$oPluginValid->isEmailValid('email');
+			case 'submitForgottenPassword':
+				$oPluginValid->isNotEmpty('myEmail');
+				if (null != $this->__get('myEmail')) {
+					$oPluginValid->isEmailValid('myEmail');
 				}
-				$oPluginValid->isNotEmpty('newPassword');
-				$oPluginValid->isNotEmpty('confirmPassword');
 				break;
 			default:
 				// Valeur non vérifiable de manière à ne jamais être valide !
