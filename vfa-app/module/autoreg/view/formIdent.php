@@ -28,12 +28,11 @@
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
-				<a id="cancelLogin" class="btn btn-default"><i class="glyphicon glyphicon-ok with-text"></i>Annuler</a>
-				<button type="submit" class="btn btn-default" name="action" value="toIdentify">
+				<button type="submit" class="btn btn-info" name="action" value="toIdentify">
 					<i class="glyphicon glyphicon-ok with-text"></i>S'identifier
 				</button>
+				<a id="cancelLogin" class="btn btn-default"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 			</div>
-			<a href="#modalForgottenPassword" class="btn btn-info" data-toggle="modal">Mot de passe oublié ?</a>
 		</div>
 	</div>
 </form>

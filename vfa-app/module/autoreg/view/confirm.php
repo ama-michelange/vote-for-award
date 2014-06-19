@@ -17,20 +17,12 @@
 			<h3 class="panel-title"><?php echo $this->oConfirm->titleInvit ?></h3>
 		</div>
 		<div class="panel-body">
-			<!--		<div class="row">-->
-			<!--			<div class="col-sm-6 col-md-6">-->
-			<!--				<div class="panel panel-default panel-inner">-->
-			<!--					<div class="panel-body">-->
 			<div class="row">
 				<?php foreach ($this->oConfirm->tInscription as $label => $value): ?>
 					<div class="col-sm-1 col-md-2 col-lg-1 view-label"><?php echo $label ?></div>
 					<div class="col-sm-5 col-md-4 col-lg-5 view-value"><?php echo $value ?></div>
 				<?php endforeach; ?>
 			</div>
-			<!--					</div>-->
-			<!--				</div>-->
-			<!--			</div>-->
-			<!--		</div>-->
 		</div>
 	</div>
 	<div class="panel panel-info">
@@ -41,10 +33,12 @@
 			<?php
 			$displayAccount = '';
 			$displayLogin = '';
+			$displayPassword = '';
 			// Gère l'ouverture ou la fermeture du panel d'ouverture du compte
 			if ($this->oConfirm->openAccount) {
 				$collapseInAccount = ' in';
 				$displayLogin = 'style="display:none;"';
+				$displayPassword = 'style="display:none;"';
 			} else {
 				$collapseInAccount = '';
 			}
@@ -52,24 +46,32 @@
 			if ($this->oConfirm->openLogin) {
 				$collapseInLogin = ' in';
 				$displayAccount = 'style="display:none;"';
+				$displayPassword = 'style="display:none;"';
 			} else {
 				$collapseInLogin = '';
+			}
+			// Gère l'ouverture ou la fermeture du panel Mot de passe
+			if ($this->oConfirm->openPassword) {
+				$collapseInPassword = ' in';
+				$displayAccount = 'style="display:none;"';
+				$displayLogin = 'style="display:none;"';
+			} else {
+				$collapseInPassword = '';
 			}
 			?>
 			<div class="panel-group" id="accordion">
 				<div id="panelAccount" class="panel panel-info" <?php echo $displayAccount ?>>
 					<div class="panel-body panel-inner">
 						<div class="row">
-							<div class="col-sm-1">
-								<h1 class="text-center text-warning"><i class="glyphicon glyphicon-star-empty"></i></h1>
+							<div class="col-sm-1 col-lg-1">
+								<h1 class="text-center text-warning margin-top-lg"><i class="glyphicon glyphicon-star-empty"></i></h1>
 							</div>
-							<div class="col-sm-11">
-								<h3>
-									Vous n'avez pas de compte sur ce site ...
-									<a id="btnAccount" data-toggle="collapse" data-parent="#accordion" href="#collapseAccount"
-										class="btn btn-default" <?php echo $displayLogin ?>><i class="glyphicon glyphicon-record with-text"></i>Enregistrez-vous
-										!</a>
-								</h3>
+							<div class="col-sm-7 col-lg-6">
+								<h3>Vous n'avez pas de compte sur ce site ...</h3>
+							</div>
+							<div class="col-sm-4 col-lg-5">
+								<a id="btnAccount" data-toggle="collapse" data-parent="#accordion" href="#collapseAccount"
+									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $displayLogin ?>>Enregistrez-vous !</a>
 							</div>
 						</div>
 					</div>
@@ -87,17 +89,17 @@
 				<div id="panelLogin" class="panel panel-info" <?php echo $displayLogin ?>>
 					<div class="panel-body panel-inner">
 						<div class="row">
-							<div class="col-sm-1">
-								<h1 class="text-center text-warning"><i class="glyphicon glyphicon-star"></i></h1>
+							<div class="col-sm-1 col-lg-1">
+								<h1 class="text-center text-warning margin-top-lg"><i class="glyphicon glyphicon-star"></i></h1>
 							</div>
-							<div class="col-sm-11">
-								<h3>
-									Vous avez déjà un compte sur ce site ...
-									<a id="btnLogin" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin"
-										class="btn btn-default" <?php echo $displayAccount ?>>
-										<i class="glyphicon glyphicon-user with-text"></i>Identifiez-vous !
-									</a>
-								</h3>
+							<div class="col-sm-7 col-lg-6">
+								<h3>Vous avez déjà un compte sur ce site ...</h3>
+							</div>
+							<div class="col-sm-4 col-lg-5">
+								<a id="btnLogin" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin"
+									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $displayAccount ?>>
+									Identifiez-vous !
+								</a>
 							</div>
 						</div>
 					</div>
@@ -112,8 +114,34 @@
 						</div>
 					</div>
 				</div>
+				<div id="panelPassword" class="panel panel-info" <?php echo $displayPassword ?>>
+					<div class="panel-body panel-inner">
+						<div class="row">
+							<div class="col-sm-1 col-lg-1">
+								<h1 class="text-center text-warning margin-top-lg"><i class="glyphicon glyphicon-fire"></i></h1>
+							</div>
+							<div class="col-sm-7 col-lg-6">
+								<h3>Mais vous avez oubliez votre mot de passe ...</h3>
+							</div>
+							<div class="col-sm-4 col-lg-5">
+								<a id="btnPassword" data-toggle="collapse" data-parent="#accordion" href="#collapsePassword"
+									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $displayAccount ?>>
+									Un peu d'aide ?</a>
+							</div>
+						</div>
+					</div>
+					<div id="collapsePassword" class="panel-info collapse<?php echo $collapseInPassword ?>">
+						<div class="panel-body panel-inner">
+							<div class="row">
+								<div class="col-sm-8 col-sm-offset-2">
+									<?php echo $this->oViewForgottenPassword->show(); ?>
+									<a name="bottomPassword" href="#bottomPassword" id="bottomPassword"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	<?php echo $this->oViewForgottenPassword->show(); ?>
 <?php endif; ?>

@@ -463,6 +463,14 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
     text-decoration: none;
 }
 
+.margin-top-sm {
+    margin-top: 8px;
+}
+
+.margin-top-lg {
+    margin-top: 16px;
+}
+
 .navbar-default {
     /*background-color: #DDECF3;*/
     /*border-color: #99C7DB;*/
@@ -537,4 +545,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
     -webkit-box-shadow: 0 0 6px 3px rgba(102, 175, 233, 0.5), inset 0 0 4px 2px rgba(102, 175, 233, 0.5);
     /*box-shadow: 0 0 6px 3px rgba(102, 175, 233, 0.6), inset 0 0 4px 2px rgba(102, 175, 233, 0.6);*/
     box-shadow: 0 0 6px 3px rgba(102, 175, 233, 0.5), inset 0 0 4px 2px rgba(102, 175, 233, 0.5);
+}
+
+.has-error .form-control {
+    background-color: #ffbf9b;
 }

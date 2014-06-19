@@ -253,7 +253,7 @@ class module_accounts extends abstract_module
 
 	private function buildInvitationKey($poUser)
 	{
-		$s = plugin_vfa::CATEGORY_CHANGE . plugin_vfa::TYPE_EMAIL . $poUser->user_id . $poUser->email;
+		$s = plugin_vfa::CATEGORY_VALIDATE . plugin_vfa::TYPE_EMAIL . $poUser->user_id . $poUser->email;
 		$sSha1 = sha1($s);
 		$key = $sSha1 . time();
 		return $key;
@@ -267,7 +267,7 @@ class module_accounts extends abstract_module
 		$oInvit->created_user_id = $poUser->user_id;
 		$oInvit->invitation_key = $this->buildInvitationKey($poUser);
 		$oInvit->state = plugin_vfa::STATE_OPEN;
-		$oInvit->category = plugin_vfa::CATEGORY_CHANGE;
+		$oInvit->category = plugin_vfa::CATEGORY_VALIDATE;
 		$oInvit->type = plugin_vfa::TYPE_EMAIL;
 		$oInvit->email = $poUser->email;
 		$oInvit->created_date = plugin_vfa::dateTimeSgbd();
