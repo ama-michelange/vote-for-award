@@ -109,10 +109,10 @@
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
-				<a id="cancelAccount" class="btn btn-default"><i class="glyphicon glyphicon-ok with-text"></i>Annuler</a>
 				<button type="submit" class="btn btn-info" name="action" value="toRegistry">
 					<i class="glyphicon glyphicon-ok with-text"></i>S'enregistrer
 				</button>
+				<a id="cancelAccount" class="btn btn-default"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 			</div>
 		</div>
 	</div>

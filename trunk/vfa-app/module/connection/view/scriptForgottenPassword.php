@@ -5,3 +5,10 @@
 	});
 </script>
 <?php endif; ?>
+<?php if ($this->oConnection->openModalMessage): ?>
+	<script>
+		$(document).ready(function () {
+			$('#modalMessage').modal({'show':true, 'keyboard':true});
+		});
+	</script>
+<?php endif; ?>

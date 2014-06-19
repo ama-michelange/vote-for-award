@@ -59,6 +59,15 @@ class model_user extends abstract_model
 	}
 
 	/**
+	 * @param $email
+	 * @return row_user
+	 */
+	public function findByEmail($email)
+	{
+		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE email=?', $email);
+	}
+
+	/**
 	 * @return row_user[]
 	 */
 	public function findAll()

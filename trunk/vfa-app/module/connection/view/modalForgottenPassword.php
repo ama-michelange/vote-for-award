@@ -17,10 +17,10 @@
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'myEmail') ?>">
 								<label for="inputMyEmail">Adresse Email</label>
 								<input type="text" id="inputMyEmail" name="myEmail" class="form-control" placeholder="Votre adresse Email"
-								value="<?php echo $this->oConnection->myEmail ?>" required autofocus autocomplete="off"/>
+										 value="<?php echo $this->oConnection->myEmail ?>" required autofocus autocomplete="off"/>
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'myEmail') ?></span>
 							</div>
-							<p>Saisissez l'adresse mail associé à votre compte ci-dessus.</p>
+							<p>Saisissez l'adresse email associée à votre compte.</p>
 							<p>Un message contenant un lien pour changer votre mot de passe va vous être envoyé.</p>
 						</div>
 					</div>
@@ -37,4 +37,19 @@
 		</div>
 	</div>
 </div>
-
+<?php if ($this->oConnection->openModalMessage): ?>
+	<div id="modalMessage" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h4><?php echo $this->oConnection->textModalMessage ?></h4>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary" data-dismiss="modal">
+						<i class="glyphicon glyphicon-remove with-text"></i>Fermer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>

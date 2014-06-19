@@ -35,17 +35,17 @@ class module_autoreg extends abstract_module
 			case plugin_vfa::CATEGORY_INVITATION:
 				$this->doInvitation($poInvitation);
 				break;
-			case plugin_vfa::CATEGORY_CHANGE:
+			case plugin_vfa::CATEGORY_VALIDATE:
 				switch ($poInvitation->type) {
 					case plugin_vfa::TYPE_EMAIL:
-						$this->doChangeEmail($poInvitation);
+						$this->doValidateEmail($poInvitation);
 						break;
 				}
 				break;
 		}
 	}
 
-	private function doChangeEmail($poInvitation)
+	private function doValidateEmail($poInvitation)
 	{
 		// Compare le datetime courant avec celle de création
 		// Si dépassement de 48h, message d'erreur
@@ -252,7 +252,7 @@ class module_autoreg extends abstract_module
 			$oView->oViewFormIdent->tMessage = $oConfirm->getMessages();
 			$oView->oViewFormIdent->token = $oView->token;
 
-			$oView->oViewForgottenPassword = new _view('connection::forgottenPassword');
+			$oView->oViewForgottenPassword = new _view('connection::formForgottenPassword');
 			$oView->oViewForgottenPassword->tHidden = array('invitation_id' => $poInvitation->invitation_id,
 				'invitation_key' => $poInvitation->invitation_key);
 			$oView->oViewForgottenPassword->oConnection = $oConfirm->oConnection;
@@ -264,7 +264,7 @@ class module_autoreg extends abstract_module
 			$scriptView = new _view('autoreg::scriptConfirm');
 			$this->oLayout->add('script', $scriptView);
 			// Gestion de l'affichage de la boite modale
-			$scriptView = new _view('autoreg::scriptForgottenPassword');
+			$scriptView = new _view('connection::scriptForgottenPassword');
 			$scriptView->oConnection = $oConfirm->oConnection;
 			$this->oLayout->add('script', $scriptView);
 		}
@@ -337,20 +337,20 @@ class module_autoreg extends abstract_module
 
 	private function doVerifyForgottenPassword($poInvitation, $poConfirm)
 	{
-		// Force l'ouverture du panel d'identification
-		$poConfirm->openLogin = true;
+		// Force l'ouverture du panel de Mot de passe
+		$poConfirm->openPassword = true;
 
-		// Valide la saisie de l'email
-		$oConnection = new row_connection;
-		$oConnection->action = _root::getParam('action');
-		$oConnection->myEmail = _root::getParam('myEmail');
-		// Validation
-		if ($oConnection->isValid()) {
-			// TODO A finir
-		} else {
-			$oConnection->openModalForgottenPassword = true;
-		}
-		$poConfirm->oConnection = $oConnection;
+//		// Valide la saisie de l'email
+//		$oConnection = new row_connection;
+//		$oConnection->action = _root::getParam('action');
+//		$oConnection->myEmail = _root::getParam('myEmail');
+//		// Validation
+//		if ($oConnection->isValid()) {
+//			// TODO A finir
+//		} else {
+//			$oConnection->openModalForgottenPassword = true;
+//		}
+		$poConfirm->oConnection = module_connection::doForgottenPassword();
 
 	}
 
