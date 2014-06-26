@@ -2,6 +2,7 @@
 	<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 	<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>"/>
 	<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>"/>
+	<input type="hidden" name="email" value="<?php echo $this->oConfirm->email ?>"/>
 	<input type="text" name="hiddenLogin" value="" style="display: none"/>
 	<input type="password" name="hiddenPassword" value="" style="display: none"/>
 
@@ -22,15 +23,15 @@
 						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login') ?></span>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email') ?>">
-						<label for="email">Email</label>
-						<input type="hidden" name="email" value="<?php echo $this->oConfirm->email ?>"/>
-						<input class="form-control" type="text" id="email" name="email" disabled="disabled"
-								 value="<?php echo $this->oConfirm->email ?>" placeholder="Votre Email"/>
-						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email') ?></span>
-					</div>
-				</div>
+<!--				<div class="col-sm-6">-->
+<!--					<div class="--><?php //echo plugin_validation::addClassError('form-group', $this->tMessage, 'email') ?><!--">-->
+<!--						<label for="email">Email</label>-->
+<!--						<input type="hidden" name="email" value="--><?php //echo $this->oConfirm->email ?><!--"/>-->
+<!--						<input class="form-control" type="text" id="email" name="email" disabled="disabled"-->
+<!--								 value="--><?php //echo $this->oConfirm->email ?><!--" placeholder="Votre Email"/>-->
+<!--						<span class="help-block">--><?php //echo plugin_validation::show($this->tMessage, 'email') ?><!--</span>-->
+<!--					</div>-->
+<!--				</div>-->
 			</div>
 			<div class="row">
 				<div class="col-sm-6">

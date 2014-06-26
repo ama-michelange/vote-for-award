@@ -74,6 +74,7 @@
 							<div class="row">
 								<div class="col-sm-11 col-sm-offset-1">
 									<?php echo $this->oViewFormAccount->show(); ?>
+									<a name="bottomAccount" href="#bottomAccount" id="bottomAccount"></a>
 								</div>
 							</div>
 						</div>

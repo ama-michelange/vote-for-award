@@ -257,6 +257,7 @@ class module_autoreg extends abstract_module
 				'invitation_key' => $poInvitation->invitation_key);
 			$oView->oViewForgottenPassword->oConnection = $oConfirm->oConnection;
 			$oView->oViewForgottenPassword->tMessage = $oConfirm->oConnection->getMessages();
+			$oView->oViewForgottenPassword->token = $oView->token;
 
 			$this->oLayout->add('work', $oView);
 
@@ -280,6 +281,9 @@ class module_autoreg extends abstract_module
 			$oPluginXsrf = new plugin_xsrf();
 			if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
 				$oConfirm->setMessages(array('token' => $oPluginXsrf->getMessage()));
+				if (!$oConfirm->oConnection) {
+					$oConfirm ->oConnection = new row_connection();
+				}
 				return $oConfirm;
 			}
 		}

@@ -2,12 +2,12 @@
 	$(document).ready(function () {
 		$('#collapseAccount').on({
 			'show.bs.collapse': function () {
-				$('#btnAccount').show();
+				$('#btnAccount').hide();
 				$('#btnLogin').show();
 				$('#btnPassword').show();
 			},
-			'shown.bs.collapse': function () {
-				$('#btnAccount').hide();
+		'shown.bs.collapse': function () {
+				$('#bottomAccount').get(0).click();
 			}
 		});
 		$('#cancelAccount').on('click', function () {
@@ -20,11 +20,11 @@
 		$('#collapseLogin').on({
 			'show.bs.collapse': function () {
 				$('#btnAccount').show();
-				$('#btnLogin').show();
+				$('#btnLogin').hide();
 				$('#btnPassword').show();
 			},
 			'shown.bs.collapse': function () {
-				$('#btnLogin').hide();
+				$('#bottomLogin').get(0).click();
 			}
 		});
 		$('#cancelLogin').on('click', function () {
@@ -38,10 +38,10 @@
 			'show.bs.collapse': function () {
 				$('#btnAccount').show();
 				$('#btnLogin').show();
-				$('#btnPassword').show();
+				$('#btnPassword').hide();
 			},
 			'shown.bs.collapse': function () {
-				$('#btnPassword').hide();
+				$('#bottomPassword').get(0).click();
 			}
 		});
 		$('#cancelPassword').on('click', function () {
