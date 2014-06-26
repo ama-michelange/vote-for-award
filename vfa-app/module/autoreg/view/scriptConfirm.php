@@ -2,65 +2,53 @@
 	$(document).ready(function () {
 		$('#collapseAccount').on({
 			'show.bs.collapse': function () {
-				$('#panelLogin').hide();
-				$('#panelPassword').hide();
+				$('#btnAccount').show();
+				$('#btnLogin').show();
+				$('#btnPassword').show();
 			},
 			'shown.bs.collapse': function () {
-				$('#btnAccount').fadeOut(800);
-			},
-			'hidden.bs.collapse': function () {
-				$('#btnAccount').fadeIn(800);
-			},
-			'hide.bs.collapse': function () {
-				$('#panelLogin').fadeIn(800);
-				$('#panelPassword').fadeIn(800);
+				$('#btnAccount').hide();
 			}
 		});
 		$('#cancelAccount').on('click', function () {
+			$('#btnLogin').show();
+			$('#btnPassword').show();
+			$('#btnAccount').show();
 			$('#collapseAccount').collapse('hide');
 		});
 
 		$('#collapseLogin').on({
 			'show.bs.collapse': function () {
-				$('#panelAccount').hide();
-				$('#panelPassword').hide();
+				$('#btnAccount').show();
+				$('#btnLogin').show();
+				$('#btnPassword').show();
 			},
 			'shown.bs.collapse': function () {
-				$('#btnLogin').fadeOut(800);
-			},
-			'hidden.bs.collapse': function () {
-			},
-			'hide.bs.collapse': function () {
+				$('#btnLogin').hide();
 			}
 		});
 		$('#cancelLogin').on('click', function () {
-			$('#panelAccount').show();
-			$('#panelPassword').show();
+			$('#btnAccount').show();
+			$('#btnPassword').show();
+			$('#btnLogin').show();
 			$('#collapseLogin').collapse('hide');
-			$('#btnLogin').fadeIn(800);
 		});
 
 		$('#collapsePassword').on({
 			'show.bs.collapse': function () {
-				$('#panelAccount').hide();
-				$('#panelLogin').hide();
+				$('#btnAccount').show();
+				$('#btnLogin').show();
+				$('#btnPassword').show();
 			},
 			'shown.bs.collapse': function () {
-				$('#btnPassword').fadeOut(800);
-			},
-			'hidden.bs.collapse': function () {
-//				$('#btnPassword').fadeIn(800);
-			},
-			'hide.bs.collapse': function () {
-//				$('#panelAccount').fadeIn();
-//				$('#panelLogin').fadeIn();
+				$('#btnPassword').hide();
 			}
 		});
 		$('#cancelPassword').on('click', function () {
-			$('#panelAccount').show();
-			$('#panelLogin').show();
+			$('#btnAccount').show();
+			$('#btnLogin').show();
+			$('#btnPassword').show();
 			$('#collapsePassword').collapse('hide');
-			$('#btnPassword').fadeIn(800);
 		});
 	});
 

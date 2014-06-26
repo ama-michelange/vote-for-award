@@ -31,36 +31,30 @@
 		</div>
 		<div class="panel-body panel-condensed">
 			<?php
-			$displayAccount = '';
-			$displayLogin = '';
-			$displayPassword = '';
+			$btnAccount = '';
+			$collapseInAccount = '';
+			$btnLogin = '';
+			$collapseInLogin = '';
+			$btnPassword = '';
+			$collapseInPassword = '';
 			// Gère l'ouverture ou la fermeture du panel d'ouverture du compte
 			if ($this->oConfirm->openAccount) {
 				$collapseInAccount = ' in';
-				$displayLogin = 'style="display:none;"';
-				$displayPassword = 'style="display:none;"';
-			} else {
-				$collapseInAccount = '';
+				$btnAccount = 'style="display:none;"';
 			}
 			// Gère l'ouverture ou la fermeture du panel d'identification
 			if ($this->oConfirm->openLogin) {
 				$collapseInLogin = ' in';
-				$displayAccount = 'style="display:none;"';
-				$displayPassword = 'style="display:none;"';
-			} else {
-				$collapseInLogin = '';
+				$btnLogin = 'style="display:none;"';
 			}
 			// Gère l'ouverture ou la fermeture du panel Mot de passe
 			if ($this->oConfirm->openPassword) {
 				$collapseInPassword = ' in';
-				$displayAccount = 'style="display:none;"';
-				$displayLogin = 'style="display:none;"';
-			} else {
-				$collapseInPassword = '';
+				$btnPassword = 'style="display:none;"';
 			}
 			?>
 			<div class="panel-group" id="accordion">
-				<div id="panelAccount" class="panel panel-info" <?php echo $displayAccount ?>>
+				<div id="panelAccount" class="panel panel-info">
 					<div class="panel-body panel-inner">
 						<div class="row">
 							<div class="col-sm-1 col-lg-1">
@@ -71,7 +65,7 @@
 							</div>
 							<div class="col-sm-4 col-lg-5">
 								<a id="btnAccount" data-toggle="collapse" data-parent="#accordion" href="#collapseAccount"
-									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $displayLogin ?>>Enregistrez-vous !</a>
+									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnAccount ?>>Enregistrez-vous !</a>
 							</div>
 						</div>
 					</div>
@@ -80,13 +74,12 @@
 							<div class="row">
 								<div class="col-sm-11 col-sm-offset-1">
 									<?php echo $this->oViewFormAccount->show(); ?>
-									<a name="bottomAccount" href="#bottomAccount" id="bottomAccount"></a>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="panelLogin" class="panel panel-info" <?php echo $displayLogin ?>>
+				<div id="panelLogin" class="panel panel-info">
 					<div class="panel-body panel-inner">
 						<div class="row">
 							<div class="col-sm-1 col-lg-1">
@@ -97,7 +90,7 @@
 							</div>
 							<div class="col-sm-4 col-lg-5">
 								<a id="btnLogin" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin"
-									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $displayAccount ?>>
+									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnLogin ?>>
 									Identifiez-vous !
 								</a>
 							</div>
@@ -114,7 +107,7 @@
 						</div>
 					</div>
 				</div>
-				<div id="panelPassword" class="panel panel-info" <?php echo $displayPassword ?>>
+				<div id="panelPassword" class="panel panel-info">
 					<div class="panel-body panel-inner">
 						<div class="row">
 							<div class="col-sm-1 col-lg-1">
@@ -125,7 +118,7 @@
 							</div>
 							<div class="col-sm-4 col-lg-5">
 								<a id="btnPassword" data-toggle="collapse" data-parent="#accordion" href="#collapsePassword"
-									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $displayAccount ?>>
+									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnPassword ?>>
 									Un peu d'aide ?</a>
 							</div>
 						</div>
