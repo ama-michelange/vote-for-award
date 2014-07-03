@@ -115,7 +115,7 @@ class module_autoreg extends abstract_module
 			$textInvit = 'Cet accès n\'est pas valide ! Le groupe de l\'invitation n\'existe pas.';
 			$ok = false;
 		} elseif (false == $this->isValidAwardInvitation($poInvitation)) {
-			$textInvit = 'Cet accès n\'est pas valide ! Un prix de l\'invitation est terminé.';
+			$textInvit = 'Cet accès n\'est pas valide !<p>Le prix de l\'invitation est terminé.</p>';
 			$ok = false;
 		}
 
