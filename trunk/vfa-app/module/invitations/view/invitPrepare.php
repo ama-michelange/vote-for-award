@@ -30,6 +30,24 @@
 					<div class="alert alert-warning">Utilisateur déjà inscrit à <?php echo plugin_validation::showDirect($this->tMessage,
 							'registredAward') ?></div>
 				<?php endif; ?>
+				<div class="panel panel-info">
+					<div class="panel-body panel-condensed">
+						<?php if ($this->oRegistry->type == plugin_vfa::TYPE_RESPONSIBLE): ?>
+							<p>Préparation d'une invitation à envoyer par mail à un correspondant d'un groupe.</p>
+							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription au prix, l'appartenance au
+								groupe et l'acceptation à devenir son correspondant.</p>
+						<?php elseif ($this->oRegistry->type == plugin_vfa::TYPE_BOARD): ?>
+							<p>Préparation d'une invitation à envoyer par mail à un membre du comité de sélection.</p>
+							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription à la présélection et l'appartenance au
+								comité de sélection.</p>
+						<?php
+						else: ?>
+							<p>Préparation d'une invitation à envoyer par mail à un lecteur.</p>
+							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription au prix et l'appartenance au
+								groupe.</p>
+						<?php endif; ?>
+					</div>
+				</div>
 				<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email') ?>">
 					<label for="inputEmail">Adresse email du destinataire</label>
 					<input class="form-control" type="text" id="inputEmail" name="email" value="<?php echo $this->oRegistry->email ?>"/>
