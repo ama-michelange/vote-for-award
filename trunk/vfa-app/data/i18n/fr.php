@@ -50,6 +50,7 @@ _root::setConfigVar('tLangue', array(
 	'notUniqueTypeGroup' => 'Le type des groupes n\'est pas unique !',
 	'invalidGroupsWithRoles' => 'Les groupes sont invalides par rapport aux rôles !',
 	'invalidRolesWithGroups' => 'Les rôles sont invalides par rapport aux groupes !',
+	'unknown.myEmail' => 'Email inconnu !',
 
 
 	'matchExpressionKO.year' => "La valeur saisie doit correspondre à une année valide (nombre)",

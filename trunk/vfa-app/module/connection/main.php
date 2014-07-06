@@ -43,10 +43,13 @@ class module_connection extends abstract_module
 				// Email existant ?
 				$oUser = model_user::getInstance()->findByEmail($oConnection->myEmail);
 				if (true == $oUser->isEmpty()) {
-					$oConnection->openModalMessage = true;
-					$oConnection->textModalMessage = 'Adresse Email inconnue !';
+					$oConnection->setMessages(array('myEmail' => array('unknown')));
+//					$oConnection->openModalMessage = true;
+//					$oConnection->textModalMessage = 'Adresse Email inconnue !';
 				} else {
 					// TODO
+					$oConnection->openModalMessage = true;
+					$oConnection->textModalMessage = 'Vous allez bientôt recevoir un email pour changer votre mot de passe - A FINIR A FINIR A FINIR A FINIR A FINIR';
 				}
 			} else {
 				$oConnection->openModalForgottenPassword = true;
@@ -104,15 +107,7 @@ class module_connection extends abstract_module
 		$oMail->setBodyHtml($bodyHtml);
 
 		// Envoi le mail
-		try {
-			if (_root::getConfigVar('vfa-app.mail.enabled')) {
-				$sent = $oMail->send();
-			} else {
-				$sent = true;
-			}
-		} catch (Exception $e) {
-			$sent = false;
-		}
+		$sent = plugin_vfa::sendEmail($oMail);
 		if ($sent) {
 			$poInvitation->state = plugin_vfa::STATE_SENT;
 			$poInvitation->modified_date = plugin_vfa::dateTimeSgbd();
