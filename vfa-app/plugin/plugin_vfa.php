@@ -612,4 +612,25 @@ class plugin_vfa
 		return $titleInvit;
 	}
 
+	/**
+	 * Envoie un mail en fonction de l'autorisation dans la configuration ou le simule.
+	 * <p>Si la configuration l'autorise (voir 'vfa-app.mail.enabled'), l'email est transmit au système et le retour est celui du système.
+	 * Sinon c'est une simulation et le retour est toujours vrai.</p>
+	 * @param plugin_mail $poMail
+	 * @return bool Vrai si l'email est réellemnt envoyé au niveau système ou simulé
+	 */
+	public static function sendEmail($poMail)
+	{
+		// Envoi le mail
+		try {
+			if (_root::getConfigVar('vfa-app.mail.enabled')) {
+				$sent = $poMail->send();
+			} else {
+				$sent = true;
+			}
+		} catch (Exception $e) {
+			$sent = false;
+		}
+		return $sent;
+	}
 }
