@@ -6,7 +6,7 @@
 				$('#btnLogin').show();
 				$('#btnPassword').show();
 			},
-		'shown.bs.collapse': function () {
+			'shown.bs.collapse': function () {
 				$('#bottomAccount').get(0).click();
 			}
 		});

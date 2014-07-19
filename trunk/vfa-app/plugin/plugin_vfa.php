@@ -24,6 +24,7 @@ class plugin_vfa
 	const TYPE_READER = 'reader';
 	const TYPE_RESPONSIBLE = 'responsible';
 	const TYPE_EMAIL = 'email';
+	const TYPE_PASSWORD = 'password';
 
 	const TYPE_AWARD_BOARD = 'PSBD';
 	const TYPE_AWARD_READER = 'PBD';
