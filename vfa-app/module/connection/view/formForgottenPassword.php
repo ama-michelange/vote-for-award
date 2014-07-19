@@ -16,7 +16,7 @@
 				<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'myEmail') ?></span>
 			</div>
 			<p>Saisissez l'adresse email associée à votre compte.</p>
-			<p>Un message contenant un lien pour changer votre mot de passe va vous être envoyé.</p>
+			<p>Vous recevrez un message pour saisir un nouveau mot de passe.</p>
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">

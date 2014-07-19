@@ -289,6 +289,10 @@ class module_autoreg extends abstract_module
 		}
 		// Reconstruit le texte
 		$this->makeTextConfirmation($poInvitation, $oConfirm);
+		// Force les fermetures des panels
+		$oConfirm->openAccount = false;
+		$oConfirm->openLogin = false;
+		$oConfirm->openPassword = false;
 		// Dispatch
 		switch (_root::getParam('action')) {
 			case 'toConfirm':
