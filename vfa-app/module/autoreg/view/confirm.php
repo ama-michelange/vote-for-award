@@ -138,4 +138,5 @@
 			</div>
 		</div>
 	</div>
+	<?php echo $this->oViewModalMessage->show(); ?>
 <?php endif; ?>
