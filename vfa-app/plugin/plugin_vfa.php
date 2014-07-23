@@ -607,6 +607,12 @@ class plugin_vfa
 						$titleInvit .= 'Changement d\'adresse Email';
 						break;
 				}
+				break;case plugin_vfa::CATEGORY_MODIFY:
+				switch ($poInvitation->type) {
+					case plugin_vfa::TYPE_PASSWORD:
+						$titleInvit .= 'Mot de passe oublié';
+						break;
+				}
 				break;
 		}
 		//		_root::getLog()->log($titleInvit);

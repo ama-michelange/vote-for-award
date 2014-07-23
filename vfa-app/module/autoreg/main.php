@@ -42,7 +42,40 @@ class module_autoreg extends abstract_module
 						break;
 				}
 				break;
+			case plugin_vfa::CATEGORY_MODIFY:
+				switch ($poInvitation->type) {
+					case plugin_vfa::TYPE_PASSWORD:
+						$this->doModifyPassword($poInvitation);
+						break;
+				}
+				break;
 		}
+	}
+
+	private function doModifyPassword($poInvitation)
+	{
+		// Compare le datetime courant avec celle de création
+		// Si dépassement de 48h, message d'erreur
+		$dt = new plugin_datetime($poInvitation->modified_date, 'Y-m-d H:i:s');
+		$dt->addDay(2);
+		if (plugin_vfa::beforeDateTime(plugin_vfa::todayDateTime(), $dt)) {
+			// OK : modification du mot de passe
+			// TODO A finir
+
+		} else {
+			// KO
+			$oConfirm = new row_confirm_invitation();
+			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+			$oConfirm->textInvit = 'Cet accès n\'est plus valide !';
+
+			$oView = new _view('autoreg::ko');
+			$oView->oConfirm = $oConfirm;
+
+			$this->oLayout->add('work', $oView);
+
+		}
+		// Supprime l'invit
+		model_invitation::getInstance()->delete($poInvitation);
 	}
 
 	private function doValidateEmail($poInvitation)
@@ -259,10 +292,15 @@ class module_autoreg extends abstract_module
 			$oView->oViewForgottenPassword->tMessage = $oConfirm->oConnection->getMessages();
 			$oView->oViewForgottenPassword->token = $oView->token;
 
+			$oView->oViewModalMessage = new _view('connection::modalMessage');
+			$oView->oViewModalMessage->oConnection = $oConfirm->oConnection;
+			$oView->oViewModalMessage->tMessage = $oConfirm->oConnection->getMessages();
+
 			$this->oLayout->add('work', $oView);
 
 			// Gestion de l'affichage du bon panel
 			$scriptView = new _view('autoreg::scriptConfirm');
+			$scriptView->oConnection = $oConfirm->oConnection;
 			$this->oLayout->add('script', $scriptView);
 			// Gestion de l'affichage de la boite modale
 			$scriptView = new _view('connection::scriptForgottenPassword');
@@ -306,7 +344,7 @@ class module_autoreg extends abstract_module
 				$this->doVerifyToRegistry($poInvitation, $oConfirm);
 				break;
 			case 'submitForgottenPassword':
-				$this->doVerifyForgottenPassword($poInvitation, $oConfirm);
+				$this->doVerifyForgottenPassword($oConfirm);
 				break;
 			default:
 				_root::redirect('autoreg::invalid');
@@ -343,23 +381,15 @@ class module_autoreg extends abstract_module
 		return $oConfirm;
 	}
 
-	private function doVerifyForgottenPassword($poInvitation, $poConfirm)
+	private function doVerifyForgottenPassword($poConfirm)
 	{
 		// Force l'ouverture du panel de Mot de passe
 		$poConfirm->openPassword = true;
 
-//		// Valide la saisie de l'email
-//		$oConnection = new row_connection;
-//		$oConnection->action = _root::getParam('action');
-//		$oConnection->myEmail = _root::getParam('myEmail');
-//		// Validation
-//		if ($oConnection->isValid()) {
-//			// TODO A finir
-//		} else {
-//			$oConnection->openModalForgottenPassword = true;
-//		}
 		$poConfirm->oConnection = module_connection::doForgottenPassword();
-
+		if (true == $poConfirm->oConnection->mailSent) {
+			$poConfirm->openPassword = false;
+		}
 	}
 
 	private function doVerifyToIdentify($poInvitation, $poConfirm)

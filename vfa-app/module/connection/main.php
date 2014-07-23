@@ -44,67 +44,81 @@ class module_connection extends abstract_module
 				$oUser = model_user::getInstance()->findByEmail($oConnection->myEmail);
 				if (true == $oUser->isEmpty()) {
 					$oConnection->setMessages(array('myEmail' => array('unknown')));
-//					$oConnection->openModalMessage = true;
-//					$oConnection->textModalMessage = 'Adresse Email inconnue !';
 				} else {
-					// TODO
+					$oInvit = self::saveInvitationModifyPassword($oConnection,$oUser);
+					if (self::sendMail($oInvit)) {
+						$oConnection->mailSent = true;
+						$oConnection->textModalMessage = 'Vous allez bientôt recevoir un message à l\'adresse "' . $oConnection->myEmail .
+							'" pour saisir un nouveau mot de passe.';
+					} else {
+						$oConnection->textModalMessage =
+							'<p>Impossible d\'envoyer un message à l\'adresse <strong>' . $oConnection->myEmail . '</strong>.</p>' .
+							'<p><br>Retentez dans un moment !<br/>';
+						$oInvit->delete();
+					}
 					$oConnection->openModalMessage = true;
-					$oConnection->textModalMessage = 'Vous allez bientôt recevoir un email pour changer votre mot de passe - A FINIR A FINIR A FINIR A FINIR A FINIR';
 				}
-			} else {
-				$oConnection->openModalForgottenPassword = true;
 			}
 		}
 		return $oConnection;
 	}
 
-	private function saveInvitation($poRegistry)
+	private static function saveInvitationModifyPassword($poConnection, $poUser)
 	{
-		$oInvit = new row_invitation();
+		$oInvit = model_invitation::getInstance()->findByEmailModifyPassword($poConnection->myEmail);
+		if ($oInvit->isEmpty()) {
+			$oInvit = new row_invitation();
 
-		// Remplissage de l'invit
-		$oInvit->created_user_id = _root::getAuth()->getUserSession()->getUser()->user_id;
-		$oInvit->invitation_key = $this->buildInvitationKey($poRegistry);
-		$oInvit->state = plugin_vfa::STATE_OPEN;
-		$oInvit->category = $poRegistry->category;
-		$oInvit->type = $poRegistry->type;
-		$oInvit->email = $poRegistry->email;
-		$oInvit->group_id = $poRegistry->group_id;
-		if ($poRegistry->award_id) {
-			$oInvit->awards_ids = strval($poRegistry->award_id);
+			// Remplissage de l'invit
+			$oInvit->created_user_id = $poUser->getId();
+			$oInvit->state = plugin_vfa::STATE_OPEN;
+			$oInvit->category = plugin_vfa::CATEGORY_MODIFY;
+			$oInvit->type = plugin_vfa::TYPE_PASSWORD;
+			$oInvit->email = $poConnection->myEmail;
+			$oInvit->created_date = plugin_vfa::dateTimeSgbd();
+			$oInvit->ip = $_SERVER['REMOTE_ADDR'];
+			$oInvit->invitation_key = self::buildKeyModifyPassword($oInvit);
 		} else {
-			$oInvit->awards_ids = implode(',', $poRegistry->awards_ids);
+			$oInvit->state = plugin_vfa::STATE_OPEN;
+			$oInvit->ip = $_SERVER['REMOTE_ADDR'];
+			$oInvit->modified_date = plugin_vfa::dateTimeSgbd();
 		}
-		$oInvit->created_date = plugin_vfa::dateTimeSgbd();
-
 		// Sauve en base
 		$oInvit->save();
 
 		return $oInvit;
 	}
 
-	private function sendMail($poInvitation)
+	private static function buildKeyModifyPassword($poInvitation)
+	{
+		$s = $poInvitation->category . $poInvitation->type . $poInvitation->email;
+		$sSha1 = sha1($s);
+		$key = $sSha1 . time();
+		return $key;
+	}
+
+	private static function sendMail($poInvitation)
 	{
 		$oMail = new plugin_mail();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
 		$oMail->addTo($poInvitation->email);
-		$createdUser = $poInvitation->findCreatedUser();
-		$oMail->addCC($createdUser->email);
+//		$createdUser = $poInvitation->findCreatedUser();
+//		$oMail->addCC($createdUser->email);
 		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
 		// Sujet
 		$oMail->setSubject(plugin_vfa::buildTitleInvitation($poInvitation));
 		// Prepare le body TXT
-		$oViewTxt = new _view('invitations::mailTxt');
+		$oViewTxt = new _view('connection::mailTxt');
 		$oViewTxt->oInvit = $poInvitation;
 		$bodyTxt = $oViewTxt->show();
 		// _root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
 		// Prepare le body HTML
-		$oViewTxt = new _view('invitations::mailHtml');
-		$oViewTxt->oInvit = $poInvitation;
-		$bodyHtml = $oViewTxt->show();
-		// _root::getLog()->log($bodyHtml);
-		$oMail->setBodyHtml($bodyHtml);
+//		$oViewTxt = new _view('connection::mailHtml');
+//		$oViewTxt->oInvit = $poInvitation;
+//		$bodyHtml = $oViewTxt->show();
+//		// _root::getLog()->log($bodyHtml);
+//		$oMail->setBodyHtml($bodyHtml);
 
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);

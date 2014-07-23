@@ -96,6 +96,16 @@ class model_invitation extends abstract_model
 		}
 		return $this->findOne($sql, $poRegistry->type, $pState, $poRegistry->email, $poRegistry->group_id, $awardsIds);
 	}
+
+	/**
+	 * @param string $pEmail
+	 * @return row_invitation
+	 */
+	public function findByEmailModifyPassword($pEmail)
+	{
+		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE category=?' . '	AND type=?' . '	AND email=?';
+		return $this->findOne($sql, plugin_vfa::CATEGORY_MODIFY, plugin_vfa::TYPE_PASSWORD, $pEmail);
+	}
 }
 
 class row_invitation extends abstract_row
