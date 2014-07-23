@@ -51,5 +51,4 @@
 			$('#collapsePassword').collapse('hide');
 		});
 	});
-
 </script>

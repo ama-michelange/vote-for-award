@@ -302,15 +302,12 @@ class module_accounts extends abstract_module
 //		$oMail->setBodyHtml($bodyHtml);
 
 		// Envoi le mail
-		try {
-			$sent = $oMail->send();
-		} catch (Exception $e) {
-			$sent = false;
-			$poInvitation->state = plugin_vfa::STATE_NOT_SENT;
-			$poInvitation->update();
-		}
+		$sent = plugin_vfa::sendEmail($oMail);
 		if ($sent) {
 			$poInvitation->state = plugin_vfa::STATE_SENT;
+			$poInvitation->update();
+		} else {
+			$poInvitation->state = plugin_vfa::STATE_NOT_SENT;
 			$poInvitation->update();
 		}
 		return $sent;
