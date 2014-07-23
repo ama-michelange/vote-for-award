@@ -45,7 +45,7 @@ class module_connection extends abstract_module
 				if (true == $oUser->isEmpty()) {
 					$oConnection->setMessages(array('myEmail' => array('unknown')));
 				} else {
-					$oInvit = self::saveInvitationModifyPassword($oConnection,$oUser);
+					$oInvit = self::saveInvitationModifyPassword($oConnection);
 					if (self::sendMail($oInvit)) {
 						$oConnection->mailSent = true;
 						$oConnection->textModalMessage = 'Vous allez bientôt recevoir un message à l\'adresse "' . $oConnection->myEmail .
@@ -63,14 +63,14 @@ class module_connection extends abstract_module
 		return $oConnection;
 	}
 
-	private static function saveInvitationModifyPassword($poConnection, $poUser)
+	private static function saveInvitationModifyPassword($poConnection)
 	{
 		$oInvit = model_invitation::getInstance()->findByEmailModifyPassword($poConnection->myEmail);
 		if ($oInvit->isEmpty()) {
 			$oInvit = new row_invitation();
 
 			// Remplissage de l'invit
-			$oInvit->created_user_id = $poUser->getId();
+			$oInvit->created_user_id = 0;
 			$oInvit->state = plugin_vfa::STATE_OPEN;
 			$oInvit->category = plugin_vfa::CATEGORY_MODIFY;
 			$oInvit->type = plugin_vfa::TYPE_PASSWORD;
