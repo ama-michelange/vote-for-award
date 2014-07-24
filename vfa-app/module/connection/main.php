@@ -38,6 +38,8 @@ class module_connection extends abstract_module
 			// Valide la saisie de l'email
 			$oConnection->action = _root::getParam('action');
 			$oConnection->myEmail = _root::getParam('myEmail');
+			$oConnection->link_id = _root::getParam('invitation_id');
+			$oConnection->link_key = _root::getParam('invitation_key');
 			// Validation
 			if ($oConnection->isValid()) {
 				// Email existant ?
@@ -78,6 +80,8 @@ class module_connection extends abstract_module
 			$oInvit->created_date = plugin_vfa::dateTimeSgbd();
 			$oInvit->ip = $_SERVER['REMOTE_ADDR'];
 			$oInvit->invitation_key = self::buildKeyModifyPassword($oInvit);
+			$oInvit->link_id = $poConnection->link_id;
+			$oInvit->link_key = $poConnection->link_key;
 		} else {
 			$oInvit->state = plugin_vfa::STATE_OPEN;
 			$oInvit->ip = $_SERVER['REMOTE_ADDR'];

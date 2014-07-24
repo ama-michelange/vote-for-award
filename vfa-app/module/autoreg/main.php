@@ -60,22 +60,48 @@ class module_autoreg extends abstract_module
 		$dt->addDay(2);
 		if (plugin_vfa::beforeDateTime(plugin_vfa::todayDateTime(), $dt)) {
 			// OK : modification du mot de passe
-			// TODO A finir
+			// mais pour quel utilisateur ?
+			$tUsers = model_user::getInstance()->findAllByEmail($poInvitation->email);
+			$nbFound = count($tUsers);
+			if (0 == $nbFound) {
+				// Aucun utilistauer : KO
+				$this->doInvalidAccess($poInvitation);
+			} elseif (1 == $nbFound) {
 
+			} else {
+
+			}
 		} else {
 			// KO
-			$oConfirm = new row_confirm_invitation();
-			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
-			$oConfirm->textInvit = 'Cet accès n\'est plus valide !';
-
-			$oView = new _view('autoreg::ko');
-			$oView->oConfirm = $oConfirm;
-
-			$this->oLayout->add('work', $oView);
-
+			$this->doInvalidAccess($poInvitation);
 		}
+	}
+
+	private function doInvalidAccess($poInvitation)
+	{
+		$oConfirm = new row_confirm_invitation();
+		$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
+		$oConfirm->textInvit = 'Cet accès n\'est plus valide !';
+
+		$oView = new _view('autoreg::ko');
+		$oView->oConfirm = $oConfirm;
+
+		$this->oLayout->add('work', $oView);
+
 		// Supprime l'invit
 		model_invitation::getInstance()->delete($poInvitation);
+	}
+
+	private function doDoModifyPassword($poInvitation)
+	{
+		$oConfirm = new row_confirm_invitation();
+		$oConfirm->invitation_id = _root::getParam('id');
+		$oConfirm->invitation_key = _root::getParam('key');
+
+		$oView = new _view('autoreg::modifyPassword');
+		$oView->oConfirm = $oConfirm;
+
+		$this->oLayout->add('work', $oView);
 	}
 
 	private function doValidateEmail($poInvitation)
