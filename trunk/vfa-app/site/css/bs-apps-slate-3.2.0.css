@@ -17,6 +17,13 @@
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
+.panel-images-col {
+    float: none;
+    margin: inherit;
+}
+.panel-images-col .panel-images-body{
+    display: block;
+}
 
 .panel-images-dark {
     /*background-color: #BBDAE8;*/
@@ -36,6 +43,10 @@
 
 .panel-images-title {
     margin: 0;
+}
+
+.panel-images-horizontal {
+    margin-right: 30px;
 }
 
 .panel-images-horizontal .panel-images-body {
@@ -448,6 +459,10 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
 
 .btn-separator {
     padding-left: 6px;
+}
+
+.btn-margin {
+    margin-right: 11px;
 }
 
 .btn-default, a.btn-default {
