@@ -251,10 +251,13 @@ class plugin_BsHtml
 	 * @internal param $
 	 * @return string
 	 */
-	public static function showNavImage($pImage, $pTextAlt, $pSize, $pLink, $pShowText = false)
+	public static function showNavImage($pImage, $pTextAlt, $pSize, $pLink = null, $pShowText = false)
 	{
 		$ret = '';
-		$permit = $pLink->isPermit();
+		$permit = false;
+		if (null != $pLink) {
+			$permit = $pLink->isPermit();
+		}
 		if (isset($pImage)) {
 			if ($permit) {
 				$ret .= '<a href="';

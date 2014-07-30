@@ -107,7 +107,7 @@ class model_award extends abstract_model
 			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
 		}
 		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' . 'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' .
-			'AND (vfa_user_awards.user_id = ?) AND (? <= vfa_awards.end_date)' . $andType;
+			'AND (vfa_user_awards.user_id = ?) AND (? <= vfa_awards.end_date)' . $andType . ' ORDER BY vfa_awards.public DESC';
 		return $this->findMany($sql, $pUserId, plugin_vfa::dateSgbd());
 	}
 
@@ -121,7 +121,7 @@ class model_award extends abstract_model
 		if (null != $pType) {
 			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
 		}
-		$sql = 'SELECT * FROM vfa_awards ' . 'WHERE (? <= vfa_awards.end_date)' . $andType;
+		$sql = 'SELECT * FROM vfa_awards ' . 'WHERE (? <= vfa_awards.end_date)' . $andType . ' ORDER BY vfa_awards.public DESC';
 		return $this->findMany($sql, plugin_vfa::dateSgbd());
 	}
 
@@ -207,6 +207,25 @@ class row_award extends abstract_row
 	public function toString()
 	{
 		$s = $this->getTypeString() . ' ' . $this->name . ' ' . $this->year;
+		return $s;
+	}
+
+	public function toStringWithPrefix()
+	{
+		$s = $this->getPrefix() . ' ' . $this->toString();
+		return $s;
+	}
+
+	public function getPrefix()
+	{
+		switch ($this->type) {
+			case 'PSBD':
+				$s = 'de la';
+				break;
+			default:
+				$s = 'du';
+				break;
+		}
 		return $s;
 	}
 
