@@ -15,7 +15,6 @@
 				}
 			}
 			?>
-
 		</h3>
 	</div>
 	<?php if (null != $this->oFirstAward && count($this->tUsers) > 0) : ?>

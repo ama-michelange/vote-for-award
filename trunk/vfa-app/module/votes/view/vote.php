@@ -7,58 +7,50 @@
 			<?php foreach ($this->oVote->getVoteItems() as $oVoteItem): ?>
 				<div class="panel panel-inner panel-info">
 					<div class="panel-body">
-						<div class="panel-images panel-images-horizontal">
-							<div class="panel-images-body">
-								<?php foreach ($oVoteItem->getTitle()->findDocs() as $oDoc): ?>
-									<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-md', null, true); ?>
-								<?php endforeach; ?>
-							</div>
-						</div>
-						<div class="pull-left">
-							<h3><?php echo $oVoteItem->getTitle()->toString() ?></h3>
-							<h4>Votre note</h4>
-							<div>
-								<a href="#" class="btn btn-default btn-lg btn-margin active">0</a>
-								<a href="#" class="btn btn-default btn-lg btn-margin">1</a>
-								<a href="#" class="btn btn-default btn-lg btn-margin">2</a>
-								<a href="#" class="btn btn-default btn-lg btn-margin">3</a>
-								<a href="#" class="btn btn-default btn-lg btn-margin">4</a>
-								<a href="#" class="btn btn-default btn-lg btn-margin">5</a>
-								<a href="#" class="btn btn-default">Abstention</a>
-							</div>
-							<h4>Votre commentaire</h4>
-							<textarea class="form-control" rows="3"></textarea>
-						</div>
-					</div>
-				</div>
-			<?php endforeach; ?>
-			<?php foreach ($this->oVote->getVoteItems() as $oVoteItem): ?>
-				<div class="panel panel-inner panel-info">
-					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-3 center-block">
+							<div class="col-sm-3">
 								<div class="panel-images panel-images-col">
 									<div class="panel-images-body">
 										<?php foreach ($oVoteItem->getTitle()->findDocs() as $oDoc): ?>
-											<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-md', null, true); ?>
+											<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-max', null, true); ?>
 										<?php endforeach; ?>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-9">
-								<h3><?php echo $oVoteItem->getTitle()->toString() ?></h3>
-								<h4>Votre note</h4>
-								<div>
-									<a href="#" class="btn btn-default btn-lg btn-margin active">0</a>
-									<a href="#" class="btn btn-default btn-lg btn-margin">1</a>
-									<a href="#" class="btn btn-default btn-lg btn-margin">2</a>
-									<a href="#" class="btn btn-default btn-lg btn-margin">3</a>
-									<a href="#" class="btn btn-default btn-lg btn-margin">4</a>
-									<a href="#" class="btn btn-default btn-lg btn-margin">5</a>
-									<a href="#" class="btn btn-default">Abstention</a>
+							<div class="col-sm-9">
+								<div class="row">
+									<div class="col-xs-12">
+										<h2><?php echo $oVoteItem->getTitle()->toString() ?></h2>
+									</div>
 								</div>
-								<h4>Votre commentaire</h4>
-								<textarea class="form-control" rows="3"></textarea>
+								<div class="row">
+									<div class="col-xs-8"><h4>Votre note</h4></div>
+									<div class="col-xs-4"><a class="btn btn-nonote btn-sm btn-block active">Aucune note</a></div>
+								</div>
+								<div class="row">
+									<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block active">0</a></div>
+									<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block">1</a></div>
+									<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block">2</a></div>
+									<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block">3</a></div>
+									<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block">4</a></div>
+									<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block">5</a></div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<h4>Votre commentaire</h4>
+										<?php
+										$mess = '';
+										$mess .= 'Title = ' . $oVoteItem->getTitle()->toString() . "\n";
+										$mess .= 'vote_item_id = ' . $oVoteItem->vote_item_id . "\n";
+										$mess .= 'vote_id = ' . $oVoteItem->vote_id . "\n";
+										$mess .= 'title_id = ' . $oVoteItem->title_id . "\n";
+										$mess .= 'score = ' . $oVoteItem->score . "\n";
+										$mess .= 'comment = ' . $oVoteItem->comment . "\n";
+										$mess .= 'modified = ' . $oVoteItem->modified . "\n";
+										?>
+										<textarea class="form-control" rows="3"><?php echo $mess ?></textarea>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

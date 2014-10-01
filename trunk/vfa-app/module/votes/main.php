@@ -43,7 +43,8 @@ class module_votes extends abstract_module
 		if (count($this->toValidAwards) > 0) {
 			$this->doVote();
 		} else {
-
+			$oView = new _view('votes::noVote');
+			$this->oLayout->add('work', $oView);
 		}
 	}
 
