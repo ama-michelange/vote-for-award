@@ -222,12 +222,17 @@ class plugin_BsHtml
 	 * @param string $pLabel
 	 * @param Link $pLink
 	 * @param string $pIcon
+	 * @param string $pId
 	 * @return LabelItem
 	 */
-	public static function buildBrandItem($pLabel, $pLink, $pIcon = null)
+	public static function buildBrandItem($pLabel, $pLink, $pIcon = null, $pId = null)
 	{
 		$ret = new LabelItem($pLabel, $pLink, $pIcon);
-		$pLink->setProperties(array('class' => 'navbar-brand'));
+		$props = array('class' => 'navbar-brand');
+		if (null != $pId) {
+			$props["id"] = $pId;
+		}
+		$pLink->setProperties($props);
 		return $ret;
 	}
 
@@ -328,12 +333,12 @@ class NavBar extends DefaultItem
 		parent::__construct($name);
 	}
 
-	public function setTitle($pLabel, $pLink = null, $pIcon = null)
+	public function setTitle($pLabel, $pLink = null, $pIcon = null, $pId = null)
 	{
 		if (null == $pLink) {
 			$this->_sTitle = $pLabel;
 		} else {
-			$this->_oTitle = plugin_BsHtml::buildBrandItem($pLabel, $pLink, $pIcon);
+			$this->_oTitle = plugin_BsHtml::buildBrandItem($pLabel, $pLink, $pIcon, $pId);
 		}
 	}
 
