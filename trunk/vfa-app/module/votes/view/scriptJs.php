@@ -69,7 +69,7 @@
 					p_RootGroup.find(".btn-nonote").show();
 				}
 				var isOriginal = (note == inputHidden.data("original"));
-				chechToSave(inputHidden.attr("name"), isOriginal);
+				checkToSave(inputHidden.attr("name"), isOriginal);
 			}
 			//	debug(p_Note.data("select-note"));
 			//	debug(p_RootGroup.find("[type=hidden]").prop("value"));
@@ -82,7 +82,7 @@
 			p_RootGroup.find(".btn-nonote").removeClass("active");
 		}
 
-		function chechToSave(pName, pIsOriginal) {
+		function checkToSave(pName, pIsOriginal) {
 			// debug(pName + " " + pIsOriginal);
 			var brand = $("#myBrand");
 			var toSave = brand.data("toSave");
