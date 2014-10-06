@@ -61,7 +61,7 @@ class module_votes extends abstract_module
 		$this->oLayout->add('work', $oView);
 
 		// Ajout du javascript
-		$scriptView = new _view('votes::scriptTest');
+		$scriptView = new _view('votes::scriptJs');
 		//$scriptView->oConnection = $oConfirm->oConnection;
 		$this->oLayout->add('script', $scriptView);
 	}
