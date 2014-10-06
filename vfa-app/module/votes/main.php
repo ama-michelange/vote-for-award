@@ -32,7 +32,7 @@ class module_votes extends abstract_module
 	private function buildContextBar()
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
-		$navBar->setTitle('Votes', new NavLink('votes', 'index'));
+		$navBar->setTitle('Bulletin', new NavLink('votes', 'index'), null, "myBrand");
 		$navBar->addChild(new BarButtons('left'));
 
 		return $navBar;
@@ -55,8 +55,15 @@ class module_votes extends abstract_module
 		$oView = new _view('votes::vote');
 		$oView->oAward = $this->oAward;
 		$oView->oVote = $oVote;
-
+		$oView->tMessage = $oVote->getMessages();
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
 		$this->oLayout->add('work', $oView);
+
+		// Ajout du javascript
+		$scriptView = new _view('votes::scriptTest');
+		//$scriptView->oConnection = $oConfirm->oConnection;
+		$this->oLayout->add('script', $scriptView);
 	}
 
 
