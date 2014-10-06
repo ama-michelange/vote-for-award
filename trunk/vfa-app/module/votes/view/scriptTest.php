@@ -68,7 +68,7 @@
 					noteText.html(htmlVotreNoteBegin + note + htmlVotreNoteFin);
 					p_RootGroup.find(".btn-nonote").show();
 				}
-				var isOriginal = note == inputHidden.data("original");
+				var isOriginal = (note == inputHidden.data("original"));
 				chechToSave(inputHidden.attr("name"), isOriginal);
 			}
 			//	debug(p_Note.data("select-note"));
