@@ -16,6 +16,9 @@
 		</div>
 	<?php else: ?>
 		<?php if ($this->oAward): ?>
+			<input type="hidden" name="vote_id" value="<?php echo $this->oVote->vote_id ?>"/>
+			<input type="hidden" name="award_id" value="<?php echo $this->oVote->award_id ?>"/>
+			<input type="hidden" name="user_id" value="<?php echo $this->oVote->user_id ?>"/>
 			<div class="panel panel-default panel-root">
 				<div class="panel-heading">
 					<h3 class="panel-title">Bulletin de vote <?php echo $this->oAward->toStringWithPrefix() ?></h3>
@@ -48,7 +51,8 @@
 											<?php
 											$score = $oVoteItem->score;
 											if (!isset($score)) : $score = '-1'; endif; ?>
-											<input type="hidden" name="n_<?php echo $oVoteItem->title_id ?>" value="<?php echo $score ?>"/>
+											<input type="hidden" name="n_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
+													 value="<?php echo $score ?>"/>
 											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="0">0</a></div>
 											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="1">1</a></div>
 											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="2">2</a></div>
@@ -59,17 +63,9 @@
 										<div class="row">
 											<div class="col-xs-12">
 												<h4>Votre commentaire</h4>
-												<?php
-												$mess = '';
-												$mess .= 'Title = ' . $oVoteItem->getTitle()->toString() . "\n";
-												$mess .= 'vote_item_id = ' . $oVoteItem->vote_item_id . "\n";
-												$mess .= 'vote_id = ' . $oVoteItem->vote_id . "\n";
-												$mess .= 'title_id = ' . $oVoteItem->title_id . "\n";
-												$mess .= 'score = ' . $oVoteItem->score . "\n";
-												$mess .= 'comment = ' . $oVoteItem->comment . "\n";
-												$mess .= 'modified = ' . $oVoteItem->modified . "\n";
-												?>
-												<textarea class="form-control" name="c_<?php echo $oVoteItem->title_id ?>" rows="3"><?php echo $mess ?></textarea>
+												<textarea class="form-control"
+															 name="c_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
+															 rows="3"><?php echo $oVoteItem->comment ?></textarea>
 											</div>
 										</div>
 									</div>

@@ -50,7 +50,7 @@ class module_votes extends abstract_module
 
 	private function doVote()
 	{
-		$oVote = $this->doVerifyAndBuild();
+		$oVote = $this->doVerifyRequest();
 
 		$oView = new _view('votes::vote');
 		$oView->oAward = $this->oAward;
@@ -62,7 +62,6 @@ class module_votes extends abstract_module
 
 		// Ajout du javascript
 		$scriptView = new _view('votes::scriptJs');
-		//$scriptView->oConnection = $oConfirm->oConnection;
 		$this->oLayout->add('script', $scriptView);
 	}
 
@@ -70,17 +69,29 @@ class module_votes extends abstract_module
 	/**
 	 * @return row_vote
 	 */
-	private function doVerifyAndBuild()
+	private function doVerifyRequest()
 	{
-		// Sélectionne le prix du bulletin de vote
+		if (_root::getRequest()->isPost()) {
+			$oVote = $this->doVerifyPost();
+		} else {
+			// Construit le bulletin de vote complet d'un prix de l'utilisateur courant
+			$oVote = $this->buildBulletinVote();
+		}
+		return $oVote;
+	}
+
+	/**
+	 * Construit le bulletin de vote complet d'un prix de l'utilisateur courant.
+	 * Le prix est automatiquement sélectionné si son ID ne fait pas parti des paramètre de la requête.
+	 * @return row_vote
+	 */
+	private function buildBulletinVote()
+	{
+		// Sélectionne le prix correspondant au bulletin de vote
 		$this->selectAwardToVote();
 		// Recherche du bulletin de vote
-		$oVote = model_vote::getInstance()->findByUserIdAwardId($this->oUser->getId(), $this->oAward->getId());
-		if ($oVote->isEmpty()) {
-			// Création si non trouvé
-			$this->saveNewVote($oVote);
-		}
-		// Recherche des titres sélectionnés pour le prix pour remplir le bulletin de vote détaillé
+		$oVote = $this->findBulletinVote($this->oUser->getId(), $this->oAward->getId());
+		// Recherche les titres sélectionnés du prix pour remplir le bulletin de vote détaillé
 		$toVoteItems = array();
 		$toTitles = $this->oAward->findTitles();
 		foreach ($toTitles as $oTitle) {
@@ -94,7 +105,29 @@ class module_votes extends abstract_module
 			$oVoteItem->setTitle($oTitle);
 		}
 		$oVote->setVoteItems($toVoteItems);
+		return $oVote;
+	}
 
+	/**
+	 * Recherche du bulletin de vote d'un prix pour un utilisateur.
+	 * Si non trouvé, initialise un bulletin de base.
+	 *
+	 * @param $pIdUser
+	 * @param $pIdAward
+	 * @return row_vote
+	 */
+	private function findBulletinVote($pIdUser, $pIdAward)
+	{
+		$oVote = model_vote::getInstance()->findByUserIdAwardId($pIdUser, $pIdAward);
+		if ($oVote->isEmpty()) {
+			// Initialisation si non trouvé
+			$oVote->award_id = $this->oAward->getId();
+			$oVote->user_id = $this->oUser->getId();
+//			$oVote->created = plugin_vfa::dateTimeSgbd();
+//			$oVote->number = 0;
+//			$oVote->average = 0.0;
+//			$oVote->save();
+		}
 		return $oVote;
 	}
 
@@ -122,29 +155,25 @@ class module_votes extends abstract_module
 		}
 	}
 
-	/**
-	 * @param row_vote $poVote
-	 * @return row_vote
-	 */
-	private function saveNewVote($poVote)
-	{
-		$poVote->award_id = $this->oAward->getId();
-		$poVote->user_id = $this->oUser->getId();
-		$poVote->created = plugin_vfa::dateTimeSgbd();
-		$poVote->number = 0;
-		$poVote->average = 0.0;
-		$poVote->save();
-	}
+//	/**
+//	 * @param row_vote $poVote
+//	 * @return row_vote
+//	 */
+//	private function initNewVote($poVote)
+//	{
+//		$poVote->award_id = $this->oAward->getId();
+//		$poVote->user_id = $this->oUser->getId();
+//		$poVote->created = plugin_vfa::dateTimeSgbd();
+//		$poVote->number = 0;
+//		$poVote->average = 0.0;
+//		// $poVote->save();
+//	}
 
 	/**
 	 * @return row_vote
 	 */
-	private function save()
+	private function doVerifyPost()
 	{
-		if (!_root::getRequest()->isPost()) {
-			return null;
-		}
-
 		// on verifie que le token est valide
 		$oPluginXsrf = new plugin_xsrf();
 		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
@@ -156,12 +185,20 @@ class module_votes extends abstract_module
 		// Nouveau bulletin de vote ?
 		$voteId = _root::getParam('vote_id', null);
 		if ($voteId == null) {
-			$oVote = $this->buildNewVote();
+			$oVote = new row_vote();
+			$oVote->award_id = _root::getParam('award_id', null);
+			$oVote->user_id = _root::getParam('user_id', null);
+			$oVote->created = plugin_vfa::dateTimeSgbd();
+			$oVote->number = 0;
+			$oVote->average = 0.0;
 		} else {
-			$oVote = $this->buildVote($voteId);
+			$oVote = model_vote::getInstance()->findById($voteId);
 		}
 
-		$oVote->modified = plugin_vfa::dateTimeSgbd();
+
+		$tParams = _root::getRequest()->getParams();
+		var_dump($oVote);
+		var_dump($tParams);
 
 //		// Copie la saisie dans un enregistrement
 //		foreach ($oVoteModel->getListColumn() as $sColumn) {
