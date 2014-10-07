@@ -7,10 +7,6 @@
 
 		$("#myBrand").data("toSave", []);
 
-		$("textarea").change(function () {
-//			alert($(this).val());
-			debug($(this).val());
-		});
 		$(".btn-note").click(function () {
 			if (false == $(this).hasClass('active')) {
 				getNoteGroup($(this).parents("[data-notes-group]"), $(this));
@@ -26,6 +22,10 @@
 			initNotesGroup($(this));
 		});
 
+		$("textarea").change(function () {
+			var isOriginal = ($(this).val() == $(this).data("original"));
+			checkToSave($(this).attr("name"), isOriginal);
+		});
 
 		function initNotesGroup(p_RootGroup) {
 			//	debug(p_RootGroup.attr("data-notes-group"));
@@ -43,7 +43,10 @@
 				selectNote.toggleClass("active");
 				noteText.html(htmlVotreNoteBegin + note + htmlVotreNoteFin);
 			}
+			var comment = p_RootGroup.find("textarea");
+			comment.data("original", comment.val());
 		}
+
 
 		function getNoteGroup(p_RootGroup, p_Note) {
 			//	debug(p_RootGroup.attr("data-notes-group"));
@@ -81,6 +84,7 @@
 			});
 			p_RootGroup.find(".btn-nonote").removeClass("active");
 		}
+
 
 		function checkToSave(pName, pIsOriginal) {
 			// debug(pName + " " + pIsOriginal);
