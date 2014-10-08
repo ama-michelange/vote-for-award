@@ -71,9 +71,11 @@ class module_votes extends abstract_module
 	 */
 	private function doVerifyRequest()
 	{
+		$oVote = null;
 		if (_root::getRequest()->isPost()) {
 			$oVote = $this->doVerifyPost();
-		} else {
+		}
+		if (null == $oVote) {
 			// Construit le bulletin de vote complet d'un prix de l'utilisateur courant
 			$oVote = $this->buildBulletinVote();
 		}
@@ -181,7 +183,7 @@ class module_votes extends abstract_module
 			$oVote = model_vote::getInstance()->findById($voteId);
 		}
 
-		// Extrait les pamètres de la requ^te et les convertit en row_vote_item
+		// Extrait les pamètres de la requête et les convertit en row_vote_item
 		$toVoteItems = $this->extractParamsToVoteItems();
 		$oVote->setVoteItems($toVoteItems);
 		// Calcule le nombre de vote valide
@@ -189,7 +191,7 @@ class module_votes extends abstract_module
 		// Sauvegarde
 		$this->saveVote($oVote);
 
-		return $oVote;
+		return null;
 	}
 
 	/**
@@ -264,18 +266,34 @@ class module_votes extends abstract_module
 	 */
 	private function saveVote($poVote)
 	{
+		$poVote->save();
 		$toVoteItems = $poVote->getVoteItems();
 		foreach ($toVoteItems as $oVoteItem) {
+			$oVoteItem->vote_id = $poVote->vote_id;
 			if ($oVoteItem->vote_item_id) {
 				$last = model_vote_item::getInstance()->findById($oVoteItem->getId());
-				if (($oVoteItem->score != $last->score) || ($oVoteItem->comment != $last->comment)) {
+				echo('<p>');
+				echo($last->score);
+				echo('<br/>');
+				echo($oVoteItem->score);
+				echo('<br/>');
+				echo($oVoteItem->score != $last->score);
+				echo('</p><p>');
+				echo($last->comment);
+				echo('<br/>');
+				echo($oVoteItem->comment);
+				echo('<br/>');
+				echo($oVoteItem->comment != $last->comment);
+				echo('</p>');
+				if (($oVoteItem->score != $last->score) ) {
+//				if (($oVoteItem->score != $last->score) || ($oVoteItem->comment != $last->comment)) {
 					$oVoteItem->save();
 				}
 			} else {
 				$oVoteItem->save();
 			}
 		}
-		$poVote->save();
+
 	}
 
 
