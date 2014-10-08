@@ -155,20 +155,6 @@ class module_votes extends abstract_module
 		}
 	}
 
-//	/**
-//	 * @param row_vote $poVote
-//	 * @return row_vote
-//	 */
-//	private function initNewVote($poVote)
-//	{
-//		$poVote->award_id = $this->oAward->getId();
-//		$poVote->user_id = $this->oUser->getId();
-//		$poVote->created = plugin_vfa::dateTimeSgbd();
-//		$poVote->number = 0;
-//		$poVote->average = 0.0;
-//		// $poVote->save();
-//	}
-
 	/**
 	 * @return row_vote
 	 */
@@ -195,50 +181,101 @@ class module_votes extends abstract_module
 			$oVote = model_vote::getInstance()->findById($voteId);
 		}
 
+		// Extrait les pamètres de la requ^te et les convertit en row_vote_item
+		$toVoteItems = $this->extractParamsToVoteItems();
+		$oVote->setVoteItems($toVoteItems);
+		// Calcule le nombre de vote valide
+		$this->calcVote($oVote);
+		// Sauvegarde
+		$this->saveVote($oVote);
 
-		$tParams = _root::getRequest()->getParams();
-		var_dump($oVote);
-		var_dump($tParams);
-
-//		// Copie la saisie dans un enregistrement
-//		foreach ($oVoteModel->getListColumn() as $sColumn) {
-//			if (in_array($sColumn, $oVoteModel->getIdTab())) {
-//				continue;
-//			}
-//			if ((_root::getParam($sColumn, null) == null) && (null != $oVote->$sColumn)) {
-//				$oVote->$sColumn = null;
-//			} else {
-//				$oVote->$sColumn = _root::getParam($sColumn, null);
-//			}
-//		}
-//
-//		if ($oVote->isValid()) {
-//			$oVote->save();
-//			$this->saveVoteAcl($oVote->getId(), $ptCompleteAclModules);
-//			_root::redirect('votes::read', array('id' => $oVote->getId()));
-//		}
-		return $oVote;
-	}
-
-
-	/**
-	 * @param $pVoteId int
-	 * @return row_vote
-	 */
-	private function buildVote($pVoteId)
-	{
-		$oVote = model_vote::getInstance()->findById($pVoteId);
 		return $oVote;
 	}
 
 	/**
-	 * @param row_vote $poVote
 	 * @return row_vote_item[]
 	 */
-	private function buildVoteItems($poVote)
+	private function extractParamsToVoteItems()
 	{
-		$oVote = model_vote::getInstance()->findById($pVoteId);
-		return $oVote;
+		// extraction
+		$tParams = _root::getRequest()->getParams();
+		$tItems = array();
+		foreach ($tParams as $key => $value) {
+			$exKey = explode("_", $key);
+			if (($exKey[0] == 'no') || ($exKey[0] == 'co')) {
+				$idTitle = $exKey[1];
+				$idVoteItem = $exKey[2];
+				if (isset($tItems[$idTitle])) {
+					$tDetail = $tItems[$idTitle];
+				} else {
+					$tDetail = array();
+				}
+				$tDetail['title_id'] = $idTitle;
+				$tDetail['vote_item_id'] = $idVoteItem;
+				if ($exKey[0] == 'no') {
+					$tDetail['score'] = $value;
+				}
+				if ($exKey[0] == 'co') {
+					$tDetail['comment'] = $value;
+				}
+				$tItems[$idTitle] = $tDetail;
+			}
+		}
+
+		// conversion
+		$toVoteItems = array();
+		foreach ($tItems as $key => $values) {
+			$oVoteItem = new row_vote_item();
+			$id = $values['vote_item_id'];
+			if (strlen($id) > 0) {
+				$oVoteItem->vote_item_id = intval($values['vote_item_id']);
+			}
+			$oVoteItem->title_id = intval($values['title_id']);
+			$oVoteItem->score = intval($values['score']);
+			$oVoteItem->comment = $values['comment'];
+			$oVoteItem->modified = plugin_vfa::dateTimeSgbd();
+			$toVoteItems[] = $oVoteItem;
+		}
+		return $toVoteItems;
+	}
+
+	/**
+	 * @param $poVote row_vote
+	 * @return void
+	 */
+	private function calcVote($poVote)
+	{
+		$nb = 0;
+		$sum = 0.0;
+		$toVoteItems = $poVote->getVoteItems();
+		foreach ($toVoteItems as $oVoteItem) {
+			if ($oVoteItem->score > -1) {
+				$nb++;
+				$sum += $oVoteItem->score;
+			}
+		}
+		$poVote->number = $nb;
+		$poVote->average = $sum / $nb;
+	}
+
+	/**
+	 * @param $poVote row_vote
+	 * @return void
+	 */
+	private function saveVote($poVote)
+	{
+		$toVoteItems = $poVote->getVoteItems();
+		foreach ($toVoteItems as $oVoteItem) {
+			if ($oVoteItem->vote_item_id) {
+				$last = model_vote_item::getInstance()->findById($oVoteItem->getId());
+				if (($oVoteItem->score != $last->score) || ($oVoteItem->comment != $last->comment)) {
+					$oVoteItem->save();
+				}
+			} else {
+				$oVoteItem->save();
+			}
+		}
+		$poVote->save();
 	}
 
 

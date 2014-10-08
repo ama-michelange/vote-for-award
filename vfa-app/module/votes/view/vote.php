@@ -51,7 +51,7 @@
 											<?php
 											$score = $oVoteItem->score;
 											if (!isset($score)) : $score = '-1'; endif; ?>
-											<input type="hidden" name="n_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
+											<input type="hidden" name="no_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
 													 value="<?php echo $score ?>"/>
 											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="0">0</a></div>
 											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="1">1</a></div>
@@ -64,7 +64,7 @@
 											<div class="col-xs-12">
 												<h4>Votre commentaire</h4>
 												<textarea class="form-control"
-															 name="c_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
+															 name="co_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
 															 rows="3"><?php echo $oVoteItem->comment ?></textarea>
 											</div>
 										</div>
