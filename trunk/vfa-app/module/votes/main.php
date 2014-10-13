@@ -257,7 +257,11 @@ class module_votes extends abstract_module
 			}
 		}
 		$poVote->number = $nb;
-		$poVote->average = $sum / $nb;
+		if ($nb) {
+			$poVote->average = $sum / $nb;
+		} else {
+			$poVote->average = 0;
+		}
 	}
 
 	/**
@@ -272,28 +276,13 @@ class module_votes extends abstract_module
 			$oVoteItem->vote_id = $poVote->vote_id;
 			if ($oVoteItem->vote_item_id) {
 				$last = model_vote_item::getInstance()->findById($oVoteItem->getId());
-				echo('<p>');
-				echo($last->score);
-				echo('<br/>');
-				echo($oVoteItem->score);
-				echo('<br/>');
-				echo($oVoteItem->score != $last->score);
-				echo('</p><p>');
-				echo($last->comment);
-				echo('<br/>');
-				echo($oVoteItem->comment);
-				echo('<br/>');
-				echo($oVoteItem->comment != $last->comment);
-				echo('</p>');
-				if (($oVoteItem->score != $last->score) ) {
-//				if (($oVoteItem->score != $last->score) || ($oVoteItem->comment != $last->comment)) {
-					$oVoteItem->save();
+				if (($oVoteItem->score != $last->score) || (strcmp($oVoteItem->comment, $last->comment) != 0)) {
+					$oVoteItem->update();
 				}
 			} else {
 				$oVoteItem->save();
 			}
 		}
-
 	}
 
 
