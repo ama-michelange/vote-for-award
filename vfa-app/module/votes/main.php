@@ -125,10 +125,6 @@ class module_votes extends abstract_module
 			// Initialisation si non trouvé
 			$oVote->award_id = $this->oAward->getId();
 			$oVote->user_id = $this->oUser->getId();
-//			$oVote->created = plugin_vfa::dateTimeSgbd();
-//			$oVote->number = 0;
-//			$oVote->average = 0.0;
-//			$oVote->save();
 		}
 		return $oVote;
 	}
