@@ -27,6 +27,19 @@
 			checkToSave($(this).attr("name"), isOriginal);
 		});
 
+		$("textarea").keyup(function () {
+			var $this = $(this);
+			setTimeout(function () {
+				var isOriginal = ($this.val() == $this.data("original"));
+				checkToSave($this.attr("name"), isOriginal);
+			}, 500);
+		});
+
+		function checkTextArea(p_Item) {
+			var isOriginal = ($(p_Item).val() == $(p_Item).data("original"));
+			checkToSave($(p_Item).attr("name"), isOriginal);
+		}
+
 		function initNotesGroup(p_RootGroup) {
 			//	debug(p_RootGroup.attr("data-notes-group"));
 			var inputHidden = p_RootGroup.find("[type=hidden]");
