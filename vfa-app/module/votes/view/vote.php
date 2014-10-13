@@ -21,7 +21,10 @@
 			<input type="hidden" name="user_id" value="<?php echo $this->oVote->user_id ?>"/>
 			<div class="panel panel-default panel-root">
 				<div class="panel-heading">
-					<h3 class="panel-title">Bulletin de vote <?php echo $this->oAward->toStringWithPrefix() ?></h3>
+					<h3 class="panel-title">Bulletin de vote <?php echo $this->oAward->toStringWithPrefix() ?>
+						<span class="badge pull-right"><?php echo $this->oVote->number ?></span>
+						<span class="pull-right" style="padding-right: 5px;">Notes</span>
+					</h3>
 				</div>
 				<div class="panel-body">
 					<?php foreach ($this->oVote->getVoteItems() as $oVoteItem): ?>
