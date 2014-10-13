@@ -35,11 +35,6 @@
 			}, 500);
 		});
 
-		function checkTextArea(p_Item) {
-			var isOriginal = ($(p_Item).val() == $(p_Item).data("original"));
-			checkToSave($(p_Item).attr("name"), isOriginal);
-		}
-
 		function initNotesGroup(p_RootGroup) {
 			//	debug(p_RootGroup.attr("data-notes-group"));
 			var inputHidden = p_RootGroup.find("[type=hidden]");
