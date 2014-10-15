@@ -1,9 +1,6 @@
 <script>
 	$(document).ready(function () {
 
-		var htmlAucuneNote = "<h4><span class=\"label label-warning\">Aucune note</span></h4>";
-		var htmlVotreNoteBegin = "<h4>Votre note : ";
-		var htmlVotreNoteFin = "</h4>";
 
 		$("#myBrand").data("toSave", []);
 
@@ -46,10 +43,10 @@
 			var selectNote = p_RootGroup.find(finder);
 			if (selectNote.length == 0) {
 				p_RootGroup.find(".btn-nonote").hide();
-				noteText.html(htmlAucuneNote);
+				noteText.html(buildTextNote(note, true));
 			} else {
 				selectNote.toggleClass("active");
-				noteText.html(htmlVotreNoteBegin + note + htmlVotreNoteFin);
+				noteText.html(buildTextNote(note, true));
 			}
 			var comment = p_RootGroup.find("textarea");
 			comment.data("original", comment.val());
@@ -71,19 +68,41 @@
 				//	debug("Change : " + inputHidden.data("save") + " -> " + note);
 				inputHidden.val(note);
 				inputHidden.data("save", note);
+				var isOriginal = (note == inputHidden.data("original"));
 				if (note == "-1") {
-					noteText.html(htmlAucuneNote);
+					noteText.html(buildTextNote(note, isOriginal));
 					p_RootGroup.find(".btn-nonote").hide();
 				} else {
 					p_Note.addClass('active');
-					noteText.html(htmlVotreNoteBegin + note + htmlVotreNoteFin);
-					p_RootGroup.find(".btn-nonote").show();
+					noteText.html(buildTextNote(note, isOriginal));
 				}
-				var isOriginal = (note == inputHidden.data("original"));
-				checkToSave(inputHidden.attr("name"), isOriginal);
+				p_RootGroup.find(".btn-nonote").show();
 			}
+			checkToSave(inputHidden.attr("name"), isOriginal);
+
 			//	debug(p_Note.data("select-note"));
 			//	debug(p_RootGroup.find("[type=hidden]").prop("value"));
+		}
+
+
+		function buildTextNote(p_Note, p_Original) {
+			var text;
+			if (p_Note == "-1") {
+				if (p_Original) {
+					text = "<h4><span class=\"label label-danger\">Aucune note</span></h4>";
+				}
+				else {
+					text = "<h4><span class=\"label label-warning\">Aucune note</span></h4>";
+				}
+			}
+			else {
+				if (p_Original) {
+					text = "<h4><span class='label label-primary'>Votre note <span class='label label-default'>" + p_Note + "</span></span></h4>";
+				} else {
+					text = "<h4><span class='label label-warning'>Votre note <span class='label label-default'>" + p_Note + "</span></span></h4>";
+				}
+			}
+			return text;
 		}
 
 		function desactiveGroup(p_RootGroup) {
@@ -144,5 +163,6 @@
 		}
 
 
-	});
+	})
+	;
 </script>

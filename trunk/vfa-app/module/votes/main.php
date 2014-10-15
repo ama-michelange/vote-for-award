@@ -173,10 +173,12 @@ class module_votes extends abstract_module
 			$oVote->award_id = _root::getParam('award_id', null);
 			$oVote->user_id = _root::getParam('user_id', null);
 			$oVote->created = plugin_vfa::dateTimeSgbd();
+			$oVote->modified = $oVote->created;
 			$oVote->number = 0;
 			$oVote->average = 0.0;
 		} else {
 			$oVote = model_vote::getInstance()->findById($voteId);
+			$oVote->modified = plugin_vfa::dateTimeSgbd();
 		}
 
 		// Extrait les pamètres de la requête et les convertit en row_vote_item
@@ -231,7 +233,6 @@ class module_votes extends abstract_module
 			$oVoteItem->title_id = intval($values['title_id']);
 			$oVoteItem->score = intval($values['score']);
 			$oVoteItem->comment = $values['comment'];
-			$oVoteItem->modified = plugin_vfa::dateTimeSgbd();
 			$toVoteItems[] = $oVoteItem;
 		}
 		return $toVoteItems;
@@ -273,9 +274,12 @@ class module_votes extends abstract_module
 			if ($oVoteItem->vote_item_id) {
 				$last = model_vote_item::getInstance()->findById($oVoteItem->getId());
 				if (($oVoteItem->score != $last->score) || (strcmp($oVoteItem->comment, $last->comment) != 0)) {
+					$oVoteItem->modified = plugin_vfa::dateTimeSgbd();
 					$oVoteItem->update();
 				}
 			} else {
+				$oVoteItem->created = plugin_vfa::dateTimeSgbd();
+				$oVoteItem->modified = $oVoteItem->created;
 				$oVoteItem->save();
 			}
 		}

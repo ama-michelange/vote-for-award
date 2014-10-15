@@ -21,10 +21,12 @@
 			<input type="hidden" name="user_id" value="<?php echo $this->oVote->user_id ?>"/>
 			<div class="panel panel-default panel-root">
 				<div class="panel-heading">
-					<h3 class="panel-title">Bulletin de vote <?php echo $this->oAward->toStringWithPrefix() ?>
-						<span class="badge pull-right"><?php echo $this->oVote->number ?></span>
-						<span class="pull-right" style="padding-right: 5px;">Notes</span>
-					</h3>
+					<span class="panel-title">Bulletin de vote <?php echo $this->oAward->toStringWithPrefix() ?></span>
+					<span class="pull-right" >
+						<span style="padding-right: 5px;">Notes enregistrées</span>
+						<?php if ($this->oVote->number < 7) : $numberLabel = 'label-warning'; else : $numberLabel = 'label-default'; endif ?>
+						<span class="panel-title"><span class="label <?php echo $numberLabel ?>"><?php echo $this->oVote->number ?></span></span>
+					</span>
 				</div>
 				<div class="panel-body">
 					<?php foreach ($this->oVote->getVoteItems() as $oVoteItem): ?>
@@ -68,7 +70,7 @@
 												<h4>Votre commentaire</h4>
 												<textarea class="form-control"
 															 name="co_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
-															 rows="3"><?php echo $oVoteItem->comment ?></textarea>
+															 rows="1"><?php echo $oVoteItem->comment ?></textarea>
 											</div>
 										</div>
 									</div>
