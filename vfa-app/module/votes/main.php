@@ -32,9 +32,9 @@ class module_votes extends abstract_module
 	private function buildContextBar()
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
+		$navBar->addChild(new Bar('left'));
 		$navBar->setTitle('Bulletin', new NavLink('votes', 'index'), null, "myBrand");
-		$navBar->addChild(new BarButtons('left'));
-
+		$this->buildMenuAwardToVote($navBar->getChild('left'));
 		return $navBar;
 	}
 
@@ -151,6 +151,34 @@ class module_votes extends abstract_module
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param Bar $pBar
+	 */
+	private function buildMenuAwardToVote($pBar)
+	{
+		$tItems = array();
+		if ($this->toValidReaderAwards && (count($this->toValidReaderAwards) > 0)) {
+			$t = $this->toValidReaderAwards;
+			foreach ($t as $award) {
+				if ($award->award_id != $this->oAward->award_id) {
+					$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
+						new NavLink('votes', 'index', array('award_id' => $award->award_id)));
+				}
+			}
+		}
+		if ($this->toValidBoardAwards && count($this->toValidBoardAwards) > 0) {
+			$t = $this->toValidBoardAwards;
+			$tItems[] = plugin_BsHtml::buildSeparator();
+			foreach ($t as $award) {
+				if ($award->award_id != $this->oAward->award_id) {
+					$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
+						new NavLink('votes', 'index', array('award_id' => $award->award_id)));
+				}
+			}
+		}
+		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres bulletins', 'Autre bulletin', true));
 	}
 
 	/**
