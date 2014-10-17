@@ -50,7 +50,7 @@
 										</div>
 										<div class="row">
 											<div class="col-xs-7 col-sm-8" data-note><h4>Votre note : </h4></div>
-											<div class="col-xs-5 col-sm-4"><a class="btn btn-nonote btn-sm btn-block">Annuler la note</a></div>
+											<div class="col-xs-5 col-sm-4"><a class="btn btn-nonote btn-sm btn-block">Annuler ce vote</a></div>
 										</div>
 										<div class="row">
 											<?php
@@ -67,10 +67,10 @@
 										</div>
 										<div class="row">
 											<div class="col-xs-12">
-												<h4>Votre commentaire</h4>
+												<h4>Commentaire</h4>
 												<textarea class="form-control"
 															 name="co_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
-															 rows="1"><?php echo $oVoteItem->comment ?></textarea>
+															 rows="2"><?php echo $oVoteItem->comment ?></textarea>
 											</div>
 										</div>
 									</div>

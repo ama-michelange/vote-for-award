@@ -40,12 +40,23 @@ class plugin_BsHtml
 	 * @param string|null $pLabelMenuItem
 	 * @return MenuItem|DropdownMenuItem|null
 	 */
-	public static function buildDropdownMenuItem($ptMenuItems, $pLabelDrop, $pLabelMenuItem = null)
+	public static function buildDropdownMenuItem($ptMenuItems, $pLabelDrop, $pLabelMenuItem = null, $pForceNav = false)
 	{
 		$tItems = array();
 		foreach ($ptMenuItems as $item) {
 			if ($item) {
 				$tItems[] = $item;
+			}
+		}
+		if (count($tItems) > 0) {
+			if (true == plugin_BsHtml::isSeparator($tItems[0])) {
+				array_shift($tItems);
+			}
+		}
+		$nb = count($tItems) - 1;
+		if ($nb > -1) {
+			if (true == plugin_BsHtml::isSeparator($tItems[$nb])) {
+				array_pop($tItems);
 			}
 		}
 		$ret = null;
@@ -54,7 +65,7 @@ class plugin_BsHtml
 				break;
 			case 1:
 				if (false == plugin_BsHtml::isSeparator($tItems[0])) {
-					if (_root::getParamNav() != $tItems[0]->getLink()->getNav()) {
+					if ((_root::getParamNav() != $tItems[0]->getLink()->getNav()) || ($pForceNav)) {
 						$name = $pLabelMenuItem;
 						if (null == $name) {
 							$name = $pLabelDrop;
@@ -70,7 +81,7 @@ class plugin_BsHtml
 				foreach ($tItems as $item) {
 					if (plugin_BsHtml::isSeparator($item)) {
 						$drop->addChild($item);
-					} elseif (_root::getParamNav() != $item->getLink()->getNav()) {
+					} elseif ((_root::getParamNav() != $item->getLink()->getNav()) || ($pForceNav)) {
 						$drop->addChild($item);
 					}
 				}
