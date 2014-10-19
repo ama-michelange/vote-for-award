@@ -92,10 +92,10 @@ $(document).ready(function () {
 		var color;
 		if (p_Note == "-1") {
 			if (p_Original) {
-				label = "warning";
+				label = "danger";
 			}
 			else {
-				label = "danger";
+				label = "warning";
 			}
 			html = "<h4><span class=\"label label-" + label + "\">Non lu, aucun vote</span></h4>";
 		}
