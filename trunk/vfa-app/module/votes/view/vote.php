@@ -22,10 +22,23 @@
 			<div class="panel panel-default panel-root">
 				<div class="panel-heading">
 					<span class="panel-title">Bulletin de vote <?php echo $this->oAward->toStringWithPrefix() ?></span>
-					<span class="pull-right" >
-						<span style="padding-right: 5px;">Notes enregistrées</span>
-						<?php if ($this->oVote->number < 7) : $numberLabel = 'label-warning'; else : $numberLabel = 'label-default'; endif ?>
-						<span class="panel-title"><span class="label <?php echo $numberLabel ?>"><?php echo $this->oVote->number ?></span></span>
+					<span class="pull-right">
+						<?php
+						$maxNotes = count($this->oVote->getVoteItems());
+						if (!$this->oVote->number) {
+							$nbNotes = 0;
+						} else {
+							$nbNotes = $this->oVote->number;
+						}
+						$numberLabel = 'label-primary';
+						if ($this->oAward->type == plugin_vfa::TYPE_AWARD_READER) {
+							if ($nbNotes < 7) {
+								$numberLabel = 'label-warning';
+							}
+						}
+						?>
+						<span style="padding-right: 5px;">Votes enregistrées</span>
+						<span class="panel-title"><span class="label <?php echo $numberLabel ?>"><?php echo $nbNotes . ' / ' . $maxNotes ?></span></span>
 					</span>
 				</div>
 				<div class="panel-body">
