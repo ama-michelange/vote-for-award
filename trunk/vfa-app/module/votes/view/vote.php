@@ -71,12 +71,12 @@
 											if (!isset($score)) : $score = '-1'; endif; ?>
 											<input type="hidden" name="no_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
 													 value="<?php echo $score ?>"/>
-											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="0">0</a></div>
-											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="1">1</a></div>
-											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="2">2</a></div>
-											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="3">3</a></div>
-											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="4">4</a></div>
-											<div class="col-xs-2"><a class="btn btn-note btn-lg btn-block" data-select-note="5">5</a></div>
+											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="0">0</a><span class="hidden-xs">Sans intérêt</span></div>
+											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="1">1</a><span class="hidden-xs">Décevant</span></div>
+											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="2">2</a><span class="hidden-xs">Moyen</span></div>
+											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="3">3</a><span class="hidden-xs">Bon</span></div>
+											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="4">4</a><span class="hidden-xs">Très bon</span></div>
+											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="5">5</a><span class="hidden-xs">Excellent</span></div>
 										</div>
 										<div class="row">
 											<div class="col-xs-12">
