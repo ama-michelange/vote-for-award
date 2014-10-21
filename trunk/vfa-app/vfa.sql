@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mer 08 Octobre 2014 à 22:12
+-- Généré le: Mar 21 Octobre 2014 à 21:51
 -- Version du serveur: 5.6.12-log
 -- Version de PHP: 5.4.12
 
@@ -611,17 +611,16 @@ CREATE TABLE IF NOT EXISTS `vfa_votes` (
   `number` tinyint(4) NOT NULL,
   `average` decimal(10,5) NOT NULL,
   `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   PRIMARY KEY (`vote_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Contenu de la table `vfa_votes`
 --
 
-INSERT INTO `vfa_votes` (`vote_id`, `award_id`, `user_id`, `number`, `average`, `created`) VALUES
-(3, 38, 5, 0, '0.00000', '2014-07-27 01:13:10'),
-(4, 38, 2, 0, '0.00000', '2014-07-31 00:15:54'),
-(5, 41, 6, 1, '1.00000', '2014-10-08 02:09:11');
+INSERT INTO `vfa_votes` (`vote_id`, `award_id`, `user_id`, `number`, `average`, `created`, `modified`) VALUES
+(7, 41, 6, 2, '1.50000', '2014-10-20 00:22:32', '2014-10-20 00:59:11');
 
 -- --------------------------------------------------------
 
@@ -633,23 +632,21 @@ CREATE TABLE IF NOT EXISTS `vfa_vote_items` (
   `vote_item_id` int(11) NOT NULL AUTO_INCREMENT,
   `vote_id` int(11) NOT NULL,
   `title_id` int(11) NOT NULL,
-  `score` tinyint(4) NOT NULL,
+  `score` tinyint(4) NOT NULL DEFAULT '-1',
   `comment` text,
+  `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`vote_item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 --
 -- Contenu de la table `vfa_vote_items`
 --
 
-INSERT INTO `vfa_vote_items` (`vote_item_id`, `vote_id`, `title_id`, `score`, `comment`, `modified`) VALUES
-(1, 0, 91, 3, NULL, '2014-10-08 02:09:11'),
-(2, 0, 93, -1, NULL, '2014-10-08 02:09:11'),
-(3, 0, 92, -1, NULL, '2014-10-08 02:09:11'),
-(4, 0, 91, 1, NULL, '2014-10-08 02:10:15'),
-(5, 0, 93, -1, NULL, '2014-10-08 02:10:15'),
-(6, 0, 92, -1, NULL, '2014-10-08 02:10:15');
+INSERT INTO `vfa_vote_items` (`vote_item_id`, `vote_id`, `title_id`, `score`, `comment`, `created`, `modified`) VALUES
+(13, 7, 91, 2, NULL, '2014-10-20 00:22:32', '2014-10-20 00:50:35'),
+(14, 7, 93, 1, NULL, '2014-10-20 00:22:32', '2014-10-20 00:59:11'),
+(15, 7, 92, -1, NULL, '2014-10-20 00:22:32', '2014-10-20 00:22:32');
 
 -- --------------------------------------------------------
 
