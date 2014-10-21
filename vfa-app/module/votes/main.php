@@ -14,8 +14,11 @@ class module_votes extends abstract_module
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
 
+
 		$this->oUser = $oUserSession->getUser();
 		$this->toValidAwards = $oUserSession->getValidAwards();
+		$this->toValidBoardAwards = 0;
+		$this->toValidReaderAwards = 0;
 		if (count($this->toValidAwards) > 0) {
 			$this->toValidBoardAwards = $oUserSession->getValidBoardAwards();
 			$this->toValidReaderAwards = $oUserSession->getValidReaderAwards();
