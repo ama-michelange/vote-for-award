@@ -51,6 +51,13 @@ class module_votes extends abstract_module
 		}
 	}
 
+	public function _test()
+	{
+		$this->oAward= new model_award();
+		$this->oAward->award_id = -1;
+		model_vote_result::getInstance()->calcResultVotes(2);
+	}
+
 	private function doVote()
 	{
 		$oVote = $this->doVerifyRequest();
