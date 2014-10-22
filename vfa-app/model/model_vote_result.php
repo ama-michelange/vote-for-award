@@ -37,6 +37,20 @@ class model_vote_result extends abstract_model
 		return $this->findMany('SELECT * FROM ' . $this->sTable);
 	}
 
+	public function calcResultVotes($pIdAward)
+	{
+		$sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score)' . ' FROM vfa_votes, vfa_vote_items' .
+			' WHERE (vfa_votes.award_id = 38)' . ' AND (vfa_votes.number > 3)' . ' AND (vfa_votes.vote_id = vfa_vote_items.vote_id)' .
+			' AND (vfa_vote_items.score > -1)' . ' GROUP BY vfa_vote_items.title_id';
+		$res = $this->execute($sql);
+		var_dump($res);
+		while ($row = mysql_fetch_row($res)) {
+			//var_dump($row);
+			printf("TITLE_ID : %d,  Count : %d,  Sum : %d, Moy : %f </br>", $row[0], $row[1], $row[2], $row[2]/$row[1]);
+		}
+		mysql_free_result($res);
+	}
+
 }
 
 class row_vote_result extends abstract_row
