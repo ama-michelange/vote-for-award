@@ -37,18 +37,42 @@ class model_vote_result extends abstract_model
 		return $this->findMany('SELECT * FROM ' . $this->sTable);
 	}
 
-	public function calcResultVotes($pIdAward)
+	/**
+	 * @param $poAward row_award
+	 * @return row_vote_result[]
+	 */
+	public function calcResultVotes($poAward)
 	{
-		$sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score)' . ' FROM vfa_votes, vfa_vote_items' .
-			' WHERE (vfa_votes.award_id = 38)' . ' AND (vfa_votes.number > 3)' . ' AND (vfa_votes.vote_id = vfa_vote_items.vote_id)' .
-			' AND (vfa_vote_items.score > -1)' . ' GROUP BY vfa_vote_items.title_id';
+		if (!isset($poAward) || $poAward->isEmpty()) {
+			return null;
+		}
+		$idAward = $poAward->award_id;
+		$minNbVote = 2;
+		if ($poAward->type == plugin_vfa::TYPE_AWARD_BOARD) {
+			$minNbVote = 0;
+		}
+
+		$sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score) FROM vfa_votes, vfa_vote_items' .
+			' WHERE (vfa_votes.award_id = ' . $idAward . ') AND (vfa_votes.number > ' . $minNbVote . ')' .
+			' AND (vfa_votes.vote_id = vfa_vote_items.vote_id) AND (vfa_vote_items.score > -1)' . ' GROUP BY vfa_vote_items.title_id';
+		var_dump($sql);
 		$res = $this->execute($sql);
-		var_dump($res);
+
+		$toVoteResults = array();
 		while ($row = mysql_fetch_row($res)) {
 			//var_dump($row);
-			printf("TITLE_ID : %d,  Count : %d,  Sum : %d, Moy : %f </br>", $row[0], $row[1], $row[2], $row[2]/$row[1]);
+			printf("TITLE_ID : %d,  Count : %d,  Sum : %d, Moy : %f </br>", $row[0], $row[1], $row[2], $row[2] / $row[1]);
+			$oVoteResult = new row_vote_result();
+			$oVoteResult->award_id = $idAward;
+			$oVoteResult->title_id = $row[0];
+			$oVoteResult->number = $row[1];
+			$oVoteResult->score = $row[2];
+			$oVoteResult->average = $row[2] / $row[1];
+			$toVoteResults[] = $oVoteResult;
 		}
 		mysql_free_result($res);
+
+		return $toVoteResults;
 	}
 
 }
