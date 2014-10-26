@@ -40,6 +40,16 @@ class model_vote extends abstract_model
 	}
 
 	/**
+	 * Trouve le dernier enregistrement modifié (dans le temps)
+	 * @param int $pAwardId
+	 * @return row_vote
+	 */
+	public function findLastModifiedByAwardId( $pAwardId)
+	{
+		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE award_id=? ORDER BY modified DESC',  $pAwardId);
+	}
+
+	/**
 	 * @return row_vote[]
 	 */
 	public function findAll()

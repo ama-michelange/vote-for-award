@@ -166,6 +166,21 @@ class plugin_vfa
 		}
 		return $oDate;
 	}
+	/**
+	 * Transforme une chaine au format SGBD en datetime.
+	 *
+	 * @param string $pDatetime
+	 *         La date au format SGBD
+	 * @return plugin_date La date ou NULL si pb
+	 */
+	public static function toDateTimeFromSgbd($pDatetime)
+	{
+		$oDatetime = null;
+		if (isset($pDatetime)) {
+			$oDatetime = new plugin_datetime($pDatetime, 'Y-m-d H:i:s');
+		}
+		return $oDatetime;
+	}
 
 	/**
 	 * Change le format d'une date.
