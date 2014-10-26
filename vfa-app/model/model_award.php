@@ -121,7 +121,8 @@ class model_award extends abstract_model
 		if (null != $pType) {
 			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
 		}
-		$sql = 'SELECT * FROM vfa_awards ' . 'WHERE (? <= vfa_awards.end_date)' . $andType . ' ORDER BY vfa_awards.public DESC';
+		$sql = 'SELECT * FROM vfa_awards WHERE (? <= vfa_awards.end_date)' . $andType .
+			' ORDER BY vfa_awards.public DESC, vfa_awards.type, vfa_awards.year DESC, vfa_awards.name';
 		return $this->findMany($sql, plugin_vfa::dateSgbd());
 	}
 

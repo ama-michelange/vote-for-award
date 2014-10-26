@@ -73,7 +73,7 @@ class module_bsnavbar extends abstract_module
 	private function buildMenuPrix($pItems)
 	{
 		$item = new DropdownMenuItem('Prix');
-		$item->addChild(plugin_BsHtml::buildMenuItem('Résultats', new NavLink('results', 'index')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Résultats intermédiaires', new NavLink('results', 'live')));
 
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'list')));
