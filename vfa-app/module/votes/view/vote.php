@@ -62,21 +62,40 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-xs-7 col-sm-8" data-note><h4>Votre note : </h4></div>
-											<div class="col-xs-5 col-sm-4"><a class="btn btn-nonote btn-sm btn-block">Annuler ce vote</a></div>
-										</div>
-										<div class="row">
 											<?php
 											$score = $oVoteItem->score;
 											if (!isset($score)) : $score = '-1'; endif; ?>
 											<input type="hidden" name="no_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
 													 value="<?php echo $score ?>"/>
-											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="0">0</a><span class="hidden-xs">Sans intérêt</span></div>
-											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="1">1</a><span class="hidden-xs">Décevant</span></div>
-											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="2">2</a><span class="hidden-xs">Moyen</span></div>
-											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="3">3</a><span class="hidden-xs">Bon</span></div>
-											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="4">4</a><span class="hidden-xs">Très bon</span></div>
-											<div class="col-xs-2" style="text-align: center"><a class="btn btn-note btn-lg btn-block" data-select-note="5">5</a><span class="hidden-xs">Excellent</span></div>
+											<div class="col-xs-12">
+												<h4>Note</h4>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12 col-sm-7 col-md-5">
+												<div class="btn-group btn-group-lg">
+													<button type="button" class="btn btn-default btn-note" data-select-note="0">0</button>
+													<button type="button" class="btn btn-default btn-note" data-select-note="1">1</button>
+													<button type="button" class="btn btn-default btn-note" data-select-note="2">2</button>
+													<button type="button" class="btn btn-default btn-note" data-select-note="3">3</button>
+													<button type="button" class="btn btn-default btn-note" data-select-note="4">4</button>
+													<button type="button" class="btn btn-default btn-note" data-select-note="5">5</button>
+												</div>
+											</div>
+											<div class="col-xs-12 col-sm-5 col-md-6">
+												<h4 class="note-help">&nbsp;</h4>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<h4>Vote</h4>
+											</div>
+											<div class="col-xs-7 col-sm-5 col-md-3">
+												<h4 data-note style="line-height: 1.5;">Votre note :</h4>
+											</div>
+											<div class="col-xs-5 col-sm-7 col-md-5">
+												<h4><a class="btn btn-nonote btn-sm">Annuler ce vote</a></h4>
+											</div>
 										</div>
 										<div class="row">
 											<div class="col-xs-12">

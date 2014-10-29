@@ -12,9 +12,11 @@
 		<div class="panel-body">
 			<div class="panel panel-inner panel-info">
 				<div class="panel-body">
+					Date de fin de prix : 14/14/2589
 					Stats
 					Inscrits
-					Participation
+					Participants
+					Votants
 				</div>
 			</div>
 			<?php
