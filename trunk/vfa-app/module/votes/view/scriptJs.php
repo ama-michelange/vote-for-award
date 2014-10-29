@@ -9,6 +9,15 @@ $(document).ready(function () {
 			getNoteGroup($(this).parents("[data-notes-group]"), $(this));
 		}
 	});
+	$(".btn-note").mouseover(function () {
+		var note = $(this).data("select-note");
+		var text = note + " : " + selectTextNote(note);
+		$(this).parents("[data-notes-group]").find(".note-help").html(text);
+	});
+	$(".btn-note").mouseout(function () {
+		$(this).parents("[data-notes-group]").find(".note-help").html('&nbsp;');
+	});
+
 	$(".btn-nonote").click(function () {
 		if (false == $(this).hasClass('active')) {
 			getNoteGroup($(this).parents("[data-notes-group]"), $(this));
@@ -97,7 +106,7 @@ $(document).ready(function () {
 			else {
 				label = "warning";
 			}
-			html = "<h4><span class=\"label label-" + label + "\">Non lu, aucun vote</span></h4>";
+			html = "<span class=\"label label-" + label + "\">Non lu, aucun vote</span>";
 		}
 		else {
 			if (p_Original) {
@@ -107,36 +116,42 @@ $(document).ready(function () {
 				label = "warning";
 				color = "#000000";
 			}
-			switch (p_Note) {
-				case 0 :
-				case "0":
-					comment = "Sans intérêt";
-					break;
-				case 1 :
-				case "1":
-					comment = "Décevant";
-					break;
-				case 2 :
-				case "2" :
-					comment = "Moyen";
-					break;
-				case 3 :
-				case "3" :
-					comment = "Bon";
-					break;
-				case 4 :
-				case "4" :
-					comment = "Très bon";
-					break;
-				case 5 :
-				case "5" :
-					comment = "Excellent";
-					break;
-			}
-			html = "<h4><span class='label label-" + label + "' style='color:#000000'>Vote <span class='label label-default'>" + p_Note + "</span>" +
-				" <span class='small' style='color:" + color + "'>" + comment + "</span></span></h4>";
+			comment = selectTextNote(p_Note);
+			html = "<span class='label label-" + label + "' style='color:#000000'>Vote <span class='label label-default'>" + p_Note + "</span>" +
+				" <span class='small' style='color:" + color + "'>" + comment + "</span></span>";
 		}
 		return html;
+	}
+
+	function selectTextNote(p_Note) {
+		var text = '???';
+		switch (p_Note) {
+			case 0 :
+			case "0":
+				text = "Sans intérêt";
+				break;
+			case 1 :
+			case "1":
+				text = "Décevant";
+				break;
+			case 2 :
+			case "2" :
+				text = "Moyen";
+				break;
+			case 3 :
+			case "3" :
+				text = "Bon";
+				break;
+			case 4 :
+			case "4" :
+				text = "Très bon";
+				break;
+			case 5 :
+			case "5" :
+				text = "Excellent";
+				break;
+		}
+		return text;
 	}
 
 	function desactiveGroup(p_RootGroup) {
