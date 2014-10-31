@@ -44,9 +44,9 @@ class model_vote extends abstract_model
 	 * @param int $pAwardId
 	 * @return row_vote
 	 */
-	public function findLastModifiedByAwardId( $pAwardId)
+	public function findLastModifiedByAwardId($pAwardId)
 	{
-		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE award_id=? ORDER BY modified DESC',  $pAwardId);
+		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE award_id=? ORDER BY modified DESC', $pAwardId);
 	}
 
 	/**
@@ -57,6 +57,42 @@ class model_vote extends abstract_model
 		return $this->findMany('SELECT * FROM ' . $this->sTable);
 	}
 
+	/**
+	 * @param $pAwardId
+	 * @return int
+	 */
+	public function countUser($pAwardId)
+	{
+		$ret = 0;
+		$sql = 'SELECT count(*) FROM ' . $this->sTable . ' WHERE (award_id = ?)';
+		$res = $this->execute($sql, $pAwardId);
+		while ($row = mysql_fetch_row($res)) {
+			$ret = $row[0];
+		}
+		mysql_free_result($res);
+		return $ret;
+	}
+
+	/**
+	 * @param $pAwardId
+	 * @param $pAwardType
+	 * @return int
+	 */
+	public function countUserWithValidVote($pAwardId, $pAwardType)
+	{
+		$ret = 0;
+		$min = plugin_vfa::MIN_NB_VOTE_AWARD_READER;
+		if ($pAwardType == plugin_vfa::TYPE_AWARD_BOARD) {
+			$min = plugin_vfa::MIN_NB_VOTE_AWARD_BOARD;
+		}
+		$sql = 'SELECT count(*) FROM ' . $this->sTable . ' WHERE (award_id = ?) AND (number >= ' . $min . ')';
+		$res = $this->execute($sql, $pAwardId);
+		while ($row = mysql_fetch_row($res)) {
+			$ret = $row[0];
+		}
+		mysql_free_result($res);
+		return $ret;
+	}
 }
 
 class row_vote extends abstract_row
@@ -72,7 +108,6 @@ class row_vote extends abstract_row
 	protected $sClassModel = 'model_vote';
 
 	protected $tMessages = null;
-
 
 
 	private $toVoteItems = null;

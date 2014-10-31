@@ -137,6 +137,22 @@ class model_award extends abstract_model
 		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE (year=?) AND (name=?) AND (type=?)';
 		return $this->findOne($sql, $pYear, $pName, $pType);
 	}
+
+	/**
+	 * @param $pAwardId
+	 * @return int
+	 */
+	public function countUser($pAwardId)
+	{
+		$ret = 0;
+		$sql = 'SELECT count(*) FROM vfa_user_awards  WHERE (vfa_user_awards.award_id = ?)';
+		$res = $this->execute($sql, $pAwardId);
+		while ($row = mysql_fetch_row($res)) {
+			$ret = $row[0];
+		}
+		mysql_free_result($res);
+		return $ret;
+	}
 }
 
 class row_award extends abstract_row

@@ -61,6 +61,7 @@ class module_results extends abstract_module
 	public function _index()
 	{
 	}
+
 	public function _live()
 	{
 		$toResults = null;
@@ -153,7 +154,7 @@ class module_results extends abstract_module
 				}
 			} else {
 				// Tailles différentes, on supprime tout et on resauvegarde pour éviter les emmerdes
-				foreach ($poNew as $oResult) {
+				foreach ($poOri as $oResult) {
 					$oResult->delete();
 				}
 			}

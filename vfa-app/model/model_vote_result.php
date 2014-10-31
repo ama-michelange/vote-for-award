@@ -57,13 +57,13 @@ class model_vote_result extends abstract_model
 		}
 
 		$idAward = $poAward->award_id;
-		$minNbVote = 2;
+		$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER;
 		if ($poAward->type == plugin_vfa::TYPE_AWARD_BOARD) {
-			$minNbVote = 0;
+			$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_BOARD;
 		}
 
 		$sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score) FROM vfa_votes, vfa_vote_items' .
-			' WHERE (vfa_votes.award_id = ' . $idAward . ') AND (vfa_votes.number > ' . $minNbVote . ')' .
+			' WHERE (vfa_votes.award_id = ' . $idAward . ') AND (vfa_votes.number >= ' . $minNbVote . ')' .
 			' AND (vfa_votes.vote_id = vfa_vote_items.vote_id) AND (vfa_vote_items.score > -1)' . ' GROUP BY vfa_vote_items.title_id';
 		//	var_dump($sql);
 		$res = $this->execute($sql);
