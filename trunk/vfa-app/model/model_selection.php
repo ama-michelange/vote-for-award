@@ -96,14 +96,12 @@ class model_selection extends abstract_model
 	 *
 	 * @param string $pIdselection
 	 */
-	public function deleteselectionCascades($pIdselection)
+	public function deleteSelectionCascades($pIdselection)
 	{
 		$this->execute('DELETE FROM vfa_selections WHERE selection_id=?', $pIdselection);
 		$this->execute('DELETE FROM vfa_selection_titles WHERE selection_id=?', $pIdselection);
-		$sql = 'DELETE FROM vfa_titles ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_selection_titles)';
-		$this->execute($sql);
-		$sql = 'DELETE FROM vfa_title_docs ' . 'WHERE title_id NOT IN (SELECT title_id FROM vfa_titles)';
-		$this->execute($sql);
+		$this->execute('DELETE FROM vfa_titles WHERE title_id NOT IN (SELECT title_id FROM vfa_selection_titles)');
+		$this->execute('DELETE FROM vfa_title_docs WHERE title_id NOT IN (SELECT title_id FROM vfa_titles)');
 	}
 
 	/**

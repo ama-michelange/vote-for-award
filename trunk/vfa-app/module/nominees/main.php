@@ -384,18 +384,8 @@ class module_nominees extends abstract_module
 		$iId = _root::getParam('id', null);
 		$idSelection = _root::getParam('idSelection');
 		if (null != $iId) {
-			// Supprime la relation avec la Sélection
-			$oTitleModel = new model_title();
-			$oTitleModel->deleteSelectionTitle($idSelection, $iId);
-			// Supprime le titre si aucune autre Sélection ne l'utilise
-			$tSelections = model_selection::getInstance()->findAllByTitleId($iId);
-			$count = count($tSelections);
-			if (1 == $count) {
-				$oTitle = $oTitleModel->findById($iId);
-				$oTitle->delete();
-				// Supprime la relation avec les documents
-				$oTitleModel->deleteTitleDocs($iId);
-			}
+			// Supprime la relation avec la Sélection et le titre
+			model_title::getInstance()->deleteSelectionTitleCascades($idSelection, $iId);
 		}
 		_root::redirect('nominees::list', array('idSelection' => $idSelection));
 	}

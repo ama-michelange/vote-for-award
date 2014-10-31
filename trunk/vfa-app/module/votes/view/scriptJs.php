@@ -88,7 +88,6 @@ $(document).ready(function () {
 			}
 		}
 		checkToSave(inputHidden.attr("name"), isOriginal);
-
 		//	debug(p_Note.data("select-note"));
 		//	debug(p_RootGroup.find("[type=hidden]").prop("value"));
 	}
@@ -117,7 +116,7 @@ $(document).ready(function () {
 				color = "#000000";
 			}
 			comment = selectTextNote(p_Note);
-			html = "<span class='label label-" + label + "' style='color:#000000'>Vote <span class='label label-default'>" + p_Note + "</span>" +
+			html = "<span class='label label-" + label + "' style='color:#000000'>Note <span class='label label-default'>" + p_Note + "</span>" +
 				" <span class='small' style='color:" + color + "'>" + comment + "</span></span>";
 		}
 		return html;

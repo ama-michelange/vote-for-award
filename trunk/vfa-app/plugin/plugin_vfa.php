@@ -35,6 +35,9 @@ class plugin_vfa
 	const STATE_REJECTED = 'REJECTED';
 	const STATE_NOT_SENT = 'NOT_SENT';
 
+	const MIN_NB_VOTE_AWARD_READER = 7;
+	const MIN_NB_VOTE_AWARD_BOARD = 1;
+
 	/**
 	 * Déplace, s'il existe, l'article du début d'un titre à la fin du même titre.
 	 * Ex : 'La page blanche' devient 'Page blanche (La)'

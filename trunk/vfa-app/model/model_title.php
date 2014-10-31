@@ -120,9 +120,11 @@ class model_title extends abstract_model
 		}
 	}
 
-	public function deleteSelectionTitle($pIdSelection, $pIdTitle)
+	public function deleteSelectionTitleCascades($pIdSelection, $pIdTitle)
 	{
 		$this->execute('DELETE FROM vfa_selection_titles WHERE selection_id=? AND title_id=?', $pIdSelection, $pIdTitle);
+		$this->execute('DELETE FROM vfa_titles WHERE title_id NOT IN (SELECT title_id FROM vfa_selection_titles)');
+		$this->execute('DELETE FROM vfa_title_docs WHERE title_id NOT IN (SELECT title_id FROM vfa_titles)');
 	}
 
 	public function saveSelectionTitle($pIdSelection, $pIdTitle)
