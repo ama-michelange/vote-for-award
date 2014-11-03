@@ -32,7 +32,7 @@ class model_user_session
 		$oBoardGroup = model_group::getInstance()->findByUserIdByRoleName($pUser->user_id, plugin_vfa::TYPE_BOARD);
 		$oUserSession->setBoardGroup($oBoardGroup);
 
-		$oValidAwards = model_award::getInstance()->findAllValidByUserId($pUser->user_id);
+		$oValidAwards = model_award::getInstance()->findAllInProgressByUserId($pUser->user_id);
 		$oUserSession->setValidAwards($oValidAwards);
 
 		$oValidReaderAwards = array();

@@ -100,7 +100,7 @@ class model_award extends abstract_model
 	 * @param string|null $pType
 	 * @return row_award[]
 	 */
-	public function findAllValidByUserId($pUserId, $pType = null)
+	public function findAllInProgressByUserId($pUserId, $pType = null)
 	{
 		$andType = '';
 		if (null != $pType) {
@@ -115,13 +115,37 @@ class model_award extends abstract_model
 	 * @param string|null $pType
 	 * @return row_award[]
 	 */
-	public function findAllValid($pType = null)
+	public function findAllInProgress($pType = null)
 	{
 		$andType = '';
 		if (null != $pType) {
 			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
 		}
 		$sql = 'SELECT * FROM vfa_awards WHERE (? <= vfa_awards.end_date)' . $andType .
+			' ORDER BY vfa_awards.public DESC, vfa_awards.type, vfa_awards.year DESC, vfa_awards.name';
+		return $this->findMany($sql, plugin_vfa::dateSgbd());
+	}
+
+	/**
+	 * @param boolean|null $pPublic
+	 * @param string|null $pType
+	 * @return row_award[]
+	 */
+	public function findAllCompleted($pPublic = null, $pType = plugin_vfa::TYPE_AWARD_READER)
+	{
+		$andPublic = '';
+		if (null != $pPublic) {
+			$p = 1;
+			if (false == $pPublic) {
+				$p = 0;
+			}
+			$andPublic = ' AND (vfa_awards.public =  ' . $p . ')';
+		}
+		$andType = '';
+		if (null != $pType) {
+			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
+		}
+		$sql = 'SELECT * FROM vfa_awards WHERE (? > vfa_awards.end_date)' . $andPublic . $andType .
 			' ORDER BY vfa_awards.public DESC, vfa_awards.type, vfa_awards.year DESC, vfa_awards.name';
 		return $this->findMany($sql, plugin_vfa::dateSgbd());
 	}

@@ -169,6 +169,7 @@ class plugin_vfa
 		}
 		return $oDate;
 	}
+
 	/**
 	 * Transforme une chaine au format SGBD en datetime.
 	 *
@@ -327,6 +328,18 @@ class plugin_vfa
 		$a = $pDateA->getMkTime();
 		$b = $pDateB->getMkTime();
 		return $a > $b;
+	}
+
+	/**
+	 * @param plugin_date $pDateA
+	 * @param plugin_date $pDateB
+	 * @return bool
+	 */
+	public static function beforeDate($pDateA, $pDateB)
+	{
+		$a = $pDateA->getMkTime();
+		$b = $pDateB->getMkTime();
+		return $a < $b;
 	}
 
 	/**

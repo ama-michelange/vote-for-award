@@ -95,7 +95,7 @@ class module_registred extends abstract_module
 		if (count($tBoardGroups) > 0) {
 			$oBoardGroup = $tBoardGroups[0];
 		}
-		$tAwards = model_award::getInstance()->findAllValid(plugin_vfa::TYPE_AWARD_BOARD);
+		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_BOARD);
 		if (count($tAwards) > 0) {
 			$oFirstAward = $tAwards[0];
 			$tUsers = model_user::getInstance()->findAllByGroupIdByAwardId($oBoardGroup->group_id, $oFirstAward->award_id, 'email');
@@ -117,7 +117,7 @@ class module_registred extends abstract_module
 	{
 		$tUsers = array();
 		$oFirstAward = null;
-		$tAwards = model_award::getInstance()->findAllValid(plugin_vfa::TYPE_AWARD_READER);
+		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
 		if (count($tAwards) > 0) {
 			$oFirstAward = $tAwards[0];
 			$tUsers = model_user::getInstance()->findAllByRoleNameByAwardId(plugin_vfa::ROLE_RESPONSIBLE, $oFirstAward->award_id, 'email');

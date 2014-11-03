@@ -93,6 +93,17 @@ class model_vote extends abstract_model
 		mysql_free_result($res);
 		return $ret;
 	}
+
+	public function minUserId()
+	{
+		$ret = -1;
+		$row = $this->findOne('SELECT min(user_id) FROM ' . $this->sTable);
+		if (false == $row->isEmpty()) {
+			$ret = $row->__get('min(user_id)');
+		}
+		return $ret;
+	}
+
 }
 
 class row_vote extends abstract_row

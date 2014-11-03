@@ -74,14 +74,10 @@ class module_bsnavbar extends abstract_module
 	{
 		$item = new DropdownMenuItem('Prix');
 		$item->addChild(plugin_BsHtml::buildMenuItem('Résultats intermédiaires', new NavLink('results', 'live')));
+		$item->addChildSeparator();
+		$item->addChild(plugin_BsHtml::buildMenuItem('Résultat du prix précédent', new NavLink('results', 'last')));
 
 		$item->addChildSeparator();
-		$item->addChild(plugin_BsHtml::buildMenuItem('Prix', new NavLink('awards', 'list')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Sélections', new NavLink('nominees', 'list')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Albums', new NavLink('docs', 'list')));
-
-		$item->addChildSeparator();
-		$item->addChild(plugin_BsHtml::buildMenuItem('Toto - Titi', new NavLink('docs', 'list')));
 
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
