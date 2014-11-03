@@ -9,7 +9,7 @@
 				<div class="alert alert-warning clearfix">
 					<p><?php echo plugin_validation::show($this->tMessage, 'token') ?>
 						<a class="btn btn-sm btn-warning pull-right"
-							href="<?php echo $this->getLink('roles::index') ?>">Fermer</a>
+							href="<?php echo $this->getLink('votes::index') ?>">Fermer</a>
 					</p>
 				</div>
 			</div>

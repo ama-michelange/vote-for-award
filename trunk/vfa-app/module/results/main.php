@@ -36,8 +36,13 @@ class module_results extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->addChild(new Bar('left'));
-		$navBar->setTitle('Résultats intermédiaires', new NavLink('results', 'live'));
-		$this->buildMenuAwardLiveResults($navBar->getChild('left'));
+		if (_root::getAction() == 'live') {
+			$navBar->setTitle('Résultats intermédiaires', new NavLink('results', 'live'));
+			$this->buildMenuAwardLiveResults($navBar->getChild('left'));
+		}
+		if (_root::getAction() == 'last') {
+			$navBar->setTitle('Résultat du prix précédent', new NavLink('results', 'last'));
+		}
 		return $navBar;
 	}
 
@@ -47,7 +52,7 @@ class module_results extends abstract_module
 	private function buildMenuAwardLiveResults($pBar)
 	{
 		$tItems = array();
-		$tAwards = model_award::getInstance()->findAllValid();
+		$tAwards = model_award::getInstance()->findAllInProgress();
 		foreach ($tAwards as $award) {
 			if (plugin_vfa::TYPE_AWARD_BOARD == $award->type) {
 				$tItems[] = plugin_BsHtml::buildSeparator();
@@ -65,7 +70,7 @@ class module_results extends abstract_module
 	public function _live()
 	{
 		$toResults = null;
-		$oAward = $this->selectAward();
+		$oAward = $this->selectAwardInProgress();
 		if (null != $oAward) {
 			$toResults = $this->calcAwardResults($oAward);
 		}
@@ -75,7 +80,20 @@ class module_results extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function selectAward()
+	public function _last()
+	{
+		$toResults = null;
+		$oAward = $this->selectLastAwardCompleted();
+		if (null != $oAward) {
+			$toResults = $this->calcAwardResults($oAward);
+		}
+		$oView = new _view('results::award_last');
+		$oView->oAward = $oAward;
+		$oView->toResults = $toResults;
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function selectAwardInProgress()
 	{
 		$oAward = null;
 		$awardId = _root::getParam('award_id');
@@ -84,12 +102,29 @@ class module_results extends abstract_module
 			if ((null != $oAward) && ($oAward->isEmpty())) {
 				$oAward = null;
 			}
+			if (null != $oAward) {
+				$endDate = plugin_vfa::toDateFromSgbd($oAward->end_date);
+				$today = plugin_vfa::todayDate();
+				if (false == plugin_vfa::beforeDate($today, $endDate)) {
+					$oAward = null;
+				}
+			}
 		}
 		if (null == $oAward) {
-			$tAwards = model_award::getInstance()->findAllValid();
+			$tAwards = model_award::getInstance()->findAllInProgress();
 			if ((null != $tAwards) && (count($tAwards) > 0)) {
 				$oAward = $tAwards[0];
 			}
+		}
+		return $oAward;
+	}
+
+	private function selectLastAwardCompleted()
+	{
+		$oAward = null;
+		$tAwards = model_award::getInstance()->findAllCompleted(true);
+		if ((null != $tAwards) && (count($tAwards) > 0)) {
+			$oAward = $tAwards[0];
 		}
 		return $oAward;
 	}
@@ -189,4 +224,87 @@ class module_results extends abstract_module
 		}
 		return $ret;
 	}
+
+
+	public function _recup_file()
+	{
+		$tTitleIds = null;
+		// Identifiant du prix
+		$idPrix = 42;
+		// Lit les lignes du fichier
+		$lines = file('qAlices-PrixBD-Resultats-2014.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+		// Converti les lignes de chaines en tableau
+		$i = 0;
+		$tBulletins = array();
+		foreach ($lines as $line_num => $line) {
+			if ($i == 0) {
+				$tTitleIds = explode(';', $line);
+			} else {
+				$lineScores = explode(';', $line);
+				$tBulletins[] = $lineScores;
+			}
+			$i++;
+		}
+		// Recherche le prochain identifiant d'utilisateur (id négatif car non inscrit)
+		$minUserId = model_vote::getInstance()->minUserId();
+		$nextUserId = -1;
+		if ($minUserId <= $nextUserId) {
+			$nextUserId = $minUserId - 1;
+		}
+
+		// Parcours tous les bulletins
+		for ($iLine = 0; $iLine < count($tBulletins); $iLine++) {
+			$lineScores = $tBulletins[$iLine];
+			// Calcule les éléments du bulettin : nb vote et moyenne
+			$cpt = 0;
+			$sum = 0;
+			for ($i = 0; $i < count($lineScores); $i++) {
+				$len = strlen($lineScores[$i]);
+				// Vérifie qu'une valeur est présente
+				if ($len > 0) {
+					$cpt++;
+					$sum += $lineScores[$i];
+				} else {
+					// Force une valeur négative comme dans le formulaire
+					$lineScores[$i] = -1;
+				}
+			}
+			$average = 0;
+			if ($cpt > 0) {
+				$average = $sum / $cpt;
+			}
+			// Création du vote pour l'utilisateur
+			$oVote = new row_vote();
+			$oVote->award_id = $idPrix;
+			$oVote->user_id = $nextUserId;
+			$oVote->number = $cpt;
+			$oVote->average = $average;
+			$oVote->created = plugin_vfa::dateTimeSgbd();
+			$oVote->modified = $oVote->created;
+			$oVote->save();
+
+			for ($i = 0; $i < count($lineScores); $i++) {
+				$note = $lineScores[$i];
+				// Vérifie la note
+				if (($note < -1) || ($note > 5)) {
+					$note = -1;
+				}
+				// Création du vote pour le titre
+				$oVoteItem = new row_vote_item();
+				$oVoteItem->vote_id = $oVote->getId();
+				$oVoteItem->title_id = $tTitleIds[$i];
+				$oVoteItem->score = $note;
+				$oVoteItem->created = plugin_vfa::dateTimeSgbd();
+				$oVoteItem->modified = $oVoteItem->created;
+				$oVoteItem->save();
+			}
+			// Utilisateur suivant
+			$nextUserId--;
+		}
+		echo "<br />\n";
+
+	}
+
+
 }

@@ -286,7 +286,7 @@ class module_users extends abstract_module
 			$roles .= ' et Correspondant';
 		}
 		$oView->roles = $roles;
-		$oView->toValidAwards = model_award::getInstance()->findAllValidByUserId($poUser->user_id, plugin_vfa::TYPE_AWARD_READER);
+		$oView->toValidAwards = model_award::getInstance()->findAllInProgressByUserId($poUser->user_id, plugin_vfa::TYPE_AWARD_READER);
 
 		return $oView;
 	}
@@ -310,7 +310,7 @@ class module_users extends abstract_module
 			$roles .= 'Membre';
 		}
 		$oView->roles = $roles;
-		$oView->toValidAwards = model_award::getInstance()->findAllValidByUserId($poUser->user_id, plugin_vfa::TYPE_AWARD_BOARD);
+		$oView->toValidAwards = model_award::getInstance()->findAllInProgressByUserId($poUser->user_id, plugin_vfa::TYPE_AWARD_BOARD);
 
 		return $oView;
 	}

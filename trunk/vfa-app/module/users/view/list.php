@@ -31,13 +31,13 @@
 							<td><?php echo wordwrap($oUser->login,20,'<br />', true) ?></td>
 						<?php endif;?>
 						<td style="text-align:center;">
-							<?php if ($oUser->isInRole(plugin_vfa::TYPE_RESPONSIBLE)) :	?>
+							<?php if ($oUser->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) :	?>
 								<span class="glyphicon glyphicon-check"></span>
 							<?php endif; ?>
 						</td>
 						<td>
 							<?php
-								$tAwards = model_award::getInstance()->findAllValidByUserId($oUser->user_id);
+								$tAwards = model_award::getInstance()->findAllInProgressByUserId($oUser->user_id);
 								$i = 0;
 								foreach ($tAwards as $oAward) {
 									if ($i > 0) :	echo ', '; endif;

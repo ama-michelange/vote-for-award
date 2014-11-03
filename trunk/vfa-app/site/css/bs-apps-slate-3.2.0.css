@@ -267,6 +267,10 @@
 
 }
 
+.panel-info > .panel-heading {
+    background-color: #4E5D72;
+}
+
 .panel-info > .panel-footer {
     /*background-color: #d9edf7;*/
     background-color: #283444;

@@ -304,10 +304,10 @@ class module_invitations extends abstract_module
 
 		switch (_root::getAction()) {
 			case 'invitBoard':
-				$tAwards = model_award::getInstance()->findAllValid(plugin_vfa::TYPE_AWARD_BOARD);
+				$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_BOARD);
 				break;
 			case 'invitResponsible':
-				$tAwards = model_award::getInstance()->findAllValid(plugin_vfa::TYPE_AWARD_READER);
+				$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
 				break;
 			default:
 				$tAwards = $oUserSession->getValidReaderAwards();
@@ -316,7 +316,7 @@ class module_invitations extends abstract_module
 		// Verifie si l'utilisateur n'est pas déjà inscrit au prix
 		if ($poRegistry->oUser) {
 			$oUser = $poRegistry->oUser;
-			$tRegistredAwards = model_award::getInstance()->findAllValidByUserId($oUser->getId());
+			$tRegistredAwards = model_award::getInstance()->findAllInProgressByUserId($oUser->getId());
 			$tCommons = array();
 			foreach ($tAwards as $oAward) {
 				foreach ($tRegistredAwards as $oRegistredAward) {
