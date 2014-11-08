@@ -1,20 +1,14 @@
 <div class="container">
 	<div class="row">
 		<div class="jumbotron">
-			<h1>
-				Bureau de votes
-				<small>des Prix BD Alices</small>
-			</h1>
-			<h2>Prix BD Alices 2013 : Saison 3</h2>
+			<h1 class="text-center margin-bottom-max">Bureau de votes <small class="text-nowrap">du Prix BD Inter-CE</small></h1>
+<!--			<h2>Prix BD Alices 2013 : Saison 3</h2>-->
 
-			<p>Pour voter ou voir les résultats, c'est simple, identifiez-vous !</p>
-
-			<p>
-				<a href="#myModal" class="btn btn-info" data-toggle="modal"><i class="glyphicon glyphicon-user"></i>
-					&nbsp;S'identifier</a>
+			<p class="text-center">Pour voter ou voir les résultats, c'est simple, identifiez-vous !</p>
+			<p class="text-center">
+				<a href="#myModal" class="btn btn-default btn-lg" data-toggle="modal"><i class="glyphicon glyphicon-user with-text"></i>S'identifier</a>
 			</p>
 
-			<p>Vous pourrez voir les résultats du Prix 2013 dès sa fin à partir du 30 avril 2013 minuit.</p>
 		</div>
 	</div>
 

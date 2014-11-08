@@ -360,9 +360,10 @@ class NavBar extends DefaultItem
 
 	public function toHtmlTitle()
 	{
+		$ret = '';
 		if ($this->_sTitle) {
 			$ret = '<span class="navbar-brand">' . $this->_sTitle . '</span>';
-		} else {
+		} else if ($this->_oTitle) {
 			$ret = $this->_oTitle->toHtml();
 			if ($this->_oTitle->hasChildren()) {
 				foreach ($this->_oTitle->getChildren() as $item) {

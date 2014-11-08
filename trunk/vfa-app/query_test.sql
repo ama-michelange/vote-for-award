@@ -170,3 +170,14 @@ GROUP BY vfa_vote_items.title_id;
 
 SELECT count(*) FROM vfa_vote_items;
 SELECT count(*), sum(score) FROM vfa_vote_items;
+
+
+
+SELECT *
+FROM vfa_selections as s, vfa_selection_titles as st, vfa_titles as t
+WHERE s.selection_id = st.selection_id
+      AND st.title_id = t.title_id
+ORDER BY s.selection_id ASC, t.order_title ASC
+
+
+SELECT * FROM vfa_votes WHERE modified >= DATE("2014-11-08")

@@ -2,7 +2,7 @@
 	<div class="panel-heading">
 		<h3 class="panel-title">
 			<?php if ($this->oAward) : ?>
-				<small>Résultat intermédiaire</small> <?php echo $this->oAward->toString() ?>
+				<?php echo $this->oAward->toString() ?>
 			<?php else : ?>
 				Aucun prix en cours ...
 			<?php endif; ?>

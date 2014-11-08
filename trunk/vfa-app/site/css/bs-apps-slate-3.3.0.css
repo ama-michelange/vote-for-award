@@ -44,7 +44,16 @@
 }
 
 .panel-images-title {
+    margin: 10px 0 0 0;
+}
+
+.panel-images-title > p {
     margin: 0;
+}
+
+.panel-images-space {
+    margin-right: 30px;
+    margin-bottom: 30px;
 }
 
 .panel-images-horizontal {
@@ -108,7 +117,6 @@
 
 .panel-images-body img.img-sm {
     height: 100px;
-    /* 	max-height: 100px; */
 }
 
 .panel-images-body p.img-sm {
@@ -124,7 +132,6 @@
 
 .panel-images-body img.img-md {
     height: 250px;
-    /* 	max-height: 250px; */
 }
 
 .panel-images-body p.img-md {
@@ -137,6 +144,58 @@
     font-size: 90px;
     margin-top: 16px;
     color: #777777;
+}
+
+.panel-images-body img.img-lg {
+    height: 315px;
+}
+
+.panel-images-body p.img-lg {
+    min-height: 315px;
+    max-width: 250px;
+    margin: 0;
+}
+
+.panel-images-body p.img-lg .glyphicon {
+    font-size: 90px;
+    margin-top: 16px;
+    color: #777777;
+}
+
+@media (max-width: 767px) {
+    .panel-images-body img.img-winner {
+        height: 300px;
+    }
+
+    .panel-images-body p.img-winner {
+        min-height: 300px;
+        max-width: 200px;
+        margin: 0;
+    }
+
+    .panel-images-body p.img-winner .glyphicon {
+        font-size: 40px;
+        margin-top: 16px;
+        color: #777777;
+    }
+}
+
+@media (min-width: 768px) {
+    .panel-images-body img.img-winner {
+        height: 500px;
+    }
+
+    .panel-images-body p.img-winner {
+        min-height: 500px;
+        max-width: 400px;
+        margin: 0;
+    }
+
+    .panel-images-body p.img-winner .glyphicon {
+        font-size: 90px;
+        margin-top: 16px;
+        color: #777777;
+    }
 }
 
 .panel-images-body img.img-max {
@@ -578,6 +637,10 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
 
 .margin-top-lg {
     margin-top: 16px;
+}
+
+.jumbotron .margin-bottom-max {
+    margin-bottom: 50px;
 }
 
 .navbar-default {
