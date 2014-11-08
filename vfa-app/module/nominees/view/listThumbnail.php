@@ -9,12 +9,14 @@
 			<?php foreach($this->toTitles as $oTitle):?>
 				<div class="panel-images">
 					<div class="panel-images-body">
-						<p>
-							<?php echo plugin_BsHtml::showNavLabel($oTitle->toString(),new NavLink('nominees', 'read', array('id'=>$oTitle->getId(),'idSelection'=>$this->oSelection->selection_id))); ?>
-						</p>
 						<?php foreach($oTitle->findDocs() as $oDoc):?>
 							<?php echo plugin_BsHtml::showNavImage($oDoc->image,$oDoc->toString(),'img-sm',new NavLink('nominees', 'read', array('id'=>$oTitle->getId(),'idSelection'=>$this->oSelection->selection_id))); ?>
 						<?php endforeach;?>
+						<div class="panel-images-title">
+							<p>
+								<?php echo plugin_BsHtml::showNavLabel($oTitle->toString(),new NavLink('nominees', 'read', array('id'=>$oTitle->getId(),'idSelection'=>$this->oSelection->selection_id))); ?>
+							</p>
+						</div>
 					</div>
 				</div>
 			<?php endforeach;?>

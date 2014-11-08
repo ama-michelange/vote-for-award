@@ -36,12 +36,13 @@ class module_results extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->addChild(new Bar('left'));
-		if (_root::getAction() == 'live') {
-			$navBar->setTitle('Résultats intermédiaires', new NavLink('results', 'live'));
+		if (_root::getAction() == 'awardInProgress') {
+			$navBar->setTitle('Prix en cours', new NavLink('results', 'awardInProgress'));
+		} else if (_root::getAction() == 'live') {
+			$navBar->setTitle('Classement intermédiaire', new NavLink('results', 'live'));
 			$this->buildMenuAwardLiveResults($navBar->getChild('left'));
-		}
-		if (_root::getAction() == 'last') {
-			$navBar->setTitle('Résultat du prix précédent', new NavLink('results', 'last'));
+		} else if (_root::getAction() == 'last') {
+			$navBar->setTitle('Résultat du dernier prix', new NavLink('results', 'last'));
 		}
 		return $navBar;
 	}
@@ -67,10 +68,22 @@ class module_results extends abstract_module
 	{
 	}
 
+	public function _awardInProgress()
+	{
+		$oAward = $this->selectAwardInProgress();
+		$toTitles = $oAward->findTitles();
+
+		$oView = new _view('results::award_in_progress');
+		$oView->oAward = $oAward;
+		$oView->toTitles = $toTitles;
+		$this->oLayout->add('work', $oView);
+	}
+
+
 	public function _live()
 	{
 		$toResults = null;
-		$oAward = $this->selectAwardInProgress();
+		$oAward = $this->selectAwardInProgress(_root::getParam('award_id'));
 		if (null != $oAward) {
 			$toResults = $this->calcAwardResults($oAward);
 		}
@@ -93,12 +106,11 @@ class module_results extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function selectAwardInProgress()
+	private function selectAwardInProgress($pAwardId = null)
 	{
 		$oAward = null;
-		$awardId = _root::getParam('award_id');
-		if (null != $awardId) {
-			$oAward = model_award::getInstance()->findById($awardId);
+		if (null != $pAwardId) {
+			$oAward = model_award::getInstance()->findById($pAwardId);
 			if ((null != $oAward) && ($oAward->isEmpty())) {
 				$oAward = null;
 			}
@@ -225,14 +237,13 @@ class module_results extends abstract_module
 		return $ret;
 	}
 
-
 	public function _recup_file()
 	{
 		$tTitleIds = null;
 		// Identifiant du prix
-		$idPrix = 42;
+		$idPrix = 32;
 		// Lit les lignes du fichier
-		$lines = file('qAlices-PrixBD-Resultats-2014.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$lines = file('Alices-PrixBD-Resultats-2013.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 		// Converti les lignes de chaines en tableau
 		$i = 0;
