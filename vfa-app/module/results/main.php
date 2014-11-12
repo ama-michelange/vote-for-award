@@ -43,6 +43,9 @@ class module_results extends abstract_module
 			$this->buildMenuAwardLiveResults($navBar->getChild('left'));
 		} else if (_root::getAction() == 'last') {
 			$navBar->setTitle('Résultat du dernier prix', new NavLink('results', 'last'));
+		} else if (_root::getAction() == 'archives') {
+			$navBar->setTitle('Archives', new NavLink('results', 'archives'));
+			$this->buildMenuAwardArchive($navBar->getChild('left'));
 		}
 		return $navBar;
 	}
@@ -60,6 +63,20 @@ class module_results extends abstract_module
 			}
 			$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
 				new NavLink('results', 'live', array('award_id' => $award->award_id)));
+		}
+		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres classements', 'Autre classement', true));
+	}
+
+	/**
+	 * @param Bar $pBar
+	 */
+	private function buildMenuAwardArchive($pBar)
+	{
+		$tItems = array();
+		$tAwards = model_award::getInstance()->findAllCompleted(true);
+		foreach ($tAwards as $award) {
+			$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
+				new NavLink('results', 'archives', array('award_id' => $award->award_id)));
 		}
 		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres prix', 'Autre prix', true));
 	}
@@ -106,6 +123,19 @@ class module_results extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
+	public function _archives()
+	{
+		$toResults = null;
+		$oAward = $this->selectArchiveAwardCompleted();
+		if (null != $oAward) {
+			$toResults = $this->calcAwardResults($oAward);
+		}
+		$oView = new _view('results::award_archive');
+		$oView->oAward = $oAward;
+		$oView->toResults = $toResults;
+		$this->oLayout->add('work', $oView);
+	}
+
 	private function selectAwardInProgress($pAwardId = null)
 	{
 		$oAward = null;
@@ -141,6 +171,37 @@ class module_results extends abstract_module
 		return $oAward;
 	}
 
+	private function selectArchiveAwardCompleted($pAwardId = null)
+	{
+		$oAward = null;
+		if (null != $pAwardId) {
+			$oAward = model_award::getInstance()->findById($pAwardId);
+			if ((null != $oAward) && ($oAward->isEmpty())) {
+				$oAward = null;
+			}
+			if (null != $oAward) {
+				$endDate = plugin_vfa::toDateFromSgbd($oAward->end_date);
+				$today = plugin_vfa::todayDate();
+				if (false == plugin_vfa::beforeDate($today, $endDate)) {
+					$oAward = null;
+				}
+			}
+		}
+		if (null == $oAward) {
+			$tAwards = model_award::getInstance()->findAllCompleted(true);
+			if ((null != $tAwards) && (count($tAwards) > 0)) {
+				$index = 1;
+				while (($index > 0) && (null == $oAward)) {
+					if ($index < count($tAwards)) {
+						$oAward = $tAwards[$index];
+					}
+					$index--;
+				}
+			}
+		}
+		return $oAward;
+	}
+
 	public function _calc()
 	{
 		$awardId = _root::getParam('award_id');
@@ -164,10 +225,14 @@ class module_results extends abstract_module
 		$toResults = model_vote_result::getInstance()->findByIdAward($poAward->getId());
 		if ((null != $toResults) && (count($toResults) > 0)) {
 			$oLastVote = model_vote::getInstance()->findLastModifiedByAwardId($poAward->getId());
-			$LastVoteDatetime = plugin_vfa::toDateTimeFromSgbd($oLastVote->modified);
-			$modified = plugin_vfa::toDateTimeFromSgbd($toResults[0]->modified);
-			if (plugin_vfa::beforeDateTime($LastVoteDatetime, $modified)) {
+			if (true == $oLastVote->isEmpty()) {
 				$calc = false;
+			} else {
+				$LastVoteDatetime = plugin_vfa::toDateTimeFromSgbd($oLastVote->modified);
+				$modified = plugin_vfa::toDateTimeFromSgbd($toResults[0]->modified);
+				if (plugin_vfa::beforeDateTime($LastVoteDatetime, $modified)) {
+					$calc = false;
+				}
 			}
 		}
 		if (true == $calc) {
@@ -271,7 +336,7 @@ class module_results extends abstract_module
 			$cpt = 0;
 			$sum = 0;
 			for ($i = 0; $i < count($lineScores); $i++) {
-				$len = strlen($lineScores[$i]);
+				$len = strlen(trim($lineScores[$i]));
 				// Vérifie qu'une valeur est présente
 				if ($len > 0) {
 					$cpt++;

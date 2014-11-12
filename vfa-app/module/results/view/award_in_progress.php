@@ -14,7 +14,7 @@
 			<div class="panel panel-inner panel-info">
 				<div class="panel-body">
 					<?php foreach ($this->toTitles as $oTitle): ?>
-						<div class="panel-images panel-images-dark panel-images-space">
+						<div class="panel-images panel-images-upper panel-images-space">
 							<div class="panel-images-body">
 								<?php foreach ($oTitle->findDocs() as $oDoc): ?>
 									<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-lg',
