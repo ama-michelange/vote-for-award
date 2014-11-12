@@ -5,7 +5,7 @@
 	<div class="panel-body">
 	<?php if($this->tDocs):?>
 		<?php foreach($this->tDocs as $oDoc):?>
-			<div class="panel-images panel-images-dark">
+			<div class="panel-images panel-images-upper">
 				<div class="panel-images-body">
 					<?php echo plugin_BsHtml::showNavImage($oDoc->image,$oDoc->toString(),'img-md',new NavLink('docs', 'read', array( 'id'=>$oDoc->getId())),true); ?>
 				</div>
