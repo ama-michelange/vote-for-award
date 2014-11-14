@@ -126,7 +126,7 @@ class module_results extends abstract_module
 	public function _archives()
 	{
 		$toResults = null;
-		$oAward = $this->selectArchiveAwardCompleted();
+		$oAward = $this->selectArchiveAwardCompleted(_root::getParam('award_id'));
 		if (null != $oAward) {
 			$toResults = $this->calcAwardResults($oAward);
 		}
@@ -146,7 +146,7 @@ class module_results extends abstract_module
 			}
 			if (null != $oAward) {
 				$endDate = plugin_vfa::toDateFromSgbd($oAward->end_date);
-				$today = plugin_vfa::todayDate();
+				$today = plugin_vfa::today();
 				if (false == plugin_vfa::beforeDate($today, $endDate)) {
 					$oAward = null;
 				}
@@ -180,9 +180,9 @@ class module_results extends abstract_module
 				$oAward = null;
 			}
 			if (null != $oAward) {
-				$endDate = plugin_vfa::toDateFromSgbd($oAward->end_date);
-				$today = plugin_vfa::todayDate();
-				if (false == plugin_vfa::beforeDate($today, $endDate)) {
+				$endDate = plugin_vfa::toDateTime(plugin_vfa::toDateFromSgbd($oAward->end_date));
+				$now = plugin_vfa::now();
+				if (false == plugin_vfa::afterDateTime($now, $endDate)) {
 					$oAward = null;
 				}
 			}
@@ -222,8 +222,11 @@ class module_results extends abstract_module
 	private function calcAwardResults($poAward)
 	{
 		$calc = true;
+
+		// Vérifie si les résultats n'existe pas déjà
 		$toResults = model_vote_result::getInstance()->findByIdAward($poAward->getId());
 		if ((null != $toResults) && (count($toResults) > 0)) {
+			// Vérifie s'il y a un vote plus récent que le dernier calcul des résultats du prix
 			$oLastVote = model_vote::getInstance()->findLastModifiedByAwardId($poAward->getId());
 			if (true == $oLastVote->isEmpty()) {
 				$calc = false;
@@ -236,13 +239,16 @@ class module_results extends abstract_module
 			}
 		}
 		if (true == $calc) {
+			// Calcule les résulats des votes du prix
 			$toCalcResults = model_vote_result::getInstance()->calcResultVotes($poAward);
+			// Sauvegarde les résultats des votes
 			$toResults = $this->mergeSaveResults($poAward, $toResults, $toCalcResults);
 		}
 		return $toResults;
 	}
 
 	/**
+	 * Sauvegarde les résultats des votes
 	 * @param $poAward row_award
 	 * @param $poOri row_vote_result[]
 	 * @param $poNew row_vote_result[]
@@ -251,7 +257,6 @@ class module_results extends abstract_module
 	private function mergeSaveResults($poAward, $poOri, $poNew)
 	{
 		$insert = true;
-		$ret = null;
 		if ((null != $poOri) && (count($poOri) > 0)) {
 			if (count($poOri) == count($poNew)) {
 				// Taille identique : mise à jour
@@ -276,7 +281,6 @@ class module_results extends abstract_module
 			foreach ($poNew as $oResult) {
 				$oResult->save();
 			}
-			$ret = $poNew;
 		}
 		// Relecture pour l'ordre
 		$ret = model_vote_result::getInstance()->findByIdAward($poAward->getId());
