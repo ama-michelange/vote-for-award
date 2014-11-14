@@ -58,7 +58,7 @@ class module_autoreg extends abstract_module
 		// Si dépassement de 48h, message d'erreur
 		$dt = new plugin_datetime($poInvitation->modified_date, 'Y-m-d H:i:s');
 		$dt->addDay(2);
-		if (plugin_vfa::beforeDateTime(plugin_vfa::todayDateTime(), $dt)) {
+		if (plugin_vfa::beforeDateTime(plugin_vfa::now(), $dt)) {
 			// OK : modification du mot de passe
 			// mais pour quel utilisateur ?
 			$tUsers = model_user::getInstance()->findAllByEmail($poInvitation->email);
@@ -110,7 +110,7 @@ class module_autoreg extends abstract_module
 		// Si dépassement de 48h, message d'erreur
 		$dt = new plugin_datetime($poInvitation->created_date, 'Y-m-d H:i:s');
 		$dt->addDay(2);
-		if (plugin_vfa::beforeDateTime(plugin_vfa::todayDateTime(), $dt)) {
+		if (plugin_vfa::beforeDateTime(plugin_vfa::now(), $dt)) {
 			// OK : changement d'adresse Email
 			$oConfirm = new row_confirm_invitation();
 			$oConfirm->titleInvit = plugin_vfa::buildTitleInvitation($poInvitation);
@@ -208,7 +208,7 @@ class module_autoreg extends abstract_module
 		$tAwards = $poInvitation->findAwards();
 		foreach ($tAwards as $oAward) {
 			$dt = new plugin_date($oAward->end_date, 'Y-m-d');
-			if (plugin_vfa::afterDate(plugin_vfa::todayDate(), $dt)) {
+			if (plugin_vfa::afterDate(plugin_vfa::today(), $dt)) {
 				// Supprime l'invit
 				model_invitation::getInstance()->delete($poInvitation);
 				return false;

@@ -155,6 +155,22 @@ class plugin_vfa
 	}
 
 	/**
+	 * Transforme une Date en DateTime à minuit (00:00:00).
+	 *
+	 * @param plugin_date $poDate La date
+	 * @return plugin_datetime La DateTime ou NULL si pb
+	 */
+	public static function toDateTime($poDate)
+	{
+		$oDatetime = null;
+		if (isset($poDate)) {
+			$sDate = $poDate->toString('Y-m-d').' 00:00:00';
+			$oDatetime = new plugin_datetime($sDate, 'Y-m-d H:i:s');
+		}
+		return $oDatetime;
+	}
+
+	/**
 	 * Transforme une chaine au format SGBD en date.
 	 *
 	 * @param string $pDate
@@ -346,7 +362,7 @@ class plugin_vfa
 	 * Date et heure courante
 	 * @return plugin_datetime
 	 */
-	public static function todayDateTime()
+	public static function now()
 	{
 		return new plugin_datetime(date('Y-m-d H:i:s', time()));
 	}
@@ -355,7 +371,7 @@ class plugin_vfa
 	 * Date courante
 	 * @return plugin_date
 	 */
-	public static function todayDate()
+	public static function today()
 	{
 		return new plugin_date(date('Y-m-d'));
 	}
