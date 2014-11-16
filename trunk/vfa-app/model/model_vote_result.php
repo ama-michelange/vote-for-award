@@ -39,9 +39,9 @@ class model_vote_result extends abstract_model
 
 	/**
 	 * @param $pIdAward string
-	 * @return row_vote_result
+	 * @return row_vote_result[]
 	 */
-	public function findByIdAward($pIdAward)
+	public function findAllByIdAward($pIdAward)
 	{
 		return $this->findMany('SELECT * FROM ' . $this->sTable . ' WHERE award_id=? ORDER BY average DESC', $pIdAward);
 	}

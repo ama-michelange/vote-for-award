@@ -38,6 +38,11 @@ class plugin_vfa
 	const MIN_NB_VOTE_AWARD_READER = 7;
 	const MIN_NB_VOTE_AWARD_BOARD = 1;
 
+	const CODE_NB_BALLOT = 'NbBallot';
+	const CODE_NB_BALLOT_VALID = 'NbBallotValid';
+	const CODE_NB_GROUP = 'NbGroup';
+	const CODE_NB_REGISTRED = 'NbRegistered';
+
 	/**
 	 * Déplace, s'il existe, l'article du début d'un titre à la fin du même titre.
 	 * Ex : 'La page blanche' devient 'Page blanche (La)'
@@ -164,7 +169,7 @@ class plugin_vfa
 	{
 		$oDatetime = null;
 		if (isset($poDate)) {
-			$sDate = $poDate->toString('Y-m-d').' 00:00:00';
+			$sDate = $poDate->toString('Y-m-d') . ' 00:00:00';
 			$oDatetime = new plugin_datetime($sDate, 'Y-m-d H:i:s');
 		}
 		return $oDatetime;
