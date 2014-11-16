@@ -177,6 +177,23 @@ class model_award extends abstract_model
 		mysql_free_result($res);
 		return $ret;
 	}
+
+	/**
+	 * @param $pAwardId
+	 * @return int
+	 */
+	public function countGroup($pAwardId)
+	{
+		$ret = 0;
+		$sql = 'SELECT count(distinct vfa_user_groups.group_id) FROM vfa_user_groups, vfa_user_awards' .
+			' WHERE (vfa_user_awards.award_id = ?) AND (vfa_user_awards.user_id = vfa_user_groups.user_id)';
+		$res = $this->execute($sql, $pAwardId);
+		while ($row = mysql_fetch_row($res)) {
+			$ret = $row[0];
+		}
+		mysql_free_result($res);
+		return $ret;
+	}
 }
 
 class row_award extends abstract_row

@@ -104,21 +104,24 @@
 			</div>
 			<?php if (_root::getACL()->isInRole(plugin_vfa::ROLE_BOARD)) : ?>
 				<div class="panel panel-inner panel-info">
-					<div class="panel-heading">Participations</div>
+					<div class="panel-heading">Statistiques</div>
 					<div class="panel-body">
 						<div class="row">
 							<dl class="col-md-2 text-center">
-								<dt>Inscrits</dt>
-								<dd><?php echo model_award::getInstance()->countUser($this->oAward->getId()) ?></dd>
+								<dt>Bulletins valides</dt>
+								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_BALLOT_VALID) ?></dd>
 							</dl>
 							<dl class="col-md-2 text-center">
 								<dt>Bulletins reçus</dt>
-								<dd><?php echo model_vote::getInstance()->countUser($this->oAward->getId()) ?></dd>
+								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_BALLOT) ?></dd>
 							</dl>
 							<dl class="col-md-2 text-center">
-								<dt>Lecteurs</dt>
-								<dd><?php echo model_vote::getInstance()
-										->countUserWithValidVote($this->oAward->getId(), $this->oAward->type) ?></dd>
+								<dt>Lecteurs inscrits</dt>
+								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_REGISTRED) ?></dd>
+							</dl>
+							<dl class="col-md-2 text-center">
+								<dt>Groupes inscrits</dt>
+								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_GROUP) ?></dd>
 							</dl>
 						</div>
 					</div>

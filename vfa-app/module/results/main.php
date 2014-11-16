@@ -116,10 +116,12 @@ class module_results extends abstract_module
 		$oAward = $this->selectLastAwardCompleted();
 		if (null != $oAward) {
 			$toResults = $this->calcAwardResults($oAward);
+			$toStats = model_vote_stat::getInstance()->findAllByIdAward($oAward->getId());
 		}
-		$oView = new _view('results::award_last');
+		$oView = new _view('results::award_archive');
 		$oView->oAward = $oAward;
 		$oView->toResults = $toResults;
+		$oView->toStats = $toStats;
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -129,14 +131,21 @@ class module_results extends abstract_module
 		$oAward = $this->selectArchiveAwardCompleted(_root::getParam('award_id'));
 		if (null != $oAward) {
 			$toResults = $this->calcAwardResults($oAward);
+			$toStats = model_vote_stat::getInstance()->findAllByIdAward($oAward->getId());
 		}
 		$oView = new _view('results::award_archive');
 		$oView->oAward = $oAward;
 		$oView->toResults = $toResults;
+		$oView->toStats = $toStats;
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function selectAwardInProgress($pAwardId = null)
+	/**
+	 * Renvoie le prix en cours : par défaut le prix public sinon le prix demandé.
+	 * @param null $pAwardId string Si présent renvoie le prix demandé si en cours
+	 * @return null|row_award Le prix en cours ou null si non trouvé ou si non en cours
+	 */
+	public static function selectAwardInProgress($pAwardId = null)
 	{
 		$oAward = null;
 		if (null != $pAwardId) {
@@ -161,7 +170,11 @@ class module_results extends abstract_module
 		return $oAward;
 	}
 
-	private function selectLastAwardCompleted()
+	/**
+	 * Renvoie le dernier prix public terminé.
+	 * @return null|row_award
+	 */
+	public static function selectLastAwardCompleted()
 	{
 		$oAward = null;
 		$tAwards = model_award::getInstance()->findAllCompleted(true);
@@ -171,7 +184,12 @@ class module_results extends abstract_module
 		return $oAward;
 	}
 
-	private function selectArchiveAwardCompleted($pAwardId = null)
+	/**
+	 * Renvoie le prix terminé : par défaut l'avant dernier prix public terminé sinon le prix demandé.
+	 * @param null $pAwardId string Si présent renvoie le prix demandé si terminé
+	 * @return null|row_award Le prix terminé ou null si non trouvé ou si non terminé
+	 */
+	public static function selectArchiveAwardCompleted($pAwardId = null)
 	{
 		$oAward = null;
 		if (null != $pAwardId) {
@@ -224,7 +242,7 @@ class module_results extends abstract_module
 		$calc = true;
 
 		// Vérifie si les résultats n'existe pas déjà
-		$toResults = model_vote_result::getInstance()->findByIdAward($poAward->getId());
+		$toResults = model_vote_result::getInstance()->findAllByIdAward($poAward->getId());
 		if ((null != $toResults) && (count($toResults) > 0)) {
 			// Vérifie s'il y a un vote plus récent que le dernier calcul des résultats du prix
 			$oLastVote = model_vote::getInstance()->findLastModifiedByAwardId($poAward->getId());
@@ -238,13 +256,63 @@ class module_results extends abstract_module
 				}
 			}
 		}
+		// Calcule les résulats des votes du prix
 		if (true == $calc) {
-			// Calcule les résulats des votes du prix
 			$toCalcResults = model_vote_result::getInstance()->calcResultVotes($poAward);
 			// Sauvegarde les résultats des votes
 			$toResults = $this->mergeSaveResults($poAward, $toResults, $toCalcResults);
 		}
+
+		// Vérifie s'il faut calculer les stats
+		$endDate = plugin_vfa::toDateTime(plugin_vfa::toDateFromSgbd($poAward->end_date));
+		$now = plugin_vfa::now();
+		// Si le prix est termminé
+		if (true == plugin_vfa::afterDateTime($now, $endDate)) {
+			// Recherche une stat du prix
+			$oVoteStat = model_vote_stat::getInstance()->findByIdAwardCode($poAward->getId(), plugin_vfa::CODE_NB_REGISTRED);
+			// Si pas de stat ou si le calcul vient d'être effectué
+			if ((true == $oVoteStat->isEmpty()) || (true == $calc)) {
+				// Calcul des stats
+				$this->calcAwardStats($poAward);
+			}
+		}
+
 		return $toResults;
+	}
+
+	/**
+	 * @param $poAward row_award
+	 * @return row_vote_stat[]
+	 */
+	private function calcAwardStats($poAward)
+	{
+		// Nombre de bulletin de votes
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_BALLOT;
+		$oStat->num_int = model_vote::getInstance()->countUser($poAward->getId());
+		model_vote_stat::getInstance()->saveStat($oStat);
+
+		// Nombre de bulletin de votes valides
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_BALLOT_VALID;
+		$oStat->num_int = model_vote::getInstance()->countUserWithValidVote($poAward->getId(), $poAward->type);
+		model_vote_stat::getInstance()->saveStat($oStat);
+
+		// Nombre de lecteurs inscrits au prix
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_REGISTRED;
+		$oStat->num_int = model_award::getInstance()->countUser($poAward->getId());
+		model_vote_stat::getInstance()->saveStat($oStat);
+
+		// Nombre de groupes inscrits au prix
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_GROUP;
+		$oStat->num_int = model_award::getInstance()->countGroup($poAward->getId());
+		model_vote_stat::getInstance()->saveStat($oStat);
 	}
 
 	/**
@@ -283,7 +351,7 @@ class module_results extends abstract_module
 			}
 		}
 		// Relecture pour l'ordre
-		$ret = model_vote_result::getInstance()->findByIdAward($poAward->getId());
+		$ret = model_vote_result::getInstance()->findAllByIdAward($poAward->getId());
 		return $ret;
 	}
 
