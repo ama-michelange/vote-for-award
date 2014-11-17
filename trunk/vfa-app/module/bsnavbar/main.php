@@ -44,7 +44,7 @@ class module_bsnavbar extends abstract_module
 
 		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
-		$bar->addChild(plugin_BsHtml::buildMenuItem('Vote', new NavLink('votes', 'index')));
+		$bar->addChild(plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index')));
 
 		$this->buildMenuAwards($bar);
 		$this->buildMenuRegistred($bar);
