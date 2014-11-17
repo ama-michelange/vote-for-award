@@ -113,15 +113,24 @@ class model_award extends abstract_model
 
 	/**
 	 * @param string|null $pType
+	 * @param boolean|null $pPublic
 	 * @return row_award[]
 	 */
-	public function findAllInProgress($pType = null)
+	public function findAllInProgress($pType = null, $pPublic = null)
 	{
 		$andType = '';
 		if (null != $pType) {
 			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
 		}
-		$sql = 'SELECT * FROM vfa_awards WHERE (? <= vfa_awards.end_date)' . $andType .
+		$andPublic = '';
+		if (null != $pPublic) {
+			$p = 1;
+			if (false == $pPublic) {
+				$p = 0;
+			}
+			$andPublic = ' AND (vfa_awards.public =  ' . $p . ')';
+		}
+		$sql = 'SELECT * FROM vfa_awards WHERE (? <= vfa_awards.end_date)' . $andType . $andPublic .
 			' ORDER BY vfa_awards.public DESC, vfa_awards.type, vfa_awards.year DESC, vfa_awards.name';
 		return $this->findMany($sql, plugin_vfa::dateSgbd());
 	}
