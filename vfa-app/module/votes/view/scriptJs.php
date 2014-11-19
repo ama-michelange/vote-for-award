@@ -4,23 +4,34 @@ $(document).ready(function () {
 
 	$("#myBrand").data("toSave", []);
 
-	$(".btn-note").click(function () {
-		if (false == $(this).hasClass('active')) {
-			getNoteGroup($(this).parents("[data-notes-group]"), $(this));
+	$(".btn-note").on({
+		click: function () {
+			if (false == $(this).hasClass('active')) {
+				getNoteGroup($(this).parents("[data-notes-group]"), $(this));
+			}
+		},
+		mouseover: function () {
+			var note = $(this).data("select-note");
+			var text = "<small>" + note + " : " + selectTextNote(note) + "<i class='glyphicon glyphicon-hand-left with-left-text'></i></small>";
+			$(this).parents("[data-notes-group]").find(".note-help").html(text);
+		},
+		mouseout: function () {
+			$(this).parents("[data-notes-group]").find(".note-help").html('&nbsp;');
 		}
 	});
-	$(".btn-note").mouseover(function () {
-		var note = $(this).data("select-note");
-		var text = note + " : " + selectTextNote(note);
-		$(this).parents("[data-notes-group]").find(".note-help").html(text);
-	});
-	$(".btn-note").mouseout(function () {
-		$(this).parents("[data-notes-group]").find(".note-help").html('&nbsp;');
-	});
 
-	$(".btn-nonote").click(function () {
-		if (false == $(this).hasClass('active')) {
-			getNoteGroup($(this).parents("[data-notes-group]"), $(this));
+	$(".btn-nonote").on({
+		mouseover: function () {
+			var text = "<small>Annuler ce vote<i class='glyphicon glyphicon-hand-left with-left-text'></i></small>";
+			$(this).parents("[data-notes-group]").find(".note-help").html(text);
+		},
+		mouseout: function () {
+			$(this).parents("[data-notes-group]").find(".note-help").html('&nbsp;');
+		},
+		click: function () {
+			if (false == $(this).hasClass('active')) {
+				getNoteGroup($(this).parents("[data-notes-group]"), $(this));
+			}
 		}
 	});
 
@@ -28,18 +39,20 @@ $(document).ready(function () {
 		initNotesGroup($(this));
 	});
 
-	$("textarea").change(function () {
-		var isOriginal = ($(this).val() == $(this).data("original"));
-		checkToSave($(this).attr("name"), isOriginal);
+	$("textarea").on({
+		change: function () {
+			var isOriginal = ($(this).val() == $(this).data("original"));
+			checkToSave($(this).attr("name"), isOriginal);
+		},
+		keyup: function () {
+			var $this = $(this);
+			setTimeout(function () {
+				var isOriginal = ($this.val() == $this.data("original"));
+				checkToSave($this.attr("name"), isOriginal);
+			}, 500);
+		}
 	});
 
-	$("textarea").keyup(function () {
-		var $this = $(this);
-		setTimeout(function () {
-			var isOriginal = ($this.val() == $this.data("original"));
-			checkToSave($this.attr("name"), isOriginal);
-		}, 500);
-	});
 
 	function initNotesGroup(p_RootGroup) {
 		//	debug(p_RootGroup.attr("data-notes-group"));
@@ -51,7 +64,7 @@ $(document).ready(function () {
 		var finder = "[data-select-note=" + note + "]";
 		var selectNote = p_RootGroup.find(finder);
 		if (selectNote.length == 0) {
-			p_RootGroup.find(".btn-nonote").hide();
+			p_RootGroup.find(".btn-nonote").addClass('disabled');
 			noteText.html(buildTextNote(note, true));
 		} else {
 			selectNote.toggleClass("active");
@@ -79,11 +92,11 @@ $(document).ready(function () {
 			inputHidden.data("save", note);
 			var isOriginal = (note == inputHidden.data("original"));
 			if (note == "-1") {
-				p_RootGroup.find(".btn-nonote").hide();
+				p_RootGroup.find(".btn-nonote").addClass('disabled');
 				noteText.html(buildTextNote(note, isOriginal));
 			} else {
 				p_Note.addClass('active');
-				p_RootGroup.find(".btn-nonote").show();
+				p_RootGroup.find(".btn-nonote").removeClass('disabled');
 				noteText.html(buildTextNote(note, isOriginal));
 			}
 		}
@@ -97,7 +110,6 @@ $(document).ready(function () {
 		var html;
 		var label;
 		var comment;
-		var color;
 		if (p_Note == "-1") {
 			if (p_Original) {
 				label = "danger";
@@ -105,25 +117,22 @@ $(document).ready(function () {
 			else {
 				label = "warning";
 			}
-			html = "<span class=\"label label-" + label + "\">Non lu, aucun vote</span>";
+			html = "<span class=\"label label-" + label + "\">Non lu, aucun note</span>";
 		}
 		else {
 			if (p_Original) {
 				label = "primary";
-				color = "#FFFFFF";
 			} else {
 				label = "warning";
-				color = "#000000";
 			}
 			comment = selectTextNote(p_Note);
-			html = "<span class='label label-" + label + "' style='color:#000000'>Note <span class='label label-default'>" + p_Note + "</span>" +
-				" <span class='small' style='color:" + color + "'>" + comment + "</span></span>";
+			html = "<span class='label label-" + label + " label-circle'>" + p_Note + "</span> " + comment;
 		}
 		return html;
 	}
 
 	function selectTextNote(p_Note) {
-		var text = '???';
+		var text = '"???";';
 		switch (p_Note) {
 			case 0 :
 			case "0":
@@ -203,7 +212,7 @@ $(document).ready(function () {
 		}
 	}
 
-	// Private function for debugging.
+// Private function for debugging.
 	function debug(mess) {
 		if (window.console && window.console.log) {
 			window.console.log(mess);
