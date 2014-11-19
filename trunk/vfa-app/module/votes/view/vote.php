@@ -67,12 +67,12 @@
 											if (!isset($score)) : $score = '-1'; endif; ?>
 											<input type="hidden" name="no_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
 													 value="<?php echo $score ?>"/>
-											<div class="col-xs-12">
-												<h4>Note <span class="note-help">&nbsp;</span></h4>
+											<div class="col-xs-6 col-sm-7 col-md-5 col-lg-4">
+												<h4>Vote <em class="note-help pull-right">&nbsp;</em></h4>
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-xs-12 col-sm-7 col-md-6">
+											<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
 												<div class="btn-group btn-group-lg">
 													<button type="button" class="btn btn-default btn-note" data-select-note="0">0</button>
 													<button type="button" class="btn btn-default btn-note" data-select-note="1">1</button>
@@ -81,19 +81,20 @@
 													<button type="button" class="btn btn-default btn-note" data-select-note="4">4</button>
 													<button type="button" class="btn btn-default btn-note" data-select-note="5">5</button>
 												</div>
+												<button type="button" class="btn btn-default btn-nonote"><i class="glyphicon glyphicon-remove"></i></button>
 											</div>
 										</div>
 										<div class="row">
 											<div class="col-xs-12">
-												<h4>Vote</h4>
+												<h4>Note attribuée</h4>
 											</div>
 											<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
-												<span data-note style="line-height: 1.1; font-size: 180%;">Votre note :</span>
+												<div class="vote-text"><span data-note>Votre note :</span></div>
 											</div>
-											<div class="col-xs-12 col-sm-6 col-md-5">
-												<span class="visible-xs">&nbsp;</span>
-												<a class="btn btn-nonote btn-sm">Annuler ce vote</a>
-											</div>
+<!--											<div class="col-xs-12 col-sm-6 col-md-5">-->
+<!--												<span class="visible-xs">&nbsp;</span>-->
+<!--												<a class="btn btn-nonote btn-sm">Annuler ce vote</a>-->
+<!--											</div>-->
 										</div>
 										<div class="row">
 											<div class="col-xs-12">
