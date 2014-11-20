@@ -6,20 +6,22 @@
 </div>
 <?php if (count($this->toUserRegistredAwards) > 0) : ?>
 	<div class="panel panel-info">
-		<div class="panel-heading"><h3 class="panel-title">Bulletin</h3></div>
+		<div class="panel-heading"><h3 class="panel-title">Voter</h3></div>
 		<div class="panel-body">
-			<table class="table table-striped">
+			<div class="row">
 				<?php foreach ($this->toUserRegistredAwards as $oAward) : ?>
-					<tr>
-						<td>
-							<h3>
-								<a href="<?php echo $this->getLink('votes::index',array('id'=>$oAward->getId())) ?>">
-									<?php echo($oAward->toString()) ?></a>
-							</h3>
-						</td>
-					</tr>
+					<div class="col-md-4">
+						<div class="thumbnail">
+							<div class="caption text-center">
+								<h3>
+									<a href="<?php echo $this->getLink('votes::index', array('award_id' => $oAward->getId())) ?>">
+										<?php echo($oAward->toString()) ?></a>
+								</h3>
+							</div>
+						</div>
+					</div>
 				<?php endforeach; ?>
-			</table>
+			</div>
 		</div>
 	</div>
 <?php else: ?>
@@ -34,15 +36,3 @@
 		</div>
 	<?php endif; ?>
 <?php endif; ?>
-
-<!--<h2>Prix BD Alices 2013 : Saison 3</h2>-->
-<?php //if (count($this->toUserRegistredAwards) > 0) : ?>
-<!--	--><?php //foreach ($this->toUserRegistredAwards as $oAward) : ?>
-<!--		<h4>--><?php //echo($oAward->toString()) ?><!--</h4>-->
-<!--	--><?php //endforeach; ?>
-<?php //endif; ?>
-<?php //if (count($this->toInProgressAwards) > 0) : ?>
-<!--	--><?php //foreach ($this->toInProgressAwards as $oAward) : ?>
-<!--		<h4>--><?php //echo($oAward->toString()) ?><!--</h4>-->
-<!--	--><?php //endforeach; ?>
-<?php //endif; ?>
