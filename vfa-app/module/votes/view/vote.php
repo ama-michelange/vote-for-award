@@ -46,7 +46,7 @@
 						<div class="panel panel-inner panel-info">
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-sm-3">
+									<div class="col-sm-4">
 										<div class="panel-images panel-images-col">
 											<div class="panel-images-body">
 												<?php foreach ($oVoteItem->getTitle()->findDocs() as $oDoc): ?>
@@ -55,7 +55,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-sm-9" data-notes-group="<?php echo $oVoteItem->title_id ?>">
+									<div class="col-sm-8" data-notes-group="<?php echo $oVoteItem->title_id ?>">
 										<div class="row">
 											<div class="col-xs-12">
 												<h2><?php echo $oVoteItem->getTitle()->toString() ?></h2>
@@ -72,7 +72,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
+											<div class="col-xs-12 col-sm-9 col-md-7 col-lg-6">
 												<div class="btn-group btn-group-lg">
 													<button type="button" class="btn btn-default btn-note" data-select-note="0">0</button>
 													<button type="button" class="btn btn-default btn-note" data-select-note="1">1</button>

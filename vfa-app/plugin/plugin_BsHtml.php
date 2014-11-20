@@ -554,16 +554,28 @@ class BarButtons extends Bar
  */
 class ButtonItem extends LabelItem
 {
-	public function __construct($pLabel, $pLink = null, $pIcon = null, $pShowLabel = true)
+	private $_sId;
+	private $_bHidden;
+
+	public function __construct($pLabel, $pLink = null, $pIcon = null, $pShowLabel = true, $pId = null, $pHidden = false)
 	{
+		$this->_sId = $pId;
+		$this->_bHidden = $pHidden;
 		parent::__construct($pLabel, $pLink, $pIcon, $pShowLabel);
 	}
 
 	public function toHtml()
 	{
-		$ret = '<a class="btn btn-default btn-sm navbar-btn';
+		$ret = '<a';
+		if ($this->_sId) {
+			$ret .= ' id="' . $this->_sId . '"';
+		}
+		$ret .= ' class="btn btn-default btn-sm navbar-btn';
 		if ($this->isActive()) {
 			$ret .= ' active';
+		}
+		if ($this->_bHidden) {
+			$ret .= ' hidden';
 		}
 		$ret .= '"';
 		$ret .= ' href="';

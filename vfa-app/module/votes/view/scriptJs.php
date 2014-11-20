@@ -202,13 +202,25 @@ $(document).ready(function () {
 					$("form").submit();
 				}
 			});
+			$("#btnSave").removeClass("hidden btn-default").addClass("btn-warning");
 		}
 	}
+
+	$("#btnSave").on({
+		click: function (pEvent) {
+			pEvent.preventDefault();
+			var brand = $("#myBrand");
+			if (brand.data("toSave").length > 0) {
+				$("form").submit();
+			}
+		}
+	});
 
 	function hideButtonSave() {
 		var brand = $("#myBrand");
 		if (brand.hasClass("navbar-btn")) {
 			brand.text("Bulletin").removeClass().addClass("navbar-brand");
+			$("#btnSave").addClass("hidden");
 		}
 	}
 

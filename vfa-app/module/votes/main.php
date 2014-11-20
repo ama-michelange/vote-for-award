@@ -37,7 +37,7 @@ class module_votes extends abstract_module
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->addChild(new Bar('left'));
 		$navBar->setTitle('Voter', new NavLink('votes', 'index'), null, "myBrand");
-		$this->buildMenuAwardToVote($navBar->getChild('left'));
+		$this->buildMenuAwardToVote($navBar);
 		return $navBar;
 	}
 
@@ -157,10 +157,11 @@ class module_votes extends abstract_module
 	}
 
 	/**
-	 * @param Bar $pBar
+	 * @param NavBar $pNavBar
 	 */
-	private function buildMenuAwardToVote($pBar)
+	private function buildMenuAwardToVote($pNavBar)
 	{
+		$bar= $pNavBar->getChild('left');
 		$tItems = array();
 		if ($this->toValidReaderAwards && (count($this->toValidReaderAwards) > 0)) {
 			$t = $this->toValidReaderAwards;
@@ -181,7 +182,12 @@ class module_votes extends abstract_module
 				}
 			}
 		}
-		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres bulletins', 'Autre bulletin', true));
+		$bar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres bulletins', 'Autre bulletin', true));
+
+		$bar = new BarButtons('right');
+		$pNavBar->addChild($bar);
+		$btn = new ButtonItem('Enregistrer', null, 'glyphicon-save', true, 'btnSave', true);
+		$bar->addChild($btn);
 	}
 
 	/**
