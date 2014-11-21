@@ -224,7 +224,6 @@
     }
 }
 
-
 @media (min-width: 768px) {
     .panel-images-body img.img-max {
         max-height: none;
@@ -338,6 +337,20 @@
 .bd-note legend.text-only {
     margin-bottom: 0;
     border: none;
+}
+
+.carousel img.img-md {
+    height: 400px;
+}
+
+.carousel-inner .item {
+    padding: 16px 16px 113px;
+}
+
+@media screen and (min-width: 768px) {
+    .carousel-indicators {
+        bottom: 10px;
+    }
 }
 
 .table-color td {
