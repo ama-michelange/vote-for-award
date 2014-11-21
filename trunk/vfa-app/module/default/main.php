@@ -17,13 +17,29 @@ class module_default extends abstract_module
 
 	public function _index()
 	{
+
+		$oView = new _view('default::index');
+		$oView->toTitles = $this->searchWinnerTitlesInAwards(7, 13);
+		$this->oLayout->add('work', $oView);
+	}
+
+	/**
+	 * Recherche les titres gagnants des prix terminés.
+	 * @param int $pTop Recherche les x premiers de chaque prix
+	 * @param int $pMax Nombre maximum de titres remontés
+	 * @param bool $pShuffle Mélange les titres avant de les renvoyer
+	 * @return array Le tableau des titres gagnants
+	 */
+	private function searchWinnerTitlesInAwards($pTop = 3, $pMax = 10, $pShuffle = true)
+	{
 		$toAllTitles = array();
 
 		$toAwards = model_award::getInstance()->findAllCompleted(true);
 		foreach ($toAwards as $oAward) {
 			$toResults = model_vote_result::getInstance()->findAllByIdAward($oAward->getId());
-			if (count($toResults) > 0) {
-				for ($i = 0; $i < 3; $i++) {
+			$nbResults = count($toResults);
+			if ($nbResults > 0) {
+				for ($i = 0; $i < $pTop; $i++) {
 					$oTitle = $toResults[$i]->findTitle();
 					$oTitle->year = $oAward->year;
 					if ($i == 0) {
@@ -34,18 +50,16 @@ class module_default extends abstract_module
 					}
 					$toAllTitles[] = $oTitle;
 				}
-
 			}
 		}
 		$toTitles = array();
-		shuffle($toAllTitles);
-		for ($i = 0; ($i < 10) && ($i < count($toAllTitles)); $i++) {
+		if ($pShuffle) {
+			shuffle($toAllTitles);
+		}
+		for ($i = 0; ($i < $pMax) && ($i < count($toAllTitles)); $i++) {
 			$toTitles[] = $toAllTitles[$i];
 		}
-
-		$oView = new _view('default::index');
-		$oView->toTitles = $toAllTitles;
-		$this->oLayout->add('work', $oView);
+		return $toTitles;
 	}
 
 	public function after()
