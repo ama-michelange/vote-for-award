@@ -23,11 +23,11 @@
 						</div>
 						<div class="col-md-2">
 							<p>Bulletins</p>
-							<p><?php echo model_vote::getInstance()->countUser($this->oAward->getId()) ?></p>
+							<p><?php echo model_vote::getInstance()->countAllBallots($this->oAward->getId()) ?></p>
 						</div>
 						<div class="col-md-2">
 							<p>Bulletins valides</p>
-							<p><?php echo model_vote::getInstance()->countUserWithValidVote($this->oAward->getId(), $this->oAward->type) ?></p>
+							<p><?php echo model_vote::getInstance()->countValidBallots($this->oAward->getId(), $this->oAward->type) ?></p>
 						</div>
 					</div>
 				</div>
