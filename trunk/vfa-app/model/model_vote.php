@@ -61,7 +61,7 @@ class model_vote extends abstract_model
 	 * @param $pAwardId
 	 * @return int
 	 */
-	public function countUser($pAwardId)
+	public function countAllBallots($pAwardId)
 	{
 		$ret = 0;
 		$sql = 'SELECT count(*) FROM ' . $this->sTable . ' WHERE (award_id = ?)';
@@ -78,7 +78,7 @@ class model_vote extends abstract_model
 	 * @param $pAwardType
 	 * @return int
 	 */
-	public function countUserWithValidVote($pAwardId, $pAwardType)
+	public function countValidBallots($pAwardId, $pAwardType)
 	{
 		$ret = 0;
 		$min = plugin_vfa::MIN_NB_VOTE_AWARD_READER;

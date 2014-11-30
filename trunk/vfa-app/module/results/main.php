@@ -290,14 +290,14 @@ class module_results extends abstract_module
 		$oStat = new row_vote_stat();
 		$oStat->award_id = $poAward->getId();
 		$oStat->code = plugin_vfa::CODE_NB_BALLOT;
-		$oStat->num_int = model_vote::getInstance()->countUser($poAward->getId());
+		$oStat->num_int = model_vote::getInstance()->countAllBallots($poAward->getId());
 		model_vote_stat::getInstance()->saveStat($oStat);
 
 		// Nombre de bulletin de votes valides
 		$oStat = new row_vote_stat();
 		$oStat->award_id = $poAward->getId();
 		$oStat->code = plugin_vfa::CODE_NB_BALLOT_VALID;
-		$oStat->num_int = model_vote::getInstance()->countUserWithValidVote($poAward->getId(), $poAward->type);
+		$oStat->num_int = model_vote::getInstance()->countValidBallots($poAward->getId(), $poAward->type);
 		model_vote_stat::getInstance()->saveStat($oStat);
 
 		// Nombre de lecteurs inscrits au prix
@@ -378,9 +378,9 @@ class module_results extends abstract_module
 	{
 		$tTitleIds = null;
 		// Identifiant du prix
-		$idPrix = 32;
+		$idPrix = 45;
 		// Lit les lignes du fichier
-		$lines = file('Alices-PrixBD-Resultats-2013.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$lines = file('Alices-PrixBD-Resultats-2011.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 		// Converti les lignes de chaines en tableau
 		$i = 0;
