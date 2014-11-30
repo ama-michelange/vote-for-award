@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données: `vfa`
 --
-CREATE DATABASE IF NOT EXISTS `vfa` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `vfa`;
+-- CREATE DATABASE IF NOT EXISTS `vfa` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- USE `vfa`;
 
 -- --------------------------------------------------------
 
