@@ -64,12 +64,11 @@ class module_autoreg extends abstract_module
 			$tUsers = model_user::getInstance()->findAllByEmail($poInvitation->email);
 			$nbFound = count($tUsers);
 			if (0 == $nbFound) {
-				// Aucun utilistauer : KO
+				// Aucun utilisateur : KO
 				$this->doInvalidAccess($poInvitation);
-			} elseif (1 == $nbFound) {
-
 			} else {
-
+				$poInvitation->toUsersChanging = $tUsers;
+				$this->doChangePassword($poInvitation, $tUsers);
 			}
 		} else {
 			// KO
@@ -92,13 +91,14 @@ class module_autoreg extends abstract_module
 		model_invitation::getInstance()->delete($poInvitation);
 	}
 
-	private function doDoModifyPassword($poInvitation)
+	private function doChangePassword($poInvitation)
 	{
+		// TODO A finir
 		$oConfirm = new row_confirm_invitation();
 		$oConfirm->invitation_id = _root::getParam('id');
 		$oConfirm->invitation_key = _root::getParam('key');
 
-		$oView = new _view('autoreg::modifyPassword');
+		$oView = new _view('autoreg::formChangePassword');
 		$oView->oConfirm = $oConfirm;
 
 		$this->oLayout->add('work', $oView);
@@ -311,6 +311,10 @@ class module_autoreg extends abstract_module
 			$oView->oViewFormIdent->tMessage = $oConfirm->getMessages();
 			$oView->oViewFormIdent->token = $oView->token;
 
+			// Force l'email déjà connu s'il existe
+			if (null == $oConfirm->oConnection->myEmail) {
+				$oConfirm->oConnection->myEmail = $oConfirm->email;
+			}
 			$oView->oViewForgottenPassword = new _view('connection::formForgottenPassword');
 			$oView->oViewForgottenPassword->tHidden = array('invitation_id' => $poInvitation->invitation_id,
 				'invitation_key' => $poInvitation->invitation_key);
@@ -346,7 +350,7 @@ class module_autoreg extends abstract_module
 			if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
 				$oConfirm->setMessages(array('token' => $oPluginXsrf->getMessage()));
 				if (!$oConfirm->oConnection) {
-					$oConfirm ->oConnection = new row_connection();
+					$oConfirm->oConnection = new row_connection();
 				}
 				return $oConfirm;
 			}
@@ -376,7 +380,7 @@ class module_autoreg extends abstract_module
 				_root::redirect('autoreg::invalid');
 		}
 		if (!$oConfirm->oConnection) {
-			$oConfirm ->oConnection = new row_connection();
+			$oConfirm->oConnection = new row_connection();
 		}
 		return $oConfirm;
 	}
@@ -413,6 +417,7 @@ class module_autoreg extends abstract_module
 		$poConfirm->openPassword = true;
 
 		$poConfirm->oConnection = module_connection::doForgottenPassword();
+
 		if (true == $poConfirm->oConnection->mailSent) {
 			$poConfirm->openPassword = false;
 		}
