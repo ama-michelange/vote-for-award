@@ -34,6 +34,8 @@ class row_confirm_invitation extends abstract_row
 				}
 				$oPluginValid->isNotEmpty('newPassword');
 				$oPluginValid->isNotEmpty('confirmPassword');
+				$oPluginValid->isNotEmpty('last_name');
+				$oPluginValid->isNotEmpty('first_name');
 				break;
 			default:
 				// Valeur non vérifiable de manière à ne jamais être valide !
