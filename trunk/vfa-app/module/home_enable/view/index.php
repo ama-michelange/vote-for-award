@@ -1,7 +1,6 @@
-<div class="jumbotron">
-	<h1 class="text-center">Prix de la BD <span class="text-nowrap">Inter CE ALICES</span></h1>
-	<h1 class="text-center">
-		<small>Bureau de votes</small>
+<div class="well well-sm">
+	<h1 class="text-center margin-bottom-max">Bureau de votes
+		<small class="text-nowrap">du Prix de la BD INTER CE</small>
 	</h1>
 </div>
 <div class="row">
@@ -10,9 +9,7 @@
 			<div class="panel panel-info">
 				<div class="panel-heading"><h3 class="panel-title">Voter</h3></div>
 				<div class="panel-body">
-					<!--					<div class="row">-->
 					<?php foreach ($this->toUserRegistredAwards as $oAward) : ?>
-						<!--							<div class="col-md-4">-->
 						<div class="thumbnail">
 							<div class="caption text-center">
 								<h3>

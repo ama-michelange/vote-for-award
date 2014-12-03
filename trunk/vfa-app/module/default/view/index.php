@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="jumbotron">
 			<h1 class="text-center margin-bottom-max">Bureau de votes
-				<small class="text-nowrap">du Prix BD Inter-CE</small>
+				<small class="text-nowrap">du Prix de la BD INTER CE</small>
 			</h1>
 			<!--			<h2>Prix BD Alices 2013 : Saison 3</h2>-->
 

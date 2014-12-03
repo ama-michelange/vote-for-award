@@ -587,16 +587,16 @@ class plugin_vfa
 		}
 		switch ($poInvitation->type) {
 			case plugin_vfa::TYPE_BOARD:
-				$textInvit = sprintf('%1$s, l\'organisateur du Prix de la Bande Dessinée, %2$s%2$svous invite à devenir membre du Comité de sélection.',
+				$textInvit = sprintf('%1$s, l\'organisateur du Prix de la BD INTER CE, %2$s%2$svous invite à devenir membre du Comité de sélection.',
 					$creator, $cr);
 				break;
 			case plugin_vfa::TYPE_READER:
-//				$textInvit = sprintf('%1s, le correspondant du Prix de la Bande Dessinée, vous invite à vous inscrire %2s : ', $creator, $xPrix);
-				$textInvit = sprintf('%1$s, le correspondant du Prix de la Bande Dessinée, %2$s%2$svous invite à participer au prix.', $creator,
+//				$textInvit = sprintf('%1s, le correspondant du Prix de la BD INTER CE, vous invite à vous inscrire %2s : ', $creator, $xPrix);
+				$textInvit = sprintf('%1$s, le correspondant du Prix de la BD INTER CE, %2$s%2$svous invite à participer au prix.', $creator,
 					$cr);
 				break;
 			case plugin_vfa::TYPE_RESPONSIBLE:
-				$textInvit = sprintf('%1$s, l\'organisateur du Prix de la Bande Dessinée, %3$s%3$svous invite à devenir Correspondant du groupe %2$s %3$s%3$set à vous inscrire au prix.',
+				$textInvit = sprintf('%1$s, l\'organisateur du Prix de la BD INTER CE, %3$s%3$svous invite à devenir Correspondant du groupe %2$s %3$s%3$set à vous inscrire au prix.',
 					$creator, $oGroup->group_name, $cr);
 				break;
 			default:
@@ -646,10 +646,10 @@ class plugin_vfa
 						$titleInvit .= 'Invitation pour participer au Comité de sélection';
 						break;
 					case plugin_vfa::TYPE_READER:
-						$titleInvit .= 'Invitation pour voter au Prix de la Bande Dessinée';
+						$titleInvit .= 'Invitation pour voter au Prix de la BD INTER CE';
 						break;
 					case plugin_vfa::TYPE_RESPONSIBLE:
-						$titleInvit .= 'Invitation pour devenir Correspondant de votre groupe et voter au Prix de la Bande Dessinée';
+						$titleInvit .= 'Invitation pour devenir Correspondant de votre groupe et voter au Prix de la BD INTER CE';
 						break;
 				}
 				break;
