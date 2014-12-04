@@ -98,8 +98,12 @@ class module_autoreg extends abstract_module
 		$oConfirm->invitation_id = _root::getParam('id');
 		$oConfirm->invitation_key = _root::getParam('key');
 
-		$oView = new _view('autoreg::formChangePassword');
+		$oView = new _view('autoreg::changePassword');
 		$oView->oConfirm = $oConfirm;
+		$oView->tMessage = $oConfirm->getMessages();
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
 
 		$this->oLayout->add('work', $oView);
 	}
