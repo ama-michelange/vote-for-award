@@ -45,14 +45,14 @@ class module_autoreg extends abstract_module
 			case plugin_vfa::CATEGORY_MODIFY:
 				switch ($poInvitation->type) {
 					case plugin_vfa::TYPE_PASSWORD:
-						$this->doModifyPassword($poInvitation);
+						$this->doLostPassword($poInvitation);
 						break;
 				}
 				break;
 		}
 	}
 
-	private function doModifyPassword($poInvitation)
+	private function doLostPassword($poInvitation)
 	{
 		// Compare le datetime courant avec celle de création
 		// Si dépassement de 48h, message d'erreur
@@ -67,8 +67,7 @@ class module_autoreg extends abstract_module
 				// Aucun utilisateur : KO
 				$this->doInvalidAccess($poInvitation);
 			} else {
-				$poInvitation->toUsersChanging = $tUsers;
-				$this->doChangePassword($poInvitation, $tUsers);
+				$this->doPostLostPassword($poInvitation, $tUsers);
 			}
 		} else {
 			// KO
@@ -91,14 +90,40 @@ class module_autoreg extends abstract_module
 		model_invitation::getInstance()->delete($poInvitation);
 	}
 
-	private function doChangePassword($poInvitation)
-	{
-		// TODO A finir
-		$oConfirm = new row_confirm_invitation();
-		$oConfirm->invitation_id = _root::getParam('id');
-		$oConfirm->invitation_key = _root::getParam('key');
 
-		$oView = new _view('autoreg::changePassword');
+	public function _toLostPassword()
+	{
+		$oInvitationModel = new model_invitation();
+		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
+		$this->_oInvitation = $oInvitation;
+		printf('A');
+		if (true == $this->isInvitationParamsValid($oInvitation)) {
+			printf('B');
+			$this->doPostLostPassword($oInvitation);
+		} else {
+			$oView = new _view('autoreg::invalid');
+			$this->oLayout->add('work', $oView);
+		}
+	}
+
+	private function doPostLostPassword($poInvitation, $ptUsers = null)
+	{
+		if (_root::getRequest()->isPost()) {
+			$oConfirm = doVerifyPostLostPassword($poInvitation);
+		} else {
+			$oConfirm = $this->makeConfirmWithParams($poInvitation);
+		}
+//		$oConfirm = new row_confirm_invitation();
+//		$oConfirm->invitation_id = $poInvitation->invitation_id;
+//		$oConfirm->invitation_key = $poInvitation->invitation_key;
+//		$oConfirm->email = $poInvitation->email;
+		if (null == $ptUsers) {
+			$oConfirm->tUsers = model_user::getInstance()->findAllByEmail($poInvitation->email);
+		} else {
+			$oConfirm->tUsers = $ptUsers;
+		}
+
+		$oView = new _view('autoreg::lostPassword');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = $oConfirm->getMessages();
 
@@ -106,6 +131,23 @@ class module_autoreg extends abstract_module
 		$oView->token = $oPluginXsrf->getToken();
 
 		$this->oLayout->add('work', $oView);
+	}
+
+
+	private function doVerifyPostLostPassword($poInvitation)
+	{
+		// Récupère les params
+		$oConfirm = $this->makeConfirmWithParams($poInvitation);
+
+		// Verifie le token
+		if (_root::getParam('token')) {
+			$oPluginXsrf = new plugin_xsrf();
+			if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+				$oConfirm->setMessages(array('token' => $oPluginXsrf->getMessage()));
+				return $oConfirm;
+			}
+		}
+		return $oConfirm;
 	}
 
 	private function doValidateEmail($poInvitation)
@@ -161,7 +203,7 @@ class module_autoreg extends abstract_module
 			$oConfirm->invitation_key = _root::getParam('key');
 			$this->makeTextInvitation($poInvitation, $oConfirm);
 
-			$oView = new _view('autoreg::index');
+			$oView = new _view('autoreg::invitation');
 			$oView->oConfirm = $oConfirm;
 
 			$this->oLayout->add('work', $oView);
@@ -253,7 +295,7 @@ class module_autoreg extends abstract_module
 
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
 			if (_root::getRequest()->isPost()) {
-				$this->doPost($oInvitation);
+				$this->doPostConfirm($oInvitation);
 			}
 		} else {
 			$oView = new _view('autoreg::invalid');
@@ -261,27 +303,9 @@ class module_autoreg extends abstract_module
 		}
 	}
 
-//	private function doGet($poInvitation)
-//	{
-//		$oConfirm = new row_confirm_invitation();
-//		$oConfirm->invitation_id = _root::getParam('id');
-//		$oConfirm->invitation_key = _root::getParam('key');
-//		$this->makeTextInvitation($poInvitation, $oConfirm);
-//
-//		$oView = new _view('autoreg::index');
-//		$oView->oConfirm = $oConfirm;
-//		$oView->tMessage = "";
-//		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
-//
-//		$oPluginXsrf = new plugin_xsrf();
-//		$oView->token = $oPluginXsrf->getToken();
-//
-//		$this->oLayout->add('work', $oView);
-//	}
-
-	private function doPost($poInvitation)
+	private function doPostConfirm($poInvitation)
 	{
-		$oConfirm = $this->doVerifyPost($poInvitation);
+		$oConfirm = $this->doVerifyPostConfirm($poInvitation);
 		if ($oConfirm->completed) {
 			// Affiche la vue de fin
 			if ($oConfirm->completedRegistration) {
@@ -343,7 +367,7 @@ class module_autoreg extends abstract_module
 		}
 	}
 
-	private function doVerifyPost($poInvitation)
+	private function doVerifyPostConfirm($poInvitation)
 	{
 		// Récupère les params
 		$oConfirm = $this->makeConfirmWithParams($poInvitation);
@@ -411,7 +435,7 @@ class module_autoreg extends abstract_module
 		$oConfirm->first_name = _root::getParam('first_name');
 		$oConfirm->birthyear = _root::getParam('birthyear');
 		$oConfirm->gender = _root::getParam('gender');
-
+		var_dump($oConfirm);
 		return $oConfirm;
 	}
 
@@ -464,7 +488,7 @@ class module_autoreg extends abstract_module
 			// Doublon ?
 			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->login);
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
-				if ($this->checkPassword($poConfirm)) {
+				if (plugin_vfa::checkPassword($poConfirm, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
 					if ($this->createUser($poInvitation, $poConfirm)) {
 						if ($this->acceptInvitation($poInvitation)) {
 							$poConfirm->completed = true;
@@ -482,27 +506,6 @@ class module_autoreg extends abstract_module
 				$poConfirm->login = $poInvitation->email;
 			}
 		}
-	}
-
-	private function checkPassword($poConfirm)
-	{
-		$canSave = false;
-		$newPassword = _root::getParam('newPassword');
-		$confirmPassword = _root::getParam('confirmPassword');
-		if (null != $newPassword) {
-			$lenPassword = strlen($newPassword);
-			if (($lenPassword < 7) OR ($lenPassword > 30)) {
-				$poConfirm->setMessages(array('newPassword' => array('badSize')));
-			} else {
-				if ($newPassword === $confirmPassword) {
-					$poConfirm->password = sha1($newPassword);
-					$canSave = true;
-				} else {
-					$poConfirm->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
-				}
-			}
-		}
-		return $canSave;
 	}
 
 	private function createUser($poInvitation, $poConfirm)
@@ -627,8 +630,11 @@ class module_autoreg extends abstract_module
 
 	private function isInvitationParamsValid($poInvitation)
 	{
+		printf('C');
 		$id = _root::getParam('id', _root::getParam('invitation_id'));
 		$key = _root::getParam('key', _root::getParam('invitation_key'));
+		printf("id = $id<br/>");
+		printf("key = $key<br/>");
 		if ((null == $id) || (null == $key) || (null == $poInvitation)) {
 			return false;
 		}
