@@ -689,8 +689,37 @@ class plugin_vfa
 				$sent = true;
 			}
 		} catch (Exception $e) {
+			_root::getLog()->error($e->getCode() . ':' . $e->getMessage());
 			$sent = false;
 		}
 		return $sent;
 	}
+
+	/**
+	 * Vérifie la saisie d'un mot de passe et de sa confirmation.
+	 * @param abstract_row $poRow L'objet de table concerné
+	 * @param string $pNewPassword Le mot de passe saisi
+	 * @param string $pConfirmPassword La confirmation du mot de passe saisi
+	 * @return bool Vrai si le mot de passe à la taille souhaitée et s'il est identique à sa confirmation
+	 */
+	public static function checkPassword($poRow, $pNewPassword, $pConfirmPassword)
+	{
+		$ok = false;
+		if (null != $pNewPassword) {
+			$lenPassword = strlen($pNewPassword);
+			if (($lenPassword < 7) OR ($lenPassword > 30)) {
+				$poRow->setMessages(array('newPassword' => array('badSize')));
+			} else {
+				if ($pNewPassword === $pConfirmPassword) {
+					$poRow->password = sha1($pNewPassword . _root::getConfigVar('vfa-app.security.salt'));
+					$ok = true;
+				} else {
+					$poRow->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
+				}
+			}
+		}
+		return $ok;
+	}
+
+
 }

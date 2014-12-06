@@ -14,20 +14,41 @@
 <?php else: ?>
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<h3 class="panel-title">Changement de mot de passe</h3>
+			<h3 class="panel-title">Mot de passe oublié !</h3>
 		</div>
 		<div class="panel-body panel-condensed">
-			<form id="toRegistry" action="" method="POST">
+			<form action="<?php echo $this->getLink('autoreg::toLostPassword') ?>" method="POST">
 				<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 				<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>"/>
 				<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>"/>
 				<input type="hidden" name="email" value="<?php echo $this->oConfirm->email ?>"/>
-				<input type="text" name="hiddenLogin" value="" style="display: none"/>
-				<input type="password" name="hiddenPassword" value="" style="display: none"/>
+				<input type="text" name="hiddenLogin" value="" class="hidden" />
+				<input type="password" name="hiddenPassword" value="" class="hidden" />
 
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
-						<h3 class="panel-title">Saisissez un nouveau</h3>
+						<h3 class="panel-title">Utilisateur associé à l'email <span class="text-light"><?php echo $this->oConfirm->email ?></span></h3>
+					</div>
+					<div class="panel-body">
+						<?php if (count($this->oConfirm->tUsers) == 1) : ?>
+							<?php echo $this->oConfirm->tUsers[0]->toString() ?>
+						<?php else : ?>
+							<p class="text-warning">Plusieurs utilisateurs sont associés à cet email !</p>
+							<p>Sélectionnez l'utilisateur qui a oublié son mot de passe :</p>
+							<?php foreach($this->oConfirm->tUsers as $user) : ?>
+								<div>
+									<label class="radio-inline text-light" for="input<?php echo $user->getId()?>">
+										<input type="radio" id="input<?php echo $user->getId()?>" name="idUser" value="<?php echo $user->getId()?>"/>
+										<?php echo $user->toString() ?>
+									</label>
+								</div>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</div>
+				</div>
+				<div class="panel panel-default panel-inner">
+					<div class="panel-heading">
+						<h3 class="panel-title">Saisissez votre nouveau mot de passe</h3>
 					</div>
 					<div class="panel-body">
 						<div class="row">

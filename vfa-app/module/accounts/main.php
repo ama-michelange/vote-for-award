@@ -132,28 +132,10 @@ class module_accounts extends abstract_module
 
 	private function savePassword($poUser)
 	{
-		// Gère la saisie du mot de passe
-		$canSave = false;
-		$newPassword = _root::getParam('newPassword');
-		$confirmPassword = _root::getParam('confirmPassword');
-		if (null != $newPassword) {
-			$lenPassword = strlen($newPassword);
-			if (($lenPassword < 7) OR ($lenPassword > 30)) {
-				$poUser->openPassword = true;
-				$poUser->newPassword = $newPassword;
-				$poUser->confirmPassword = $confirmPassword;
-				$poUser->setMessages(array('newPassword' => array('badSize')));
-			} else {
-				if ($newPassword === $confirmPassword) {
-					$poUser->password = sha1($newPassword);
-					$canSave = true;
-				} else {
-					$poUser->openPassword = true;
-					$poUser->newPassword = $newPassword;
-					$poUser->confirmPassword = $confirmPassword;
-					$poUser->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
-				}
-			}
+		// Vérifie la saisie du mot de passe
+		$canSave = plugin_vfa::checkPassword($poUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'));
+		if (false == $canSave) {
+			$poUser->openPassword = true;
 		}
 
 		if (true == $canSave && $poUser->isValid()) {

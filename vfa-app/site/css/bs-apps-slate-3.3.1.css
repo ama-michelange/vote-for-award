@@ -59,7 +59,6 @@
     margin-right: 0;
 }
 
-
 .panel-images-heading, .panel-images-heading h1, .panel-images-heading h2, .panel-images-heading h3,
 .panel-images-heading h4, .panel-images-heading h5, .panel-images-heading h6 {
     margin: 0 0 15px 0;
@@ -460,6 +459,10 @@
 
 .panel-title {
     font-size: 18px;
+}
+
+.text-light {
+    color: #f9f9f9;
 }
 
 .text-muted a {

@@ -392,7 +392,7 @@ class module_users extends abstract_module
 		if ($oUser->isValid()) {
 			if (false == $this->hasDuplicateLogin($oUser)) {
 				if ($this->isValidGroupsRoles($oUser, $tUserGroups, $tUserRoles)) {
-					if ($this->checkPassword($oUser)) {
+					if (plugin_vfa::checkPassword($oUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
 						$oUser->save();
 						$oUserModel->saveUserRoles($oUser->user_id, $tUserRoles);
 						$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
@@ -402,33 +402,6 @@ class module_users extends abstract_module
 			}
 		}
 		return $oUser;
-	}
-
-	private function checkPassword($poUser)
-	{
-		$canSave = true;
-		$newPassword = _root::getParam('newPassword');
-		$confirmPassword = _root::getParam('confirmPassword');
-		if (null != $newPassword) {
-			$lenPassword = strlen($newPassword);
-			if (($lenPassword < 7) OR ($lenPassword > 30)) {
-				$poUser->newPassword = $newPassword;
-				$poUser->confirmPassword = $confirmPassword;
-				$poUser->setMessages(array('newPassword' => array('badSize')));
-				$canSave = false;
-			} else {
-				if ($newPassword === $confirmPassword) {
-					$poUser->password = sha1($newPassword);
-					$canSave = true;
-				} else {
-					$poUser->newPassword = $newPassword;
-					$poUser->confirmPassword = $confirmPassword;
-					$poUser->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
-					$canSave = false;
-				}
-			}
-		}
-		return $canSave;
 	}
 
 	private function hasDuplicateLogin($poUser)
