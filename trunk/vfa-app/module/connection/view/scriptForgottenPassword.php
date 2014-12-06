@@ -11,8 +11,6 @@
 			$('#modalMessage').modal({'show':true, 'keyboard':true});
 			<?php if ($this->oConnection->redirectOnClose): ?>
 				$('#modalMessage').on('hide.bs.modal', function (e) {
-					// do something...
-					alert("COUCOU");
 					window.location.replace("<?php echo _root::getLinkString('default::index') ?>");
 				})
 			<?php endif; ?>
