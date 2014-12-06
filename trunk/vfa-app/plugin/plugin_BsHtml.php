@@ -521,6 +521,7 @@ class DropdownButtonItem extends DropdownMenuItem
 	}
 }
 
+
 /**
  * Class BarButtons
  */
@@ -600,6 +601,48 @@ class GroupButtonItem extends DefaultItem
 		$ret = '<div class="btn-group">';
 		$ret .= parent::toHtml();
 		$ret .= '</div>';
+		return $ret;
+	}
+}
+
+/**
+ * Class SplitButtonDropdownItem
+ */
+class SplitButtonDropdownItem extends ButtonItem
+{
+	public function toHtml()
+	{
+		$ret = '<div class="btn-group">';
+		$ret .= $this->toHtmlDropdownMenuToggle();
+		$ret .= $this->toHtmlDropdownMenu();
+		$ret .= '</div>';
+
+		return $ret;
+	}
+
+	protected function toHtmlDropdownMenuToggle()
+	{
+		$ret = parent::toHtml();
+		$ret .= '<a href="#" class="btn btn-default btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">';
+		$ret .= '<span class="caret"></span>';
+		$ret .= '</a>';
+		return $ret;
+	}
+
+	protected function toHtmlDropdownMenu()
+	{
+		$ret = '';
+		if ($this->hasChildren()) {
+			$ret .= '<ul class="dropdown-menu">';
+			foreach ($this->getChildren() as $item) {
+				if (plugin_BsHtml::isSeparator($item)) {
+					$ret .= '<li class="divider"></li>';
+				} else {
+					$ret .= $item->toHtml();
+				}
+			}
+			$ret .= '</ul>';
+		}
 		return $ret;
 	}
 }

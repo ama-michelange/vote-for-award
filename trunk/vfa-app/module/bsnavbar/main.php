@@ -33,8 +33,12 @@ class module_bsnavbar extends abstract_module
 		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
 		$bar->addChild(new MenuItem('Accueil', new NavLink('default', 'index')));
+
 		$bar = $pNavBar->getChild('right');
-		$bar->addChild(new MenuItem('Connexion', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user'));
+		$item = new SplitButtonDropdownItem('Connexion', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user');
+		$item->addChild(new MenuItem('S\'identifier', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user'));
+		$item->addChild(new MenuItem('Mot de passe oublié ?', new NavLink('connection', 'forgotten', null, true)));
+		$bar->addChild($item);
 	}
 
 	private function buildConnectedBar($pNavBar)
@@ -117,14 +121,6 @@ class module_bsnavbar extends abstract_module
 		$item->addChild(plugin_BsHtml::buildMenuItem('Correspondants', new NavLink('users', 'listResponsibleGroup')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Comité de sélection', new NavLink('users', 'listBoardGroup')));
 
-//		$item->addChildSeparator();
-//		$item->addChild(plugin_BsHtml::buildMenuItem('Invitation aux lecteurs', new NavLink('invitations', 'reader')));
-//		$item->addChild(plugin_BsHtml::buildMenuItem('Inscriptions libres', new NavLink('invitations', 'free')));
-
-//		$item->addChildSeparator();
-//		$item->addChild(plugin_BsHtml::buildMenuItem('Responsable de groupe', new NavLink('invitations', 'responsible')));
-//		$item->addChild(plugin_BsHtml::buildMenuItem('Membre du comité', new NavLink('invitations', 'board')));
-
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
 		}
@@ -139,7 +135,7 @@ class module_bsnavbar extends abstract_module
 		if (_root::getRequest()->isPost()) {
 			// Recup params
 			$sLogin = _root::getParam('login');
-			$sPass = sha1(_root::getParam('password'));
+			$sPass = plugin_vfa::cryptPassword(_root::getParam('password'));
 			// _root::getLog()->log('AMA >>> login = '.$sLogin.', pass = '.$sPass);
 			// Recherche et vérifie "login/pass" dans la base
 			$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);
