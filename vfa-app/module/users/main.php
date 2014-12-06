@@ -375,7 +375,7 @@ class module_users extends abstract_module
 				continue;
 			}
 			if ('password' == $sColumn) {
-				$oUser->$sColumn = sha1(_root::getParam($sColumn, null));
+				$oUser->$sColumn = plugin_vfa::cryptPassword(_root::getParam($sColumn, null));
 			} else {
 				if ((_root::getParam($sColumn, null) == null) && (null != $oUser->$sColumn)) {
 					$oUser->$sColumn = null;

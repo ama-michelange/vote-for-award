@@ -459,7 +459,7 @@ class module_autoreg extends abstract_module
 		if ($poConfirm->isValid()) {
 			// Recup params
 			$sLogin = $poConfirm->cf_login;
-			$sPass = sha1($poConfirm->cf_password);
+			$sPass = plugin_vfa::cryptPassword($poConfirm->cf_password);
 			// Recherche et vérifie "login/pass" dans la base
 			$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);
 			// Connexion si utilisateur autorisé

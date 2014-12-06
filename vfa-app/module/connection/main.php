@@ -3,17 +3,67 @@
 class module_connection extends abstract_module
 {
 
+	public function before()
+	{
+		_root::startSession();
+		plugin_vfa::loadI18n();
+
+		if (_root::getAuth()->isConnected()) {
+			_root::redirect('home_enable::index');
+		}
+		$this->oLayout = new _layout('tpl_bs_bar');
+		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
+	}
+
+	public function after()
+	{
+		$this->oLayout->show();
+	}
 
 	public function _logout()
 	{
 		_root::getAuth()->logout();
 	}
 
+	public function _forgotten()
+	{
+		$oConnection = $this->doForgottenPassword();
+
+		if ($oConnection->openModalMessage){
+			$oConnection->redirectOnClose = true;
+		}
+
+		$oView = new _view('connection::forgottenPassword');
+		$oView->oConnection = $oConnection;
+		$oView->tMessage = $oConnection->getMessages();
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+
+		$oView->oViewForgottenPassword = new _view('connection::formForgottenPassword');
+		$oView->oViewForgottenPassword->oConnection = $oConnection;
+		$oView->oViewForgottenPassword->tMessage = $oConnection->getMessages();
+		$oView->oViewForgottenPassword->token = $oView->token;
+
+
+		$oView->oViewModalMessage = new _view('connection::modalMessage');
+		$oView->oViewModalMessage->oConnection = $oConnection;
+		$oView->oViewModalMessage->tMessage = $oConnection->getMessages();
+
+		$this->oLayout->add('work', $oView);
+
+		// Gestion de l'affichage de la boite modale
+		$scriptView = new _view('connection::scriptForgottenPassword');
+		$scriptView->oConnection = $oConnection;
+		$this->oLayout->add('script', $scriptView);
+
+	}
+
 	private function doLogin()
 	{
 		// Recup params
 		$sLogin = _root::getParam('login');
-		$sPass = sha1(_root::getParam('password'));
+		$sPass = plugin_vfa::cryptPassword(_root::getParam('password'));
 		// _root::getLog()->log('AMA >>> login = '.$sLogin.', pass = '.$sPass);
 		// Recherche et vérifie "login/pass" dans la base
 		$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);

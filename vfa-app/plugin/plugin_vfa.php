@@ -721,5 +721,8 @@ class plugin_vfa
 		return $ok;
 	}
 
-
+	public static function cryptPassword($pPassword)
+	{
+		return sha1($pPassword . _root::getConfigVar('security.salt'));
+	}
 }
