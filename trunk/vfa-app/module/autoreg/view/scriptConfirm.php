@@ -10,7 +10,8 @@
 				$('#bottomAccount').get(0).click();
 			}
 		});
-		$('#cancelAccount').on('click', function () {
+		$('#cancelAccount').on('click', function (pEvent) {
+			pEvent.preventDefault();
 			$('#btnLogin').show();
 			$('#btnPassword').show();
 			$('#btnAccount').show();
@@ -27,7 +28,8 @@
 				$('#bottomLogin').get(0).click();
 			}
 		});
-		$('#cancelLogin').on('click', function () {
+		$('#cancelLogin').on('click', function (pEvent) {
+			pEvent.preventDefault();
 			$('#btnAccount').show();
 			$('#btnPassword').show();
 			$('#btnLogin').show();
@@ -44,7 +46,8 @@
 				$('#bottomPassword').get(0).click();
 			}
 		});
-		$('#cancelPassword').on('click', function () {
+		$('#cancelPassword').on('click', function (pEvent) {
+			pEvent.preventDefault();
 			$('#btnAccount').show();
 			$('#btnLogin').show();
 			$('#btnPassword').show();
