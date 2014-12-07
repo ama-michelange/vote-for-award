@@ -24,6 +24,7 @@
 					<button class="btn btn-default" data-dismiss="modal">
 						<i class="glyphicon glyphicon-remove with-text"></i>Annuler
 					</button>
+					<a class="pull-left" href="<?php echo $this->getLink('connection::forgotten') ?>"><i class="glyphicon glyphicon-fire with-text"></i>J'ai oublié mon mot de passe !</a>
 				</div>
 			</form>
 		</div>

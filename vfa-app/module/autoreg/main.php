@@ -96,9 +96,7 @@ class module_autoreg extends abstract_module
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
 		$this->_oInvitation = $oInvitation;
-		printf('A');
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
-			printf('B');
 			$this->doPostLostPassword($oInvitation);
 		} else {
 			$oView = new _view('autoreg::invalid');
@@ -435,7 +433,6 @@ class module_autoreg extends abstract_module
 		$oConfirm->first_name = _root::getParam('first_name');
 		$oConfirm->birthyear = _root::getParam('birthyear');
 		$oConfirm->gender = _root::getParam('gender');
-		var_dump($oConfirm);
 		return $oConfirm;
 	}
 
@@ -630,11 +627,8 @@ class module_autoreg extends abstract_module
 
 	private function isInvitationParamsValid($poInvitation)
 	{
-		printf('C');
 		$id = _root::getParam('id', _root::getParam('invitation_id'));
 		$key = _root::getParam('key', _root::getParam('invitation_key'));
-		printf("id = $id<br/>");
-		printf("key = $key<br/>");
 		if ((null == $id) || (null == $key) || (null == $poInvitation)) {
 			return false;
 		}

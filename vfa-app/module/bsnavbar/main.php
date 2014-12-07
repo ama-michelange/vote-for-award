@@ -37,7 +37,7 @@ class module_bsnavbar extends abstract_module
 		$bar = $pNavBar->getChild('right');
 		$item = new SplitButtonDropdownItem('Connexion', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user');
 		$item->addChild(new MenuItem('S\'identifier', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user'));
-		$item->addChild(new MenuItem('Mot de passe oublié ?', new NavLink('connection', 'forgotten', null, true)));
+		$item->addChild(new MenuItem('Mot de passe oublié ?', new NavLink('connection', 'forgotten', null, true), 'glyphicon-fire'));
 		$bar->addChild($item);
 	}
 
