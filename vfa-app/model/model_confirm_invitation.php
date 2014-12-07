@@ -37,6 +37,11 @@ class row_confirm_invitation extends abstract_row
 				$oPluginValid->isNotEmpty('last_name');
 				$oPluginValid->isNotEmpty('first_name');
 				break;
+			case 'toNewPassword':
+				$oPluginValid->isNotEmpty('newPassword');
+				$oPluginValid->isNotEmpty('confirmPassword');
+				$oPluginValid->isNotEmpty('user_id');
+				break;
 			default:
 				// Valeur non vérifiable de manière à ne jamais être valide !
 				$oPluginValid->isNotEmpty('action');

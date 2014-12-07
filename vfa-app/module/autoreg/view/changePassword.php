@@ -14,10 +14,10 @@
 <?php else: ?>
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<h3 class="panel-title">Mot de passe oublié !</h3>
+			<h3 class="panel-title">Nouveau de mot de passe</h3>
 		</div>
 		<div class="panel-body panel-condensed">
-			<form action="<?php echo $this->getLink('autoreg::toLostPassword') ?>" method="POST">
+			<form action="<?php echo $this->getLink('autoreg::toChangePassword') ?>" method="POST">
 				<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 				<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>"/>
 				<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>"/>
@@ -32,23 +32,32 @@
 					<div class="panel-body">
 						<?php if (count($this->oConfirm->tUsers) == 1) : ?>
 							<?php echo $this->oConfirm->tUsers[0]->toString() ?>
+							<input type="hidden" name="user_id" value="<?php echo $this->oConfirm->tUsers[0]->getId()?>"/>
 						<?php else : ?>
 							<p class="text-warning">Plusieurs utilisateurs sont associés à cet email !</p>
 							<p>Sélectionnez l'utilisateur qui a oublié son mot de passe :</p>
 							<?php foreach($this->oConfirm->tUsers as $user) : ?>
 								<div>
 									<label class="radio-inline text-light" for="input<?php echo $user->getId()?>">
-										<input type="radio" id="input<?php echo $user->getId()?>" name="idUser" value="<?php echo $user->getId()?>"/>
+										<?php if ($this->oConfirm->user_id) : ?>
+											<input type="radio" id="input<?php echo $user->getId()?>" name="user_id" value="<?php echo $user->getId()?>"
+												<?php  if ($this->oConfirm->user_id == $user->getId()) : echo 'checked'; endif; ?> />
+										<?php else : ?>
+											<input type="radio" id="input<?php echo $user->getId()?>" name="user_id" value="<?php echo $user->getId()?>"/>
+										<?php endif; ?>
 										<?php echo $user->toString() ?>
 									</label>
 								</div>
 							<?php endforeach; ?>
+							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'user_id') ?>">
+								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_id') ?></span>
+							</div>
 						<?php endif; ?>
 					</div>
 				</div>
 				<div class="panel panel-default panel-inner">
 					<div class="panel-heading">
-						<h3 class="panel-title">Saisissez votre nouveau mot de passe</h3>
+						<h3 class="panel-title">Saisissez votre mot de passe</h3>
 					</div>
 					<div class="panel-body">
 						<div class="row">
@@ -78,7 +87,7 @@
 					</div>
 					<div class="panel-footer clearfix">
 						<div class="pull-right">
-							<button type="submit" class="btn btn-info" name="action" value="toRegistry">
+							<button type="submit" class="btn btn-info" name="action" value="toNewPassword">
 								<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
 							</button>
 <!--							<a id="cancelAccount" class="btn btn-default"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>-->

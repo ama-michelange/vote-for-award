@@ -4,8 +4,6 @@
 			<h1 class="text-center margin-bottom-max">Bureau de votes
 				<small class="text-nowrap">du Prix de la BD INTER CE</small>
 			</h1>
-			<!--			<h2>Prix BD Alices 2013 : Saison 3</h2>-->
-
 			<p class="text-center">Pour voter ou voir les résultats, c'est simple, identifiez-vous !</p>
 			<p class="text-center">
 				<a href="#myModal" class="btn btn-default btn-lg" data-toggle="modal"><i class="glyphicon glyphicon-user with-text"></i>S'identifier</a>
