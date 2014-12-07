@@ -45,14 +45,14 @@ class module_autoreg extends abstract_module
 			case plugin_vfa::CATEGORY_MODIFY:
 				switch ($poInvitation->type) {
 					case plugin_vfa::TYPE_PASSWORD:
-						$this->doLostPassword($poInvitation);
+						$this->doChangePassword($poInvitation);
 						break;
 				}
 				break;
 		}
 	}
 
-	private function doLostPassword($poInvitation)
+	private function doChangePassword($poInvitation)
 	{
 		// Compare le datetime courant avec celle de création
 		// Si dépassement de 48h, message d'erreur
@@ -67,7 +67,7 @@ class module_autoreg extends abstract_module
 				// Aucun utilisateur : KO
 				$this->doInvalidAccess($poInvitation);
 			} else {
-				$this->doPostLostPassword($poInvitation, $tUsers);
+				$this->doPostChangePassword($poInvitation, $tUsers);
 			}
 		} else {
 			// KO
@@ -91,37 +91,36 @@ class module_autoreg extends abstract_module
 	}
 
 
-	public function _toLostPassword()
+	public function _toChangePassword()
 	{
 		$oInvitationModel = new model_invitation();
 		$oInvitation = $oInvitationModel->findById(_root::getParam('invitation_id'));
 		$this->_oInvitation = $oInvitation;
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
-			$this->doPostLostPassword($oInvitation);
+			$this->doPostChangePassword($oInvitation);
 		} else {
 			$oView = new _view('autoreg::invalid');
 			$this->oLayout->add('work', $oView);
 		}
 	}
 
-	private function doPostLostPassword($poInvitation, $ptUsers = null)
+	private function doPostChangePassword($poInvitation, $ptUsers = null)
 	{
 		if (_root::getRequest()->isPost()) {
-			$oConfirm = doVerifyPostLostPassword($poInvitation);
+			$oConfirm = $this->doVerifyPostChangePassword($poInvitation);
 		} else {
 			$oConfirm = $this->makeConfirmWithParams($poInvitation);
 		}
-//		$oConfirm = new row_confirm_invitation();
-//		$oConfirm->invitation_id = $poInvitation->invitation_id;
-//		$oConfirm->invitation_key = $poInvitation->invitation_key;
-//		$oConfirm->email = $poInvitation->email;
+
+//		var_dump($oConfirm);
+
 		if (null == $ptUsers) {
 			$oConfirm->tUsers = model_user::getInstance()->findAllByEmail($poInvitation->email);
 		} else {
 			$oConfirm->tUsers = $ptUsers;
 		}
 
-		$oView = new _view('autoreg::lostPassword');
+		$oView = new _view('autoreg::changePassword');
 		$oView->oConfirm = $oConfirm;
 		$oView->tMessage = $oConfirm->getMessages();
 
@@ -132,7 +131,7 @@ class module_autoreg extends abstract_module
 	}
 
 
-	private function doVerifyPostLostPassword($poInvitation)
+	private function doVerifyPostChangePassword($poInvitation)
 	{
 		// Récupère les params
 		$oConfirm = $this->makeConfirmWithParams($poInvitation);
@@ -143,6 +142,16 @@ class module_autoreg extends abstract_module
 			if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
 				$oConfirm->setMessages(array('token' => $oPluginXsrf->getMessage()));
 				return $oConfirm;
+			}
+		}
+		// Validation
+		if ($oConfirm->isValid()) {
+			if (plugin_vfa::checkPassword($oConfirm, $oConfirm->newPassword, $oConfirm->confirmPassword)) {
+				$oUser = model_user::getInstance()->findById($oConfirm->user_id);
+				if (false == $oUser->isEmpty()) {
+					$oUser->password = plugin_vfa::cryptPassword($oConfirm->newPassword);
+					$oUser->save();
+				}
 			}
 		}
 		return $oConfirm;
@@ -417,8 +426,8 @@ class module_autoreg extends abstract_module
 		$oConfirm->action = _root::getParam('action');
 
 		// Récupère les params cachés nécessaire au Token (entre autre)
-		$oConfirm->invitation_id = _root::getParam('invitation_id');
-		$oConfirm->invitation_key = _root::getParam('invitation_key');
+		$oConfirm->invitation_id = _root::getParam('invitation_id', _root::getParam('id'));
+		$oConfirm->invitation_key = _root::getParam('invitation_key', _root::getParam('key'));
 
 		// Copie la saisie Identification
 		$oConfirm->cf_login = _root::getParam('cf_login');
@@ -433,6 +442,10 @@ class module_autoreg extends abstract_module
 		$oConfirm->first_name = _root::getParam('first_name');
 		$oConfirm->birthyear = _root::getParam('birthyear');
 		$oConfirm->gender = _root::getParam('gender');
+
+		// Copie la saisie Mot de passe oublié
+		$oConfirm->user_id = _root::getParam('user_id');
+
 		return $oConfirm;
 	}
 
@@ -629,6 +642,7 @@ class module_autoreg extends abstract_module
 	{
 		$id = _root::getParam('id', _root::getParam('invitation_id'));
 		$key = _root::getParam('key', _root::getParam('invitation_key'));
+
 		if ((null == $id) || (null == $key) || (null == $poInvitation)) {
 			return false;
 		}
