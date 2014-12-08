@@ -346,10 +346,10 @@
 .carousel {
     padding-top: 43px;
 
-    border-left: 2px solid rgba(0, 0, 0, 0.2);
-    border-right: 2px solid rgba(255, 255, 255, 0.1);
-    border-top: 2px solid rgba(0, 0, 0, 0.2);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    border-left: 2px solid rgba(0, 0, 0, 0.6);
+    border-right: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid rgba(0, 0, 0, 0.6);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
 
     border-radius: 8px;
     -webkit-transition: all 0.2s ease-in-out;
@@ -358,14 +358,14 @@
 
 .carousel img.img-md {
     height: 400px;
-    /*padding: 10px;*/
+    padding: 10px;
     /*background-color: #000000;*/
 
-    border-right: 5px solid rgba(0, 0, 0, 0.2);
-    border-left: 5px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 5px solid rgba(0, 0, 0, 0.2);
-    border-top: 5px solid rgba(255, 255, 255, 0.1);
-    /*border-radius: 4px;*/
+    border-right: 2px solid rgba(0, 0, 0, 0.6);
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.6);
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
@@ -815,4 +815,19 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
 
 .has-error .form-control {
     background-color: #ffbf9b;
+}
+
+@media screen and (min-width: 768px) {
+    .jumbotron {
+        padding: 15px 15px;
+    }
+    .container .jumbotron,
+    .container-fluid .jumbotron {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .jumbotron h1,
+    .jumbotron .h1 {
+        font-size: 63px;
+    }
 }
