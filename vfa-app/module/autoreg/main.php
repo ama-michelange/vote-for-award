@@ -20,7 +20,6 @@ class module_autoreg extends abstract_module
 	public function _index()
 	{
 		$oInvitation = model_invitation::getInstance()->findById(_root::getParam('id'));
-
 		if (true == $this->isInvitationParamsValid($oInvitation)) {
 			$this->dispatch($oInvitation);
 		} else {
@@ -151,6 +150,17 @@ class module_autoreg extends abstract_module
 				if (false == $oUser->isEmpty()) {
 					$oUser->password = plugin_vfa::cryptPassword($oConfirm->newPassword);
 					$oUser->save();
+
+					$oInvitation = model_invitation::getInstance()->findById($oConfirm->invitation_id);
+					$link_id = $oInvitation->link_id;
+					$link_key = $oInvitation->link_key;
+					$oInvitation->delete();
+
+					if ($link_id) {
+						_root::redirect('autoreg::index', array('id' => $link_id, 'key' => $link_key));
+					} else {
+						_root::redirect('default::index');
+					}
 				}
 			}
 		}
