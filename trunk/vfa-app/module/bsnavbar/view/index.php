@@ -1,11 +1,11 @@
 <!-- Modal -->
-<div id="myModal" class="modal fade">
+<div id="modalLogin" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form class="form-horizontal" action="" method="POST">
+			<form class="form-horizontal" action="<?php echo $this->getLink('default::index') ?>" method="POST">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">×</button>
-					<h3 id="myModalLabel">S'identifier ...</h3>
+					<h3 id="modalLoginLabel">S'identifier ...</h3>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
@@ -18,7 +18,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">
+					<button type="submit" class="btn btn-primary" name="actionLogin">
 						<i class="glyphicon glyphicon-ok with-text"></i>Ok
 					</button>
 					<button class="btn btn-default" data-dismiss="modal">
