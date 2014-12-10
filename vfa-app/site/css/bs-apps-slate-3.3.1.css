@@ -347,11 +347,11 @@
     padding-top: 43px;
 
     border-left: 2px solid rgba(0, 0, 0, 0.6);
-    border-right: 2px solid rgba(255, 255, 255, 0.3);
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
     border-top: 2px solid rgba(0, 0, 0, 0.6);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 
-    border-radius: 8px;
+    border-radius: 12px;
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
@@ -821,13 +821,27 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
     .jumbotron {
         padding: 15px 15px;
     }
+
     .container .jumbotron,
     .container-fluid .jumbotron {
         padding-left: 15px;
         padding-right: 15px;
     }
+
     .jumbotron h1,
     .jumbotron .h1 {
         font-size: 63px;
     }
+}
+
+.error-identity {
+    height: 400px;
+    padding: 7px;
+}
+
+.error-identity i {
+    font-size: 27em;
+    text-shadow: -5px -5px 4px #FF9906;
+    line-height: 1.03;
+    color: #e68606;
 }

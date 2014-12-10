@@ -17,10 +17,40 @@ class module_default extends abstract_module
 
 	public function _index()
 	{
+		$errorLogin = false;
+		if (_root::getRequest()->isPost()) {
+			$errorLogin = $this->doLogin();
+		}
 
 		$oView = new _view('default::index');
 		$oView->toTitles = $this->searchWinnerTitlesInAwards(7, 13);
 		$this->oLayout->add('work', $oView);
+
+		$scriptView = new _view('default::script');
+		$scriptView->errorLogin = $errorLogin;
+		$this->oLayout->add('script', $scriptView);
+
+	}
+
+	private function doLogin()
+	{
+		$actionlogin = false;
+		$action = _root::getParam('actionLogin');
+		if (isset($action)) {
+			$actionlogin = true;
+			// Recup params
+			$sLogin = _root::getParam('login');
+			$sPass = plugin_vfa::cryptPassword(_root::getParam('password'));
+			// Recherche et vérifie "login/pass" dans la base
+			$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);
+			// Connexion si utilisateur autorisé
+			if (null != $oUser) {
+				$oUserSession = model_user_session::getInstance()->create($oUser);
+				_root::getAuth()->connect($oUserSession);
+				_root::redirect('home_enable::index');
+			}
+		}
+		return $actionlogin;
 	}
 
 	/**

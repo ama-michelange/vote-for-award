@@ -35,8 +35,8 @@ class module_bsnavbar extends abstract_module
 		$bar->addChild(new MenuItem('Accueil', new NavLink('default', 'index')));
 
 		$bar = $pNavBar->getChild('right');
-		$item = new SplitButtonDropdownItem('Connexion', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user');
-		$item->addChild(new MenuItem('S\'identifier', new Link('#myModal', array('data-toggle' => 'modal')), 'glyphicon-user'));
+		$item = new SplitButtonDropdownItem('Connexion', new Link('#modalLogin', array('data-toggle' => 'modal')), 'glyphicon-user');
+		$item->addChild(new MenuItem('S\'identifier', new Link('#modalLogin', array('data-toggle' => 'modal')), 'glyphicon-user'));
 		$item->addChild(new MenuItem('Mot de passe oublié ?', new NavLink('connection', 'forgotten', null, true), 'glyphicon-fire'));
 		$bar->addChild($item);
 	}
@@ -128,27 +128,7 @@ class module_bsnavbar extends abstract_module
 
 	public function buildView()
 	{
-		// _root::getLog()->log('AMA >>> module_authent._login()');
 		// Vue par défaut
-		$oView = new _view('bsnavbar::index');
-		// Post ?
-		if (_root::getRequest()->isPost()) {
-			// Recup params
-			$sLogin = _root::getParam('login');
-			$sPass = plugin_vfa::cryptPassword(_root::getParam('password'));
-			// _root::getLog()->log('AMA >>> login = '.$sLogin.', pass = '.$sPass);
-			// Recherche et vérifie "login/pass" dans la base
-			$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);
-			// Connexion si utilisateur autorisé
-			if (null != $oUser) {
-				$oUserSession = model_user_session::getInstance()->create($oUser);
-				// _root::getLog()->log('AMA >>> $oUserSession = '.$oUserSession->getUser()->login);
-				_root::getAuth()->connect($oUserSession);
-				_root::redirect('home_enable::index');
-			} else {
-				// TODO Passer une info du genre : $this->sUnknownLogin=$sLogin; pour indiquer au module parent une erreur
-			}
-		}
-		return $oView;
+		return new _view('bsnavbar::index');
 	}
 }
