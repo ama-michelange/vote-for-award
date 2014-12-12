@@ -378,9 +378,9 @@ class module_results extends abstract_module
 	{
 		$tTitleIds = null;
 		// Identifiant du prix
-		$idPrix = 45;
+		$idPrix = 46;
 		// Lit les lignes du fichier
-		$lines = file('Alices-PrixBD-Resultats-2011.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$lines = file('Alices-PrixBD-Resultats-2010.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 		// Converti les lignes de chaines en tableau
 		$i = 0;
