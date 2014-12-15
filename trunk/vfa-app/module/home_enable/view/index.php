@@ -1,5 +1,5 @@
 <div class="well well-sm">
-	<h1 class="text-center margin-bottom-max">Bureau de votes
+	<h1 class="text-center">Bureau de votes
 		<small class="text-nowrap">du Prix de la BD INTER CE</small>
 	</h1>
 </div>
@@ -10,14 +10,9 @@
 				<div class="panel-heading"><h3 class="panel-title">Voter</h3></div>
 				<div class="panel-body">
 					<?php foreach ($this->toUserRegistredAwards as $oAward) : ?>
-						<div class="thumbnail">
-							<div class="caption text-center">
-								<h3>
-									<a href="<?php echo $this->getLink('votes::index', array('award_id' => $oAward->getId())) ?>">
-										<?php echo($oAward->toString()) ?></a>
-								</h3>
-							</div>
-						</div>
+						<a class="btn btn-block btn-lg btn-default"
+							href="<?php echo $this->getLink('votes::index', array('award_id' => $oAward->getId())) ?>">
+							<?php echo($oAward->toString()) ?></a>
 					<?php endforeach; ?>
 				</div>
 			</div>

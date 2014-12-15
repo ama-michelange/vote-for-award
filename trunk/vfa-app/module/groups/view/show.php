@@ -17,6 +17,12 @@
 					<div class="col-sm-3 col-md-2 view-label">Nombre de comptes</div>
 					<div class="col-sm-9 col-md-10 view-value"><?php echo $this->countUsers ?></div>
 				</div>
+				<div class="row">
+					<div class="col-sm-3 col-md-2 view-label">Participation</div>
+					<div class="col-sm-9 col-md-10 view-value">
+						<?php	echo $this->oGroup->getAwardsString() ?>
+					</div>
+				</div>
 			</div>
 		</div>
 		<?php if($this->toUsers):?>

@@ -103,6 +103,13 @@ class module_groups extends abstract_module
 		if ($this->allTypes) {
 			$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tRoles);
 		}
+
+		$tInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
+		$tInProgressSelect = plugin_vfa::toSelect($tInProgressAwards, 'award_id', null, 'toString');
+		$tAwards = $oGroup->findAwards();
+		$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'toString');
+		$oView->tSelectedAwards = plugin_vfa::buildOptionSelected($tInProgressSelect, $tSelect);
+
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un groupe';
 
@@ -190,8 +197,11 @@ class module_groups extends abstract_module
 			}
 		}
 
+		$awardIds = _root::getParam('award_ids', null);
+
 		if ($oGroup->isValid()) {
 			$oGroup->save();
+			model_group::getInstance()->saveGroupAwards($oGroup->getId(), $awardIds);
 			_root::redirect('groups::read', array('id' => $oGroup->getId()));
 		}
 		return $oGroup;

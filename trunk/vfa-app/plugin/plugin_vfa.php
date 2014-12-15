@@ -496,7 +496,7 @@ class plugin_vfa
 	 * @param string $pLabelFieldName
 	 *         Le nom du champ dans le tuple pour le libellé (Mettre à null pour utiliser une fonction)
 	 * @param string $pLabelFunctionName
-	 *         Le nom de la fonction de rapppel dans le tuple pour le libellé sinon null
+	 *         Le nom de la fonction de rappel dans le tuple pour le libellé sinon null
 	 * @param boolean $pForceEmpty
 	 *         Si vrai insère une valeur vide dans le tableau
 	 * @return array(id:int ->label:string)

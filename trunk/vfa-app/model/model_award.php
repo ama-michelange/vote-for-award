@@ -85,6 +85,17 @@ class model_award extends abstract_model
 	}
 
 	/**
+	 * @param $pGroupId
+	 * @return row_award[]
+	 */
+	public function findAllByGroupId($pGroupId)
+	{
+		$sql = 'SELECT * FROM vfa_awards, vfa_group_awards ' . 'WHERE (vfa_group_awards.award_id = vfa_awards.award_id) ' .
+			'AND (vfa_group_awards.group_id = ?) ORDER BY vfa_awards.public DESC, vfa_awards.year DESC, vfa_awards.name';
+		return $this->findMany($sql, $pGroupId);
+	}
+
+	/**
 	 * @param $pUserId
 	 * @return row_award[]
 	 */
