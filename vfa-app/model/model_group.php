@@ -123,6 +123,20 @@ class model_group extends abstract_model
 		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE group_name=?', $pName);
 	}
 
+	/**
+	 * @param int $pIdGroup
+	 * @param int[] $pIdAwards
+	 */
+	public function saveGroupAwards($pIdGroup, $pIdAwards)
+	{
+		$this->execute('DELETE FROM vfa_group_awards WHERE group_id=?', $pIdGroup);
+		if ($pIdAwards) {
+			foreach ($pIdAwards as $idAward) {
+				$this->execute('INSERT INTO vfa_group_awards (group_id, award_id) VALUES (?,?)', $pIdGroup, $idAward);
+			}
+		}
+	}
+
 	public function getSelect()
 	{
 		$tab = $this->findAll();
@@ -144,7 +158,7 @@ class model_group extends abstract_model
 				$this->tTypeGroups = array();
 			}
 			$oRole = model_role::getInstance()->findById($pIdRole);
-			$this->tTypeGroups[$pIdRole] = plugin_i18n::get('group.' . $oRole ->role_name);
+			$this->tTypeGroups[$pIdRole] = plugin_i18n::get('group.' . $oRole->role_name);
 		}
 		return $this->tTypeGroups[$pIdRole];
 	}
@@ -157,6 +171,11 @@ class row_group extends abstract_row
 	protected $sClassModel = 'model_group';
 
 	protected $tMessages = null;
+
+	public function findAwards()
+	{
+		return model_award::getInstance()->findAllByGroupId($this->group_id);
+	}
 
 	public function findUsers()
 	{
@@ -190,6 +209,24 @@ class row_group extends abstract_row
 	public function getRoleString()
 	{
 		return model_role::getInstance()->getI18nStringRole($this->role_id_default);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAwardsString()
+	{
+		$ret = '';
+		$tAwards = $this->findAwards();
+		$i = 0;
+		foreach ($tAwards as $oAward) {
+			if ($i > 0) {
+				$ret .= ', ';
+			}
+			$ret .= $oAward->toString();
+			$i++;
+		}
+		return $ret;
 	}
 
 	private function getCheck()

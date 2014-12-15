@@ -1,14 +1,12 @@
 <div class="container">
-	<div class="row">
-		<div class="jumbotron">
-			<h1 class="text-center margin-bottom-max">Bureau de votes
-				<small class="text-nowrap">du Prix de la BD INTER CE</small>
-			</h1>
-			<p class="text-center">Pour voter ou voir les résultats, c'est simple, identifiez-vous !</p>
-			<p class="text-center">
-				<a href="#modalLogin" class="btn btn-default btn-lg" data-toggle="modal"><i class="glyphicon glyphicon-user with-text"></i>S'identifier</a>
-			</p>
-		</div>
+	<div class="jumbotron">
+		<h1 class="text-center margin-bottom-max">Bureau de votes
+			<small class="text-nowrap">du Prix de la BD INTER CE</small>
+		</h1>
+		<p class="text-center">Pour voter ou voir les résultats, c'est simple, identifiez-vous !</p>
+		<p class="text-center">
+			<a href="#modalLogin" class="btn btn-default btn-lg" data-toggle="modal"><i class="glyphicon glyphicon-user with-text"></i>S'identifier</a>
+		</p>
 	</div>
 	<?php if (count($this->toTitles) > 0) : ?>
 		<div class="row">
@@ -17,7 +15,8 @@
 					<!-- Indicators -->
 					<ol class="carousel-indicators">
 						<?php for ($i = 0; $i < count($this->toTitles); $i++) : ?>
-							<li data-target="#myCarousel" data-slide-to="<?php echo $i ?>"<?php if ($i == 0): echo ' class="active"'; endif; ?>></li>
+							<li data-target="#myCarousel" data-slide-to="<?php echo $i ?>"<?php if ($i == 0
+							): echo ' class="active"'; endif; ?>></li>
 						<?php endfor; ?>
 					</ol>
 					<!-- Carousel items -->
