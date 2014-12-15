@@ -73,6 +73,12 @@ class module_groups extends abstract_module
 		if ($this->allTypes) {
 			$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tRoles);
 		}
+		$tInProgressAwards = model_award::getInstance()->findAllInProgress();
+		$tInProgressSelect = plugin_vfa::toSelect($tInProgressAwards, 'award_id', null, 'toString');
+		$tAwards = $oGroup->findAwards();
+		$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'toString');
+		$oView->tSelectedAwards = plugin_vfa::buildOptionSelected($tInProgressSelect, $tSelect);
+
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un groupe';
 
@@ -85,6 +91,7 @@ class module_groups extends abstract_module
 	public function _update()
 	{
 		$tMessage = null;
+		$tRoles = null;
 		$oGroupModel = new model_group();
 
 		$oGroup = $this->save();
@@ -104,7 +111,7 @@ class module_groups extends abstract_module
 			$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tRoles);
 		}
 
-		$tInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
+		$tInProgressAwards = model_award::getInstance()->findAllInProgress();
 		$tInProgressSelect = plugin_vfa::toSelect($tInProgressAwards, 'award_id', null, 'toString');
 		$tAwards = $oGroup->findAwards();
 		$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'toString');
