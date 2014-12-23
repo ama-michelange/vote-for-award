@@ -51,7 +51,8 @@ class module_bsnavbar extends abstract_module
 		$bar->addChild(plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index')));
 
 		$this->buildMenuAwards($bar);
-		$this->buildMenuRegistred($bar);
+		$this->buildMenuReader($bar);
+		$this->buildMenuRegistrations($bar);
 		$this->buildMenuAdmin($bar);
 
 		$bar = $pNavBar->getChild('right');
@@ -109,7 +110,7 @@ class module_bsnavbar extends abstract_module
 	/**
 	 * @param Bar $pItems
 	 */
-	private function buildMenuRegistred($pItems)
+	private function buildMenuReader($pItems)
 	{
 		$item = new DropdownMenuItem('Lecteurs');
 
@@ -124,6 +125,20 @@ class module_bsnavbar extends abstract_module
 		if ($item->hasRealChildren()) {
 			$pItems->addChild($item);
 		}
+	}
+
+	/**
+	 * @param Bar $pItems
+	 */
+	private function buildMenuRegistrations($pItems)
+	{
+		$tMenuItems = array();
+		$tMenuItems[] = plugin_BsHtml::buildMenuItem('S\'inscrire', new NavLink('regin', 'index'));
+		$tMenuItems[] = plugin_BsHtml::buildSeparator();
+		$tMenuItems[] = plugin_BsHtml::buildMenuItem('Ouverture d\'inscriptions', new NavLink('regin', 'opened'));
+		$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validates'));
+
+		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Inscriptions', 'S\'inscrire', true));
 	}
 
 	public function buildView()

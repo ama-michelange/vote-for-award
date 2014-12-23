@@ -120,7 +120,25 @@ class model_group extends abstract_model
 	 */
 	public function findByName($pName)
 	{
-		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE group_name=?', $pName);
+		return $this->findOne('SELECT * FROM' . ' ' . $this->sTable . ' WHERE group_name=?', $pName);
+	}
+
+	/**
+	 * @param $pIdGroup
+	 * @return row_award
+	 */
+	public function findAllRegistryInProgressAwards($pIdGroup)
+	{
+		$tAwards = array();
+		$tGroupAwards = $this->findMany('SELECT * FROM vfa_group_awards WHERE group_id=?', $pIdGroup);
+		foreach ($tGroupAwards as $groupAward) {
+			$oAward = model_award::getInstance()->findById($groupAward->award_id);
+			$end = new plugin_date($oAward->end_date);
+			if (true == plugin_vfa::beforeDate(plugin_vfa::today(), $end)) {
+				$tAwards[] = $oAward;
+			}
+		}
+		return $tAwards;
 	}
 
 	/**
