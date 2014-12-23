@@ -35,8 +35,8 @@ class plugin_BsHtml
 	}
 
 	/**
-	 * @param string $pLabelDrop
 	 * @param MenuItem[] $ptMenuItems
+	 * @param string $pLabelDrop
 	 * @param string|null $pLabelMenuItem
 	 * @return MenuItem|DropdownMenuItem|null
 	 */

@@ -30,6 +30,7 @@ class plugin_vfa
 	const TYPE_AWARD_READER = 'PBD';
 
 	const STATE_OPEN = 'OPEN';
+	const STATE_CLOSE = 'CLOSE';
 	const STATE_SENT = 'SENT';
 	const STATE_ACCEPTED = 'ACCEPTED';
 	const STATE_REJECTED = 'REJECTED';

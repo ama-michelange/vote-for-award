@@ -33,7 +33,7 @@ class model_award extends abstract_model
 	 */
 	public function findAll()
 	{
-		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY year DESC, name, type');
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY YEAR DESC, NAME, type');
 	}
 
 	public function getSelect()
@@ -178,7 +178,7 @@ class model_award extends abstract_model
 	 */
 	public function findByYearNameType($pYear, $pName, $pType)
 	{
-		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE (year=?) AND (name=?) AND (type=?)';
+		$sql = 'SELECT * FROM ' . $this->sTable . ' WHERE (YEAR=?) AND (NAME=?) AND (type=?)';
 		return $this->findOne($sql, $pYear, $pName, $pType);
 	}
 
@@ -205,7 +205,7 @@ class model_award extends abstract_model
 	public function countGroup($pAwardId)
 	{
 		$ret = 0;
-		$sql = 'SELECT count(distinct vfa_user_groups.group_id) FROM vfa_user_groups, vfa_user_awards' .
+		$sql = 'SELECT count(DISTINCT vfa_user_groups.group_id) FROM vfa_user_groups, vfa_user_awards' .
 			' WHERE (vfa_user_awards.award_id = ?) AND (vfa_user_awards.user_id = vfa_user_groups.user_id)';
 		$res = $this->execute($sql, $pAwardId);
 		while ($row = mysql_fetch_row($res)) {
