@@ -172,7 +172,7 @@ class module_users extends abstract_module
 	{
 		$tMessage = null;
 		$oUserModel = new model_user();
-		$tColumns = array('login', 'last_name', 'first_name', 'email', 'birthyear', 'gender', 'vote');
+		$tColumns = array('login', 'last_name', 'first_name', 'email', 'birthyear', 'gender');
 
 		$oUser = $this->save($tColumns);
 		if (null == $oUser) {
@@ -388,11 +388,18 @@ class module_users extends abstract_module
 		$tUserRoles = _root::getParam('user_roles', null);
 		// Récupère les groupes associés
 		$tUserGroups = _root::getParam('user_groups', null);
-
 		if ($oUser->isValid()) {
 			if (false == $this->hasDuplicateLogin($oUser)) {
 				if ($this->isValidGroupsRoles($oUser, $tUserGroups, $tUserRoles)) {
-					if (plugin_vfa::checkPassword($oUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
+					$save = true;
+					if (_root::getParam('newPassword')) {
+						$save = plugin_vfa::checkPassword($oUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'));
+						if (false == $save) {
+							$oUser->newPassword = _root::getParam('newPassword');
+							$oUser->confirmPassword = _root::getParam('confirmPassword');
+						}
+					}
+					if ($save) {
 						$oUser->save();
 						$oUserModel->saveUserRoles($oUser->user_id, $tUserRoles);
 						$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
