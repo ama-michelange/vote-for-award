@@ -32,7 +32,7 @@ class module_bsnavbar extends abstract_module
 	{
 		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
-		$bar->addChild(new MenuItem('Accueil', new NavLink('default', 'index')));
+		$bar->addChild(new MenuItem('S\'inscrire', new NavLink('default', 'code')));
 
 		$bar = $pNavBar->getChild('right');
 		$item = new SplitButtonDropdownItem('Connexion', new Link('#modalLogin', array('data-toggle' => 'modal')), 'glyphicon-user');
@@ -52,7 +52,7 @@ class module_bsnavbar extends abstract_module
 
 		$this->buildMenuAwards($bar);
 		$this->buildMenuReader($bar);
-		$this->buildMenuRegistrations($bar);
+		$this->buildMenuRegistrations($bar, $oUserSession);
 		$this->buildMenuAdmin($bar);
 
 		$bar = $pNavBar->getChild('right');
@@ -130,14 +130,23 @@ class module_bsnavbar extends abstract_module
 	/**
 	 * @param Bar $pItems
 	 */
-	private function buildMenuRegistrations($pItems)
+	private function buildMenuRegistrations($pItems, $poUserSession)
 	{
 		$tMenuItems = array();
 		$tMenuItems[] = plugin_BsHtml::buildMenuItem('S\'inscrire', new NavLink('regin', 'index'));
 		$tMenuItems[] = plugin_BsHtml::buildSeparator();
-		$tMenuItems[] = plugin_BsHtml::buildMenuItem('Ouverture d\'inscriptions', new NavLink('regin', 'opened'));
-		$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validates'));
-
+		if ($poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscriptions ouvertes', new NavLink('regin', 'opened'));
+			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validate'));
+		} elseif ($poUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
+			$tRegins = model_regin::getInstance()->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $poUserSession->getReaderGroup()->getId());
+			if (0 == count($tRegins)) {
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Ouverture des inscriptions', new NavLink('regin', 'open'));
+			} else {
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscriptions ouvertes', new NavLink('regin', 'opened'));
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validate'));
+			}
+		}
 		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Inscriptions', 'S\'inscrire', true));
 	}
 

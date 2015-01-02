@@ -36,6 +36,9 @@ class plugin_vfa
 	const STATE_REJECTED = 'REJECTED';
 	const STATE_NOT_SENT = 'NOT_SENT';
 
+	const PROCESS_INTIME = 'INTIME';
+	const PROCESS_INTIME_VALIDATE = 'INTIME_VALIDATE';
+
 	const MIN_NB_VOTE_AWARD_READER = 7;
 	const MIN_NB_VOTE_AWARD_BOARD = 1;
 
@@ -550,6 +553,31 @@ class plugin_vfa
 	}
 
 	/**
+	 * Génère un code d'inscription.
+	 * @param $pYear
+	 * @param $pName
+	 * @return string
+	 */
+	public static function generateRegistrationCode($pYear, $pName)
+	{
+		$time = time();
+		$year = substr($pYear, 0, 4);
+		$gname = trim(substr($pName, 0, 9));
+		$gname = implode(explode(' ', $gname));
+		if ($time % 2 == 0) {
+			$gname = strtoupper($gname);
+		} else {
+			$gname = strtolower($gname);
+		}
+		$fcode = $year . $gname . substr($time, -2);
+		$sha = sha1($fcode . rand(0, $time));
+		$code = $fcode . substr($sha, -5);
+
+//		var_dump($code);
+		return $code;
+	}
+
+	/**
 	 * Construit le texte de l'invitation en fonction de son type.
 	 *
 	 * @param row_invitation $poInvitation
@@ -697,18 +725,18 @@ class plugin_vfa
 	}
 
 	/**
-	 * Vérifie la saisie d'un mot de passe et de sa confirmation.
+	 * Vérifie la saisie d'un mot de passe et de sa confirmation et le sauvegarde dans le champ 'password' s'il est correct.
 	 * @param abstract_row $poRow L'objet de table concerné
 	 * @param string $pNewPassword Le mot de passe saisi
 	 * @param string $pConfirmPassword La confirmation du mot de passe saisi
 	 * @return bool Vrai si le mot de passe à la taille souhaitée et s'il est identique à sa confirmation
 	 */
-	public static function checkPassword($poRow, $pNewPassword, $pConfirmPassword)
+	public static function checkSavePassword($poRow, $pNewPassword, $pConfirmPassword)
 	{
 		$ok = false;
 		if (null != $pNewPassword) {
 			$lenPassword = strlen($pNewPassword);
-			if (($lenPassword < 7) OR ($lenPassword > 30)) {
+			if (($lenPassword < 7) OR ($lenPassword > 50)) {
 				$poRow->setMessages(array('newPassword' => array('badSize')));
 			} else {
 				if ($pNewPassword === $pConfirmPassword) {

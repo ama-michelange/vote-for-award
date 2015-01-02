@@ -63,10 +63,28 @@ class model_regin extends abstract_model
 	 * @param string | int $pGroupId
 	 * @return row_regin[]
 	 */
-	public function findAllByTypeByGroupId($pType, $pGroupId)
+	public function findAllByTypeByGroupIdByState($pType, $pGroupId, $pState = plugin_vfa::STATE_OPEN)
 	{
-		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE type=? and group_id=? ORDER BY created_date DESC';
-		return $this->findMany($sql, $pType, $pGroupId);
+		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE type=? and group_id=? and state=? ORDER BY created_date DESC';
+		return $this->findMany($sql, $pType, $pGroupId, $pState);
+	}
+
+	/**
+	 * @param $pCode
+	 * @return row_regin
+	 */
+	public function findByCode($pCode)
+	{
+		return $this->findOne('SELECT * FROM' . ' ' . $this->sTable . ' WHERE code=?', $pCode);
+	}
+
+	/**
+	 * @param $pCode
+	 * @return row_regin[]
+	 */
+	public function findAllByCode($pCode)
+	{
+		return $this->findMany('SELECT * FROM' . ' ' . $this->sTable . ' WHERE code=?', $pCode);
 	}
 }
 
@@ -139,7 +157,6 @@ class row_regin extends abstract_row
 		$oPluginValid = new plugin_valid($this->getTab());
 
 		$oPluginValid->isNotEmpty('type');
-		$oPluginValid->isNotEmpty('code');
 		$oPluginValid->isNotEmpty('state');
 
 		return $oPluginValid;
