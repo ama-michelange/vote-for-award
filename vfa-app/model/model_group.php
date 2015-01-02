@@ -195,6 +195,19 @@ class row_group extends abstract_row
 		return model_award::getInstance()->findAllByGroupId($this->group_id);
 	}
 
+	public function getAwardIds()
+	{
+		$ids = '';
+		$tAwards = $this->findAwards();
+		foreach ($tAwards as $award) {
+			if (strlen($ids) > 0) {
+				$ids .= ',';
+			}
+			$ids .= $award->getId();
+		}
+		return $ids;
+	}
+
 	public function findUsers()
 	{
 		return model_user::getInstance()->findAllByGroupId($this->group_id);

@@ -29,7 +29,316 @@ class module_default extends abstract_module
 		$scriptView = new _view('default::script');
 		$scriptView->errorLogin = $errorLogin;
 		$this->oLayout->add('script', $scriptView);
+	}
 
+	public function _code()
+	{
+		$this->showViewGetCode(new row_registry());
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function showViewGetCode($poRegistry)
+	{
+		$oView = new _view('default::code');
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+
+		$oView->oRegistry = $poRegistry;
+		$oView->tMessage = $poRegistry->getMessages();
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	public function _registry()
+	{
+		if (_root::getRequest()->isPost()) {
+			switch (_root::getParam('action')) {
+				case 'toGetCode':
+					$this->postGetCode();
+					break;
+				case 'toAccount':
+					$this->postAccount();
+					break;
+				case 'toIdentify':
+					$this->postIdent();
+					break;
+				case 'submitForgottenPassword':
+					$this->postForgottenPassword();
+					break;
+				default:
+					_root::redirect('default::index');
+					break;
+			}
+		} else {
+			_root::redirect('default::index');
+		}
+	}
+
+	private function postGetCode()
+	{
+		$nextView = false;
+		$oRegistry = new row_registry();
+		// on verifie que le token est valide
+		if ($this->isValidToken($oRegistry)) {
+			$oRegistry->action = _root::getParam('action', null);
+			$oRegistry->code = _root::getParam('code', null);
+			if ($oRegistry->isValid()) {
+				$oRegin = model_regin::getInstance()->findByCode($oRegistry->code);
+				if ($oRegin->isEmpty()) {
+					$oRegistry->setMessages(array('code' => array('registry.code.unknown')));
+				} else {
+					if (false == module_regin::verifyReginValidity($oRegin)) {
+						$oRegistry->setMessages(array('code' => array('registry.code.invalid')));
+					} else {
+						$nextView = true;
+						$oRegistry->oRegin = $oRegin;
+						$oRegistry->regin_id = $oRegin->regin_id;
+					}
+				}
+			}
+		}
+		if ($nextView) {
+			$this->initViewRegistry($oRegistry);
+			$this->showViewRegistry($oRegistry);
+		} else {
+			$this->showViewGetCode($oRegistry);
+		}
+	}
+
+	private function postAccount()
+	{
+		$oRegistry = $this->makeRegistryWithParams();
+		if ($this->isValidToken($oRegistry)) {
+			// Force l'ouverture du panel d'enregistrement du compte
+			$oRegistry->openAccount = true;
+			// Validation
+			if ($oRegistry->isValid()) {
+				// Doublon ?
+				$oUserDoublon = model_user::getInstance()->findByLogin($oRegistry->login);
+				if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
+					if (plugin_vfa::checkSavePassword($oRegistry, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
+						$this->createUserReader($oRegistry);
+						// FIXME A finir : étape suivante
+//						if ($this->acceptInvitation($poInvitation)) {
+//							$oRegistry->completed = true;
+//							$oRegistry->completedRegistration = true;
+//							$oUserSession = model_user_session::getInstance()->create($oRegistry->oUser);
+//							_root::getAuth()->connect($oUserSession);
+//						}
+					}
+				} else {
+					$oRegistry->setMessages(array('login' => array('doublon')));
+				}
+			}
+		}
+		$this->showViewRegistry($oRegistry);
+	}
+
+	private function postIdent()
+	{
+		$oRegistry = $this->makeRegistryWithParams();
+		if ($this->isValidToken($oRegistry)) {
+			// Force l'ouverture du panel d'identification
+			$oRegistry->openLogin = true;
+		}
+		$this->showViewRegistry($oRegistry);
+	}
+
+	private function postForgottenPassword()
+	{
+		$oRegistry = $this->makeRegistryWithParams();
+		if ($this->isValidToken($oRegistry)) {
+			// Force l'ouverture du panel de Mot de passe
+			$oRegistry->openPassword = true;
+
+			$oRegistry->oConnection = module_connection::doForgottenPassword();
+
+			if (true == $oRegistry->oConnection->mailSent) {
+				$oRegistry->openPassword = false;
+			}
+		}
+		$this->showViewRegistry($oRegistry);
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function initViewRegistry($poRegistry)
+	{
+		// Reconstruit le texte
+//		$this->makeTextConfirmation($poInvitation, $oConfirm);
+		// Force les fermetures des panels
+		$poRegistry->openAccount = false;
+		$poRegistry->openLogin = false;
+		$poRegistry->openPassword = false;
+
+		if (!$poRegistry->oConnection) {
+			$poRegistry->oConnection = new row_connection();
+		}
+		if (!$poRegistry->oRegin) {
+			$poRegistry->oRegin = model_regin::getInstance()->findById($poRegistry->regin_id);
+		}
+	}
+
+
+	/**
+	 * Verifie le token
+	 * @param row_registry $poRegistry
+	 * @return bool
+	 */
+	private function isValidToken($poRegistry)
+	{
+		if (_root::getParam('token')) {
+			$oPluginXsrf = new plugin_xsrf();
+			if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+				$poRegistry->setMessages(array('token' => $oPluginXsrf->getMessage()));
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private function makeRegistryWithParams()
+	{
+		$oRegistry = new row_registry();
+
+		$oRegistry->action = _root::getParam('action');
+
+		// Récupère les params cachés
+		$oRegistry->regin_id = _root::getParam('regin_id');
+
+		// Copie la saisie Identification
+		$oRegistry->cf_login = _root::getParam('cf_login');
+		$oRegistry->cf_password = _root::getParam('cf_password');
+
+		// Copie la saisie Compte Utilisateur
+		$oRegistry->login = _root::getParam('login');
+		$oRegistry->email = _root::getParam('email');
+		$oRegistry->confirmEmail = _root::getParam('confirmEmail');
+		$oRegistry->newPassword = _root::getParam('newPassword');
+		$oRegistry->confirmPassword = _root::getParam('confirmPassword');
+		$oRegistry->last_name = _root::getParam('last_name');
+		$oRegistry->first_name = _root::getParam('first_name');
+		$oRegistry->birthyear = _root::getParam('birthyear');
+		$oRegistry->gender = _root::getParam('gender');
+
+		// Copie la saisie Mot de passe oublié
+//		$oRegistry->user_id = _root::getParam('user_id');
+
+		$this->initViewRegistry($oRegistry);
+
+		return $oRegistry;
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function showViewRegistry($poRegistry)
+	{
+		$oView = new _view('default::registry');
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+
+		$oView->oRegistry = $poRegistry;
+		$oView->oRegin = $poRegistry->oRegin;
+		$oView->tMessage = $poRegistry->getMessages();
+
+//		$this->oLayout->add('work', $oView);
+
+		// Affiche la vue de confirmation
+//		$oView = new _view('autoreg::confirm');
+//		$oView->oConfirm = $oConfirm;
+//		$oView->tMessage = $oConfirm->getMessages();
+//		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
+
+//		$oPluginXsrf = new plugin_xsrf();
+//		$oView->token = $oPluginXsrf->getToken();
+
+		$oView->oViewFormAccount = new _view('default::formAccount');
+		$oView->oViewFormAccount->oRegistry = $poRegistry;
+		$oView->oViewFormAccount->tMessage = $poRegistry->getMessages();
+		$oView->oViewFormAccount->tSelectedYears = plugin_vfa::buildSelectedBirthYears($poRegistry->birthyear);
+		$oView->oViewFormAccount->token = $oView->token;
+
+		$oView->oViewFormIdent = new _view('default::formIdent');
+		$oView->oViewFormIdent->oRegistry = $poRegistry;
+		$oView->oViewFormIdent->tMessage = $poRegistry->getMessages();
+		$oView->oViewFormIdent->token = $oView->token;
+
+		// Force l'email déjà connu s'il existe
+//		if (null == $oConfirm->oConnection->myEmail) {
+//			$oConfirm->oConnection->myEmail = $oConfirm->email;
+//		}
+		$oView->oViewForgottenPassword = new _view('connection::formForgottenPassword');
+		$oView->oViewForgottenPassword->tHidden = array('regin_id' => $poRegistry->regin_id, 'invitation_key' => $poRegistry->oRegin->code);
+		$oView->oViewForgottenPassword->oConnection = $poRegistry->oConnection;
+		$oView->oViewForgottenPassword->tMessage = $poRegistry->oConnection->getMessages();
+		$oView->oViewForgottenPassword->token = $oView->token;
+
+		$oView->oViewModalMessage = new _view('connection::modalMessage');
+		$oView->oViewModalMessage->oConnection = $poRegistry->oConnection;
+		$oView->oViewModalMessage->tMessage = $poRegistry->oConnection->getMessages();
+
+		$this->oLayout->add('work', $oView);
+
+		// Gestion de l'affichage du bon panel
+		$scriptView = new _view('default::scriptRegistry');
+		$this->oLayout->add('script', $scriptView);
+		// Gestion de l'affichage de la boite modale
+		$scriptView = new _view('connection::scriptForgottenPassword');
+		$scriptView->oConnection = $poRegistry->oConnection;
+		$this->oLayout->add('script', $scriptView);
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function createUserReader($poRegistry)
+	{
+		$oUser = new row_user();
+		$oUser->created_date = plugin_vfa::dateTimeSgbd();
+		$oUser->modified_date = $oUser->created_date;
+
+		$oUser->login = $poRegistry->login;
+		$oUser->email = $poRegistry->email;
+		$oUser->password = $poRegistry->password;
+		$oUser->last_name = $poRegistry->last_name;
+		$oUser->first_name = $poRegistry->first_name;
+		$oUser->birthyear = $poRegistry->birthyear;
+		$oUser->gender = $poRegistry->gender;
+
+		$tIdGroups = array($poRegistry->oRegin->group_id);
+		$tIdRoles = array();
+		$oRole = model_role::getInstance()->findByName(plugin_vfa::ROLE_READER);
+		$tIdRoles[] = $oRole->getId();
+
+		$oUser->save();
+		model_user::getInstance()->saveUserRoles($oUser->getId(), $tIdRoles);
+		model_user::getInstance()->saveUserGroups($oUser->getId(), $tIdGroups);
+
+		$poRegistry->oUser = $oUser;
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function addAwardsToUser($poRegistry)
+	{
+		$tIdAwards = explode(',', $poRegistry->oRegin->awards_ids);
+		model_user::getInstance()->saveUserAwards($poRegistry->oUser->getId(), $tIdAwards);
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function connectUser($poRegistry)
+	{
+		$oUserSession = model_user_session::getInstance()->create($poRegistry->oUser);
+		_root::getAuth()->connect($oUserSession);
 	}
 
 	private function doLogin()

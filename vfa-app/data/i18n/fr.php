@@ -1,8 +1,11 @@
 <?php
 _root::setConfigVar('tLangue', array(
 
-	'BONJOUR' => 'Bonjour', 'BIENVENUE' => 'Bienvenue', 'CHOISISSEZ_LANGUE' => 'Choisissez la langue',
-	'DU_TEXTE_EN_FRANCAIS' => 'Du texte en francais', 'La_date' => 'La date',
+	'BONJOUR' => 'Bonjour', //
+	'BIENVENUE' => 'Bienvenue', //
+	'CHOISISSEZ_LANGUE' => 'Choisissez la langue', //
+	'DU_TEXTE_EN_FRANCAIS' => 'Du texte en francais', //
+	'La_date' => 'La date',
 
 	// Rôles
 	'role.board' => 'Membre du comité de sélection', //
@@ -19,7 +22,8 @@ _root::setConfigVar('tLangue', array(
 
 	'title.users' => 'Utilisateurs', //
 	'title.users.list' => 'Tous les utilisateurs', //
-	'title.users.listBoardGroup' => 'Comité de sélection', 'title.users.listDetailed' => 'Tous les utilisateurs détaillés', //
+	'title.users.listBoardGroup' => 'Comité de sélection', //
+	'title.users.listDetailed' => 'Tous les utilisateurs détaillés', //
 	'title.users.listResponsibleGroup' => 'Correspondants',
 
 	'menu.users' => 'Comptes',
@@ -31,8 +35,8 @@ _root::setConfigVar('tLangue', array(
 	'isEqualKO' => 'La valeur saisie est différente de la valeur attendue', //
 	'isEmailValidKO' => 'Cette adresse email est invalide', //
 	'matchExpressionKO.number' => "La valeur saisie n'est pas un nombre", //
-	'isDateBeforeKO' => 'Cohérence des dates : date trop grande !', //
-	'isDateAfterKO' => 'Cohérence des dates : date trop petite !', //
+	'isDateBeforeKO' => 'Date trop grande !', //
+	'isDateAfterKO' => 'Date trop petite !', //
 	'isNotContainsAtKO' => 'La valeur saisie contient un caractère interdit !',
 
 
@@ -42,20 +46,21 @@ _root::setConfigVar('tLangue', array(
 	'matchExpressionKO.birthyear' => "La valeur saisie doit correspondre à une année valide (nombre)",
 	'isUpperOrEqualThanKO.birthyear' => "Pas possible, c'est trop vieux !", //
 	'isLowerThanKO.birthyear' => "Pas possible, c'est trop jeune !", //
-	'isEqualKO.email' => 'Les emails ne correspondent pas !', //
-	'isEqualKO.email_bis' => 'Les emails ne correspondent pas !',
+	'isEqualKO.email' => 'L\'email et sa confirmation ne correspondent pas !', //
+	'isEqualKO.confirmEmail' => 'L\'email et sa confirmation ne correspondent pas !',
 	'isEqualKO.newPassword' => 'Le mot de passe et sa confirmation ne correspondent pas !',
 	'isEqualKO.confirmPassword' => 'Le mot de passe et sa confirmation ne correspondent pas !',
 	'badSize.newPassword' => 'Le mot de passe doit contenir entre 7 et 30 caractères !',
 	'notUniqueTypeGroup' => 'Le type des groupes n\'est pas unique !',
-	'invalidGroupsWithRoles' => 'Les groupes sont invalides par rapport aux rôles !',
-	'invalidRolesWithGroups' => 'Les rôles sont invalides par rapport aux groupes !',
-	'unknown.myEmail' => 'Email inconnu !',
+	'invalidGroupsWithRoles' => 'Les groupes sont invalides par rapport aux rôles !', //
+	'invalidRolesWithGroups' => 'Les rôles sont invalides par rapport aux groupes !', //
+	'unknown.myEmail' => 'Email inconnu !',  //
+	'isLengthBetweenKO.newPassword' => 'Le mot de passe doit contenir entre 7 et 30 caractères !', //
 
 
 	'matchExpressionKO.year' => "La valeur saisie doit correspondre à une année valide (nombre)",
-	'isUpperOrEqualThanKO.year' => "L'année du prix doit appartenir au XXI siècle", 'doublon.year' => 'Ce prix existe déjà !',
-	'doublon.name' => 'Ce prix existe déjà !', //
+	'isUpperOrEqualThanKO.year' => "L'année du prix doit appartenir au XXI siècle", //
+	'doublon.year' => 'Ce prix existe déjà !', 'doublon.name' => 'Ce prix existe déjà !', //
 	'doublon.type' => 'Ce prix existe déjà !',
 
 	'required-selection' => "Sélection obligatoire !", //
@@ -66,7 +71,11 @@ _root::setConfigVar('tLangue', array(
 	'nonePBD.awards' => 'Aucun prix trouvé !', //
 	'nonePSBD.awards' => 'Aucune présélection trouvée !', //
 	'none.groups' => 'Vous n\'appartenez à aucun groupe !', //
-	'noneCS.groups' => 'Aucun groupe de comité de sélection trouvé !' //
+	'noneCS.groups' => 'Aucun groupe de comité de sélection trouvé !', //
+
+	'registry.code.unknown' => 'Code d\'inscription inconnu !', //
+	'registry.code.invalid' => 'Ce code d\'inscription n\'est plus valide !' //
+
 ));
 
 

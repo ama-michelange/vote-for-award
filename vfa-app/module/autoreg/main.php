@@ -145,7 +145,7 @@ class module_autoreg extends abstract_module
 		}
 		// Validation
 		if ($oConfirm->isValid()) {
-			if (plugin_vfa::checkPassword($oConfirm, $oConfirm->newPassword, $oConfirm->confirmPassword)) {
+			if (plugin_vfa::checkSavePassword($oConfirm, $oConfirm->newPassword, $oConfirm->confirmPassword)) {
 				$oUser = model_user::getInstance()->findById($oConfirm->user_id);
 				if (false == $oUser->isEmpty()) {
 					$oUser->password = plugin_vfa::cryptPassword($oConfirm->newPassword);
@@ -508,7 +508,7 @@ class module_autoreg extends abstract_module
 			// Doublon ?
 			$oUserDoublon = model_user::getInstance()->findByLogin($poConfirm->login);
 			if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
-				if (plugin_vfa::checkPassword($poConfirm, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
+				if (plugin_vfa::checkSavePassword($poConfirm, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
 					if ($this->createUser($poInvitation, $poConfirm)) {
 						if ($this->acceptInvitation($poInvitation)) {
 							$poConfirm->completed = true;

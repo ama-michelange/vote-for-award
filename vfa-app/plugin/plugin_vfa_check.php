@@ -128,4 +128,23 @@ class plugin_vfa_check extends plugin_check
 		$this->setLastErrorMsg($sErrorMsg);
 		return false;
 	}
+
+	/**
+	 * Vérifie si la longueur de la chaine de caractères est comprise entre les bornes données.
+	 *
+	 * @access public
+	 * @param string $pValue La valeur de la chaine de caractères à valider
+	 * @param int $pLowLength La longueur minimale de la chaine
+	 * @param int $pHighLength La longueur maximale de la chaine
+	 * @param string $sErrorMsg Le message d'erreur a afficher
+	 * @return bool retourne true/false selon
+	 */
+	public function isLengthBetween($pValue, $pLowLength, $pHighLength, $sErrorMsg = 'isLengthBetweenKO')
+	{
+		if ((strlen($pValue) >= $pLowLength) && (strlen($pValue) <= $pHighLength)) {
+			return true;
+		}
+		$this->setLastErrorMsg($sErrorMsg);
+		return false;
+	}
 }

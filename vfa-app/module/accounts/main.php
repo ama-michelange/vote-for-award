@@ -133,7 +133,7 @@ class module_accounts extends abstract_module
 	private function savePassword($poUser)
 	{
 		// Vérifie la saisie du mot de passe
-		$canSave = plugin_vfa::checkPassword($poUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'));
+		$canSave = plugin_vfa::checkSavePassword($poUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'));
 		if (false == $canSave) {
 			$poUser->openPassword = true;
 		}

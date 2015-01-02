@@ -393,7 +393,7 @@ class module_users extends abstract_module
 				if ($this->isValidGroupsRoles($oUser, $tUserGroups, $tUserRoles)) {
 					$save = true;
 					if (_root::getParam('newPassword')) {
-						$save = plugin_vfa::checkPassword($oUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'));
+						$save = plugin_vfa::checkSavePassword($oUser, _root::getParam('newPassword'), _root::getParam('confirmPassword'));
 						if (false == $save) {
 							$oUser->newPassword = _root::getParam('newPassword');
 							$oUser->confirmPassword = _root::getParam('confirmPassword');
