@@ -247,16 +247,11 @@ class module_default extends abstract_module
 		$oView->oRegin = $poRegistry->oRegin;
 		$oView->tMessage = $poRegistry->getMessages();
 
-//		$this->oLayout->add('work', $oView);
-
-		// Affiche la vue de confirmation
-//		$oView = new _view('autoreg::confirm');
-//		$oView->oConfirm = $oConfirm;
-//		$oView->tMessage = $oConfirm->getMessages();
-//		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oConfirm->birthyear);
-
-//		$oPluginXsrf = new plugin_xsrf();
-//		$oView->token = $oPluginXsrf->getToken();
+		$oView->oViewRegistryDetail = new _view('default::viewRegistryDetail');
+		$oView->oViewRegistryDetail->oRegin = $poRegistry->oRegin;
+		$oView->oViewRegistryDetail->oGroup = $poRegistry->oRegin->findGroup();
+		$oView->oViewRegistryDetail->tAwards = $poRegistry->oRegin->findAwards();
+		$oView->oViewRegistryDetail->oCreatedUser = $poRegistry->oRegin->findCreatedUser();
 
 		$oView->oViewFormAccount = new _view('default::formAccount');
 		$oView->oViewFormAccount->oRegistry = $poRegistry;

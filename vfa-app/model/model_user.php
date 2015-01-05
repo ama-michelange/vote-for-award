@@ -159,7 +159,7 @@ class model_user extends abstract_model
 	 */
 	public function countByGroupId($pGroupId)
 	{
-		$sql = 'SELECT count(*) as total FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
+		$sql = 'SELECT count(*) AS total FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
 			'AND (vfa_user_groups.group_id = ?)';
 		$res = $this->findOneSimple($sql, $pGroupId);
 		return intval($res->total);
@@ -326,6 +326,21 @@ class row_user extends abstract_row
 			if ($this->login != $this->email) {
 				$s .= ' (' . $this->email . ')';
 			}
+		}
+		return $s;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function toStringPublic()
+	{
+		$s = '';
+		$s .= $this->first_name;
+		$s .= ' ';
+		$s .= $this->last_name;
+		if ($this->email) {
+			$s .= ' (' . $this->email . ')';
 		}
 		return $s;
 	}
