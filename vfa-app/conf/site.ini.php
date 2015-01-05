@@ -49,8 +49,7 @@ use4O4=0
 ;XSRF ou CSRF,bSecuriteXSRF utilisation de jeton dans le CRUD, plus d'infos: http://fr.wikipedia.org/wiki/Cross-Site_Request_Forgeries
 ;XSS, bSecuriteXSS protection des variables GET,POST... via getParam( , plus d'infos http://fr.wikipedia.org/wiki/XSS
 xsrf.enabled=1
-xsrf.timeout.lifetime=10
-;xsrf.timeout.lifetime=900
+xsrf.timeout.lifetime=900
 xsrf.session.enabled=0
 xss.enabled=1
 xss.onlyspecialchars=1
