@@ -74,13 +74,12 @@
 		});
 
 		function buildIdent() {
-			var inputLastName = $('#inputLastName').val();
-			var inputFirstName = $('#inputFirstName').val();
-			var login = $('#login').val();
-			if (inputFirstName && inputLastName && !login) {
-				$('#login').val(inputFirstName.toLowerCase()+'.'+inputLastName.toLowerCase());
+			var valLastName = $('#inputLastName').val();
+			var valFirstName = $('#inputFirstName').val();
+			var login = $('#login');
+			if (valFirstName && valLastName && !login.val()) {
+				login.val(valFirstName.toLowerCase() + '.' + valLastName.toLowerCase());
 			}
-
 		}
 
 		function focusForm() {
