@@ -11,25 +11,10 @@
 		</p>
 	</div>
 <?php else: ?>
-	<div class="panel panel-default panel-root">
-		<div class="panel-heading">
-			<h3 class="panel-title">
-				Titre
-<!--				--><?php //echo $this->oRegistry->titleInvit ?>
-			</h3>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-<!--				--><?php //foreach ($this->oRegistry->tInscription as $label => $value): ?>
-<!--					<div class="col-sm-1 col-md-2 col-lg-1 view-label">--><?php //echo $label ?><!--</div>-->
-<!--					<div class="col-sm-5 col-md-4 col-lg-5 view-value">--><?php //echo $value ?><!--</div>-->
-<!--				--><?php //endforeach; ?>
-			</div>
-		</div>
-	</div>
+	<?php echo $this->oViewRegistryDetail->show(); ?>
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Validation de votre inscription</h3>
+			<h3 class="panel-title">Validation</h3>
 		</div>
 		<div class="panel-body panel-condensed">
 			<?php
