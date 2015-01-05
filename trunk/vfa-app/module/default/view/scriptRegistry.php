@@ -8,6 +8,7 @@
 			},
 			'shown.bs.collapse': function () {
 				$('#bottomAccount').get(0).click();
+				$('#inputLastName').focus();
 			}
 		});
 		$('#cancelAccount').on('click', function (pEvent) {
@@ -16,6 +17,9 @@
 			$('#btnPassword').show();
 			$('#btnAccount').show();
 			$('#collapseAccount').collapse('hide');
+		});
+		$('#bottomAccount').on('focus', function () {
+			focusForm();
 		});
 
 		$('#collapseLogin').on({
@@ -26,6 +30,7 @@
 			},
 			'shown.bs.collapse': function () {
 				$('#bottomLogin').get(0).click();
+				$('#cfLogin').focus();
 			}
 		});
 		$('#cancelLogin').on('click', function (pEvent) {
@@ -34,6 +39,9 @@
 			$('#btnPassword').show();
 			$('#btnLogin').show();
 			$('#collapseLogin').collapse('hide');
+		});
+		$('#bottomLogin').on('focus', function () {
+			focusForm();
 		});
 
 		$('#collapsePassword').on({
@@ -44,6 +52,7 @@
 			},
 			'shown.bs.collapse': function () {
 				$('#bottomPassword').get(0).click();
+				$('#inputMyEmail').focus();
 			}
 		});
 		$('#cancelPassword').on('click', function (pEvent) {
@@ -53,5 +62,37 @@
 			$('#btnPassword').show();
 			$('#collapsePassword').collapse('hide');
 		});
+		$('#bottomPassword').on('focus', function () {
+			focusForm();
+		});
+
+		$('#inputLastName').on('blur', function () {
+			buildIdent();
+		});
+		$('#inputFirstName').on('blur', function () {
+			buildIdent();
+		});
+
+		function buildIdent() {
+			var inputLastName = $('#inputLastName').val();
+			var inputFirstName = $('#inputFirstName').val();
+			var login = $('#login').val();
+			if (inputFirstName && inputLastName && !login) {
+				$('#login').val(inputFirstName.toLowerCase()+'.'+inputLastName.toLowerCase());
+			}
+
+		}
+
+		function focusForm() {
+			var form = $('form:visible');
+			var idForm = form.attr('id');
+			if (idForm) {
+				var error = form.find('.has-error:first');
+				if (error.length) {
+					var input = error.find(':input');
+					input.focus();
+				}
+			}
+		}
 	});
 </script>

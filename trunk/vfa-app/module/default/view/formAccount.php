@@ -93,7 +93,7 @@
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login') ?>">
 							<label for="login">Identifiant</label>
-							<input class="form-control" type="text" id="login" name="login" autofocus="true"
+							<input class="form-control" type="text" id="login" name="login"
 									 value="<?php echo $this->oRegistry->login ?>" placeholder="Votre identifiant ou pseudo"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login') ?></span>
 						</div>
