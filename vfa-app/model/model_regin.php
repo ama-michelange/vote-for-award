@@ -86,6 +86,16 @@ class model_regin extends abstract_model
 	{
 		return $this->findMany('SELECT * FROM' . ' ' . $this->sTable . ' WHERE code=?', $pCode);
 	}
+
+	/**
+	 * @param int $pIdRegin
+	 * @param int $pIdUser
+	 */
+	public function saveReginUser($pIdRegin, $pIdUser)
+	{
+		$this->execute('DELETE FROM vfa_regin_users WHERE user_id=?', $pIdUser);
+		$this->execute('INSERT INTO vfa_regin_users (regin_id, user_id) VALUES (?,?)', $pIdRegin, $pIdUser);
+	}
 }
 
 class row_regin extends abstract_row
