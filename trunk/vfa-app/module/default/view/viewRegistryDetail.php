@@ -4,7 +4,7 @@
 	</div>
 	<div class="panel-body panel-condensed">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-sm-6 col-md-6">
 				<dl class="dl-horizontal dl-lg">
 					<dt>
 					<h4>Participation</h4>
@@ -25,7 +25,7 @@
 					<dd><?php echo $this->oGroup->toString() ?></dd>
 				</dl>
 			</div>
-			<div class="col-md-6">
+			<div class="col-sm-6 col-md-6">
 				<dl class="dl-horizontal dl-lg">
 					<dt>Code</dt>
 					<dd><?php echo $this->oRegin->code ?></dd>

@@ -121,13 +121,8 @@ class module_default extends abstract_module
 				if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
 					if (plugin_vfa::checkSavePassword($oRegistry, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
 						$this->createUserReader($oRegistry);
-						// FIXME A finir : étape suivante
-//						if ($this->acceptInvitation($poInvitation)) {
-//							$oRegistry->completed = true;
-//							$oRegistry->completedRegistration = true;
-//							$oUserSession = model_user_session::getInstance()->create($oRegistry->oUser);
-//							_root::getAuth()->connect($oUserSession);
-//						}
+						$this->sendMailCreateAccount($oRegistry);
+						$this->doRegistry($oRegistry);
 					}
 				} else {
 					$oRegistry->setMessages(array('login' => array('doublon')));
@@ -161,6 +156,33 @@ class module_default extends abstract_module
 			}
 		}
 		$this->showViewRegistry($oRegistry);
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistry($poRegistry)
+	{
+		switch ($poRegistry->oRegin->type) {
+			case plugin_vfa::TYPE_READER:
+				$this->doRegistryReader($poRegistry);
+				break;
+		}
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistryReader($poRegistry)
+	{
+		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
+			// Ajoute les prix à l'utilisateur
+			$this->addAwardsToUser($poRegistry);
+		} else {
+			// Sauvegarde pour validation
+			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
+			$this->sendMailReginToValid($poRegistry);
+		}
 	}
 
 	/**
@@ -400,4 +422,51 @@ class module_default extends abstract_module
 	{
 		$this->oLayout->show();
 	}
+
+	private function sendMailCreateAccount($poRegistry)
+	{
+		$oMail = new plugin_mail();
+		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
+		$oMail->addTo($poRegistry->oUser->email);
+//		$createdUser = $poInvitation->findCreatedUser();
+//		$oMail->addCC($createdUser->email);
+		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
+		// Sujet
+		$oMail->setSubject('Création d\'un compte sur ' . _root::getConfigVar('vfa-app.title'));
+		// Prepare le body TXT
+		$oViewTxt = new _view('default::mailCreateAccountTxt');
+		$oViewTxt->oUser = $poRegistry->oUser;
+		$bodyTxt = $oViewTxt->show();
+//		 _root::getLog()->log($bodyTxt);
+		$oMail->setBody($bodyTxt);
+		// Envoi le mail
+		$sent = plugin_vfa::sendEmail($oMail);
+		return $sent;
+	}
+
+	private function sendMailReginToValid($poRegistry)
+	{
+		$oMail = new plugin_mail();
+		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
+		$createdUser = $poRegistry->oRegin->findCreatedUser();
+		$oMail->addTo($createdUser->email);
+//		$oMail->addCC($poRegistry->oUser->email);
+		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
+
+		$tAwards = $poRegistry->oRegin->findAwards();
+
+		// Sujet
+		$oMail->setSubject('[PrixBD' . $tAwards[0]->year . '] Inscription d\'un lecteur à valider');
+		// Prepare le body TXT
+		$oViewTxt = new _view('default::mailReginToValidateTxt');
+		$oViewTxt->oUser = $poRegistry->oUser;
+		$oViewTxt->tAwards = $tAwards;
+		$bodyTxt = $oViewTxt->show();
+//		 _root::getLog()->log($bodyTxt);
+		$oMail->setBody($bodyTxt);
+		// Envoi le mail
+		$sent = plugin_vfa::sendEmail($oMail);
+		return $sent;
+	}
+
 }

@@ -197,6 +197,7 @@ class model_user extends abstract_model
 		$this->execute('DELETE FROM vfa_user_roles WHERE user_id=?', $pIdUser);
 		$this->execute('DELETE FROM vfa_user_groups WHERE user_id=?', $pIdUser);
 		$this->execute('DELETE FROM vfa_user_awards WHERE user_id=?', $pIdUser);
+		$this->execute('DELETE FROM vfa_regin_users WHERE user_id=?', $pIdUser);
 	}
 
 	/**
@@ -342,6 +343,18 @@ class row_user extends abstract_row
 		if ($this->email) {
 			$s .= ' (' . $this->email . ')';
 		}
+		return $s;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function toStringFirstLastName()
+	{
+		$s = '';
+		$s .= $this->first_name;
+		$s .= ' ';
+		$s .= $this->last_name;
 		return $s;
 	}
 
