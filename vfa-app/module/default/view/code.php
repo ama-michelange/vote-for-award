@@ -14,16 +14,14 @@
 			</div>
 		<?php else: ?>
 			<div class="panel-body panel-condensed">
-				<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'code') ?>">
-					<label for="inputCode">Code d'inscription</label>
-					<div class="row">
-						<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
+						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'code') ?>">
+							<label for="inputCode">Code d'inscription</label>
 							<input class="form-control" type="text" id="inputCode" name="code"
 									 value="<?php echo $this->oRegistry->code ?>" autofocus="true"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'code') ?></span>
-						</div>
-						<div class="col-sm-6">
-							Saisissez le code d'inscription que l'on vous a transmis pour vous inscrire.
+							Saisissez le code que l'on vous a transmis pour vous inscrire.
 						</div>
 					</div>
 				</div>

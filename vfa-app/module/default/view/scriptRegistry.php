@@ -73,6 +73,10 @@
 			buildIdent();
 		});
 
+		<?php if ($this->oRegistry): ?>
+		$('#modalEnd').modal({'show': true, 'keyboard': false, 'backdrop': 'static'});
+		<?php endif; ?>
+
 		function buildIdent() {
 			var valLastName = $('#inputLastName').val();
 			var valFirstName = $('#inputFirstName').val();
@@ -93,5 +97,6 @@
 				}
 			}
 		}
+
 	});
 </script>

@@ -126,4 +126,7 @@
 		</div>
 	</div>
 	<?php echo $this->oViewModalMessage->show(); ?>
+	<?php if ($this->oViewModalEnd): ?>
+		<?php echo $this->oViewModalEnd->show(); ?>
+	<?php endif; ?>
 <?php endif; ?>
