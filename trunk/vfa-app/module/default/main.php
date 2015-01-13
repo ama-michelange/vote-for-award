@@ -68,6 +68,9 @@ class module_default extends abstract_module
 				case 'submitForgottenPassword':
 					$this->postForgottenPassword();
 					break;
+				case 'toConnect':
+					$this->connectUser(_root::getParam('user_id'));
+					break;
 				default:
 					_root::redirect('default::index');
 					break;
@@ -121,7 +124,7 @@ class module_default extends abstract_module
 				if ((null == $oUserDoublon) || (true == $oUserDoublon->isEmpty())) {
 					if (plugin_vfa::checkSavePassword($oRegistry, _root::getParam('newPassword'), _root::getParam('confirmPassword'))) {
 						$this->createUserReader($oRegistry);
-						$this->sendMailCreateAccount($oRegistry);
+						$oRegistry->sendMailCreateAccount = $this->sendMailCreateAccount($oRegistry);
 						$this->doRegistry($oRegistry);
 					}
 				} else {
@@ -190,8 +193,6 @@ class module_default extends abstract_module
 	 */
 	private function initViewRegistry($poRegistry)
 	{
-		// Reconstruit le texte
-//		$this->makeTextConfirmation($poInvitation, $oConfirm);
 		// Force les fermetures des panels
 		$poRegistry->openAccount = false;
 		$poRegistry->openLogin = false;
@@ -265,6 +266,13 @@ class module_default extends abstract_module
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 
+
+		// FIXME A supprimer
+		$poRegistry->oUser = model_user::getInstance()->findById(41);
+		$poRegistry->oRegin = model_regin::getInstance()->findById(20);
+		// FIXME A supprimer
+
+
 		$oView->oRegistry = $poRegistry;
 		$oView->oRegin = $poRegistry->oRegin;
 		$oView->tMessage = $poRegistry->getMessages();
@@ -286,10 +294,6 @@ class module_default extends abstract_module
 		$oView->oViewFormIdent->tMessage = $poRegistry->getMessages();
 		$oView->oViewFormIdent->token = $oView->token;
 
-		// Force l'email déjà connu s'il existe
-//		if (null == $oConfirm->oConnection->myEmail) {
-//			$oConfirm->oConnection->myEmail = $oConfirm->email;
-//		}
 		$oView->oViewForgottenPassword = new _view('connection::formForgottenPassword');
 		$oView->oViewForgottenPassword->tHidden = array('regin_id' => $poRegistry->regin_id, 'invitation_key' => $poRegistry->oRegin->code);
 		$oView->oViewForgottenPassword->oConnection = $poRegistry->oConnection;
@@ -300,15 +304,37 @@ class module_default extends abstract_module
 		$oView->oViewModalMessage->oConnection = $poRegistry->oConnection;
 		$oView->oViewModalMessage->tMessage = $poRegistry->oConnection->getMessages();
 
+		$oView->oViewModalEnd = null;
+		if ($poRegistry->oUser) {
+			$oView->oViewModalEnd = $this->buildViewModalEnd($poRegistry);
+		}
+
 		$this->oLayout->add('work', $oView);
 
 		// Gestion de l'affichage du bon panel
 		$scriptView = new _view('default::scriptRegistry');
+		$scriptView->oRegistry = $poRegistry;
 		$this->oLayout->add('script', $scriptView);
 		// Gestion de l'affichage de la boite modale
 		$scriptView = new _view('connection::scriptForgottenPassword');
 		$scriptView->oConnection = $poRegistry->oConnection;
 		$this->oLayout->add('script', $scriptView);
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 * @return _view|null
+	 */
+	private function buildViewModalEnd($poRegistry)
+	{
+		$view = null;
+		switch ($poRegistry->oRegin->type) {
+			case plugin_vfa::TYPE_READER:
+				$view = new _view('default::modalEndRegistryReader');
+				break;
+		}
+		$view->oRegistry = $poRegistry;
+		return $view;
 	}
 
 	/**
@@ -338,6 +364,8 @@ class module_default extends abstract_module
 		model_user::getInstance()->saveUserGroups($oUser->getId(), $tIdGroups);
 
 		$poRegistry->oUser = $oUser;
+		$poRegistry->createAccount = true;
+
 	}
 
 	/**
@@ -350,11 +378,12 @@ class module_default extends abstract_module
 	}
 
 	/**
-	 * @param row_registry $poRegistry
+	 * @param string $pIdUser
 	 */
-	private function connectUser($poRegistry)
+	private function connectUser($pIdUser)
 	{
-		$oUserSession = model_user_session::getInstance()->create($poRegistry->oUser);
+		$oUser = model_user::getInstance()->findById($pIdUser);
+		$oUserSession = model_user_session::getInstance()->create($oUser);
 		_root::getAuth()->connect($oUserSession);
 	}
 
