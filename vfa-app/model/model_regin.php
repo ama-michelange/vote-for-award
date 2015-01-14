@@ -135,6 +135,26 @@ class row_regin extends abstract_row
 		return $tAwards;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function toStringAllAwards()
+	{
+		$ret = '';
+		$tAwards = $this->findAwards();
+		if (null != $tAwards) {
+			$i = 0;
+			foreach ($tAwards as $award) {
+				if ($i > 0) {
+					$ret .= ', ';
+				}
+				$ret .= $award->toString();
+				$i++;
+			}
+		}
+		return $ret;
+	}
+
 	public function showType()
 	{
 		switch ($this->type) {

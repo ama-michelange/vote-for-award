@@ -371,6 +371,26 @@ class row_user extends abstract_row
 	}
 
 	/**
+	 * @return string
+	 */
+	public function toStringAllGroups()
+	{
+		$ret = '';
+		$tGroups = $this->findGroups();
+		if (null != $tGroups) {
+			$i=0;
+			foreach ($tGroups as $group) {
+				if ($i > 0){
+					$ret .= ', ';
+				}
+				$ret .= $group->toString();
+				$i++;
+			}
+		}
+		return $ret;
+	}
+
+	/**
 	 * @param $pRoleName
 	 * @return null|row_group
 	 */
