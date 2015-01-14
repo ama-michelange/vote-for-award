@@ -70,6 +70,7 @@ class module_default extends abstract_module
 					break;
 				case 'toConnect':
 					$this->connectUser(_root::getParam('user_id'));
+					_root::redirect('default::index');
 					break;
 				default:
 					_root::redirect('default::index');
@@ -268,8 +269,10 @@ class module_default extends abstract_module
 
 
 		// FIXME A supprimer
-		$poRegistry->oUser = model_user::getInstance()->findById(41);
-		$poRegistry->oRegin = model_regin::getInstance()->findById(20);
+//		$poRegistry->oUser = model_user::getInstance()->findById(5);
+//		$poRegistry->oRegin = model_regin::getInstance()->findById(20);
+//		$poRegistry->oRegin->process = plugin_vfa::PROCESS_INTIME;
+//		$poRegistry->createAccount=true;
 		// FIXME A supprimer
 
 
