@@ -14,7 +14,7 @@
 	<?php echo $this->oViewRegistryDetail->show(); ?>
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Validation</h3>
+			<h3 class="panel-title">Identification</h3>
 		</div>
 		<div class="panel-body panel-condensed">
 			<?php
