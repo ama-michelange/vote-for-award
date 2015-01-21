@@ -142,6 +142,21 @@ class module_default extends abstract_module
 		if ($this->isValidToken($oRegistry)) {
 			// Force l'ouverture du panel d'identification
 			$oRegistry->openLogin = true;
+			// Validation
+			if ($oRegistry->isValid()) {
+				// Recup params
+				$sLogin = $oRegistry->cf_login;
+				$sPass = plugin_vfa::cryptPassword($oRegistry->cf_password);
+				// Recherche et vérifie "login/pass" dans la base
+				$oUser = model_user::getInstance()->findByLoginAndCheckPass($sLogin, $sPass);
+				// Enregistrement si utilisateur connu
+				if (null != $oUser) {
+					$oRegistry->oUser = $oUser;
+					$this->doRegistry($oRegistry);
+				} else {
+					$oRegistry->setMessages(array('cf_login' => array('badIdentity'), 'cf_password' => array('badIdentity')));
+				}
+			}
 		}
 		$this->showViewRegistry($oRegistry);
 	}
@@ -180,8 +195,8 @@ class module_default extends abstract_module
 	private function doRegistryReader($poRegistry)
 	{
 		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
-			// Ajoute les prix à l'utilisateur
-			$this->addAwardsToUser($poRegistry);
+			// Associe le groupe de même rôle et les prix à l'utilisateur
+			$this->saveGroupAwardsToUser($poRegistry);
 		} else {
 			// Sauvegarde pour validation
 			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
@@ -298,7 +313,7 @@ class module_default extends abstract_module
 		$oView->oViewFormIdent->token = $oView->token;
 
 		$oView->oViewForgottenPassword = new _view('connection::formForgottenPassword');
-		$oView->oViewForgottenPassword->tHidden = array('regin_id' => $poRegistry->regin_id, 'invitation_key' => $poRegistry->oRegin->code);
+		$oView->oViewForgottenPassword->tHidden = array('regin_id' => $poRegistry->regin_id);
 		$oView->oViewForgottenPassword->oConnection = $poRegistry->oConnection;
 		$oView->oViewForgottenPassword->tMessage = $poRegistry->oConnection->getMessages();
 		$oView->oViewForgottenPassword->token = $oView->token;
@@ -357,14 +372,14 @@ class module_default extends abstract_module
 		$oUser->birthyear = $poRegistry->birthyear;
 		$oUser->gender = $poRegistry->gender;
 
-		$tIdGroups = array($poRegistry->oRegin->group_id);
 		$tIdRoles = array();
 		$oRole = model_role::getInstance()->findByName(plugin_vfa::ROLE_READER);
 		$tIdRoles[] = $oRole->getId();
 
 		$oUser->save();
 		model_user::getInstance()->saveUserRoles($oUser->getId(), $tIdRoles);
-		model_user::getInstance()->saveUserGroups($oUser->getId(), $tIdGroups);
+//		$tIdGroups = array($poRegistry->oRegin->group_id);
+//		model_user::getInstance()->saveUserGroups($oUser->getId(), $tIdGroups);
 
 		$poRegistry->oUser = $oUser;
 		$poRegistry->createAccount = true;
@@ -374,10 +389,14 @@ class module_default extends abstract_module
 	/**
 	 * @param row_registry $poRegistry
 	 */
-	private function addAwardsToUser($poRegistry)
+	private function saveGroupAwardsToUser($poRegistry)
 	{
+		// Sauve le groupe de même rôle à l'utilisateur
+		$tIdGroups = array($poRegistry->oRegin->group_id);
+		model_user::getInstance()->mergeUserGroups($poRegistry->oUser->getId(), $tIdGroups);
+		// Ajoute les prix à l'utilisateur
 		$tIdAwards = explode(',', $poRegistry->oRegin->awards_ids);
-		model_user::getInstance()->saveUserAwards($poRegistry->oUser->getId(), $tIdAwards);
+		model_user::getInstance()->mergeUserAwards($poRegistry->oUser->getId(), $tIdAwards);
 	}
 
 	/**

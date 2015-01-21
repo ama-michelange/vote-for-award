@@ -29,7 +29,7 @@ class module_connection extends abstract_module
 	{
 		$oConnection = $this->doForgottenPassword();
 
-		if ($oConnection->openModalMessage){
+		if ($oConnection->openModalMessage) {
 			$oConnection->redirectOnClose = true;
 		}
 
@@ -88,8 +88,7 @@ class module_connection extends abstract_module
 			// Valide la saisie de l'email
 			$oConnection->action = _root::getParam('action');
 			$oConnection->myEmail = _root::getParam('myEmail');
-			$oConnection->link_id = _root::getParam('invitation_id');
-			$oConnection->link_key = _root::getParam('invitation_key');
+			$oConnection->link_id = _root::getParam('regin_id');
 			// Validation
 			if ($oConnection->isValid()) {
 				// Email existant ?
@@ -100,6 +99,7 @@ class module_connection extends abstract_module
 					$oInvit = self::saveInvitationModifyPassword($oConnection);
 					if (self::sendMail($oInvit)) {
 						$oConnection->mailSent = true;
+						$oConnection->linkWhenClose = 'default::index';
 						$oConnection->textModalMessage = 'Vous allez bientôt recevoir un message à l\'adresse "' . $oConnection->myEmail .
 							'" pour saisir un nouveau mot de passe.';
 					} else {
@@ -131,7 +131,6 @@ class module_connection extends abstract_module
 			$oInvit->ip = $_SERVER['REMOTE_ADDR'];
 			$oInvit->invitation_key = self::buildKeyModifyPassword($oInvit);
 			$oInvit->link_id = $poConnection->link_id;
-			$oInvit->link_key = $poConnection->link_key;
 		} else {
 			$oInvit->state = plugin_vfa::STATE_OPEN;
 			$oInvit->ip = $_SERVER['REMOTE_ADDR'];

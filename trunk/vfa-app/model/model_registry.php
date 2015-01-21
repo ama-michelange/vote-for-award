@@ -54,10 +54,13 @@ class row_registry extends abstract_row
 				$oPluginValid->isNotEmpty('last_name');
 				$oPluginValid->isNotEmpty('first_name');
 				break;
+			case 'toIdentify':
+				$oPluginValid->isNotEmpty('cf_login');
+				$oPluginValid->isNotEmpty('cf_password');
+				break;
 			case 'toNewPassword':
 				$oPluginValid->isNotEmpty('newPassword');
 				$oPluginValid->isNotEmpty('confirmPassword');
-//				$oPluginValid->isNotEmpty('user_id');
 				break;
 			default:
 				// Valeur non vérifiable de manière à ne jamais être valide !
