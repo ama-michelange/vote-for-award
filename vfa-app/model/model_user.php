@@ -34,7 +34,7 @@ class model_user extends abstract_model
 	 */
 	public function findByLogin($login)
 	{
-		return $this->findOne('SELECT * FROM ' . $this->sTable . ' WHERE login=?', $login);
+		return $this->findOne('SELECT * FROM' . ' ' . $this->sTable . ' WHERE login=?', $login);
 	}
 
 	/**
@@ -378,9 +378,9 @@ class row_user extends abstract_row
 		$ret = '';
 		$tGroups = $this->findGroups();
 		if (null != $tGroups) {
-			$i=0;
+			$i = 0;
 			foreach ($tGroups as $group) {
-				if ($i > 0){
+				if ($i > 0) {
 					$ret .= ', ';
 				}
 				$ret .= $group->toString();
