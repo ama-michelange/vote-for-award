@@ -12,7 +12,7 @@
 			<dd>Inscription de lecteurs</dd>
 			<dt>Affectation au groupe</dt>
 			<dd><?php echo $this->oGroup->toString() ?></dd>
-			<dt>Inscription au</dt>
+			<dt>Participation au</dt>
 			<?php foreach ($this->tAwards as $award): ?>
 				<dd><?php echo $award->toString() ?></dd>
 			<?php endforeach; ?>

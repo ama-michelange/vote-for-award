@@ -94,7 +94,7 @@ class module_default extends abstract_module
 				if ($oRegin->isEmpty()) {
 					$oRegistry->setMessages(array('code' => array('registry.code.unknown')));
 				} else {
-					if (false == module_regin::verifyReginValidity($oRegin)) {
+					if (false == $oRegin->verifyProcessValidity()) {
 						$oRegistry->setMessages(array('code' => array('registry.code.invalid')));
 					} else {
 						$nextView = true;

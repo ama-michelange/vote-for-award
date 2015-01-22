@@ -143,8 +143,8 @@ class module_bsnavbar extends abstract_module
 			if (0 == count($tRegins)) {
 				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Ouverture des inscriptions', new NavLink('regin', 'open'));
 			} else {
-				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscriptions ouvertes', new NavLink('regin', 'opened'));
-				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validate'));
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscription ouverte', new NavLink('regin', 'opened'));
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation des participations', new NavLink('regin', 'validate'));
 			}
 		}
 		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Inscriptions', 'S\'inscrire', true));

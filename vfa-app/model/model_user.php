@@ -518,8 +518,8 @@ class row_user extends abstract_row
 			$date->addYear(91);
 			$oPluginValid->isLowerThan('birthyear', $date->getYear());
 		}
-		// $oPluginValid->isNotEmpty('last_name');
-		// $oPluginValid->isNotEmpty('first_name');
+		$oPluginValid->isNotEmpty('last_name');
+		$oPluginValid->isNotEmpty('first_name');
 		return $oPluginValid;
 	}
 

@@ -49,7 +49,7 @@
 								<div class="panel-body">
 									<?php if (count($tGroups) > 0) : ?>
 										<div class="form-group">
-											<label>Groupe</label>
+											<label>Groupe<?php if (count($tGroups) > 1) : echo 's'; endif; ?></label>
 											<?php foreach ($this->oUser->findGroups() as $oGroup) : ?>
 												<input class="form-control input-multi" type="text" value="<?php echo $oGroup->group_name ?>" disabled/>
 											<?php endforeach; ?>
@@ -57,7 +57,7 @@
 									<?php endif; ?>
 									<?php if (count($tAwards) > 0) : ?>
 										<div class="form-group">
-											<label>Participation</label>
+											<label>Participation<?php if (count($tAwards) > 1) : echo 's'; endif; ?></label>
 											<?php foreach ($this->oUser->findAwards() as $oAward) : ?>
 												<input class="form-control input-multi" type="text" value="<?php echo $oAward->toString() ?>" disabled/>
 											<?php endforeach; ?>
