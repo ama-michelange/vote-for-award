@@ -119,6 +119,17 @@ class module_regin extends abstract_module
 		}
 	}
 
+	public function _validate()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+
+		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+		} else {
+			$this->validateForReaders();
+		}
+	}
+
 	/**
 	 * Verifie si un responsable peut ouvrir les inscriptions.
 	 * @return bool Si Ok pour l'ouverture
@@ -274,6 +285,38 @@ class module_regin extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
+	private function validateForReaders()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oReaderGroup = $oUserSession->getReaderGroup();
+		$tAwards = $oReaderGroup->findAwards();
+
+		$oView = new _view('regin::validateForReaders');
+		$oView->oGroup = $oReaderGroup;
+		$oView->tAwards = $tAwards;
+
+
+		// FIXME A terminer
+		// FIXME Comment cela va fonctionner si 2 responsables différents peuvent valider : exemple pour instant envoi des mails uniquement du createur du RegIn !!!
+		if (_root::getRequest()->isPost()) {
+			//$oRegin = $this->doSaveOpenForReaders($oReaderGroup, $tAwards[0]);
+		} else {
+			$oRegin = model_regin::getInstance()->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $oReaderGroup->getId());
+			if (false == $oRegin->isEmpty()) {
+				$oReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+			}
+		}
+
+		$oView->oRegin = $oRegin;
+		$oView->oReginUsers = $oReginUsers;
+		$oView->tMessage = $oReginUsers->getMessages();
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$this->oLayout->add('work', $oView);
+	}
+
 	/**
 	 * @param row_group $poGroup
 	 * @param row_award $poAward
@@ -405,24 +448,4 @@ class module_regin extends abstract_module
 		}
 		_root::redirect('regin::opened');
 	}
-
-	public static function verifyReginValidity($poRegin)
-	{
-		$valid = false;
-		switch ($poRegin->type) {
-			case plugin_vfa::TYPE_READER:
-				if ($poRegin->state == plugin_vfa::STATE_OPEN) {
-					if ((plugin_vfa::PROCESS_INTIME == $poRegin->process) || (plugin_vfa::PROCESS_INTIME_VALIDATE == $poRegin->process)) {
-						$processEnd = plugin_vfa::toDateFromSgbd($poRegin->process_end);
-						$processEnd->addDay(1);
-						if (plugin_vfa::beforeDate(plugin_vfa::today(), $processEnd)) {
-							$valid = true;
-						}
-					}
-				}
-				break;
-		}
-		return $valid;
-	}
-
 }

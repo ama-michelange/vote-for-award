@@ -93,8 +93,12 @@ class model_regin extends abstract_model
 	 */
 	public function saveReginUser($pIdRegin, $pIdUser)
 	{
-		$this->execute('DELETE FROM vfa_regin_users WHERE user_id=?', $pIdUser);
-		$this->execute('INSERT INTO vfa_regin_users (regin_id, user_id) VALUES (?,?)', $pIdRegin, $pIdUser);
+		$oReginUsers = model_regin_users::getInstance()->findByReginIdUserId($pIdRegin, $pIdUser);
+		if ($oReginUsers->isEmpty()) {
+			$oReginUsers->regin_id = $pIdRegin;
+			$oReginUsers->user_id = $pIdUser;
+			$oReginUsers->save();
+		}
 	}
 }
 
@@ -133,6 +137,28 @@ class row_regin extends abstract_row
 			}
 		}
 		return $tAwards;
+	}
+
+	/**
+	 * @return bool Vrai si le processus de cet enregistrement est toujours valide
+	 */
+	public function verifyProcessValidity()
+	{
+		$valid = false;
+		switch ($this->type) {
+			case plugin_vfa::TYPE_READER:
+				if ($this->state == plugin_vfa::STATE_OPEN) {
+					if ((plugin_vfa::PROCESS_INTIME == $this->process) || (plugin_vfa::PROCESS_INTIME_VALIDATE == $this->process)) {
+						$processEnd = plugin_vfa::toDateFromSgbd($this->process_end);
+						$processEnd->addDay(1);
+						if (plugin_vfa::beforeDate(plugin_vfa::today(), $processEnd)) {
+							$valid = true;
+						}
+					}
+				}
+				break;
+		}
+		return $valid;
 	}
 
 	/**

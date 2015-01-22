@@ -3,7 +3,7 @@
 		<h3 class="panel-title">Fermeture des inscriptions</h3>
 	</div>
 	<div class="panel-body panel-inner">
-		<p>La fermeture des inscriptions supprime le code d'inscription correspondant. Les lecteurs ne pourront plus utiliser ce code pour s'inscrire.</p>
+		<p><i class="glyphicon glyphicon-exclamation-sign with-text"></i>La fermeture des inscriptions supprime le code d'inscription correspondant. Les lecteurs ne pourront plus utiliser ce code pour s'inscrire.</p>
 		<?php echo $this->oViewShow->show();?>
 	</div>
 	<div class="panel-footer clearfix">
