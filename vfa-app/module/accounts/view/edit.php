@@ -41,8 +41,8 @@
 						</div>
 
 						<?php
-						$tGroups = $this->oUser->findGroups();
-						$tAwards = $this->oUser->findAwards();
+						$tGroups = $this->tGroups;
+						$tAwards = $this->tValidAwards;
 						?>
 						<?php if ((count($tGroups) > 0) || (count($tAwards) > 0)): ?>
 							<div class="panel panel-info panel-inner">
@@ -50,7 +50,7 @@
 									<?php if (count($tGroups) > 0) : ?>
 										<div class="form-group">
 											<label>Groupe<?php if (count($tGroups) > 1) : echo 's'; endif; ?></label>
-											<?php foreach ($this->oUser->findGroups() as $oGroup) : ?>
+											<?php foreach ($tGroups as $oGroup) : ?>
 												<input class="form-control input-multi" type="text" value="<?php echo $oGroup->group_name ?>" disabled/>
 											<?php endforeach; ?>
 										</div>
@@ -58,7 +58,7 @@
 									<?php if (count($tAwards) > 0) : ?>
 										<div class="form-group">
 											<label>Participation<?php if (count($tAwards) > 1) : echo 's'; endif; ?></label>
-											<?php foreach ($this->oUser->findAwards() as $oAward) : ?>
+											<?php foreach ($tAwards as $oAward) : ?>
 												<input class="form-control input-multi" type="text" value="<?php echo $oAward->toString() ?>" disabled/>
 											<?php endforeach; ?>
 										</div>

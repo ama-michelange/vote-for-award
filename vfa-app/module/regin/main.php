@@ -60,13 +60,14 @@ class module_regin extends abstract_module
 				} else {
 					$tParams = array('id' => _root::getParam('id'));
 				}
-				$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail', new NavLink('regin', 'opened', $tParams),
-					'glyphicon-eye-open'));
-				$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier', new NavLink('regin', 'update', $tParams),
-					'glyphicon-edit'));
-				$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Fermeture', new NavLink('regin', 'delete', $tParams),
-					'glyphicon-trash'));
-
+				if ($tParams['id']) {
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail', new NavLink('regin', 'opened', $tParams),
+						'glyphicon-eye-open'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier', new NavLink('regin', 'update', $tParams),
+						'glyphicon-edit'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Fermeture', new NavLink('regin', 'delete', $tParams),
+						'glyphicon-trash'));
+				}
 				break;
 		}
 	}

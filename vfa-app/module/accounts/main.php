@@ -42,11 +42,13 @@ class module_accounts extends abstract_module
 	public function _update()
 	{
 		$tMessage = null;
-//		$oUserModel = new model_user();
+
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
 
 		$oUser = $this->save();
 		if (null == $oUser) {
-			$oUser = _root::getAuth()->getUserSession()->getUser();
+			$oUser = $oUserSession->getUser();
 		} else {
 			$tMessage = $oUser->getMessages();
 		}
@@ -54,6 +56,21 @@ class module_accounts extends abstract_module
 
 		$oView = new _view('accounts::edit');
 		$oView->oUser = $oUser;
+
+		$tGroups = array();
+		if (false == $oUserSession->getReaderGroup()->isEmpty()) {
+			$tGroups[] = $oUserSession->getReaderGroup();
+		}
+		if (false == $oUserSession->getBoardGroup()->isEmpty()) {
+			$tGroups[] = $oUserSession->getBoardGroup();
+		}
+		$oView->tGroups = $tGroups;
+
+		$tValidAwards = $oUserSession->getValidReaderAwards();
+		foreach ($oUserSession->getValidBoardAwards() as $award) {
+			$tValidAwards[] = $award;
+		}
+		$oView->tValidAwards = $tValidAwards;
 		$oView->tMessage = $tMessage;
 
 		$oPluginXsrf = new plugin_xsrf();
