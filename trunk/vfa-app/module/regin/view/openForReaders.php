@@ -41,8 +41,7 @@
 								<div class="form-group">
 									<label for="inputGroup">Affectation au groupe</label>
 									<input class="form-control" type="text" id="inputGroup" name="_group"
-											 value="<?php echo $this->oGroup->toString() ?>"
-											 disabled/>
+											 value="<?php echo $this->oGroup->toString() ?>" disabled/>
 								</div>
 							</div>
 							<div class="col-sm-4">
