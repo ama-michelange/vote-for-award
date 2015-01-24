@@ -297,21 +297,23 @@ class module_regin extends abstract_module
 		$oView->oGroup = $oReaderGroup;
 		$oView->tAwards = $tAwards;
 
-
 		// FIXME A terminer
 		// FIXME Comment cela va fonctionner si 2 responsables différents peuvent valider : exemple pour instant envoi des mails uniquement du createur du RegIn !!!
+
+		$oRegin = null;
 		if (_root::getRequest()->isPost()) {
 			//$oRegin = $this->doSaveOpenForReaders($oReaderGroup, $tAwards[0]);
 		} else {
-			$oRegin = model_regin::getInstance()->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $oReaderGroup->getId());
-			if (false == $oRegin->isEmpty()) {
-				$oReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+			$tRegins = model_regin::getInstance()->findAllInTimeByTypeByGroup(plugin_vfa::TYPE_READER, $oReaderGroup->getId());
+			if (count($tRegins) > 0) {
+				$oRegin = $tRegins[0];
+				$tReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
 			}
 		}
 
 		$oView->oRegin = $oRegin;
-		$oView->oReginUsers = $oReginUsers;
-		$oView->tMessage = $oReginUsers->getMessages();
+		$oView->tReginUsers = $tReginUsers;
+//		$oView->tMessage = $oReginUsers->getMessages();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
