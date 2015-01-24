@@ -11,7 +11,7 @@
 						<dd><?php echo $award->toString() ?></dd>
 					<?php endforeach; ?>
 				</dl>
-				<dl class="dl-horizontal dl-lg pull-right">
+				<dl class="dl-horizontal pull-right">
 					<dt>Groupe</dt>
 					<dd><?php echo $this->oGroup->toString() ?></dd>
 				</dl>

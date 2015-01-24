@@ -8,7 +8,7 @@
 <meta name="author" content="">
 
 <!-- Le styles -->
-<link href="site/assets/css/bootstrap-slate-3.3.1.css" rel="stylesheet" media="screen">
+<link href="site/assets/css/bootstrap-slate-3.3.2.css" rel="stylesheet" media="screen">
 <!-- <link href="site/assets/css/bootstrap-theme.css" rel="stylesheet" media="screen"> -->
 <style>
 body {
@@ -19,7 +19,7 @@ body {
 <link href="site/assets/css/datepicker.css" rel="stylesheet">
 <link href="site/select2/select2.css" rel="stylesheet">
 <link href="site/select2/select2-bootstrap.css" rel="stylesheet">
-<link href="site/css/bs-apps-slate-3.3.1.css" rel="stylesheet" media="screen">
+<link href="site/css/bs-apps-slate-3.3.2.css" rel="stylesheet" media="screen">
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -44,7 +44,7 @@ body {
 
 <!-- 	<script src="http://code.jquery.com/jquery-latest.js"></script> -->
 <script src="site/assets/js/jquery-1.11.0.min.js"></script>
-<script src="site/assets/js/bootstrap.min-3.3.1.js"></script>
+<script src="site/assets/js/bootstrap.min-3.3.2.js"></script>
 <script src="site/assets/js/bootstrap-datepicker.js"></script>
 <script src="site/select2/select2.min.js"></script>
 <script src="site/js/bs-apps.js"></script>
