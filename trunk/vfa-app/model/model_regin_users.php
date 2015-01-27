@@ -54,7 +54,7 @@ class model_regin_users extends abstract_model
 	 */
 	public function findAllByReginId($pReginId)
 	{
-		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE regin_id=?';
+		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE regin_id=? ORDER BY created_date';
 		return $this->findMany($sql, $pReginId);
 	}
 }
