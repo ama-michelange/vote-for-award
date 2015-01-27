@@ -318,6 +318,10 @@ class module_regin extends abstract_module
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$this->oLayout->add('work', $oView);
+
+		// Ajout du javascript
+		$scriptView = new _view('regin::scriptValidate');
+		$this->oLayout->add('script', $scriptView);
 	}
 
 	/**
