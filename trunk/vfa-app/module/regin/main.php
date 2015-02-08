@@ -326,6 +326,7 @@ class module_regin extends abstract_module
 
 		$oView->oViewModalConfirm = new _view('regin::modalConfirmValidateForReaders');
 		$oView->oViewModalConfirm->oRegin = $oRegin;
+		$oView->oViewModalConfirm->token = $oView->token;
 		$oView->oViewModalConfirm->tReginUsers = $tReginUsers;
 
 		// Ajout du javascript
@@ -373,8 +374,12 @@ class module_regin extends abstract_module
 			}
 		}
 		$oRegin->openModalConfirm = false;
-		if (($oRegin->nbAccepted > 0) || ($oRegin->nbRejected > 0)) {
-			$oRegin->openModalConfirm = true;
+		if ('toConfirm' == _root::getParam('action')) {
+		}
+		else{
+			if (($oRegin->nbAccepted > 0) || ($oRegin->nbRejected > 0)) {
+				$oRegin->openModalConfirm = true;
+			}
 		}
 		return $oRegin;
 	}
