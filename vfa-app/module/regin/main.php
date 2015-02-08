@@ -36,6 +36,9 @@ class module_regin extends abstract_module
 			case 'delete':
 				$navBar->setTitle('Inscriptions ouvertes', new NavLink('regin', 'opened'));
 				break;
+			case 'validate':
+				$navBar->setTitle('Validation', new NavLink('regin', 'validate'));
+				break;
 		}
 
 
@@ -302,7 +305,8 @@ class module_regin extends abstract_module
 
 		$oRegin = null;
 		if (_root::getRequest()->isPost()) {
-			//$oRegin = $this->doSaveOpenForReaders($oReaderGroup, $tAwards[0]);
+			$oRegin = $this->doPostValidateForReaders();
+			$tReginUsers = $oRegin->tReginUsers;
 		} else {
 			$tRegins = model_regin::getInstance()->findAllInTimeByTypeByGroup(plugin_vfa::TYPE_READER, $oReaderGroup->getId());
 			if (count($tRegins) > 0) {
@@ -312,16 +316,67 @@ class module_regin extends abstract_module
 		}
 
 		$oView->oRegin = $oRegin;
+		$oView->tMessage = $oRegin->getMessages();
 		$oView->tReginUsers = $tReginUsers;
-//		$oView->tMessage = $oReginUsers->getMessages();
 
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$this->oLayout->add('work', $oView);
 
+
+		$oView->oViewModalConfirm = new _view('regin::modalConfirmValidateForReaders');
+		$oView->oViewModalConfirm->oRegin = $oRegin;
+		$oView->oViewModalConfirm->tReginUsers = $tReginUsers;
+
 		// Ajout du javascript
 		$scriptView = new _view('regin::scriptValidate');
+		$scriptView->oRegin = $oRegin;
 		$this->oLayout->add('script', $scriptView);
+	}
+
+	/**
+	 * @return row_regin
+	 */
+	private function doPostValidateForReaders()
+	{
+		// on verifie que le token est valide
+		$oPluginXsrf = new plugin_xsrf();
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+			$oRegin = new row_regin();
+			$oRegin->setMessages(array('token' => $oPluginXsrf->getMessage()));
+			return $oRegin;
+		}
+
+		$iId = _root::getParam('regin_id');
+		if ($iId == null) {
+			$oRegin = new row_regin();
+			$oRegin->setMessages(array('token' => $oPluginXsrf->getMessage()));
+			return $oRegin;
+		}
+		$oRegin = model_regin::getInstance()->findById($iId);
+		$tReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+		$oRegin->tReginUsers = $tReginUsers;
+
+		$accepted = _root::getParam('accepted');
+		$rejected = _root::getParam('rejected');
+		$oRegin->nbAccepted = 0;
+		$oRegin->nbRejected = 0;
+		foreach ($tReginUsers as $oReginUser) {
+			if ((null != $accepted) && (true == in_array($oReginUser->getId(), $accepted))) {
+				$oReginUser->accepted = 1;
+				$oRegin->nbAccepted++;
+			} else if ((null != $rejected) && (true == in_array($oReginUser->getId(), $rejected))) {
+				$oReginUser->accepted = -1;
+				$oRegin->nbRejected++;
+			} else {
+				$oReginUser->accepted = 0;
+			}
+		}
+		$oRegin->openModalConfirm = false;
+		if (($oRegin->nbAccepted > 0) || ($oRegin->nbRejected > 0)) {
+			$oRegin->openModalConfirm = true;
+		}
+		return $oRegin;
 	}
 
 	/**
