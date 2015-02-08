@@ -598,7 +598,9 @@
 .table .btn-group {
     white-space: nowrap;
 }
-
+.table-inverse .success, .table .warning, .table .danger, .table .info {
+    color: #000;
+}
 .double .label {
     line-height: 2;
 }
