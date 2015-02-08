@@ -34,8 +34,17 @@
 							<table class="table table-striped table-hover table-inverse">
 								<thead>
 								<tr>
-									<th></th>
-									<th></th>
+									<th style="white-space: nowrap;" colspan="2">
+										<button class="btn btn-default btn-xs btn-all-valid-on" type="button">
+											<i class="glyphicon glyphicon-ok"></i>
+										</button>
+										<button class="btn btn-default btn-xs btn-all-valid-question" type="button">
+											<i class="glyphicon glyphicon-question-sign"></i>
+										</button>
+										<button class="btn btn-default btn-xs btn-all-valid-off" type="button">
+											<i class="glyphicon glyphicon-remove"></i>
+										</button>
+									</th>
 									<th>Nom</th>
 									<th>Prénom</th>
 									<th>Email</th>
@@ -67,6 +76,10 @@
 											<button class="btn btn-default btn-xs btn-valid-on" type="button"
 													  data-id="<?php echo $oReginUsers->getId() ?>">
 												<i class="glyphicon glyphicon-ok"></i>
+											</button>
+											<button class="btn btn-default btn-xs btn-valid-question" type="button"
+													  data-id="<?php echo $oReginUsers->getId() ?>">
+												<i class="glyphicon glyphicon-question-sign"></i>
 											</button>
 											<button class="btn btn-default btn-xs btn-valid-off" type="button"
 													  data-id="<?php echo $oReginUsers->getId() ?>">
