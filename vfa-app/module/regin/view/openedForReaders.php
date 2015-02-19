@@ -25,8 +25,7 @@
 			</h3>
 		</div>
 		<div id="sampleMail" class="panel-body collapse">
-			<p>Bonjour</p>
-			<p>Les inscriptions pour voter au Prix de la BD INTER CE <?php echo $this->tAwards[0]->year ?> sont ouvertes.</p>
+			<p>Le Prix de la BD INTER CE <?php echo $this->tAwards[0]->year ?> est ouvert.</p>
 			<p>Pour vous inscrire, rendez-vous sur le site de vote ci-dessous en utilisant le code d'inscription suivant
 				: <?php echo $this->oRegin->code ?><br>(via le menu : Inscriptions / S'inscrire)</p>
 			<?php $url = 'http://' . $_SERVER['SERVER_NAME'] . _root::getConfigVar('path.base'); ?>
