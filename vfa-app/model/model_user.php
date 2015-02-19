@@ -152,6 +152,20 @@ class model_user extends abstract_model
 		return $this->findMany($sql, $pRoleName, $pAwardId);
 	}
 
+	/**
+	 * @param $pGroupId
+	 * @param string $pRoleName
+	 * @return row_user[]
+	 */
+	public function findAllByGroupIdByRoleName($pGroupId, $pRoleName)
+	{
+		$sql =
+			'SELECT * FROM vfa_users, vfa_user_roles, vfa_roles, vfa_user_groups ' . 'WHERE (vfa_user_roles.user_id = vfa_users.user_id) ' .
+			'AND (vfa_user_groups.user_id = vfa_users.user_id) ' . 'AND (vfa_user_roles.role_id = vfa_roles.role_id) ' .
+			'AND (vfa_roles.role_name = ?) ' . 'AND (vfa_user_groups.group_id = ?) ORDER BY vfa_users.login';
+		return $this->findMany($sql, $pRoleName, $pGroupId);
+	}
+
 
 	/**
 	 * @param $pGroupId
