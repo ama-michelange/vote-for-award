@@ -279,7 +279,7 @@ class module_accounts extends abstract_module
 
 	private function sendMail($poInvitation)
 	{
-		$oMail = new plugin_mail();
+		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
 		$oMail->addTo($poInvitation->email);
 //		$createdUser = $poInvitation->findCreatedUser();
@@ -294,11 +294,10 @@ class module_accounts extends abstract_module
 		// _root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
 		// Prepare le body HTML
-//		$oViewTxt = new _view('invitations::mailHtml');
-//		$oViewTxt->oInvit = $poInvitation;
-//		$bodyHtml = $oViewTxt->show();
-		// _root::getLog()->log($bodyHtml);
-//		$oMail->setBodyHtml($bodyHtml);
+		$oViewTxt = new _view('invitations::mailHtml');
+		$oViewTxt->oInvit = $poInvitation;
+		$bodyHtml = $oViewTxt->show();
+		$oMail->setBodyHtml($bodyHtml);
 
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);

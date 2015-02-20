@@ -375,13 +375,95 @@ class module_regin extends abstract_module
 		}
 		$oRegin->openModalConfirm = false;
 		if ('toConfirm' == _root::getParam('action')) {
-		}
-		else{
+			$this->registryAllUsers($oRegin);
+		} else {
 			if (($oRegin->nbAccepted > 0) || ($oRegin->nbRejected > 0)) {
 				$oRegin->openModalConfirm = true;
 			}
 		}
 		return $oRegin;
+	}
+
+
+	/**
+	 * @param row_regin $poRegin
+	 */
+	private function registryAllUsers($poRegin)
+	{
+		$tAcceptedReginUsers = array();
+		$tRejectedReginUsers = array();
+		//var_dump($poRegin);
+		foreach ($poRegin->tReginUsers as $oReginUser) {
+			if (1 == $oReginUser->accepted) {
+				$tAcceptedReginUsers[] = $oReginUser;
+			} elseif (-1 == $oReginUser->accepted) {
+				$tRejectedReginUsers[] = $oReginUser;
+			}
+		}
+		foreach ($tRejectedReginUsers as $oReginUser) {
+//			var_dump($oReginUser);
+			$oReginUser->delete();
+		}
+		$tUsers = array();
+		foreach ($tAcceptedReginUsers as $oReginUser) {
+			$oUser=$oReginUser->findUser();
+			$tUsers[] = $oUser;
+//			var_dump($oUser);
+			$this->saveGroupAwardsToUser($poRegin, $oUser->getId());
+		}
+	}
+
+	/**
+	 * @param row_regin $poRegin
+	 * @param $ptUsers
+	 * @return bool
+	 */
+	private function sendMailRegistryAllUsers($poRegin, $ptUsers)
+	{
+		$oMail = new plugin_email();
+		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
+		$createdUser = $poRegin->findCreatedUser();
+		$oMail->addTo($createdUser->email);
+//		$oMail->addCC($poRegistry->oUser->email);
+		$oMail->addBCC(_root::getConfigVar('v	fa-app.mail.from'));
+
+		$tAwards = $poRegin->findAwards();
+
+		// Sujet
+		$oMail->setSubject('[PrixBD' . $tAwards[0]->year . '] Votre inscription est validée');
+		// Prepare le body TXT
+		$oViewMail = new _view('default::mailValidateTxt');
+		$oViewMail->oUser = $poRegistry->oUser;
+		$oViewMail->tAwards = $tAwards;
+		$bodyTxt = $oViewMail->show();
+//		 _root::getLog()->log($bodyTxt);
+		$oMail->setBody($bodyTxt);
+
+		// Prepare le body HTML
+		$oViewMail = new _view('default::mailValidateHtml');
+		$oViewMail->oUser = $poRegistry->oUser;
+		$oViewMail->tAwards = $tAwards;
+		$bodyHtml = $oViewMail->show();
+//		 _root::getLog()->log($bodyHtml);
+		$oMail->setBody($bodyHtml);
+
+		// Envoi le mail
+		$sent = plugin_vfa::sendEmail($oMail);
+		return $sent;
+	}
+
+	/**
+	 * @param row_regin $poRegin
+	 * @param $pIdUser
+	 */
+	private function saveGroupAwardsToUser($poRegin, $pIdUser)
+	{
+		// Sauve le groupe de même rôle à l'utilisateur
+		$tIdGroups = array($poRegin->group_id);
+		model_user::getInstance()->mergeUserGroups($pIdUser, $tIdGroups);
+		// Ajoute les prix à l'utilisateur
+		$tIdAwards = explode(',', $poRegin->oRegin->awards_ids);
+		model_user::getInstance()->mergeUserAwards($pIdUser, $tIdAwards);
 	}
 
 	/**
