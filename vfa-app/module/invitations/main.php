@@ -609,12 +609,12 @@ class module_invitations extends abstract_module
 
 	private function sendMail($poInvitation)
 	{
-		$oMail = new plugin_mail();
+		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
 		$oMail->addTo($poInvitation->email);
 		$createdUser = $poInvitation->findCreatedUser();
 		$oMail->addCC($createdUser->email);
-		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
+		$oMail->addBCC(_root::getConfigVar('vfa-app.mail.from'));
 		// Sujet
 		$oMail->setSubject(plugin_vfa::buildTitleInvitation($poInvitation));
 		// Prepare le body TXT

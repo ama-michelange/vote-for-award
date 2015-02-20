@@ -476,12 +476,12 @@ class module_default extends abstract_module
 
 	private function sendMailCreateAccount($poRegistry)
 	{
-		$oMail = new plugin_mail();
+		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
 		$oMail->addTo($poRegistry->oUser->email);
 //		$createdUser = $poInvitation->findCreatedUser();
 //		$oMail->addCC($createdUser->email);
-		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
+		$oMail->addBCC(_root::getConfigVar('vfa-app.mail.from'));
 		// Sujet
 		$oMail->setSubject('Création d\'un compte sur ' . _root::getConfigVar('vfa-app.title'));
 		// Prepare le body TXT
@@ -497,24 +497,38 @@ class module_default extends abstract_module
 
 	private function sendMailReginToValid($poRegistry)
 	{
-		$oMail = new plugin_mail();
+		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
-		$createdUser = $poRegistry->oRegin->findCreatedUser();
-		$oMail->addTo($createdUser->email);
-//		$oMail->addCC($poRegistry->oUser->email);
-		$oMail->setBcc(_root::getConfigVar('vfa-app.mail.from'));
+//		$createdUser = $poRegistry->oRegin->findCreatedUser();
+//		$oMail->addTo($createdUser->email);
+
+		$responsibles = model_user::getInstance()->findAllByGroupIdByRoleName($poRegistry->oRegin->group_id, plugin_vfa::ROLE_RESPONSIBLE);
+		foreach ($responsibles as $user) {
+			$oMail->addTo($user->email);
+		}
+		$oMail->addBCC(_root::getConfigVar('vfa-app.mail.from'));
 
 		$tAwards = $poRegistry->oRegin->findAwards();
 
 		// Sujet
-		$oMail->setSubject('[PrixBD' . $tAwards[0]->year . '] Inscription d\'un lecteur à valider');
+		$oMail->setSubject('[PrixBD' . $tAwards[0]->year . '] Inscription à valider : ' . $poRegistry->oUser->toStringPublic());
+
 		// Prepare le body TXT
-		$oViewTxt = new _view('default::mailReginToValidateTxt');
-		$oViewTxt->oUser = $poRegistry->oUser;
-		$oViewTxt->tAwards = $tAwards;
-		$bodyTxt = $oViewTxt->show();
-//		 _root::getLog()->log($bodyTxt);
-		$oMail->setBody($bodyTxt);
+		$oViewMail = new _view('default::mailReginToValidateTxt');
+		$oViewMail->oUser = $poRegistry->oUser;
+		$oViewMail->tAwards = $tAwards;
+		$body = $oViewMail->show();
+//		 _root::getLog()->log($body);
+		$oMail->setBody($body);
+
+		// Prepare le body HTML
+		$oViewMail = new _view('default::mailReginToValidateHtml');
+		$oViewMail->oUser = $poRegistry->oUser;
+		$oViewMail->tAwards = $tAwards;
+		$body = $oViewMail->show();
+//		 _root::getLog()->log($body);
+		$oMail->setBodyHtml($body);
+
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);
 		return $sent;
