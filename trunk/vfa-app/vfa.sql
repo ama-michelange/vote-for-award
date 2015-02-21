@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Sam 21 Février 2015 à 14:06
+-- Généré le: Sam 21 Février 2015 à 14:49
 -- Version du serveur: 5.6.12-log
 -- Version de PHP: 5.4.12
 
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `vfa_regin` (
   `created_user_id` int(11) DEFAULT NULL,
   `process` varchar(20) DEFAULT NULL,
   `process_end` date DEFAULT NULL,
-  `process_options` varchar(50) NOT NULL,
+  `process_options` varchar(50) DEFAULT NULL,
   `awards_ids` varchar(50) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `group_id` int(11) DEFAULT NULL,
