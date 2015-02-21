@@ -157,7 +157,7 @@ class module_autoreg extends abstract_module
 					$oInvitation->delete();
 
 					if ($link_id) {
-						_root::redirect('autoreg::index', array('id' => $link_id, 'key' => $link_key));
+						_root::redirect('default::registry', array('id' => $link_id, 'key' => $link_key));
 					} else {
 						_root::redirect('default::index');
 					}

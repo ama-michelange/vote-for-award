@@ -162,6 +162,7 @@ class module_roles extends abstract_module
 			}
 			$tComplete[$module] = $tActions;
 		}
+		ksort($tComplete);
 		// var_dump($tComplete);
 		return $tComplete;
 	}
