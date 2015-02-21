@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données: `vfa`
 --
-CREATE DATABASE IF NOT EXISTS `vfa` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `vfa`;
+-- CREATE DATABASE IF NOT EXISTS `vfa` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- USE `vfa`;
 
 -- --------------------------------------------------------
 
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `vfa_regin_users` (
   `regin_users_id` int(11) NOT NULL AUTO_INCREMENT,
   `regin_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_date` datetime NOT NULL,
   PRIMARY KEY (`regin_users_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 

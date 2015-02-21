@@ -117,7 +117,7 @@ $(document).ready(function () {
 			else {
 				label = "warning";
 			}
-			html = "<span class=\"label label-" + label + "\">Non lu, aucun note</span>";
+			html = "<span class=\"label label-" + label + "\">Album non lu, aucune note</span>";
 		}
 		else {
 			if (p_Original) {

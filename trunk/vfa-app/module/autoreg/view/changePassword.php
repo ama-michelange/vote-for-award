@@ -14,7 +14,7 @@
 <?php else: ?>
 	<div class="panel panel-info">
 		<div class="panel-heading">
-			<h3 class="panel-title">Nouveau de mot de passe</h3>
+			<h3 class="panel-title">Nouveau mot de passe</h3>
 		</div>
 		<div class="panel-body panel-condensed">
 			<form action="<?php echo $this->getLink('autoreg::toChangePassword') ?>" method="POST">

@@ -77,7 +77,20 @@ class module_default extends abstract_module
 					break;
 			}
 		} else {
-			_root::redirect('default::index');
+			if (_root::getParam('id')) {
+				$oRegin = model_regin::getInstance()->findById(_root::getParam('id'));
+				if ($oRegin->isEmpty() || (false == $oRegin->verifyProcessValidity())) {
+					_root::redirect('default::index');
+				} else {
+					$oRegistry = new row_registry();
+					$oRegistry->oRegin = $oRegin;
+					$oRegistry->regin_id = $oRegin->regin_id;
+					$this->initViewRegistry($oRegistry);
+					$this->showViewRegistry($oRegistry);
+				}
+			} else {
+				_root::redirect('default::index');
+			}
 		}
 	}
 
@@ -522,12 +535,11 @@ class module_default extends abstract_module
 		$oMail->setBody($body);
 
 		// Prepare le body HTML
-		$oViewMail = new _view('default::mailReginToValidateHtml');
-		$oViewMail->oUser = $poRegistry->oUser;
-		$oViewMail->tAwards = $tAwards;
-		$body = $oViewMail->show();
-//		 _root::getLog()->log($body);
-		$oMail->setBodyHtml($body);
+//		$oViewMail = new _view('default::mailReginToValidateHtml');
+//		$oViewMail->oUser = $poRegistry->oUser;
+//		$oViewMail->tAwards = $tAwards;
+//		$body = $oViewMail->show();
+//		$oMail->setBodyHtml($body);
 
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);

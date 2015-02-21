@@ -740,7 +740,7 @@ class plugin_vfa
 				$poRow->setMessages(array('newPassword' => array('badSize')));
 			} else {
 				if ($pNewPassword === $pConfirmPassword) {
-					$poRow->password = sha1($pNewPassword . _root::getConfigVar('vfa-app.security.salt'));
+					$poRow->password = sha1($pNewPassword . _root::getConfigVar('security.salt'));
 					$ok = true;
 				} else {
 					$poRow->setMessages(array('newPassword' => array('isEqualKO'), 'confirmPassword' => array('isEqualKO')));
