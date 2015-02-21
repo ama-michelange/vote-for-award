@@ -300,14 +300,17 @@ class module_regin extends abstract_module
 		$oView->oGroup = $oReaderGroup;
 		$oView->tAwards = $tAwards;
 
-		// FIXME A terminer
-		// FIXME Comment cela va fonctionner si 2 responsables différents peuvent valider : exemple pour instant envoi des mails uniquement du createur du RegIn !!!
 
 		$oRegin = null;
 		if (_root::getRequest()->isPost()) {
 			$oRegin = $this->doPostValidateForReaders();
+		}
+
+		if ($oRegin) {
+			// Suite à un post
 			$tReginUsers = $oRegin->tReginUsers;
 		} else {
+			// Suite à un get
 			$tRegins = model_regin::getInstance()->findAllInTimeByTypeByGroup(plugin_vfa::TYPE_READER, $oReaderGroup->getId());
 			if (count($tRegins) > 0) {
 				$oRegin = $tRegins[0];
@@ -376,6 +379,8 @@ class module_regin extends abstract_module
 		$oRegin->openModalConfirm = false;
 		if ('toConfirm' == _root::getParam('action')) {
 			$this->registryAllUsers($oRegin);
+			// Force la relecture dans la base
+			$oRegin = null;
 		} else {
 			if (($oRegin->nbAccepted > 0) || ($oRegin->nbRejected > 0)) {
 				$oRegin->openModalConfirm = true;
@@ -406,10 +411,14 @@ class module_regin extends abstract_module
 		}
 		$tUsers = array();
 		foreach ($tAcceptedReginUsers as $oReginUser) {
-			$oUser=$oReginUser->findUser();
+			$oUser = $oReginUser->findUser();
 			$tUsers[] = $oUser;
 //			var_dump($oUser);
-			$this->saveGroupAwardsToUser($poRegin, $oUser->getId());
+			$this->saveGroupAwardsToUser($poRegin, $oUser);
+			$oReginUser->delete();
+		}
+		if (count($tUsers) > 0) {
+			$this->sendMailRegistryAllUsers($poRegin, $tUsers);
 		}
 	}
 
@@ -422,26 +431,29 @@ class module_regin extends abstract_module
 	{
 		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
-		$createdUser = $poRegin->findCreatedUser();
-		$oMail->addTo($createdUser->email);
-//		$oMail->addCC($poRegistry->oUser->email);
-		$oMail->addBCC(_root::getConfigVar('v	fa-app.mail.from'));
+
+		$responsibles = model_user::getInstance()->findAllByGroupIdByRoleName($poRegin->group_id, plugin_vfa::ROLE_RESPONSIBLE);
+		foreach ($responsibles as $user) {
+			$oMail->addTo($user->email);
+		}
+		$oMail->addBCC(_root::getConfigVar('vfa-app.mail.from'));
+		foreach ($ptUsers as $user) {
+			$oMail->addBCC($user->email);
+		}
 
 		$tAwards = $poRegin->findAwards();
 
 		// Sujet
 		$oMail->setSubject('[PrixBD' . $tAwards[0]->year . '] Votre inscription est validée');
 		// Prepare le body TXT
-		$oViewMail = new _view('default::mailValidateTxt');
-		$oViewMail->oUser = $poRegistry->oUser;
+		$oViewMail = new _view('regin::mailValidateTxt');
 		$oViewMail->tAwards = $tAwards;
 		$bodyTxt = $oViewMail->show();
 //		 _root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
 
 		// Prepare le body HTML
-		$oViewMail = new _view('default::mailValidateHtml');
-		$oViewMail->oUser = $poRegistry->oUser;
+		$oViewMail = new _view('regin::mailValidateHtml');
 		$oViewMail->tAwards = $tAwards;
 		$bodyHtml = $oViewMail->show();
 //		 _root::getLog()->log($bodyHtml);
@@ -454,16 +466,16 @@ class module_regin extends abstract_module
 
 	/**
 	 * @param row_regin $poRegin
-	 * @param $pIdUser
+	 * @param $poUser
 	 */
-	private function saveGroupAwardsToUser($poRegin, $pIdUser)
+	private function saveGroupAwardsToUser($poRegin, $poUser)
 	{
 		// Sauve le groupe de même rôle à l'utilisateur
 		$tIdGroups = array($poRegin->group_id);
-		model_user::getInstance()->mergeUserGroups($pIdUser, $tIdGroups);
+		model_user::getInstance()->mergeUserGroups($poUser, $tIdGroups);
 		// Ajoute les prix à l'utilisateur
-		$tIdAwards = explode(',', $poRegin->oRegin->awards_ids);
-		model_user::getInstance()->mergeUserAwards($pIdUser, $tIdAwards);
+		$tIdAwards = explode(',', $poRegin->awards_ids);
+		model_user::getInstance()->mergeUserAwards($poUser, $tIdAwards);
 	}
 
 	/**
