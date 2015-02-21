@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Jeu 11 Décembre 2014 à 23:26
+-- Généré le: Sam 21 Février 2015 à 14:06
 -- Version du serveur: 5.6.12-log
 -- Version de PHP: 5.4.12
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `vfa_authorizations` (
   `module` varchar(30) NOT NULL,
   `action` varchar(30) NOT NULL,
   PRIMARY KEY (`authorization_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2791 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2937 ;
 
 -- --------------------------------------------------------
 
@@ -83,7 +83,18 @@ CREATE TABLE IF NOT EXISTS `vfa_groups` (
   `group_name` varchar(100) NOT NULL,
   `role_id_default` int(11) NOT NULL,
   PRIMARY KEY (`group_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `vfa_group_awards`
+--
+
+CREATE TABLE IF NOT EXISTS `vfa_group_awards` (
+  `group_id` int(11) NOT NULL,
+  `award_id` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -108,7 +119,44 @@ CREATE TABLE IF NOT EXISTS `vfa_invitations` (
   `link_id` int(11) DEFAULT NULL,
   `link_key` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`invitation_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=191 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=193 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `vfa_regin`
+--
+
+CREATE TABLE IF NOT EXISTS `vfa_regin` (
+  `regin_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(15) NOT NULL,
+  `code` varchar(20) NOT NULL,
+  `state` varchar(10) NOT NULL,
+  `created_user_id` int(11) DEFAULT NULL,
+  `process` varchar(20) DEFAULT NULL,
+  `process_end` date DEFAULT NULL,
+  `process_options` varchar(50) NOT NULL,
+  `awards_ids` varchar(50) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `group_id` int(11) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`regin_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `vfa_regin_users`
+--
+
+CREATE TABLE IF NOT EXISTS `vfa_regin_users` (
+  `regin_users_id` int(11) NOT NULL AUTO_INCREMENT,
+  `regin_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`regin_users_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -182,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `vfa_title_docs` (
 
 CREATE TABLE IF NOT EXISTS `vfa_users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `login` varchar(50) NOT NULL,
+  `login` varchar(100) NOT NULL,
   `password` varchar(50) NOT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
@@ -192,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `vfa_users` (
   `created_date` datetime DEFAULT NULL,
   `modified_date` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
 
 -- --------------------------------------------------------
 
@@ -242,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `vfa_votes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`vote_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2842 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2843 ;
 
 -- --------------------------------------------------------
 
@@ -259,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `vfa_vote_items` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`vote_item_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38518 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38532 ;
 
 -- --------------------------------------------------------
 
@@ -291,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `vfa_vote_stats` (
   `code` varchar(20) NOT NULL,
   `num_int` int(11) DEFAULT NULL,
   PRIMARY KEY (`vote_stat_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=47 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
