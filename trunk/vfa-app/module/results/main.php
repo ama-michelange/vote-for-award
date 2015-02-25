@@ -36,8 +36,10 @@ class module_results extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->addChild(new Bar('left'));
+		$navBar->addChild(new Bar('right'));
 		if (_root::getAction() == 'awardInProgress') {
 			$navBar->setTitle('Prix en cours', new NavLink('results', 'awardInProgress'));
+			$this->buildMenuAwardInProgress($navBar->getChild('right'));
 		} else if (_root::getAction() == 'live') {
 			$navBar->setTitle('Classement intermédiaire', new NavLink('results', 'live'));
 			$this->buildMenuAwardLiveResults($navBar->getChild('left'));
@@ -48,6 +50,20 @@ class module_results extends abstract_module
 			$this->buildMenuAwardArchive($navBar->getChild('left'));
 		}
 		return $navBar;
+	}
+
+	/**
+	 * @param Bar $pBar
+	 */
+	private function buildMenuAwardInProgress($pBar)
+	{
+		try {
+			$tParams = array('award_id' => $this->idAwardInProgress);
+			$pBar->addChild(plugin_BsHtml::buildButtonItem('Voter', new NavLink('votes', 'index', $tParams), 'glyphicon-leaf'));
+		} catch (Exception $e) {
+			// $this->idAwardInProgress n'existe pas !
+			// Rien à faire
+		}
 	}
 
 	/**
@@ -88,7 +104,12 @@ class module_results extends abstract_module
 	public function _awardInProgress()
 	{
 		$oAward = $this->selectAwardInProgress();
-		$toTitles = $oAward->findTitles();
+		$toTitles = null;
+		$this->idAwardInProgress = null;
+		if (null != $oAward) {
+			$toTitles = $oAward->findTitles();
+			$this->idAwardInProgress = $oAward->getId();
+		}
 
 		$oView = new _view('results::award_in_progress');
 		$oView->oAward = $oAward;
