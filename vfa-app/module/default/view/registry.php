@@ -102,7 +102,7 @@
 								<h1 class="text-center text-warning margin-top-lg"><i class="glyphicon glyphicon-fire"></i></h1>
 							</div>
 							<div class="col-xs-10 col-sm-7 col-lg-7">
-								<h3>Mais vous avez oubliez votre mot de passe</h3>
+								<h3>Mais vous avez oublié votre mot de passe</h3>
 							</div>
 							<div class="col-xs-10 col-sm-4 col-lg-4 pull-right">
 								<a id="btnPassword" data-toggle="collapse" data-parent="#accordion" href="#collapsePassword"
