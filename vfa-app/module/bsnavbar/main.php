@@ -48,7 +48,11 @@ class module_bsnavbar extends abstract_module
 
 		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
-		$bar->addChild(plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index')));
+
+		$toValidAwards = $oUserSession->getValidAwards();
+		if (count($toValidAwards) > 0) {
+			$bar->addChild(plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index')));
+		}
 
 		$this->buildMenuAwards($bar);
 		$this->buildMenuReader($bar);
@@ -139,7 +143,8 @@ class module_bsnavbar extends abstract_module
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscriptions ouvertes', new NavLink('regin', 'opened'));
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validate'));
 		} elseif ($poUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
-			$tRegins = model_regin::getInstance()->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $poUserSession->getReaderGroup()->getId());
+			$tRegins = model_regin::getInstance()
+				->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $poUserSession->getReaderGroup()->getId());
 			if (0 == count($tRegins)) {
 				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Ouverture des inscriptions', new NavLink('regin', 'open'));
 			} else {
