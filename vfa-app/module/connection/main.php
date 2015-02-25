@@ -161,17 +161,16 @@ class module_connection extends abstract_module
 		// Sujet
 		$oMail->setSubject(plugin_vfa::buildTitleInvitation($poInvitation));
 		// Prepare le body TXT
-		$oViewTxt = new _view('connection::mailTxt');
-		$oViewTxt->oInvit = $poInvitation;
-		$bodyTxt = $oViewTxt->show();
+		$oViewMail = new _view('connection::mailTxt');
+		$oViewMail->oInvit = $poInvitation;
+		$bodyTxt = $oViewMail->show();
 		// _root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
 		// Prepare le body HTML
-//		$oViewTxt = new _view('connection::mailHtml');
-//		$oViewTxt->oInvit = $poInvitation;
-//		$bodyHtml = $oViewTxt->show();
-//		// _root::getLog()->log($bodyHtml);
-//		$oMail->setBodyHtml($bodyHtml);
+		$oViewMail = new _view('connection::mailHtml');
+		$oViewMail->oInvit = $poInvitation;
+		$bodyHtml = $oViewMail->show();
+		$oMail->setBodyHtml($bodyHtml);
 
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);
