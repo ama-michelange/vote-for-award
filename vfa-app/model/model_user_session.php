@@ -290,6 +290,23 @@ class row_user_session
 	}
 
 	/**
+	 * @param string $pIdAward
+	 * @return boolean
+	 */
+	public function isValidAward($pIdAward)
+	{
+		$toAwards = $this->getValidAwards();
+		if (null != $toAwards) {
+			foreach ($toAwards as $oAward) {
+				if ($oAward->getId() == $pIdAward) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Attribue un tableau de prix
 	 *
 	 * @param row_award[] $pValidAwards
