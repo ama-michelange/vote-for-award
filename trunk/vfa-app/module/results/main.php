@@ -58,8 +58,12 @@ class module_results extends abstract_module
 	private function buildMenuAwardInProgress($pBar)
 	{
 		try {
-			$tParams = array('award_id' => $this->idAwardInProgress);
-			$pBar->addChild(plugin_BsHtml::buildButtonItem('Voter', new NavLink('votes', 'index', $tParams), 'glyphicon-leaf'));
+			/* @var $oUserSession row_user_session */
+			$oUserSession = _root::getAuth()->getUserSession();
+			if ($oUserSession->isValidAward($this->idAwardInProgress)) {
+				$tParams = array('award_id' => $this->idAwardInProgress);
+				$pBar->addChild(plugin_BsHtml::buildButtonItem('Voter', new NavLink('votes', 'index', $tParams), 'glyphicon-leaf'));
+			}
 		} catch (Exception $e) {
 			// $this->idAwardInProgress n'existe pas !
 			// Rien à faire
