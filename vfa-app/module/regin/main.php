@@ -273,6 +273,9 @@ class module_regin extends abstract_module
 			$oRegin = model_regin::getInstance()->findById(_root::getParam('id'));
 			if ($oRegin->isEmpty()) {
 				_root::redirect('default::index');
+			} else {
+				$oRegin->group_id = $oReaderGroup->getId();
+				$oRegin->awards_ids = $oReaderGroup->getAwardIds();
 			}
 		}
 
@@ -499,23 +502,21 @@ class module_regin extends abstract_module
 			$oRegin = model_regin::getInstance()->findById(_root::getParam('id', null));
 		}
 
-		// Récupère les données saisies
-		foreach (model_regin::getInstance()->getListColumn() as $sColumn) {
-			if (in_array($sColumn, model_regin::getInstance()->getIdTab())) {
-				continue;
-			}
-			if ((_root::getParam($sColumn, null) == null) && (null != $oRegin->$sColumn)) {
-				$oRegin->$sColumn = null;
-			} else {
-				$oRegin->$sColumn = _root::getParam($sColumn, null);
-			}
-		}
+		// Récupère les données cachées
+		$oRegin->type = _root::getParam('type');
+		$oRegin->code = _root::getParam('code');
+		$oRegin->state = _root::getParam('state');
+		$oRegin->created_user_id = _root::getParam('created_user_id');
+		$oRegin->awards_ids = _root::getParam('awards_ids');
+		$oRegin->group_id = _root::getParam('group_id');
+
 		// Horodatage
 		if ($iId == null) {
 			$oRegin->created_date = plugin_vfa::dateTimeSgbd();
 		}
 		$oRegin->modified_date = plugin_vfa::dateTimeSgbd();
 
+		// Récupère les données saisies
 		// Date de fin des inscriptions
 		$oRegin->process_end = plugin_vfa::toStringDateSgbd(_root::getParam('process_end', null));
 		// Validation

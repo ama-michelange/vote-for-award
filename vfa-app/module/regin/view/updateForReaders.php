@@ -1,8 +1,8 @@
 <form action="" method="POST">
 	<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 	<input type="hidden" name="type" value="<?php echo $this->oRegin->type ?>"/>
-	<input type="hidden" name="state" value="<?php echo $this->oRegin->state ?>"/>
 	<input type="hidden" name="code" value="<?php echo $this->oRegin->code ?>"/>
+	<input type="hidden" name="state" value="<?php echo $this->oRegin->state ?>"/>
 	<input type="hidden" name="created_user_id" value="<?php echo $this->oRegin->created_user_id ?>"/>
 	<input type="hidden" name="awards_ids" value="<?php echo $this->oRegin->awards_ids ?>"/>
 	<input type="hidden" name="group_id" value="<?php echo $this->oRegin->group_id ?>"/>

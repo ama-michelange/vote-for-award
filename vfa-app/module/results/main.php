@@ -38,7 +38,7 @@ class module_results extends abstract_module
 		$navBar->addChild(new Bar('left'));
 		$navBar->addChild(new Bar('right'));
 		if (_root::getAction() == 'awardInProgress') {
-			$navBar->setTitle('Prix en cours', new NavLink('results', 'awardInProgress'));
+			$navBar->setTitle('Sélection en cours', new NavLink('results', 'awardInProgress'));
 			$this->buildMenuAwardInProgress($navBar->getChild('right'));
 		} else if (_root::getAction() == 'live') {
 			$navBar->setTitle('Classement intermédiaire', new NavLink('results', 'live'));
