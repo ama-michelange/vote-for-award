@@ -37,6 +37,8 @@
 							}
 						}
 						?>
+						<span style="padding-right: 5px;">Fin du prix le</span>
+						<span style="padding-right: 25px;" class="panel-title"><span class="label label-primary"><?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?></span></span>
 						<span style="padding-right: 5px;">Votes enregistrées</span>
 						<span class="panel-title"><span class="label <?php echo $numberLabel ?>"><?php echo $nbNotes . ' / ' . $maxNotes ?></span></span>
 					</span>
