@@ -28,6 +28,9 @@ class module_regin extends abstract_module
 		$navBar->addChild(new BarButtons('right'));
 
 		switch (_root::getAction()) {
+			case 'index':
+				$navBar->setTitle('S\'inscrire', new NavLink('regin', 'index'));
+				break;
 			case 'open':
 				$navBar->setTitle('Ouverture des inscriptions', new NavLink('regin', 'open'));
 				break;
@@ -75,17 +78,35 @@ class module_regin extends abstract_module
 		}
 	}
 
-
 	public function _index()
 	{
-		/* @var $oUserSession row_user_session */
-		$oUserSession = _root::getAuth()->getUserSession();
-
-		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+		if (_root::getRequest()->isPost()) {
+			switch (_root::getParam('action')) {
+				case 'toGetCode':
+					$this->postGetCode();
+					break;
+//				case 'toAccount':
+//					$this->postAccount();
+//					break;
+//				case 'toIdentify':
+//					$this->postIdent();
+//					break;
+//				case 'submitForgottenPassword':
+//					$this->postForgottenPassword();
+//					break;
+//				case 'toConnect':
+//					$this->connectUser(_root::getParam('user_id'));
+//					_root::redirect('default::index');
+//					break;
+				default:
+					_root::redirect('default::index');
+					break;
+			}
 		} else {
-//			$this->openForReaders();
+			$this->showViewGetCode(new row_registry());
 		}
 	}
+
 
 	public function _opened()
 	{
@@ -609,4 +630,117 @@ class module_regin extends abstract_module
 		}
 		_root::redirect('regin::opened');
 	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function showViewGetCode($poRegistry)
+	{
+		$oView = new _view('regin::code');
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+
+		$oView->oRegistry = $poRegistry;
+		$oView->tMessage = $poRegistry->getMessages();
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function postGetCode()
+	{
+		$codeValid = false;
+		$oRegistry = new row_registry();
+		// on verifie que le token est valide
+		if ($this->isValidToken($oRegistry)) {
+			$oRegistry->action = _root::getParam('action', null);
+			$oRegistry->code = _root::getParam('code', null);
+			if ($oRegistry->isValid()) {
+				$oRegin = model_regin::getInstance()->findByCode($oRegistry->code);
+				if ($oRegin->isEmpty()) {
+					$oRegistry->setMessages(array('code' => array('registry.code.unknown')));
+				} else {
+					if (false == $oRegin->verifyProcessValidity()) {
+						$oRegistry->setMessages(array('code' => array('registry.code.invalid')));
+					} else {
+						$codeValid = true;
+						$oRegistry->oRegin = $oRegin;
+						$oRegistry->regin_id = $oRegin->regin_id;
+					}
+				}
+			}
+		}
+		if ($codeValid) {
+			$oRegistry->oUser = _root::getAuth()->getUserSession()->getUser();
+			$this->doRegistry($oRegistry);
+			$this->showViewEndRegistry($oRegistry);
+		} else {
+			$this->showViewGetCode($oRegistry);
+		}
+	}
+
+	/**
+	 * Verifie le token
+	 * @param row_registry $poRegistry
+	 * @return bool
+	 */
+	private function isValidToken($poRegistry)
+	{
+		if (_root::getParam('token')) {
+			$oPluginXsrf = new plugin_xsrf();
+			if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+				$poRegistry->setMessages(array('token' => $oPluginXsrf->getMessage()));
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistry($poRegistry)
+	{
+		switch ($poRegistry->oRegin->type) {
+			case plugin_vfa::TYPE_READER:
+				$this->doRegistryReader($poRegistry);
+				break;
+		}
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistryReader($poRegistry)
+	{
+		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
+			// Associe le groupe de même rôle et les prix à l'utilisateur
+			$this->saveGroupAwardsToUser($poRegistry->oRegin, $poRegistry->oUser);
+			// Met à jour la session
+			$oUserSession = _root::getAuth()->getUserSession();
+			$oUserSession->setUser($poRegistry->oUser);
+			_root::getAuth()->setUserSession($oUserSession);
+		} else {
+			// Sauvegarde pour validation
+			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
+			module_default::sendMailReginToValid($poRegistry);
+		}
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function showViewEndRegistry($poRegistry)
+	{
+		$oView = new _view('regin::endRegistryReader');
+
+//		$oPluginXsrf = new plugin_xsrf();
+//		$oView->token = $oPluginXsrf->getToken();
+
+		$oView->oRegistry = $poRegistry;
+//		$oView->tMessage = $poRegistry->getMessages();
+
+		$this->oLayout->add('work', $oView);
+	}
+
 }

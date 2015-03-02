@@ -508,7 +508,7 @@ class module_default extends abstract_module
 		return $sent;
 	}
 
-	private function sendMailReginToValid($poRegistry)
+	public static function sendMailReginToValid($poRegistry)
 	{
 		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
