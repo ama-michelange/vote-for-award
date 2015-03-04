@@ -81,7 +81,11 @@ class module_bsnavbar extends abstract_module
 	private function buildMenuAwards($pItems)
 	{
 		$item = new DropdownMenuItem('Prix');
-		$item->addChild(plugin_BsHtml::buildMenuItem('Sélection en cours', new NavLink('results', 'awardInProgress')));
+		$toInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, true);
+		if (count($toInProgressAwards) > 0) {
+			$item->addChild(plugin_BsHtml::buildMenuItem('Sélection ' . $toInProgressAwards[0]->year,
+				new NavLink('results', 'awardInProgress')));
+		}
 		$item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire', new NavLink('results', 'live')));
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Résultat du dernier prix', new NavLink('results', 'last')));
