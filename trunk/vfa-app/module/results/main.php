@@ -38,8 +38,12 @@ class module_results extends abstract_module
 		$navBar->addChild(new Bar('left'));
 		$navBar->addChild(new Bar('right'));
 		if (_root::getAction() == 'awardInProgress') {
-			$navBar->setTitle('Sélection en cours', new NavLink('results', 'awardInProgress'));
-			$this->buildMenuAwardInProgress($navBar->getChild('right'));
+			try {
+				$navBar->setTitle('Sélection ' . $this->oAwardInProgress->year, new NavLink('results', 'awardInProgress'));
+				$this->buildMenuAwardInProgress($navBar->getChild('right'));
+			} catch (Exception $e) {
+				// $this->oAwardInProgress n'existe pas ! Rien à faire
+			}
 		} else if (_root::getAction() == 'live') {
 			$navBar->setTitle('Classement intermédiaire', new NavLink('results', 'live'));
 			$this->buildMenuAwardLiveResults($navBar->getChild('left'));
@@ -60,12 +64,12 @@ class module_results extends abstract_module
 		try {
 			/* @var $oUserSession row_user_session */
 			$oUserSession = _root::getAuth()->getUserSession();
-			if ($oUserSession->isValidAward($this->idAwardInProgress)) {
-				$tParams = array('award_id' => $this->idAwardInProgress);
+			if ($oUserSession->isValidAward($this->oAwardInProgress->getId())) {
+				$tParams = array('award_id' => $this->oAwardInProgress->getId());
 				$pBar->addChild(plugin_BsHtml::buildButtonItem('Voter', new NavLink('votes', 'index', $tParams), 'glyphicon-leaf'));
 			}
 		} catch (Exception $e) {
-			// $this->idAwardInProgress n'existe pas !
+			// $this->oAwardInProgress n'existe pas !
 			// Rien à faire
 		}
 	}
@@ -109,10 +113,10 @@ class module_results extends abstract_module
 	{
 		$oAward = $this->selectAwardInProgress();
 		$toTitles = null;
-		$this->idAwardInProgress = null;
+		$this->oAwardInProgress = null;
 		if (null != $oAward) {
 			$toTitles = $oAward->findTitles();
-			$this->idAwardInProgress = $oAward->getId();
+			$this->oAwardInProgress = $oAward;
 		}
 
 		$oView = new _view('results::award_in_progress');
