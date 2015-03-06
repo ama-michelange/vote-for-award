@@ -109,6 +109,7 @@ class model_regin extends abstract_model
 		if ($oReginUsers->isEmpty()) {
 			$oReginUsers->regin_id = $pIdRegin;
 			$oReginUsers->user_id = $pIdUser;
+			$oReginUsers->created_date = plugin_vfa::dateTimeSgbd();
 			$oReginUsers->save();
 		}
 	}

@@ -2,9 +2,25 @@
 
 class module_bsnavbar extends abstract_module
 {
+	public function before()
+	{
+
+	}
 
 	public function _index()
 	{
+		if (_root::getAuth()->isConnected()) {
+			if (array_key_exists('VFA_USER_SESSION', $_COOKIE)) {
+				/* @var $oUserSession row_user_session */
+				$oUserSession = _root::getAuth()->getUserSession();
+				$oUser = $oUserSession->getUser();
+				$oUserSession = model_user_session::getInstance()->create($oUser);
+				_root::getAuth()->setUserSession($oUserSession);
+				setcookie("VFA_USER_SESSION", "", time() - 3600);
+			}
+		}
+
+
 		$oView = $this->buildView();
 		$oView->oNavBar = $this->buildNavBar();
 		return $oView;
