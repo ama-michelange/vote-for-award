@@ -85,19 +85,6 @@ class module_regin extends abstract_module
 				case 'toGetCode':
 					$this->postGetCode();
 					break;
-//				case 'toAccount':
-//					$this->postAccount();
-//					break;
-//				case 'toIdentify':
-//					$this->postIdent();
-//					break;
-//				case 'submitForgottenPassword':
-//					$this->postForgottenPassword();
-//					break;
-//				case 'toConnect':
-//					$this->connectUser(_root::getParam('user_id'));
-//					_root::redirect('default::index');
-//					break;
 				default:
 					_root::redirect('default::index');
 					break;
@@ -626,6 +613,10 @@ class module_regin extends abstract_module
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {
 			$oRegin = model_regin::getInstance()->findById($iId);
+			$toReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+			foreach ($toReginUsers as $oReginUser) {
+			 	$oReginUser->delete();
+			}
 			$oRegin->delete();
 		}
 		_root::redirect('regin::opened');

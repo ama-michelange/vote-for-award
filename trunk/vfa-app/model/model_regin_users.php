@@ -40,12 +40,23 @@ class model_regin_users extends abstract_model
 
 	/**
 	 * @param string $pReginId
+	 * @param string $pUserId
 	 * @return row_regin_users
 	 */
 	public function findByReginIdUserId($pReginId, $pUserId)
 	{
 		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE regin_id=? AND user_id=?';
 		return $this->findOne($sql, $pReginId, $pUserId);
+	}
+
+	/**
+	 * @param string $pUserId
+	 * @return row_regin_users[]
+	 */
+	public function findAllByUserId($pUserId)
+	{
+		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE user_id=?';
+		return $this->findMany($sql, $pUserId);
 	}
 
 	/**
