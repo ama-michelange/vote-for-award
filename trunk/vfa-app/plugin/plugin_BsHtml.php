@@ -38,9 +38,11 @@ class plugin_BsHtml
 	 * @param MenuItem[] $ptMenuItems
 	 * @param string $pLabelDrop
 	 * @param string|null $pLabelMenuItem
+	 * @param bool $pForceNav Force la navigation si le module et l'action à atteindre est le même que le courant
+	 * @param bool $pForceDrop Force un DropdownMenu quelque soit le nombre d'élément valide
 	 * @return MenuItem|DropdownMenuItem|null
 	 */
-	public static function buildDropdownMenuItem($ptMenuItems, $pLabelDrop, $pLabelMenuItem = null, $pForceNav = false)
+	public static function buildDropdownMenuItem($ptMenuItems, $pLabelDrop, $pLabelMenuItem = null, $pForceNav = false, $pForceDrop = false)
 	{
 		$tItems = array();
 		foreach ($ptMenuItems as $item) {
@@ -60,7 +62,11 @@ class plugin_BsHtml
 			}
 		}
 		$ret = null;
-		switch (count($tItems)) {
+		$nb = count($tItems);
+		if ($pForceDrop && $nb == 1) {
+			$nb = 10;
+		}
+		switch ($nb) {
 			case 0:
 				break;
 			case 1:
