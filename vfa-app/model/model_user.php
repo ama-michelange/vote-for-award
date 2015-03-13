@@ -515,6 +515,18 @@ class row_user extends abstract_row
 		return $tAwards;
 	}
 
+	/**
+	 * @return null|row_vote[]
+	 */
+	public function findVote($pAwardId)
+	{
+		$oVote = null;
+		if (null != $this->user_id) {
+			$oVote = model_vote::getInstance()->findByUserIdAwardId($this->user_id, $pAwardId);
+		}
+		return $oVote;
+	}
+
 	/* exemple test validation */
 	private function getCheck()
 	{

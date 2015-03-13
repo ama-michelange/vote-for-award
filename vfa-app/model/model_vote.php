@@ -59,13 +59,20 @@ class model_vote extends abstract_model
 
 	/**
 	 * @param $pAwardId
+	 * @param $pGroupId
 	 * @return int
 	 */
-	public function countAllBallots($pAwardId)
+	public function countAllBallots($pAwardId, $pGroupId = null)
 	{
 		$ret = 0;
-		$sql = 'SELECT count(*) FROM ' . $this->sTable . ' WHERE (award_id = ?)';
-		$res = $this->execute($sql, $pAwardId);
+		if (null == $pGroupId) {
+			$sql = 'SELECT count(*) FROM ' . $this->sTable . ' WHERE (award_id = ?)';
+			$res = $this->execute($sql, $pAwardId);
+		} else {
+			$sql = 'SELECT count(*) FROM vfa_votes, vfa_user_groups' . ' WHERE (vfa_votes.award_id = ?)' .
+				' AND (vfa_votes.user_id = vfa_user_groups.user_id) AND (vfa_user_groups.group_id = ?)';
+			$res = $this->execute($sql, $pAwardId, $pGroupId);
+		}
 		while ($row = mysql_fetch_row($res)) {
 			$ret = $row[0];
 		}
@@ -73,20 +80,27 @@ class model_vote extends abstract_model
 		return $ret;
 	}
 
+
 	/**
 	 * @param $pAwardId
 	 * @param $pAwardType
 	 * @return int
 	 */
-	public function countValidBallots($pAwardId, $pAwardType)
+	public function countValidBallots($pAwardId, $pAwardType, $pGroupId = null)
 	{
 		$ret = 0;
 		$min = plugin_vfa::MIN_NB_VOTE_AWARD_READER;
-		if ($pAwardType == plugin_vfa::TYPE_AWARD_BOARD) {
+		IF ($pAwardType == plugin_vfa::TYPE_AWARD_BOARD) {
 			$min = plugin_vfa::MIN_NB_VOTE_AWARD_BOARD;
 		}
-		$sql = 'SELECT count(*) FROM ' . $this->sTable . ' WHERE (award_id = ?) AND (number >= ' . $min . ')';
-		$res = $this->execute($sql, $pAwardId);
+		if (null == $pGroupId) {
+			$sql = 'SELECT count(*) FROM vfa_votes WHERE(award_id = ?) AND (number >= ' . $min . ')';
+			$res = $this->execute($sql, $pAwardId);
+		} else {
+			$sql = 'SELECT count(*) FROM vfa_votes, vfa_user_groups WHERE(vfa_votes.award_id = ?) AND (vfa_votes.number >= ' . $min . ')' .
+				' AND (vfa_votes.user_id = vfa_user_groups.user_id) AND (vfa_user_groups.group_id = ?)';
+			$res = $this->execute($sql, $pAwardId, $pGroupId);
+		}
 		while ($row = mysql_fetch_row($res)) {
 			$ret = $row[0];
 		}

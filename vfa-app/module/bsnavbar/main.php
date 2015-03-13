@@ -10,6 +10,7 @@ class module_bsnavbar extends abstract_module
 	public function _index()
 	{
 		if (_root::getAuth()->isConnected()) {
+			// Si le cookie existe, c'est suite à une inscription alors recréation des données utilisateurs en session
 			if (array_key_exists('VFA_USER_SESSION', $_COOKIE)) {
 				/* @var $oUserSession row_user_session */
 				$oUserSession = _root::getAuth()->getUserSession();
@@ -65,11 +66,12 @@ class module_bsnavbar extends abstract_module
 		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
 
-		$toValidAwards = $oUserSession->getValidAwards();
-		if (count($toValidAwards) > 0) {
-			$bar->addChild(plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index')));
-		}
+//		$toValidAwards = $oUserSession->getValidAwards();
+//		if (count($toValidAwards) > 0) {
+//			$bar->addChild(plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index')));
+//		}
 
+		$this->buildMenuVotes($bar, $oUserSession);
 		$this->buildMenuAwards($bar);
 		$this->buildMenuReader($bar);
 		$this->buildMenuRegistrations($bar, $oUserSession);
@@ -77,6 +79,39 @@ class module_bsnavbar extends abstract_module
 
 		$bar = $pNavBar->getChild('right');
 		$this->buildMenuAccount($bar, $oUserSession);
+	}
+
+	/**
+	 * @param Bar $pBar
+	 * @param row_user_session $poUserSession
+	 */
+	private function buildMenuVotes($pBar, $poUserSession)
+	{
+		$tItems = array();
+		$toValidAwards = $poUserSession->getValidAwards();
+		if (count($toValidAwards) > 0) {
+			$tItems[] = plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index'));
+		}
+		$tItems[] = plugin_BsHtml::buildMenuItem('Votes en cours', new NavLink('votes_progress', 'index'));
+
+		$tNotNullItems = array();
+		foreach ($tItems as $item) {
+			if (null != $item) {
+				$tNotNullItems[] = $item;
+			}
+		}
+
+		if (count($tNotNullItems) > 1) {
+			$dropItem = new DropdownMenuItem('Votes');
+			foreach ($tNotNullItems as $item) {
+				$dropItem->addChild($item);
+			}
+			if ($dropItem->hasRealChildren()) {
+				$pBar->addChild($dropItem);
+			}
+		} elseif (count($tNotNullItems) == 1) {
+			$pBar->addChild($tItems[0]);
+		}
 	}
 
 	/**

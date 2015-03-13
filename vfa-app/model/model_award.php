@@ -184,13 +184,20 @@ class model_award extends abstract_model
 
 	/**
 	 * @param $pAwardId
+	 * @param null $pGroupId
 	 * @return int
 	 */
-	public function countUser($pAwardId)
+	public function countUser($pAwardId, $pGroupId = null)
 	{
 		$ret = 0;
-		$sql = 'SELECT count(*) FROM vfa_user_awards  WHERE (vfa_user_awards.award_id = ?)';
-		$res = $this->execute($sql, $pAwardId);
+		if ($pGroupId) {
+			$sql = 'SELECT count(vfa_user_awards.user_id) FROM vfa_user_awards,vfa_user_groups WHERE (vfa_user_awards.award_id = ?)' .
+				' AND (vfa_user_awards.user_id = vfa_user_groups.user_id) AND (vfa_user_groups.group_id = ?) ';
+			$res = $this->execute($sql, $pAwardId, $pGroupId);
+		} else {
+			$sql = 'SELECT count(*) FROM vfa_user_awards  WHERE (vfa_user_awards.award_id = ?)';
+			$res = $this->execute($sql, $pAwardId);
+		}
 		while ($row = mysql_fetch_row($res)) {
 			$ret = $row[0];
 		}
@@ -230,6 +237,20 @@ class row_award extends abstract_row
 			$tArray = model_title::getInstance()->findAllBySelectionId($this->selection_id);
 		}
 		return $tArray;
+	}
+
+	public function isInProgress()
+	{
+		$inProgress = false;
+		if (null != $this->award_id) {
+			$endDate = plugin_vfa::toDateTime(plugin_vfa::toDateFromSgbd($this->end_date));
+			$now = plugin_vfa::now();
+			// Si le prix est termminé
+			if (false == plugin_vfa::afterDateTime($now, $endDate)) {
+				$inProgress = true;
+			}
+		}
+		return $inProgress;
 	}
 
 	public function getSelectTitles()
@@ -285,6 +306,12 @@ class row_award extends abstract_row
 	public function toString()
 	{
 		$s = $this->getTypeString() . ' ' . $this->name . ' ' . $this->year;
+		return $s;
+	}
+
+	public function toStringName()
+	{
+		$s = $this->name . ' ' . $this->year;
 		return $s;
 	}
 

@@ -177,7 +177,23 @@ SELECT *
 FROM vfa_selections as s, vfa_selection_titles as st, vfa_titles as t
 WHERE s.selection_id = st.selection_id
       AND st.title_id = t.title_id
-ORDER BY s.selection_id ASC, t.order_title ASC
+ORDER BY s.selection_id ASC, t.order_title ASC;
 
 
-SELECT * FROM vfa_votes WHERE modified >= DATE("2014-11-08")
+SELECT * FROM vfa_votes WHERE modified >= DATE("2014-11-08");
+
+
+-- Création d'un index
+CREATE INDEX RoleId_Module_Action ON vfa_authorizations (role_id,module(10,action(10));
+
+-- Suppression d'un index
+ALTER TABLE vfa_authorizations DROP INDEX RoleId_Module_Action;
+
+
+SELECT count(*) FROM vfa_votes WHERE (award_id = 43) ;
+
+SELECT * FROM vfa_votes, vfa_user_groups
+WHERE
+  (vfa_votes.award_id = 43)
+  AND (vfa_user_groups.group_id = 1)
+  AND (vfa_user_groups.user_id = vfa_votes.user_id);
