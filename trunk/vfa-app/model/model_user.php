@@ -91,7 +91,7 @@ class model_user extends abstract_model
 	public function findAllByGroupId($pGroupId)
 	{
 		$sql = 'SELECT * FROM vfa_users, vfa_user_groups ' . 'WHERE (vfa_user_groups.user_id = vfa_users.user_id) ' .
-			'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.login';
+			'AND (vfa_user_groups.group_id = ?) ' . 'ORDER BY vfa_users.last_name, vfa_users.first_name';
 		// .'AND (vfa_user_groups.group_id = vfa_groups.group_id) '
 		return $this->findMany($sql, $pGroupId);
 	}
