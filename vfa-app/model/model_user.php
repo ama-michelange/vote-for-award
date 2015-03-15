@@ -108,7 +108,7 @@ class model_user extends abstract_model
 			'AND (vfa_user_awards.user_id = vfa_users.user_id) ' . 'AND (vfa_user_groups.group_id = ?) ' .
 			'AND (vfa_user_awards.award_id = ?) ';
 		if (null == $pOrderBy) {
-			$sql .= 'ORDER BY vfa_users.login';
+			$sql .= 'ORDER BY vfa_users.last_name, vfa_users.first_name';
 		} else {
 			$sql .= 'ORDER BY vfa_users.' . $pOrderBy;
 		}

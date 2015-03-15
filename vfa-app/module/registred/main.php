@@ -75,7 +75,7 @@ class module_registred extends abstract_module
 		if (count($tAwards) > 0) {
 			$oFirstAward = $tAwards[0];
 			$tUsers = model_user::getInstance()
-				->findAllByGroupIdByAwardId($oReaderGroup->group_id, $oFirstAward->award_id, 'email');
+				->findAllByGroupIdByAwardId($oReaderGroup->group_id, $oFirstAward->award_id);
 		}
 		$oView = new _view('registred::list');
 		$oView->tUsers = $tUsers;
