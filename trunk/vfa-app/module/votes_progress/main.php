@@ -16,6 +16,14 @@ class module_votes_progress extends abstract_module
 
 		$this->oUser = $oUserSession->getUser();
 		$this->oGroup = $oUserSession->getReaderGroup();
+
+		$groupId = _root::getParam('group_id');
+		if (null != $groupId) {
+			$theGroup = model_group::getInstance()->findById($groupId);
+			if (false == $theGroup->isEmpty()) {
+				$this->oGroup = $theGroup;
+			}
+		}
 		$this->tAwards = $this->oGroup->findAwards();
 	}
 
@@ -30,13 +38,15 @@ class module_votes_progress extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->addChild(new Bar('left'));
-		$param = null;
-		$awardId = _root::getParam('award_id');
-		if (null != $awardId) {
-			$param = array('award_id' => $awardId);
-		}
-		$navBar->setTitle('Votes en cours', new NavLink('votes_progress', 'index', $param));
+//		$param = null;
+//		$awardId = _root::getParam('award_id');
+//		if (null != $awardId) {
+//			$param = array('award_id' => $awardId);
+//		}
+//		$navBar->setTitle('Votes en cours', new NavLink('votes_progress', 'index', $param));
+		$navBar->setTitle('Votes en cours', new NavLink('votes_progress', 'index'));
 		$this->buildMenuAward($navBar);
+		$this->buildMenuGroup($navBar);
 		return $navBar;
 	}
 
@@ -45,17 +55,34 @@ class module_votes_progress extends abstract_module
 	 */
 	private function buildMenuAward($pNavBar)
 	{
+		if ($this->oAward) {
+			$bar = $pNavBar->getChild('left');
+			$tItems = array();
+			foreach ($this->tAwards as $award) {
+				if ($award->award_id != $this->oAward->award_id) {
+					$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
+						new NavLink('votes_progress', 'index', array('award_id' => $award->award_id, 'group_id' => $award->group_id)));
+				}
+			}
+			$bar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres prix', null, true, true));
+		}
+	}
+
+	/**
+	 * @param NavBar $pNavBar
+	 */
+	private function buildMenuGroup($pNavBar)
+	{
 		$bar = $pNavBar->getChild('left');
 		$tItems = array();
-		foreach ($this->tAwards as $award) {
-			if ($award->award_id != $this->oAward->award_id) {
-				$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
-					new NavLink('votes_progress', 'index', array('award_id' => $award->award_id)));
+		$tGroups = model_group::getInstance()->findAll();
+		foreach ($tGroups as $group) {
+			if ($group->getId() != $this->oGroup->getId()) {
+				$tItems[] = plugin_BsHtml::buildMenuItem($group->toString(),
+					new NavLink('votes_progress', 'otherGroup', array('group_id' => $group->group_id)));
 			}
 		}
-		$bar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Votes du groupe', null, true, true));
-
-
+		$bar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres groupes', null, true, true));
 	}
 
 	public function _index()
@@ -78,11 +105,15 @@ class module_votes_progress extends abstract_module
 		$oView = new _view('votes_progress::list');
 		$oView->oAward = $this->oAward;
 		$oView->oGroup = $this->oGroup;
-		$oView->tUsers = $this->oGroup->findUsers();
-
-
+		if ($this->oAward) {
+			$oView->tUsers = model_user::getInstance()->findAllByGroupIdByAwardId($this->oGroup->getId(), $this->oAward->getId());
+		}
 		$this->oLayout->add('work', $oView);
 	}
 
+	public function _otherGroup()
+	{
+		$this->_index();
+	}
 }
 
