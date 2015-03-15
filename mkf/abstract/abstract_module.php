@@ -28,7 +28,9 @@ abstract class abstract_module
 	public function __get($sVar)
 	{
 		if (! isset($this->_tVar[$sVar])) {
-			throw new Exception('Propriete ' . $sVar . ' _module inexistant');
+			// AMA original
+			// throw new Exception('Propriete ' . $sVar . ' _module inexistant');
+			return null;
 		}
 		return $this->_tVar[$sVar];
 	}
