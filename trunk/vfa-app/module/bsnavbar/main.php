@@ -195,7 +195,8 @@ class module_bsnavbar extends abstract_module
 		$tMenuItems[] = plugin_BsHtml::buildMenuItem('S\'inscrire', new NavLink('regin', 'index'));
 		$tMenuItems[] = plugin_BsHtml::buildSeparator();
 		if ($poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
-			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscriptions ouvertes', new NavLink('regin', 'opened'));
+			$tMenuItems[] = plugin_BsHtml::buildMenuItem('
+			Inscriptions ouvertes', new NavLink('regin', 'opened'));
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validate'));
 		} elseif ($poUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
 			$tRegins = model_regin::getInstance()
