@@ -9,7 +9,7 @@
 
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Ouverture des inscriptions aux lecteurs du groupe <?php echo $this->oGroup->toString() ?></h3>
+			<h3 class="panel-title">Permission aux lecteurs du groupe <?php echo $this->oGroup->toString() ?> de s'inscrire</h3>
 		</div>
 		<?php if (plugin_validation::exist($this->tMessage, 'token')): ?>
 			<div class="panel-body">
@@ -23,11 +23,12 @@
 			<div class="panel-body panel-condensed">
 				<div class="panel panel-info">
 					<div class="panel-body panel-condensed">
-						<p>L'ouverture des inscriptions permet aux lecteurs de s'inscrire au prix pour participer aux votes et le
+						<p>La permission des inscriptions permet aux lecteurs de s'inscrire au prix pour participer aux votes et le
 							cas échéant d'ouvrir un compte.</p>
 						<p>Lors de leur inscription, les lecteurs ont besoin d'un code d'inscription que vous allez leur founir.
 							Ce code est associé à votre groupe : CE, association, ...<br/>
-							Il permet d'associer à votre groupe les participants qui l'utilisent, en plus de les autoriser à voter au prix.</p>
+							Il sert à associer la personne qui l'utilise à votre groupe et au prix en cours lorsqu'elle ouvre un compte ou
+							s'identifie sur le site.</p>
 						<p>Vous obtiendrez le code d'inscription dans l'écran suivant.</p>
 					</div>
 				</div>
@@ -118,7 +119,7 @@
 							<a class="btn btn-default" href="<?php echo $this->getLink('regin::opened') ?>">
 								<i class="glyphicon glyphicon-remove with-text"></i>Annuler
 							</a>
-							<button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-ok with-text"></i>Ouvrir</button>
+							<button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-ok with-text"></i>Ok</button>
 						</div>
 					</div>
 				</div>

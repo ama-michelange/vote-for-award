@@ -611,6 +611,10 @@
     line-height: 2;
 }
 
+.dropdown-header {
+    color: #EEEEEE;
+    padding-left: 12px;
+}
 .label-default.label-disabled {
     /*color: #CCCCCC;*/
 }

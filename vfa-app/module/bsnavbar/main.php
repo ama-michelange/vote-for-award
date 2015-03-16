@@ -195,17 +195,18 @@ class module_bsnavbar extends abstract_module
 		$tMenuItems[] = plugin_BsHtml::buildMenuItem('S\'inscrire', new NavLink('regin', 'index'));
 		$tMenuItems[] = plugin_BsHtml::buildSeparator();
 		if ($poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
-			$tMenuItems[] = plugin_BsHtml::buildMenuItem('
-			Inscriptions ouvertes', new NavLink('regin', 'opened'));
+			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscriptions ouvertes', new NavLink('regin', 'opened'));
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validate'));
 		} elseif ($poUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
 			$tRegins = model_regin::getInstance()
 				->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $poUserSession->getReaderGroup()->getId());
 			if (0 == count($tRegins)) {
-				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Ouverture des inscriptions', new NavLink('regin', 'open'));
+				$tMenuItems[] = new HeaderItem('Inscriptions au prix');
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Créer la permission', new NavLink('regin', 'open'));
 			} else {
-				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscription ouverte', new NavLink('regin', 'opened'));
-				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation des participations', new NavLink('regin', 'validate'));
+				$tMenuItems[] = new HeaderItem('Inscriptions au prix');
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Valider les inscriptions', new NavLink('regin', 'validate'));
+				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Voir la permission en cours', new NavLink('regin', 'opened'));
 			}
 		}
 		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Inscriptions', 'S\'inscrire', true));
