@@ -32,18 +32,17 @@ class module_regin extends abstract_module
 				$navBar->setTitle('S\'inscrire', new NavLink('regin', 'index'));
 				break;
 			case 'open':
-				$navBar->setTitle('Ouverture des inscriptions', new NavLink('regin', 'open'));
+				$navBar->setTitle('Créer la permission', new NavLink('regin', 'open'));
 				break;
 			case 'opened':
 			case 'update':
 			case 'delete':
-				$navBar->setTitle('Inscriptions ouvertes', new NavLink('regin', 'opened'));
+				$navBar->setTitle('Permission en cours', new NavLink('regin', 'opened'));
 				break;
 			case 'validate':
-				$navBar->setTitle('Validation', new NavLink('regin', 'validate'));
+				$navBar->setTitle('Valider les inscriptions', new NavLink('regin', 'validate'));
 				break;
 		}
-
 
 		if ($oUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
 			$this->buildMenuResponsible($navBar, $oUserSession);

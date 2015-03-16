@@ -35,6 +35,19 @@ class plugin_BsHtml
 	}
 
 	/**
+	 * @param $pItem
+	 * @return bool
+	 */
+	public static function isHeader($pItem)
+	{
+		$ret = false;
+		if ('HeaderItem' == get_class($pItem)) {
+			$ret = true;
+		}
+		return $ret;
+	}
+
+	/**
 	 * @param MenuItem[] $ptMenuItems
 	 * @param string $pLabelDrop
 	 * @param string|null $pLabelMenuItem
@@ -86,6 +99,8 @@ class plugin_BsHtml
 				$drop = new DropdownMenuItem($pLabelDrop);
 				foreach ($tItems as $item) {
 					if (plugin_BsHtml::isSeparator($item)) {
+						$drop->addChild($item);
+					} elseif (plugin_BsHtml::isHeader($item)) {
 						$drop->addChild($item);
 					} elseif ((_root::getParamNav() != $item->getLink()->getNav()) || ($pForceNav)) {
 						$drop->addChild($item);
@@ -491,6 +506,8 @@ class DropdownMenuItem extends LabelItem
 			foreach ($this->getChildren() as $item) {
 				if (plugin_BsHtml::isSeparator($item)) {
 					$ret .= '<li class="divider"></li>';
+				} elseif (plugin_BsHtml::isHeader($item)) {
+					$ret .= '<li class="dropdown-header">' . $item->getText() . '</li>';
 				} else {
 					$ret .= $item->toHtml();
 				}
@@ -824,13 +841,36 @@ abstract class DefaultItem
  */
 class SeparatorItem extends DefaultItem
 {
-
 	private static $_cpt = 0;
 
 	public function __construct()
 	{
 		self::$_cpt++;
 		parent::__construct('__separator__' . self::$_cpt);
+	}
+}
+
+/**
+ * Class HeaderItem
+ */
+class HeaderItem extends DefaultItem
+{
+	private $_sText;
+	private static $_cpt = 0;
+
+	public function __construct($pText)
+	{
+		self::$_cpt++;
+		parent::__construct('__header__' . self::$_cpt);
+		$this->_sText = $pText;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getText()
+	{
+		return $this->_sText;
 	}
 }
 
