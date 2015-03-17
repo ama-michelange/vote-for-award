@@ -27,18 +27,29 @@ class module_home_enable extends abstract_module
 		if (count($toRegins) > 0) {
 			setcookie('VFA_USER_SESSION', 'GENERATE', 0);
 		} else {
-			if (array_key_exists( 'VFA_USER_SESSION',$_COOKIE)) {
+			if (array_key_exists('VFA_USER_SESSION', $_COOKIE)) {
 				$oUser = $oUserSession->getUser();
 				$oUserSession = model_user_session::getInstance()->create($oUser);
 				_root::getAuth()->setUserSession($oUserSession);
-				setcookie ("VFA_USER_SESSION", "", time() - 3600);
+				setcookie("VFA_USER_SESSION", "", time() - 3600);
 			}
 		}
 		$oView->toRegins = $toRegins;
 
+		$oView->reginToValidate = false;
+		if ($oUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
+			$toRegins = model_regin::getInstance()
+				->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $oUserSession->getReaderGroup()->getId());
+			if (count($toRegins) > 0) {
+				$toReginUsers = model_regin_users::getInstance()->findAllByReginId($toRegins[0]->getId());
+				if (count($toReginUsers) > 0) {
+					$oView->reginToValidate = true;
+				}
+			}
+		}
+
 		$oView->toUserRegistredAwards = $oUserSession->getValidAwards();
 		$oView->toInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, true);
-
 
 		$this->oLayout->add('work', $oView);
 	}
