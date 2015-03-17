@@ -25,15 +25,15 @@
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php if (count($this->toInProgressAwards) > 0) : ?>
+	<?php if ($this->reginToValidate) : ?>
 		<div class="col-md-4">
-			<div class="panel panel-info">
-				<div class="panel-heading"><h3 class="panel-title">Voir</h3></div>
+			<div class="panel panel-success">
+				<div class="panel-heading"><h3 class="panel-title">Valider</h3></div>
 				<div class="panel-body panel-condensed">
 					<ul class="list-group">
 						<li class="list-group-item">
-							<a href="<?php echo $this->getLink('results::awardInProgress') ?>">
-								Sélection <?php echo $this->toInProgressAwards[0]->year ?></a>
+							<a href="<?php echo $this->getLink('regin::validate') ?>">
+								Inscriptions à valider</a>
 						</li>
 					</ul>
 				</div>
@@ -52,6 +52,21 @@
 									<?php echo($oAward->toString()) ?></a>
 							</li>
 						<?php endforeach; ?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+	<?php if (count($this->toInProgressAwards) > 0) : ?>
+		<div class="col-md-4">
+			<div class="panel panel-info">
+				<div class="panel-heading"><h3 class="panel-title">Voir</h3></div>
+				<div class="panel-body panel-condensed">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<a href="<?php echo $this->getLink('results::awardInProgress') ?>">
+								Sélection <?php echo $this->toInProgressAwards[0]->year ?></a>
+						</li>
 					</ul>
 				</div>
 			</div>
