@@ -1,7 +1,7 @@
 <div class="panel panel-default panel-root">
 	<?php if($this->tUsers):?>
 	<div class="table-responsive">
-		<table class="table table-striped">
+		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
 					<th>Identifiant</th>

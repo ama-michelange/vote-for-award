@@ -199,6 +199,9 @@ class module_default extends abstract_module
 			case plugin_vfa::TYPE_READER:
 				$this->doRegistryReader($poRegistry);
 				break;
+			case plugin_vfa::TYPE_BOARD:
+				$this->doRegistryBoard($poRegistry);
+				break;
 		}
 	}
 
@@ -209,11 +212,26 @@ class module_default extends abstract_module
 	{
 		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
 			// Associe le groupe de même rôle et les prix à l'utilisateur
-			$this->saveGroupAwardsToUser($poRegistry);
+			$this->saveGroupAwardsToUser($poRegistry, plugin_vfa::ROLE_READER);
 		} else {
 			// Sauvegarde pour validation
 			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
-			$this->sendMailReginToValid($poRegistry);
+			$this->sendMailReginToValid($poRegistry, true);
+		}
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistryBoard($poRegistry)
+	{
+		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
+			// Associe le groupe de même rôle et les prix à l'utilisateur
+			$this->saveGroupAwardsToUser($poRegistry, plugin_vfa::ROLE_BOARD);
+		} else {
+			// Sauvegarde pour validation
+			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
+			$this->sendMailReginToValid($poRegistry, false);
 		}
 	}
 
@@ -361,7 +379,8 @@ class module_default extends abstract_module
 		$view = null;
 		switch ($poRegistry->oRegin->type) {
 			case plugin_vfa::TYPE_READER:
-				$view = new _view('default::modalEndRegistryReader');
+			case plugin_vfa::TYPE_BOARD:
+				$view = new _view('default::modalEndRegistry');
 				break;
 		}
 		$view->oRegistry = $poRegistry;
@@ -402,14 +421,18 @@ class module_default extends abstract_module
 	/**
 	 * @param row_registry $poRegistry
 	 */
-	private function saveGroupAwardsToUser($poRegistry)
+	private function saveGroupAwardsToUser($poRegistry, $pRole)
 	{
 		// Sauve le groupe de même rôle à l'utilisateur
 		$tIdGroups = array($poRegistry->oRegin->group_id);
-		model_user::getInstance()->mergeUserGroups($poRegistry->oUser->getId(), $tIdGroups);
+		model_user::getInstance()->mergeUserGroups($poRegistry->oUser, $tIdGroups);
 		// Ajoute les prix à l'utilisateur
 		$tIdAwards = explode(',', $poRegistry->oRegin->awards_ids);
-		model_user::getInstance()->mergeUserAwards($poRegistry->oUser->getId(), $tIdAwards);
+		model_user::getInstance()->mergeUserAwards($poRegistry->oUser, $tIdAwards);
+		// Ajoute le rôle à l'utilisateur
+		$oRole = model_role::getInstance()->findByName($pRole);
+		$tIdRoles = array($oRole->getId());
+		model_user::getInstance()->mergeUserRoles($poRegistry->oUser, $tIdRoles);
 	}
 
 	/**
@@ -508,17 +531,20 @@ class module_default extends abstract_module
 		return $sent;
 	}
 
-	public static function sendMailReginToValid($poRegistry)
+	public static function sendMailReginToValid($poRegistry, $pResponsibles)
 	{
 		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
-//		$createdUser = $poRegistry->oRegin->findCreatedUser();
-//		$oMail->addTo($createdUser->email);
-
-		$responsibles = model_user::getInstance()->findAllByGroupIdByRoleName($poRegistry->oRegin->group_id, plugin_vfa::ROLE_RESPONSIBLE);
-		foreach ($responsibles as $user) {
-			$oMail->addTo($user->email);
+		if ($pResponsibles) {
+			$responsibles = model_user::getInstance()->findAllByGroupIdByRoleName($poRegistry->oRegin->group_id, plugin_vfa::ROLE_RESPONSIBLE);
+			foreach ($responsibles as $user) {
+				$oMail->addTo($user->email);
+			}
+		} else {
+			$createdUser = $poRegistry->oRegin->findCreatedUser();
+			$oMail->addTo($createdUser->email);
 		}
+
 		$oMail->addBCC(_root::getConfigVar('vfa-app.mail.from'));
 
 		$tAwards = $poRegistry->oRegin->findAwards();

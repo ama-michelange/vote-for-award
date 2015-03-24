@@ -350,10 +350,7 @@ class row_user extends abstract_row
 	 */
 	public function toStringPublic()
 	{
-		$s = '';
-		$s .= $this->first_name;
-		$s .= ' ';
-		$s .= $this->last_name;
+		$s = $this->toStringFirstLastName();
 		if ($this->email) {
 			$s .= ' (' . $this->email . ')';
 		}

@@ -9,8 +9,7 @@
 
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Modification de l'ouverture des inscriptions aux lecteurs du
-				groupe <?php echo $this->oGroup->toString() ?></h3>
+			<h3 class="panel-title">Permission aux lecteurs du <?php echo $this->oGroup->toString() ?></h3>
 		</div>
 		<?php if (plugin_validation::exist($this->tMessage, 'token')): ?>
 			<div class="panel-body">
@@ -23,6 +22,18 @@
 		<?php else: ?>
 			<div class="panel-body panel-condensed">
 				<div class="panel panel-info">
+					<div class="panel-body panel-condensed">
+						<p>La permission des inscriptions permet aux lecteurs de s'inscrire au prix pour participer aux votes et le
+							cas échéant d'ouvrir un compte.</p>
+						<p>Lors de leur inscription, les lecteurs ont besoin d'un code d'inscription que vous allez leur founir.
+							Ce code est associé au Comité de sélection<br/>
+							Il sert à associer la personne qui l'utilise au Comité de sélection et à la préselection en cours lorsqu'elle ouvre un
+							compte ou
+							s'identifie sur le site.</p>
+						<p>Vous obtiendrez le code d'inscription dans l'écran suivant qu'il faudra transmettre aux participants.</p>
+					</div>
+				</div>
+				<div class="panel panel-info">
 					<div class="panel-heading">
 						<h3 class="panel-title">Caractéristique de l'inscription du lecteur</h3>
 					</div>
@@ -30,17 +41,9 @@
 						<div class="row">
 							<div class="col-sm-4">
 								<div class="form-group">
-									<label for="inputCode">Code d'inscription</label>
-									<input class="form-control" type="text" id="inputCode" name="_code"
-											 value="<?php echo $this->oRegin->code ?>" disabled/>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
 									<label for="inputGroup">Affectation au groupe</label>
 									<input class="form-control" type="text" id="inputGroup" name="_group"
-											 value="<?php echo $this->oGroup->toString() ?>"
-											 disabled/>
+											 value="<?php echo $this->oGroup->toString() ?>" disabled/>
 								</div>
 							</div>
 							<div class="col-sm-4">
@@ -78,7 +81,7 @@
 											<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'process_end') ?></span>
 										</div>
 										<div class="col-sm-9">
-											Par défaut, la date maximale des inscriptions est fixée un jour avant la fin du prix mais vous pouvez la
+											Par défaut, la date maximale des inscriptions est la date de fin du prix mais vous pouvez la
 											réduire à votre convenance.
 										</div>
 									</div>
@@ -114,10 +117,10 @@
 					</div>
 					<div class="panel-footer clearfix">
 						<div class="pull-right">
+							<button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-ok with-text"></i>Ok</button>
 							<a class="btn btn-default" href="<?php echo $this->getLink('regin::opened') ?>">
 								<i class="glyphicon glyphicon-remove with-text"></i>Annuler
 							</a>
-							<button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-ok with-text"></i>Enregistrer</button>
 						</div>
 					</div>
 				</div>

@@ -4,14 +4,35 @@
 	</h1>
 </div>
 <div class="row">
-	<?php if (count($this->toRegins) > 0) : ?>
+	<?php if (count($this->toReaderRegins) > 0) : ?>
 		<div class="col-md-8">
 			<div class="panel panel-success">
 				<div class="panel-heading"><h3 class="panel-title">Inscription en attente de validation</h3></div>
 				<div class="panel-body panel-condensed">
 					<h4>Le correspondant doit d'abord valider votre inscription au prix ci-dessous</h4>
 					<ul class="list-group">
-						<?php foreach ($this->toRegins as $oRegin) : ?>
+						<?php foreach ($this->toReaderRegins as $oRegin) : ?>
+							<?php $toAwardRegs = $oRegin->findAwards(); ?>
+							<?php foreach ($toAwardRegs as $oAward) : ?>
+								<li class="list-group-item">
+									<?php echo($oAward->toString()) ?>
+								</li>
+							<?php endforeach; ?>
+						<?php endforeach; ?>
+					</ul>
+					<h4>Ensuite, vous pourrez voter.</h4>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+	<?php if (count($this->toBoardRegins) > 0) : ?>
+		<div class="col-md-8">
+			<div class="panel panel-success">
+				<div class="panel-heading"><h3 class="panel-title">Inscription en attente de validation</h3></div>
+				<div class="panel-body panel-condensed">
+					<h4>L'organisateur doit d'abord valider votre inscription à la présélection ci-dessous</h4>
+					<ul class="list-group">
+						<?php foreach ($this->toBoardRegins as $oRegin) : ?>
 							<?php $toAwardRegs = $oRegin->findAwards(); ?>
 							<?php foreach ($toAwardRegs as $oAward) : ?>
 								<li class="list-group-item">

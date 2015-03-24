@@ -1,6 +1,10 @@
 <div class="panel panel-default panel-root">
 	<div class="panel-heading">
-		<h3 class="panel-title">Inscription d'un lecteur</h3>
+		<h3 class="panel-title">Inscription d'un lecteur
+			<?php if ($this->oRegin->type == plugin_vfa::TYPE_BOARD): ?>
+				comme Membre du Comité de sélection
+			<?php endif;?>
+		</h3>
 	</div>
 	<div class="panel-body panel-condensed">
 		<div class="row">
@@ -30,7 +34,7 @@
 					<dt>Code</dt>
 					<dd><?php echo $this->oRegin->code ?></dd>
 					<dt>Créé par</dt>
-					<dd><?php echo $this->oCreatedUser->toStringPublic() ?></dd>
+					<dd><?php echo $this->oCreatedUser->toStringFirstLastName() ?></dd>
 				</dl>
 			</div>
 		</div>
