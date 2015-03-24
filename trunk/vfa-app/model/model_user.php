@@ -81,7 +81,7 @@ class model_user extends abstract_model
 	 */
 	public function findAll()
 	{
-		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY vfa_users.login');
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' ORDER BY vfa_users.last_name, vfa_users.first_name');
 	}
 
 	/**
@@ -125,7 +125,7 @@ class model_user extends abstract_model
 		$sql = 'SELECT * FROM vfa_users, vfa_user_roles, vfa_roles ' . 'WHERE (vfa_user_roles.user_id = vfa_users.user_id) ' .
 			'AND (vfa_user_roles.role_id = vfa_roles.role_id) ' . 'AND (vfa_roles.role_name = ?) ';
 		if (null == $pOrderBy) {
-			$sql .= 'ORDER BY vfa_users.login';
+			$sql .= 'ORDER BY vfa_users.last_name, vfa_users.first_name';
 		} else {
 			$sql .= 'ORDER BY vfa_users.' . $pOrderBy;
 		}
@@ -145,7 +145,7 @@ class model_user extends abstract_model
 			'AND (vfa_user_awards.user_id = vfa_users.user_id) ' . 'AND (vfa_user_roles.role_id = vfa_roles.role_id) ' .
 			'AND (vfa_roles.role_name = ?) ' . 'AND (vfa_user_awards.award_id = ?) ';
 		if (null == $pOrderBy) {
-			$sql .= 'ORDER BY vfa_users.login';
+			$sql .= 'ORDER BY vfa_users.last_name, vfa_users.first_name';
 		} else {
 			$sql .= 'ORDER BY vfa_users.' . $pOrderBy;
 		}
@@ -162,7 +162,7 @@ class model_user extends abstract_model
 		$sql =
 			'SELECT * FROM vfa_users, vfa_user_roles, vfa_roles, vfa_user_groups ' . 'WHERE (vfa_user_roles.user_id = vfa_users.user_id) ' .
 			'AND (vfa_user_groups.user_id = vfa_users.user_id) ' . 'AND (vfa_user_roles.role_id = vfa_roles.role_id) ' .
-			'AND (vfa_roles.role_name = ?) ' . 'AND (vfa_user_groups.group_id = ?) ORDER BY vfa_users.login';
+			'AND (vfa_roles.role_name = ?) ' . 'AND (vfa_user_groups.group_id = ?) ORDER BY vfa_users.last_name, vfa_users.first_name';
 		return $this->findMany($sql, $pRoleName, $pGroupId);
 	}
 
@@ -428,6 +428,21 @@ class row_user extends abstract_row
 		}
 		return $tSelect;
 	}
+	/**
+	 * @return array
+	 */
+	public function getSelectedAwards()
+	{
+		$tSelect = array();
+		$tab = $this->findAwards();
+		if (null != $tab) {
+			foreach ($tab as $oRow) {
+				$tSelect[$oRow->getId()] = $oRow->toString();
+			}
+		}
+		return $tSelect;
+	}
+
 
 	/**
 	 * @param string $pRoleName

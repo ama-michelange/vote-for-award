@@ -66,18 +66,18 @@ class module_users extends abstract_module
 
 	public function _index()
 	{
-		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
-		_root::getRequest()->setAction('list');
 		$this->_list();
 	}
 
 	public function _list()
 	{
-		$oUserModel = new model_user();
-		$tUsers = $oUserModel->findAll();
+		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
+		_root::getRequest()->setAction('list');
+		$tUsers = model_user::getInstance()->findAll();
 
 		$oView = new _view('users::list');
 		$oView->tUsers = $tUsers;
+		$oView->showGroup = true;
 		$oView->title = 'Tous les utilisateurs';
 
 		$this->oLayout->add('work', $oView);
@@ -179,16 +179,19 @@ class module_users extends abstract_module
 			$oUser = new row_user();
 			$tUserRoles = $oUser->getSelectedRoles();
 			$tUserGroups = $oUser->getSelectedGroups();
+			$tUserAwards = $oUser->getSelectedAwards();
 		} else {
 			$tMessage = $oUser->getMessages();
 			$tUserRoles = plugin_vfa::copyValuesToKeys(_root::getParam('user_roles', null));
 			$tUserGroups = plugin_vfa::copyValuesToKeys(_root::getParam('user_groups', null));
+			$tUserAwards = plugin_vfa::copyValuesToKeys(_root::getParam('user_awards', null));
 		}
 
 		$oView = new _view('users::edit');
 		$oView->oUser = $oUser;
 		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tUserRoles);
 		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(), $tUserGroups);
+		$oView->tSelectedAwards = plugin_vfa::buildOptionSelected(model_award::getInstance()->getSelect(), $tUserAwards);
 		$oView->tColumn = $tColumns;
 		$oView->tId = $oUserModel->getIdTab();
 		$oView->tMessage = $tMessage;
@@ -211,16 +214,19 @@ class module_users extends abstract_module
 			$oUser = $oUserModel->findById(_root::getParam('id'));
 			$tUserRoles = $oUser->getSelectedRoles();
 			$tUserGroups = $oUser->getSelectedGroups();
+			$tUserAwards = $oUser->getSelectedAwards();
 		} else {
 			$tMessage = $oUser->getMessages();
 			$tUserRoles = plugin_vfa::copyValuesToKeys(_root::getParam('user_roles', null));
 			$tUserGroups = plugin_vfa::copyValuesToKeys(_root::getParam('user_groups', null));
+			$tUserAwards = plugin_vfa::copyValuesToKeys(_root::getParam('user_awards', null));
 		}
 
 		$oView = new _view('users::edit');
 		$oView->oUser = $oUser;
 		$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tUserRoles);
 		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(), $tUserGroups);
+		$oView->tSelectedAwards = plugin_vfa::buildOptionSelected(model_award::getInstance()->getSelect(), $tUserAwards);
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un utilisateur';
 		$oView->tColumn = $tColumns;
@@ -242,15 +248,21 @@ class module_users extends abstract_module
 
 	public function buildViewShow()
 	{
-		$oUser = model_user::getInstance()->findById(_root::getParam('id'));
+		$id = _root::getParam('id');
+		if ($id) {
+			$oUser = model_user::getInstance()->findById($id);
 
-		$oView = new _view('users::show');
-		$oView->oUser = $oUser;
-		$oView->oViewShowUser = $this->buildViewShowUser($oUser);
-		if (_root::getAction() == 'read') {
-			$oView->oViewShowReaderGroup = $this->buildViewShowReaderGroup($oUser);
-			$oView->oViewShowBoardGroup = $this->buildViewShowBoardGroup($oUser);
-			$oView->oViewShowParticipations = $this->buildViewShowParticipations($oUser);
+			$oView = new _view('users::show');
+			$oView->oUser = $oUser;
+			$oView->oViewShowUser = $this->buildViewShowUser($oUser);
+			if (_root::getAction() == 'read') {
+				$oView->oViewShowReaderGroup = $this->buildViewShowReaderGroup($oUser);
+				$oView->oViewShowBoardGroup = $this->buildViewShowBoardGroup($oUser);
+				$oView->oViewShowParticipations = $this->buildViewShowParticipations($oUser);
+			}
+		}
+		else{
+			_root::redirect('users::index');
 		}
 		return $oView;
 	}
@@ -388,6 +400,8 @@ class module_users extends abstract_module
 		$tUserRoles = _root::getParam('user_roles', null);
 		// Récupère les groupes associés
 		$tUserGroups = _root::getParam('user_groups', null);
+		// Récupère les prix associés
+		$tUserAwards = _root::getParam('user_awards', null);
 		if ($oUser->isValid()) {
 			if (false == $this->hasDuplicateLogin($oUser)) {
 				if ($this->isValidGroupsRoles($oUser, $tUserGroups, $tUserRoles)) {
@@ -403,6 +417,7 @@ class module_users extends abstract_module
 						$oUser->save();
 						$oUserModel->saveUserRoles($oUser->user_id, $tUserRoles);
 						$oUserModel->saveUserGroups($oUser->user_id, $tUserGroups);
+						$oUserModel->saveUserAwards($oUser->user_id, $tUserAwards);
 						_root::redirect('users::read', array('id' => $oUser->user_id));
 					}
 				}

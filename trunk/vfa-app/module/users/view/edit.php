@@ -113,9 +113,27 @@
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'user_awards')?>">
+						<label for="inputUserAwards">Prix</label>
+						<select id="inputUserAwards" class="form-control" name="user_awards[]" size="13"	multiple>
+							<?php foreach($this->tSelectedAwards as $tAward):?>
+								<option value="<?php echo $tAward[0] ?>" <?php if($tAward[2]): echo 'selected'; endif;?>>
+									<?php echo $tAward[1]?>
+								</option>
+							<?php endforeach;?>
+						</select>
+						<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'user_awards')?></span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
+				<button class="btn btn-primary" type="submit">
+					<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
+				</button>
 				<?php if(trim($this->oUser->user_id)==false):?>
 					<a class="btn btn-default" href="<?php echo $this->getLink('users::list') ?>"><i
 					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
@@ -124,9 +142,6 @@
 					href="<?php echo $this->getLink('users::read',array('id'=>$this->oUser->user_id)) ?>"><i
 					class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<?php endif;?>
-				<button class="btn btn-primary" type="submit">
-					<i class="glyphicon glyphicon-ok with-text"></i>Enregistrer
-				</button>
 			</div>
 		</div>
 		<?php endif;?>
