@@ -76,6 +76,9 @@ class plugin_BsHtml
 			if (true == plugin_BsHtml::isSeparator($tItems[$nb])) {
 				array_pop($tItems);
 			}
+		}
+		$nb = count($tItems) - 1;
+		if ($nb > -1) {
 			if (true == plugin_BsHtml::isHeader($tItems[$nb])) {
 				array_pop($tItems);
 			}
