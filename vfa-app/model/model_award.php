@@ -41,7 +41,7 @@ class model_award extends abstract_model
 		$tab = $this->findAll();
 		$tSelect = array();
 		foreach ($tab as $oRow) {
-			$tSelect[$oRow->award_id] = $oRow->name;
+			$tSelect[$oRow->getId()] = $oRow->toString();
 		}
 		return $tSelect;
 	}
@@ -102,7 +102,7 @@ class model_award extends abstract_model
 	public function findAllByUserId($pUserId)
 	{
 		$sql = 'SELECT * FROM vfa_awards, vfa_user_awards ' . 'WHERE (vfa_user_awards.award_id = vfa_awards.award_id) ' .
-			'AND (vfa_user_awards.user_id = ?)';
+			'AND (vfa_user_awards.user_id = ?) ORDER BY YEAR DESC, NAME, type';
 		return $this->findMany($sql, $pUserId);
 	}
 
