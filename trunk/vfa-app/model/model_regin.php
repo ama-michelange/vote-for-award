@@ -159,6 +159,7 @@ class row_regin extends abstract_row
 	{
 		$valid = false;
 		switch ($this->type) {
+			case plugin_vfa::TYPE_BOARD:
 			case plugin_vfa::TYPE_READER:
 				if ($this->state == plugin_vfa::STATE_OPEN) {
 					if ((plugin_vfa::PROCESS_INTIME == $this->process) || (plugin_vfa::PROCESS_INTIME_VALIDATE == $this->process)) {

@@ -34,12 +34,36 @@ class module_home_enable extends abstract_module
 				setcookie("VFA_USER_SESSION", "", time() - 3600);
 			}
 		}
-		$oView->toRegins = $toRegins;
+
+		$toReaderRegins = array();
+		$toBoardRegins = array();
+		foreach ($toRegins as $oRegin) {
+			if ($oRegin->type == plugin_vfa::TYPE_BOARD) {
+				$toBoardRegins[] = $oRegin;
+			}
+			else {
+				$toReaderRegins[] = $oRegin;
+			}
+		}
+
+		$oView->toBoardRegins = $toBoardRegins;
+		$oView->toReaderRegins = $toReaderRegins;
 
 		$oView->reginToValidate = false;
 		if ($oUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
 			$toRegins = model_regin::getInstance()
 				->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $oUserSession->getReaderGroup()->getId());
+			if (count($toRegins) > 0) {
+				$toReginUsers = model_regin_users::getInstance()->findAllByReginId($toRegins[0]->getId());
+				if (count($toReginUsers) > 0) {
+					$oView->reginToValidate = true;
+				}
+			}
+		}
+		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$toBoardGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::ROLE_BOARD);
+			$toRegins = model_regin::getInstance()
+				->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_BOARD, $toBoardGroups[0]->getId());
 			if (count($toRegins) > 0) {
 				$toReginUsers = model_regin_users::getInstance()->findAllByReginId($toRegins[0]->getId());
 				if (count($toReginUsers) > 0) {

@@ -8,6 +8,7 @@ class module_regin extends abstract_module
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
 		$this->oLayout = new _layout('tpl_bs_bar_context');
+		$this->oGroupBoard = null;
 	}
 
 	public function after()
@@ -42,36 +43,72 @@ class module_regin extends abstract_module
 			case 'validate':
 				$navBar->setTitle('Valider les inscriptions', new NavLink('regin', 'validate'));
 				break;
+			case 'openReader':
+				$navBar->setTitle('Créer la permission', new NavLink('regin', 'openReader'));
+				break;
+			case 'openedReader':
+			case 'updateReader':
+			case 'deleteReader':
+				$navBar->setTitle('Permission en cours', new NavLink('regin', 'openedReader'));
+				break;
+			case 'validateReader':
+				$navBar->setTitle('Valider les inscriptions', new NavLink('regin', 'validateReader'));
+				break;
+			case 'openBoard':
+				$navBar->setTitle('Créer la permission', new NavLink('regin', 'openBoard'));
+				break;
+			case 'openedBoard':
+			case 'updateBoard':
+			case 'deleteBoard':
+				$navBar->setTitle('Permission en cours', new NavLink('regin', 'openedBoard'));
+				break;
+			case 'validateBoard':
+				$navBar->setTitle('Valider les inscriptions', new NavLink('regin', 'validateBoard'));
+				break;
 		}
 
-		if ($oUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
-			$this->buildMenuResponsible($navBar, $oUserSession);
-		}
+		$this->buildMenuRight($navBar);
 		return $navBar;
 	}
 
 	/**
 	 * @param NavBar $pNavBar
-	 * @param row_user_session $poUserSession
 	 */
-	public function buildMenuResponsible($pNavBar, $poUserSession)
+	public function buildMenuRight($pNavBar)
 	{
 		switch (_root::getAction()) {
-			case 'opened':
-			case 'update':
-			case 'delete':
+			case 'openedReader':
+			case 'updateReader':
+			case 'deleteReader':
 				if ($this->oLayout->__isset('idRegin')) {
 					$tParams = array('id' => $this->oLayout->idRegin);
 				} else {
 					$tParams = array('id' => _root::getParam('id'));
 				}
 				if ($tParams['id']) {
-					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail', new NavLink('regin', 'opened', $tParams),
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail',
+						new NavLink('regin', 'openedReader', $tParams), 'glyphicon-eye-open'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier',
+						new NavLink('regin', 'updateReader', $tParams), 'glyphicon-edit'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Supprimer',
+						new NavLink('regin', 'deleteReader', $tParams), 'glyphicon-trash'));
+				}
+				break;
+			case 'openedBoard':
+			case 'updateBoard':
+			case 'deleteBoard':
+				if ($this->oLayout->__isset('idRegin')) {
+					$tParams = array('id' => $this->oLayout->idRegin);
+				} else {
+					$tParams = array('id' => _root::getParam('id'));
+				}
+				if ($tParams['id']) {
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail', new NavLink('regin', 'openedBoard', $tParams),
 						'glyphicon-eye-open'));
-					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier', new NavLink('regin', 'update', $tParams),
-						'glyphicon-edit'));
-					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Fermeture', new NavLink('regin', 'delete', $tParams),
-						'glyphicon-trash'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier',
+						new NavLink('regin', 'updateBoard', $tParams), 'glyphicon-edit'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Supprimer',
+						new NavLink('regin', 'deleteBoard', $tParams), 'glyphicon-trash'));
 				}
 				break;
 		}
@@ -100,8 +137,9 @@ class module_regin extends abstract_module
 		$oUserSession = _root::getAuth()->getUserSession();
 
 		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$this->_openedBoard();
 		} else {
-			$this->openedForReaders();
+			$this->_openedReader();
 		}
 	}
 
@@ -111,11 +149,9 @@ class module_regin extends abstract_module
 		$oUserSession = _root::getAuth()->getUserSession();
 
 		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$this->_openBoard();
 		} else {
-			// Vérifie si le responsable peut ouvrir les inscriptions
-			if ($this->verifyOkToOpenForReaders()) {
-				$this->openForReaders();
-			}
+			$this->_openReader();
 		}
 	}
 
@@ -125,8 +161,9 @@ class module_regin extends abstract_module
 		$oUserSession = _root::getAuth()->getUserSession();
 
 		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$this->_updateBoard();
 		} else {
-			$this->updateForReaders();
+			$this->_updateReader();
 		}
 	}
 
@@ -136,9 +173,64 @@ class module_regin extends abstract_module
 		$oUserSession = _root::getAuth()->getUserSession();
 
 		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$this->_validateBoard();
 		} else {
-			$this->validateForReaders();
+			$this->_validateReader();
 		}
+	}
+
+	public function _openedReader()
+	{
+		_root::getRequest()->setAction('openedReader');
+		$this->doOpenedForReaders();
+	}
+
+	public function _openedBoard()
+	{
+		_root::getRequest()->setAction('openedBoard');
+		$this->doOpenedForBoards();
+	}
+
+	public function _openReader()
+	{
+		_root::getRequest()->setAction('openReader');
+		// Vérifie si le responsable peut ouvrir les inscriptions
+		if ($this->verifyOkToOpenForReaders()) {
+			$this->doOpenForReaders();
+		}
+	}
+
+	public function _openBoard()
+	{
+		_root::getRequest()->setAction('openBoard');
+		// Vérifie si l'organisateur peut ouvrir les inscriptions
+		if ($this->verifyOkToOpenForBoards()) {
+			$this->doOpenForBoards();
+		}
+	}
+
+	public function _updateReader()
+	{
+		_root::getRequest()->setAction('updateReader');
+		$this->updateForReaders();
+	}
+
+	public function _updateBoard()
+	{
+		_root::getRequest()->setAction('updateBoard');
+		$this->updateForBoards();
+	}
+
+	public function _validateReader()
+	{
+		_root::getRequest()->setAction('validateReader');
+		$this->validateForReaders();
+	}
+
+	public function _validateBoard()
+	{
+		_root::getRequest()->setAction('validateBoard');
+		$this->validateForBoards();
 	}
 
 	/**
@@ -164,8 +256,9 @@ class module_regin extends abstract_module
 			}
 		}
 		if (false == $ok) {
-			$oView = new _view('regin::koToOpenForReaders');
-			$oView->oReaderGroup = $oReaderGroup;
+			$oView = new _view('regin::koToOpen');
+			$oView->text = 'Aucun prix n\'est ouvert !';
+			$oView->oGroup = $oReaderGroup;
 			$oView->tGroupRegistryAwards = $tGroupRegistryAwards;
 			$oView->tInProgressAwards = $tInProgressAwards;
 			$this->oLayout->add('work', $oView);
@@ -181,7 +274,57 @@ class module_regin extends abstract_module
 		return $ok;
 	}
 
-	private function openedForReaders()
+	/**
+	 * Verifie si un responsable peut ouvrir les inscriptions.
+	 * @return bool Si Ok pour l'ouverture
+	 */
+	private function verifyOkToOpenForBoards()
+	{
+		$ok = true;
+		$oBoardGroup = $this->getGroupBoard();
+		$tInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_BOARD);
+		// Ouverture uniquement si un prix est en cours
+		if (0 == count($tInProgressAwards)) {
+			$ok = false;
+		} else {
+			// Sauve la présélection automatiquement qd elle existe
+			$tGroupRegistryAwards = model_group::getInstance()->findAllRegistryInProgressAwards($oBoardGroup->getId());
+			if (0 == count($tGroupRegistryAwards)) {
+				$tIds = array();
+				foreach ($tInProgressAwards as $oAward) {
+					$tIds[] = $oAward->getId();
+				}
+				model_group::getInstance()->saveGroupAwards($oBoardGroup->getId(), $tIds);
+			}
+		}
+		if (false == $ok) {
+			$oView = new _view('regin::koToOpen');
+			$oView->text = 'Aucune présélection n\'est ouverte !';
+			$oView->oGroup = $oBoardGroup;
+			$oView->tGroupRegistryAwards = $tGroupRegistryAwards;
+			$oView->tInProgressAwards = $tInProgressAwards;
+			$this->oLayout->add('work', $oView);
+		} else {
+			// Ouverture uniquement si aucune n'existe déjà
+			$tRegins = model_regin::getInstance()->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_BOARD, $oBoardGroup->getId());
+			if (count($tRegins) > 0) {
+				$ok = false;
+				_root::redirect('regin::opened');
+			}
+		}
+		return $ok;
+	}
+
+	private function getGroupBoard()
+	{
+		if (null == $this->oGroupBoard) {
+			$toBoardGroups = model_group::getInstance()->findAllByRoleName(plugin_vfa::ROLE_BOARD);
+			$this->oGroupBoard = $toBoardGroups[0];
+		}
+		return $this->oGroupBoard;
+	}
+
+	private function doOpenedForReaders()
 	{
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
@@ -196,6 +339,25 @@ class module_regin extends abstract_module
 		$oView->tRegins = $tRegins;
 		if (count($tRegins) > 0) {
 			$oView->oViewShow = $this->makeViewShowForReaders($tRegins[0]);
+
+			$oView->oRegin = $tRegins[0];
+			$this->oLayout->idRegin = $tRegins[0]->getId();
+		}
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function doOpenedForBoards()
+	{
+		$oBoardGroup = $this->getGroupBoard();
+		$tRegins = model_regin::getInstance()->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_BOARD, $oBoardGroup->getId());
+
+		$oView = new _view('regin::openedForBoards');
+		$oView->oBoardGroup = $oBoardGroup;
+		$oView->tAwards = $oBoardGroup->findAwards();
+
+		$oView->tRegins = $tRegins;
+		if (count($tRegins) > 0) {
+			$oView->oViewShow = $this->makeViewShowForBoards($tRegins[0]);
 
 			$oView->oRegin = $tRegins[0];
 			$this->oLayout->idRegin = $tRegins[0]->getId();
@@ -225,7 +387,27 @@ class module_regin extends abstract_module
 		return $oView;
 	}
 
-	private function openForReaders()
+	private function makeViewShowForBoards($poRegin = null)
+	{
+		if ($poRegin) {
+			$oRegin = $poRegin;
+		} else {
+			$oRegin = model_regin::getInstance()->findById(_root::getParam('id'));
+		}
+
+		$oBoardGroup = $this->getGroupBoard();
+
+		$oView = new _view('regin::show');
+		$oView->oRegin = $oRegin;
+		$oView->tAwards = $oBoardGroup->findAwards();
+		$oView->oGroup = $oBoardGroup;
+
+		$this->oLayout->idRegin = $oRegin->getId();
+
+		return $oView;
+	}
+
+	private function doOpenForReaders()
 	{
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
@@ -237,7 +419,7 @@ class module_regin extends abstract_module
 		$oView->tAwards = $tAwards;
 
 		if (_root::getRequest()->isPost()) {
-			$oRegin = $this->doSaveOpenForReaders($oReaderGroup, $tAwards[0]);
+			$oRegin = $this->doSaveOpenForType($oReaderGroup, $tAwards[0], plugin_vfa::TYPE_READER);
 		} else {
 			$oRegin = new row_regin();
 			$oRegin->created_user_id = $oUserSession->getUser()->getId();
@@ -263,6 +445,44 @@ class module_regin extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
+	private function doOpenForBoards()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+		$oBoardGroup = $this->getGroupBoard();
+		$tAwards = $oBoardGroup->findAwards();
+
+		$oView = new _view('regin::openForBoards');
+		$oView->oGroup = $oBoardGroup;
+		$oView->tAwards = $tAwards;
+
+		if (_root::getRequest()->isPost()) {
+			$oRegin = $this->doSaveOpenForType($oBoardGroup, $tAwards[0], plugin_vfa::TYPE_BOARD);
+		} else {
+			$oRegin = new row_regin();
+			$oRegin->created_user_id = $oUserSession->getUser()->getId();
+			$oRegin->type = plugin_vfa::TYPE_BOARD;
+			$oRegin->state = plugin_vfa::STATE_OPEN;
+			$oRegin->group_id = $oBoardGroup->getId();
+			$oRegin->awards_ids = $oBoardGroup->getAwardIds();
+
+			$oRegin->process_end = $this->buildProcessEndDate($tAwards[0])->toString();
+			$oRegin->process = plugin_vfa::PROCESS_INTIME_VALIDATE;
+		}
+
+		$oView->oRegin = $oRegin;
+		$oView->tMessage = $oRegin->getMessages();
+
+		$oView->novalidate = false;
+		if ($oRegin->process == plugin_vfa::PROCESS_INTIME) {
+			$oView->novalidate = true;
+		}
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$this->oLayout->add('work', $oView);
+	}
+
 	private function updateForReaders()
 	{
 		/* @var $oUserSession row_user_session */
@@ -270,12 +490,12 @@ class module_regin extends abstract_module
 		$oReaderGroup = $oUserSession->getReaderGroup();
 		$tAwards = $oReaderGroup->findAwards();
 
-		$oView = new _view('regin::updateForReaders');
+		$oView = new _view('regin::update');
 		$oView->oGroup = $oReaderGroup;
 		$oView->tAwards = $tAwards;
 
 		if (_root::getRequest()->isPost()) {
-			$oRegin = $this->doSaveOpenForReaders($oReaderGroup, $tAwards[0]);
+			$oRegin = $this->doSaveOpenForType($oReaderGroup, $tAwards[0], plugin_vfa::TYPE_READER);
 		} else {
 			$oRegin = model_regin::getInstance()->findById(_root::getParam('id'));
 			if ($oRegin->isEmpty()) {
@@ -283,6 +503,40 @@ class module_regin extends abstract_module
 			} else {
 				$oRegin->group_id = $oReaderGroup->getId();
 				$oRegin->awards_ids = $oReaderGroup->getAwardIds();
+			}
+		}
+
+		$oView->oRegin = $oRegin;
+		$oView->tMessage = $oRegin->getMessages();
+
+		$oView->novalidate = false;
+		if ($oRegin->process == plugin_vfa::PROCESS_INTIME) {
+			$oView->novalidate = true;
+		}
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function updateForBoards()
+	{
+		$oBoardGroup = $this->getGroupBoard();
+		$tAwards = $oBoardGroup->findAwards();
+
+		$oView = new _view('regin::update');
+		$oView->oGroup = $oBoardGroup;
+		$oView->tAwards = $tAwards;
+
+		if (_root::getRequest()->isPost()) {
+			$oRegin = $this->doSaveOpenForType($oBoardGroup, $tAwards[0], plugin_vfa::TYPE_BOARD);
+		} else {
+			$oRegin = model_regin::getInstance()->findById(_root::getParam('id'));
+			if ($oRegin->isEmpty()) {
+				_root::redirect('default::index');
+			} else {
+				$oRegin->group_id = $oBoardGroup->getId();
+				$oRegin->awards_ids = $oBoardGroup->getAwardIds();
 			}
 		}
 
@@ -337,7 +591,54 @@ class module_regin extends abstract_module
 		$this->oLayout->add('work', $oView);
 
 
-		$oView->oViewModalConfirm = new _view('regin::modalConfirmValidateForReaders');
+		$oView->oViewModalConfirm = new _view('regin::modalConfirmValidate');
+		$oView->oViewModalConfirm->oRegin = $oRegin;
+		$oView->oViewModalConfirm->token = $oView->token;
+		$oView->oViewModalConfirm->tReginUsers = $tReginUsers;
+
+		// Ajout du javascript
+		$scriptView = new _view('regin::scriptValidate');
+		$scriptView->oRegin = $oRegin;
+		$this->oLayout->add('script', $scriptView);
+	}
+
+	private function validateForBoards()
+	{
+		$oBoardGroup = $this->getGroupBoard();
+		$tAwards = $oBoardGroup->findAwards();
+
+		$oView = new _view('regin::validateForBoards');
+		$oView->oGroup = $oBoardGroup;
+		$oView->tAwards = $tAwards;
+
+
+		$oRegin = null;
+		if (_root::getRequest()->isPost()) {
+			$oRegin = $this->doPostValidateForBoards();
+		}
+
+		if ($oRegin) {
+			// Suite à un post
+			$tReginUsers = $oRegin->tReginUsers;
+		} else {
+			// Suite à un get
+			$tRegins = model_regin::getInstance()->findAllInTimeByTypeByGroup(plugin_vfa::TYPE_BOARD, $oBoardGroup->getId());
+			if (count($tRegins) > 0) {
+				$oRegin = $tRegins[0];
+				$tReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+			}
+		}
+
+		$oView->oRegin = $oRegin;
+		$oView->tMessage = $oRegin->getMessages();
+		$oView->tReginUsers = $tReginUsers;
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$this->oLayout->add('work', $oView);
+
+
+		$oView->oViewModalConfirm = new _view('regin::modalConfirmValidate');
 		$oView->oViewModalConfirm->oRegin = $oRegin;
 		$oView->oViewModalConfirm->token = $oView->token;
 		$oView->oViewModalConfirm->tReginUsers = $tReginUsers;
@@ -388,7 +689,58 @@ class module_regin extends abstract_module
 		}
 		$oRegin->openModalConfirm = false;
 		if ('toConfirm' == _root::getParam('action')) {
-			$this->registryAllUsers($oRegin);
+			$this->registryAllUsers($oRegin, plugin_vfa::ROLE_READER);
+			// Force la relecture dans la base
+			$oRegin = null;
+		} else {
+			if (($oRegin->nbAccepted > 0) || ($oRegin->nbRejected > 0)) {
+				$oRegin->openModalConfirm = true;
+			}
+		}
+		return $oRegin;
+	}
+
+	/**
+	 * @return row_regin
+	 */
+	private function doPostValidateForBoards()
+	{
+		// on verifie que le token est valide
+		$oPluginXsrf = new plugin_xsrf();
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+			$oRegin = new row_regin();
+			$oRegin->setMessages(array('token' => $oPluginXsrf->getMessage()));
+			return $oRegin;
+		}
+
+		$iId = _root::getParam('regin_id');
+		if ($iId == null) {
+			$oRegin = new row_regin();
+			$oRegin->setMessages(array('token' => $oPluginXsrf->getMessage()));
+			return $oRegin;
+		}
+		$oRegin = model_regin::getInstance()->findById($iId);
+		$tReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+		$oRegin->tReginUsers = $tReginUsers;
+
+		$accepted = _root::getParam('accepted');
+		$rejected = _root::getParam('rejected');
+		$oRegin->nbAccepted = 0;
+		$oRegin->nbRejected = 0;
+		foreach ($tReginUsers as $oReginUser) {
+			if ((null != $accepted) && (true == in_array($oReginUser->getId(), $accepted))) {
+				$oReginUser->accepted = 1;
+				$oRegin->nbAccepted++;
+			} else if ((null != $rejected) && (true == in_array($oReginUser->getId(), $rejected))) {
+				$oReginUser->accepted = -1;
+				$oRegin->nbRejected++;
+			} else {
+				$oReginUser->accepted = 0;
+			}
+		}
+		$oRegin->openModalConfirm = false;
+		if ('toConfirm' == _root::getParam('action')) {
+			$this->registryAllUsers($oRegin, plugin_vfa::ROLE_BOARD);
 			// Force la relecture dans la base
 			$oRegin = null;
 		} else {
@@ -403,7 +755,7 @@ class module_regin extends abstract_module
 	/**
 	 * @param row_regin $poRegin
 	 */
-	private function registryAllUsers($poRegin)
+	private function registryAllUsers($poRegin, $pRole)
 	{
 		$tAcceptedReginUsers = array();
 		$tRejectedReginUsers = array();
@@ -424,11 +776,11 @@ class module_regin extends abstract_module
 			$oUser = $oReginUser->findUser();
 			$tUsers[] = $oUser;
 //			var_dump($oUser);
-			$this->saveGroupAwardsToUser($poRegin, $oUser);
+			$this->saveGroupAwardsToUser($poRegin, $oUser, $pRole);
 			$oReginUser->delete();
 		}
 		if (count($tUsers) > 0) {
-			$this->sendMailRegistryAllUsers($poRegin, $tUsers);
+			$this->sendMailRegistryAllUsers($poRegin, $tUsers, plugin_vfa::ROLE_READER == $pRole);
 		}
 	}
 
@@ -437,14 +789,19 @@ class module_regin extends abstract_module
 	 * @param $ptUsers
 	 * @return bool
 	 */
-	private function sendMailRegistryAllUsers($poRegin, $ptUsers)
+	private function sendMailRegistryAllUsers($poRegin, $ptUsers, $pResponsibles)
 	{
 		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
 
-		$responsibles = model_user::getInstance()->findAllByGroupIdByRoleName($poRegin->group_id, plugin_vfa::ROLE_RESPONSIBLE);
-		foreach ($responsibles as $user) {
-			$oMail->addTo($user->email);
+		if ($pResponsibles) {
+			$responsibles = model_user::getInstance()->findAllByGroupIdByRoleName($poRegin->group_id, plugin_vfa::ROLE_RESPONSIBLE);
+			foreach ($responsibles as $user) {
+				$oMail->addTo($user->email);
+			}
+		} else {
+			$createdUser = $poRegin->findCreatedUser();
+			$oMail->addTo($createdUser->email);
 		}
 		$oMail->addBCC(_root::getConfigVar('vfa-app.mail.from'));
 		foreach ($ptUsers as $user) {
@@ -477,7 +834,7 @@ class module_regin extends abstract_module
 	 * @param row_regin $poRegin
 	 * @param $poUser
 	 */
-	private function saveGroupAwardsToUser($poRegin, $poUser)
+	private function saveGroupAwardsToUser($poRegin, $poUser, $pRole)
 	{
 		// Sauve le groupe de même rôle à l'utilisateur
 		$tIdGroups = array($poRegin->group_id);
@@ -485,14 +842,19 @@ class module_regin extends abstract_module
 		// Ajoute les prix à l'utilisateur
 		$tIdAwards = explode(',', $poRegin->awards_ids);
 		model_user::getInstance()->mergeUserAwards($poUser, $tIdAwards);
+		// Ajoute le rôle à l'utilisateur
+		$oRole = model_role::getInstance()->findByName($pRole);
+		$tIdRoles = array($oRole->getId());
+		model_user::getInstance()->mergeUserRoles($poUser, $tIdRoles);
 	}
 
 	/**
 	 * @param row_group $poGroup
 	 * @param row_award $poAward
+	 * @param $pType
 	 * @return row_regin
 	 */
-	private function doSaveOpenForReaders($poGroup, $poAward)
+	private function doSaveOpenForType($poGroup, $poAward, $pType)
 	{
 		// on verifie que le token est valide
 		$oPluginXsrf = new plugin_xsrf();
@@ -566,7 +928,16 @@ class module_regin extends abstract_module
 			} else {
 				$oRegin->save();
 			}
-			_root::redirect('regin::opened');
+			switch ($pType) {
+				case plugin_vfa::TYPE_BOARD:
+					_root::redirect('regin::openedBoard');
+					break;
+				case plugin_vfa::TYPE_READER:
+					_root::redirect('regin::openedReader');
+					break;
+				default:
+					_root::redirect('regin::opened');
+			}
 		}
 		return $oRegin;
 	}
@@ -578,13 +949,26 @@ class module_regin extends abstract_module
 	private function buildProcessEndDate($poAward)
 	{
 		$processEnd = plugin_vfa::toDateFromSgbd($poAward->end_date);
-		$processEnd->addDay(-1);
+		//$processEnd->addDay(-1);
 		return $processEnd;
 	}
 
 	public function _delete()
 	{
-		$tMessage = $this->delete();
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+
+		if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$this->_deleteBoard();
+		} else {
+			$this->_deleteReader();
+		}
+	}
+
+	public function _deleteReader()
+	{
+		_root::getRequest()->setAction('deleteReader');
+		$tMessage = $this->deleteReader();
 
 		$oView = new _view('regin::delete');
 		$oView->oViewShow = $this->makeViewShowForReaders();
@@ -596,7 +980,7 @@ class module_regin extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-	private function delete()
+	private function deleteReader()
 	{
 		// si ce n'est pas une requete POST on ne soumet pas
 		if (!_root::getRequest()->isPost()) {
@@ -614,11 +998,51 @@ class module_regin extends abstract_module
 			$oRegin = model_regin::getInstance()->findById($iId);
 			$toReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
 			foreach ($toReginUsers as $oReginUser) {
-			 	$oReginUser->delete();
+				$oReginUser->delete();
 			}
 			$oRegin->delete();
 		}
-		_root::redirect('regin::opened');
+		_root::redirect('regin::openedReader');
+	}
+
+	public function _deleteBoard()
+	{
+		_root::getRequest()->setAction('deleteBoard');
+		$tMessage = $this->deleteBoard();
+
+		$oView = new _view('regin::delete');
+		$oView->oViewShow = $this->makeViewShowForBoards();
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$oView->tMessage = $tMessage;
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function deleteBoard()
+	{
+		// si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) {
+			return null;
+		}
+
+		$oPluginXsrf = new plugin_xsrf();
+		// on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+			return array('token' => $oPluginXsrf->getMessage());
+		}
+
+		$iId = _root::getParam('id', null);
+		if ($iId != null) {
+			$oRegin = model_regin::getInstance()->findById($iId);
+			$toReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+			foreach ($toReginUsers as $oReginUser) {
+				$oReginUser->delete();
+			}
+			$oRegin->delete();
+		}
+		_root::redirect('regin::openedBoard');
 	}
 
 	/**
@@ -695,6 +1119,9 @@ class module_regin extends abstract_module
 			case plugin_vfa::TYPE_READER:
 				$this->doRegistryReader($poRegistry);
 				break;
+			case plugin_vfa::TYPE_BOARD:
+				$this->doRegistryBoard($poRegistry);
+				break;
 		}
 	}
 
@@ -705,7 +1132,7 @@ class module_regin extends abstract_module
 	{
 		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
 			// Associe le groupe de même rôle et les prix à l'utilisateur
-			$this->saveGroupAwardsToUser($poRegistry->oRegin, $poRegistry->oUser);
+			$this->saveGroupAwardsToUser($poRegistry->oRegin, $poRegistry->oUser, plugin_vfa::ROLE_READER);
 			// Met à jour la session
 			$oUserSession = _root::getAuth()->getUserSession();
 			$oUserSession->setUser($poRegistry->oUser);
@@ -713,7 +1140,26 @@ class module_regin extends abstract_module
 		} else {
 			// Sauvegarde pour validation
 			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
-			module_default::sendMailReginToValid($poRegistry);
+			module_default::sendMailReginToValid($poRegistry, true);
+		}
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistryBoard($poRegistry)
+	{
+		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
+			// Associe le groupe de même rôle et les prix à l'utilisateur
+			$this->saveGroupAwardsToUser($poRegistry->oRegin, $poRegistry->oUser, plugin_vfa::ROLE_BOARD);
+			// Met à jour la session
+			$oUserSession = _root::getAuth()->getUserSession();
+			$oUserSession->setUser($poRegistry->oUser);
+			_root::getAuth()->setUserSession($oUserSession);
+		} else {
+			// Sauvegarde pour validation
+			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
+			module_default::sendMailReginToValid($poRegistry, false);
 		}
 	}
 

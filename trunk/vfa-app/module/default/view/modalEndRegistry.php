@@ -31,7 +31,11 @@
 					<?php if (plugin_vfa::PROCESS_INTIME == $this->oRegistry->oRegin->process)  : ?>
 						<h4>Inscription</h4>
 					<?php else: ?>
-						<h4 class="text-warning">A valider par le correspondant</h4>
+						<?php if (plugin_vfa::TYPE_BOARD == $this->oRegistry->oRegin->type)  : ?>
+							<h4 class="text-warning">A valider par l'organisateur</h4>
+						<?php else: ?>
+							<h4 class="text-warning">A valider par le correspondant</h4>
+						<?php endif ?>
 					<?php endif; ?>
 					<dl class="dl-horizontal">
 						<dt>Participation</dt>

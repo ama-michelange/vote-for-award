@@ -67,10 +67,16 @@ class plugin_BsHtml
 			if (true == plugin_BsHtml::isSeparator($tItems[0])) {
 				array_shift($tItems);
 			}
+			if (true == plugin_BsHtml::isHeader($tItems[0])) {
+				array_shift($tItems);
+			}
 		}
 		$nb = count($tItems) - 1;
 		if ($nb > -1) {
 			if (true == plugin_BsHtml::isSeparator($tItems[$nb])) {
+				array_pop($tItems);
+			}
+			if (true == plugin_BsHtml::isHeader($tItems[$nb])) {
 				array_pop($tItems);
 			}
 		}
