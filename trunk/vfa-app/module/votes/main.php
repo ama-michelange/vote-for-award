@@ -154,6 +154,10 @@ class module_votes extends abstract_module
 				}
 			}
 		}
+		// Le paramètre 'award_id' est introuvable ou non valide
+		if (null == $this->oAward){
+			_root::redirect('default::index');
+		}
 	}
 
 	/**
