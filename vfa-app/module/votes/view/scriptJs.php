@@ -219,7 +219,7 @@ $(document).ready(function () {
 	function hideButtonSave() {
 		var brand = $("#myBrand");
 		if (brand.hasClass("navbar-btn")) {
-			brand.text("Bulletin").removeClass().addClass("navbar-brand");
+			brand.text("Voter").removeClass().addClass("navbar-brand");
 			$("#btnSave").addClass("hidden");
 		}
 	}
