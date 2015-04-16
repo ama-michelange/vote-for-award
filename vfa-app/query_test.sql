@@ -197,3 +197,67 @@ WHERE
   (vfa_votes.award_id = 43)
   AND (vfa_user_groups.group_id = 1)
   AND (vfa_user_groups.user_id = vfa_votes.user_id);
+
+-- ------------------------------------------------------------
+
+--  vfa_roles
+CREATE INDEX user_roles_role_name ON vfa_roles (role_name(15));
+
+-- vfa_users
+CREATE INDEX user_last_first_name ON vfa_users (last_name(20), first_name(20));
+CREATE INDEX user_login ON vfa_users (login(20));
+CREATE INDEX user_email ON vfa_users (email(20));
+
+-- vfa_user_awards
+ALTER TABLE vfa_user_awards ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+CREATE INDEX user_awards_user_id ON vfa_user_awards (user_id, award_id);
+CREATE INDEX user_awards_award_id ON vfa_user_awards (award_id, user_id);
+
+-- vfa_user_groups
+ALTER TABLE vfa_user_groups ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+CREATE INDEX user_groups_user_id ON vfa_user_groups (user_id, group_id);
+CREATE INDEX user_groups_group_id ON vfa_user_groups (group_id, user_id);
+
+-- vfa_user_roles
+ALTER TABLE vfa_user_roles ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+CREATE INDEX user_roles_user_id ON vfa_user_roles (user_id, role_id);
+CREATE INDEX user_roles_role_id ON vfa_user_roles (role_id, user_id);
+
+--  vfa_votes
+CREATE INDEX votes_user_award ON vfa_votes (user_id, award_id);
+CREATE INDEX votes_award_modified ON vfa_votes (award_id, modified);
+CREATE INDEX votes_award_user ON vfa_votes (award_id, user_id);
+
+--  vfa_vote_items
+CREATE INDEX vote_items_vote_title ON vfa_vote_items (vote_id, title_id);
+
+--  vfa_vote_results
+CREATE INDEX vote_results_award_title ON vfa_vote_results (award_id, title_id);
+CREATE INDEX vote_results_award_modified ON vfa_vote_results (award_id, modified);
+
+--  vfa_vote_stats
+CREATE INDEX vote_stats_award_code ON vfa_vote_stats (award_id, code(10));
+
+
+EXPLAIN
+  SELECT *
+    FROM vfa_users, vfa_user_roles, vfa_roles, vfa_user_awards
+    WHERE ( vfa_user_roles.user_id = vfa_users.user_id )
+    AND ( vfa_user_awards.user_id = vfa_users.user_id )
+    AND ( vfa_user_roles.role_id = vfa_roles.role_id )
+    AND (vfa_roles.role_name =  "board")
+    AND (vfa_user_awards.award_id =41);
+
+SELECT count(*) AS total FROM vfa_users, vfa_user_groups WHERE (vfa_user_groups.user_id = vfa_users.user_id) AND (vfa_user_groups.group_id = 3);
+
+SELECT * FROM vfa_users, vfa_user_roles, vfa_roles, vfa_user_groups WHERE (vfa_user_roles.user_id = vfa_users.user_id)
+  AND (vfa_user_groups.user_id = vfa_users.user_id) AND (vfa_user_roles.role_id = vfa_roles.role_id)
+	AND (vfa_roles.role_name = "reader") AND (vfa_user_groups.group_id = 3) ORDER BY vfa_users.last_name, vfa_users.first_name;
+
+SELECT * FROM vfa_votes WHERE award_id=41 ORDER BY modified DESC;
+
+SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score) FROM vfa_votes, vfa_vote_items
+			WHERE (vfa_votes.award_id = 43 ) AND (vfa_votes.number >=  7 )
+			AND (vfa_votes.vote_id = vfa_vote_items.vote_id) AND (vfa_vote_items.score > -1) GROUP BY vfa_vote_items.title_id;
+
+SELECT * FROM vfa_vote_results WHERE award_id=43 ORDER BY average DESC;
