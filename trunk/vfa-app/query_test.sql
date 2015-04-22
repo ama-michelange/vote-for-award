@@ -200,8 +200,50 @@ WHERE
 
 -- ------------------------------------------------------------
 
+--  vfa_groups
+CREATE INDEX group_name ON vfa_groups (group_name(15));
+CREATE INDEX group_role_id_name ON vfa_groups (role_id_default, group_name(15));
+
+-- vfa_group_awards
+ALTER TABLE vfa_group_awards ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+CREATE INDEX group_awards_group_id ON vfa_group_awards (group_id, award_id);
+CREATE INDEX group_awards_award_id ON vfa_group_awards (award_id, group_id);
+
+--  vfa_invitations
+CREATE INDEX invitation_category_type ON vfa_invitations (category(5), type(5));
+CREATE INDEX invitation_category_group ON vfa_invitations (category(5), group_id);
+
+--  vfa_regin
+CREATE INDEX regin_type_created_date ON vfa_regin (type(5), created_date);
+CREATE INDEX regin_created_user_type_created_date ON vfa_regin (created_user_id, type(5), created_date);
+CREATE INDEX regin_type_group_state ON vfa_regin (type(5), group_id, state(5), created_date);
+CREATE INDEX regin_process_end__type_group_state ON vfa_regin (process_end, type(5), group_id, state(5), created_date);
+CREATE INDEX regin_code ON vfa_regin (code(15));
+
+-- vfa_regin_users
+CREATE INDEX regin_users_regin_id ON vfa_regin_users (regin_id, user_id);
+CREATE INDEX regin_users_user_id ON vfa_regin_users (user_id, regin_id);
+CREATE INDEX regin_users_regin_id_created_date ON vfa_regin_users (regin_id, created_date);
+
 --  vfa_roles
-CREATE INDEX user_roles_role_name ON vfa_roles (role_name(15));
+CREATE INDEX role_role_name ON vfa_roles (role_name(15));
+
+--  vfa_selections
+CREATE INDEX selection_year_name ON vfa_selections (year, name(20));
+
+-- vfa_selection_titles
+ALTER TABLE vfa_selection_titles ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+CREATE INDEX selection_titles_selection_id ON vfa_selection_titles (selection_id, title_id);
+CREATE INDEX selection_titles_title_id ON vfa_selection_titles (title_id, selection_id);
+
+--  vfa_titles
+CREATE INDEX title_order_title ON vfa_titles (order_title(20));
+CREATE INDEX title_title_numbers ON vfa_titles (title(15), numbers(5));
+
+-- vfa_title_docs
+ALTER TABLE vfa_title_docs ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+CREATE INDEX title_docs_title_id ON vfa_title_docs (title_id, doc_id);
+CREATE INDEX title_docs_doc_id ON vfa_title_docs (doc_id, title_id);
 
 -- vfa_users
 CREATE INDEX user_last_first_name ON vfa_users (last_name(20), first_name(20));
@@ -261,3 +303,10 @@ SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score) FROM vfa_vot
 			AND (vfa_votes.vote_id = vfa_vote_items.vote_id) AND (vfa_vote_items.score > -1) GROUP BY vfa_vote_items.title_id;
 
 SELECT * FROM vfa_vote_results WHERE award_id=43 ORDER BY average DESC;
+
+SELECT * FROM vfa_vote_stats WHERE award_id=43 ORDER BY code;
+
+SELECT * FROM vfa_titles WHERE title='Blue Note' AND numbers='#1';
+
+SELECT * FROM vfa_titles, vfa_selection_titles WHERE (vfa_selection_titles.title_id = vfa_titles.title_id)
+  AND (vfa_selection_titles.selection_id = 31) ORDER BY vfa_titles.order_title;
