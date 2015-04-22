@@ -9,7 +9,7 @@
 		</h3>
 	</div>
 	<?php if ($this->oAward) : ?>
-		<div class="panel-body">
+		<div class="panel-body panel-condensed">
 			<div class="row">
 				<div class="col-md-12">
 					<?php for ($i = 0; ($i < 1 && $i < count($this->toResults)); $i++) : ?>
