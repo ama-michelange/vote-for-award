@@ -615,6 +615,7 @@
     color: #EEEEEE;
     padding-left: 12px;
 }
+
 .label-default.label-disabled {
     /*color: #CCCCCC;*/
 }
@@ -678,7 +679,11 @@
 }
 
 .container > .jumbotron {
-    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.container > .carousel {
+    margin-right: -15px;
 }
 
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small {
@@ -703,10 +708,10 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
     margin-right: 44px;
 }
 
-
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default, a.btn-default:hover {
     text-decoration: none;
 }
+
 .btn-info, a.btn-info {
     /*color: #333333;*/
     background-color: #76B4CF;
@@ -776,7 +781,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
 }
 
 .jumbotron .margin-bottom-max {
-    margin-bottom: 50px;
+    margin-bottom: 25px;
 }
 
 .navbar-default {
