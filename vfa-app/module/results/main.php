@@ -51,7 +51,9 @@ class module_results extends abstract_module
 			$navBar->setTitle('Résultat du dernier prix', new NavLink('results', 'last'));
 		} else if (_root::getAction() == 'archives') {
 			$navBar->setTitle('Archives', new NavLink('results', 'archives'));
-			$this->buildMenuAwardArchive($navBar->getChild('left'));
+			$this->buildMenuAwardArchive($navBar);
+		} else if (_root::getAction() == 'exportVotes') {
+			$this->buildMenuAwardExport($navBar);
 		}
 		return $navBar;
 	}
@@ -92,9 +94,9 @@ class module_results extends abstract_module
 	}
 
 	/**
-	 * @param Bar $pBar
+	 * @param NavBar $pNavBar
 	 */
-	private function buildMenuAwardArchive($pBar)
+	private function buildMenuAwardArchive($pNavBar)
 	{
 		$tItems = array();
 		$tAwards = model_award::getInstance()->findAllCompleted(true);
@@ -102,7 +104,19 @@ class module_results extends abstract_module
 			$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
 				new NavLink('results', 'archives', array('award_id' => $award->award_id)));
 		}
-		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres prix', 'Autre prix', true));
+		$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres prix', 'Autre prix', true));
+		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Export',
+			new NavLink('results', 'exportVotes', array('award_id' => $this->currentIdAward))));
+	}
+
+	/**
+	 * @param NavBar $pNavBar
+	 */
+	private function buildMenuAwardExport($pNavBar)
+	{
+		$pNavBar->setTitle('Export des votes', new NavLink('results', 'exportVotes', array('award_id' => _root::getParam('award_id'))));
+		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Archive',
+			new NavLink('results', 'archives', array('award_id' => _root::getParam('award_id')))));
 	}
 
 	public function _index()
@@ -166,6 +180,27 @@ class module_results extends abstract_module
 		$oView->oAward = $oAward;
 		$oView->toResults = $toResults;
 		$oView->toStats = $toStats;
+		$this->oLayout->add('work', $oView);
+
+		// Memo du prix visualisé pour la construction du menu
+		$this->currentIdAward = $oAward->getId();
+	}
+
+	public function _exportVotes()
+	{
+		$toResults = null;
+		$oAward = $this->selectArchiveAwardCompleted(_root::getParam('award_id'));
+		if (null != $oAward) {
+			$toTitles = $oAward->findTitles();
+			$toVotes = model_vote::getInstance()->findAllByAwardIdOrderUser($oAward->getId());
+			if (count($toVotes) == 0) {
+				$toVotes = model_vote::getInstance()->findAllByAwardId($oAward->getId());
+			}
+		}
+		$oView = new _view('results::award_export_votes');
+		$oView->oAward = $oAward;
+		$oView->toTitles = $toTitles;
+		$oView->toVotes = $toVotes;
 		$this->oLayout->add('work', $oView);
 	}
 
