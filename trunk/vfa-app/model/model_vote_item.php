@@ -47,6 +47,15 @@ class model_vote_item extends abstract_model
 		return $this->findMany('SELECT * FROM ' . $this->sTable);
 	}
 
+	/**
+	 * @return row_vote_item[]
+	 */
+	public function findAllByVoteId($pVoteId)
+	{
+		return $this->findMany('SELECT * FROM vfa_vote_items, vfa_titles' .
+			' WHERE vfa_vote_items.vote_id=? AND vfa_vote_items.title_id=vfa_titles.title_id' . ' ORDER BY vfa_titles.order_title', $pVoteId);
+	}
+
 }
 
 class row_vote_item extends abstract_row

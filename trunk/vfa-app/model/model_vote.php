@@ -59,6 +59,26 @@ class model_vote extends abstract_model
 
 	/**
 	 * @param $pAwardId
+	 * @return row_vote[]
+	 */
+	public function findAllByAwardId($pAwardId)
+	{
+			return $this->findMany('SELECT * FROM ' . $this->sTable . ' WHERE award_id=?', $pAwardId);
+	}
+
+	/**
+	 * @param $pAwardId
+	 * @return row_vote[]
+	 */
+	public function findAllByAwardIdOrderUser($pAwardId)
+	{
+		$sql = 'SELECT * FROM vfa_votes,vfa_users WHERE vfa_votes.award_id=?' .
+			' AND vfa_votes.user_id=vfa_users.user_id ORDER BY vfa_users.login';
+		return $this->findMany($sql, $pAwardId);
+	}
+
+	/**
+	 * @param $pAwardId
 	 * @param $pGroupId
 	 * @return int
 	 */
@@ -181,5 +201,13 @@ class row_vote extends abstract_row
 	public function setVoteItems($ptoVoteItems)
 	{
 		$this->toVoteItems = $ptoVoteItems;
+	}
+
+	/**
+	 * @return row_vote_item[]
+	 */
+	public function findVoteItems()
+	{
+		return model_vote_item::getInstance()->findAllByVoteId($this->getId());
 	}
 }
