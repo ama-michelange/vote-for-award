@@ -226,7 +226,7 @@ class module_votes extends abstract_module
 		$toVoteItems = $this->extractParamsToVoteItems();
 		$oVote->setVoteItems($toVoteItems);
 		// Calcule le nombre de vote valide
-		$this->calcVote($oVote);
+		$oVote = $this->calcVote($oVote);
 		// Sauvegarde
 		$this->saveVote($oVote);
 
@@ -281,7 +281,7 @@ class module_votes extends abstract_module
 
 	/**
 	 * @param $poVote row_vote
-	 * @return void
+	 * @return row_vote
 	 */
 	private function calcVote($poVote)
 	{
@@ -300,6 +300,7 @@ class module_votes extends abstract_module
 		} else {
 			$poVote->average = 0;
 		}
+		return $poVote;
 	}
 
 	/**

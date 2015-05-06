@@ -188,7 +188,6 @@ class module_results extends abstract_module
 
 	public function _exportVotes()
 	{
-		$toResults = null;
 		$oAward = $this->selectArchiveAwardCompleted(_root::getParam('award_id'));
 		if (null != $oAward) {
 			$toTitles = $oAward->findTitles();
@@ -203,7 +202,84 @@ class module_results extends abstract_module
 		$oView->toVotes = $toVotes;
 		$this->oLayout->add('work', $oView);
 	}
+	public function _recalcVotes()
+	{
+		$oAward = $this->selectArchiveAwardCompleted('43');
+		if (null != $oAward) {
+			$toTitles = $oAward->findTitles();
+			$toVotes = model_vote::getInstance()->findAllByAwardIdOrderUser($oAward->getId());
+			if (count($toVotes) == 0) {
+				$toVotes = model_vote::getInstance()->findAllByAwardId($oAward->getId());
+			}
+		}
 
+		foreach($toVotes as $vote){
+			// Recherche les titres sélectionnés du prix pour remplir le bulletin de vote détaillé
+			$toVoteItems = array();
+			foreach ($toTitles as $oTitle) {
+				// Recherche du vote associé au titre
+				$oVoteItem = model_vote_item::getInstance()->findByVoteIdTitleId($vote->getId(), $oTitle->getId());
+				$toVoteItems[$oTitle->getId()] = $oVoteItem;
+				if ($oVoteItem->isEmpty()) {
+					$oVoteItem->vote_id = $vote->getId();
+					$oVoteItem->title_id = $oTitle->getId();
+				}
+				$oVoteItem->setTitle($oTitle);
+			}
+			$vote->setVoteItems($toVoteItems);
+			$vote = $this->calcVote($vote);
+			$this->saveVote($vote);
+		}
+
+		echo("TERMINE");
+	}
+	/**
+	 * @param $poVote row_vote
+	 * @return row_vote
+	 */
+	private function calcVote($poVote)
+	{
+		$nb = 0;
+		$sum = 0.0;
+		$toVoteItems = $poVote->getVoteItems();
+		foreach ($toVoteItems as $oVoteItem) {
+			if ($oVoteItem->score > -1) {
+				$nb++;
+				$sum += $oVoteItem->score;
+			}
+		}
+		$poVote->number = $nb;
+		if ($nb) {
+			$poVote->average = $sum / $nb;
+		} else {
+			$poVote->average = 0;
+		}
+		return $poVote;
+	}
+
+	/**
+	 * @param $poVote row_vote
+	 * @return void
+	 */
+	private function saveVote($poVote)
+	{
+		$poVote->save();
+		$toVoteItems = $poVote->getVoteItems();
+		foreach ($toVoteItems as $oVoteItem) {
+			$oVoteItem->vote_id = $poVote->vote_id;
+			if ($oVoteItem->vote_item_id) {
+				$last = model_vote_item::getInstance()->findById($oVoteItem->getId());
+				if (($oVoteItem->score != $last->score) || (strcmp($oVoteItem->comment, $last->comment) != 0)) {
+					$oVoteItem->modified = plugin_vfa::dateTimeSgbd();
+					$oVoteItem->update();
+				}
+			} else {
+				$oVoteItem->created = plugin_vfa::dateTimeSgbd();
+				$oVoteItem->modified = $oVoteItem->created;
+				$oVoteItem->save();
+			}
+		}
+	}
 	/**
 	 * Renvoie le prix en cours : par défaut le prix public sinon le prix demandé.
 	 * @param null $pAwardId string Si présent renvoie le prix demandé si en cours
