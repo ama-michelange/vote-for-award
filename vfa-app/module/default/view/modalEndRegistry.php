@@ -4,9 +4,6 @@
 			<form action="" method="POST">
 				<input type="hidden" name="regin_id" value="<?php echo $this->oRegistry->regin_id ?>"/>
 				<input type="hidden" name="user_id" value="<?php echo $this->oRegistry->oUser->user_id ?>"/>
-				<!--				<div class="modal-header">-->
-				<!--					<h4 class="modal-title">Inscription terminée</h4>-->
-				<!--				</div>-->
 				<div class="modal-body">
 					<?php if ($this->oRegistry->createAccount) : ?>
 						<h4>Le compte est créé</h4>

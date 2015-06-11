@@ -11,6 +11,7 @@
 				$('#inputLastName').focus();
 			}
 		});
+
 		$('#cancelAccount').on('click', function (pEvent) {
 			pEvent.preventDefault();
 			$('#btnLogin').show();
