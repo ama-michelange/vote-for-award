@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * plugin_rss classe gerant l'url rewriting
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class plugin_routing
 {
@@ -21,7 +22,7 @@ class plugin_routing
 	 */
 	public function __construct()
 	{
-		include (_root::getConfigVar('urlrewriting.conf'));
+		include(_root::getConfigVar('urlrewriting.conf'));
 		$this->tRoute = $tab;
 	}
 
@@ -30,25 +31,25 @@ class plugin_routing
 	 *
 	 * @access public
 	 * @param string $sNav
-	 *        	variable de navigation exple article::list
+	 *          variable de navigation exple article::list
 	 * @param array $tParam
-	 *        	tableau de parametre
+	 *          tableau de parametre
 	 * @param bool $bAmp
-	 *        	retourne l'url avec ou sans les &amp;
+	 *          retourne l'url avec ou sans les &amp;
 	 */
 	public function getLink($sNav, $tParam = null, $bAmp = null)
 	{
 		foreach ($this->tRoute as $sUrl => $tUrl) {
-			if ($tUrl['nav'] == $sNav and ! isset($tUrl['tParam']) and $tParam == null) {
+			if ($tUrl['nav'] == $sNav and !isset($tUrl['tParam']) and $tParam == null) {
 				return $this->convertUrl($sUrl, $tParam); // si pas de parametres des deux cotes, c est la bonne regle
 			} elseif ($tUrl['nav'] == $sNav and isset($tUrl['tParam']) and is_array($tUrl['tParam']) and is_array($tParam)) {
-				
+
 				foreach ($tUrl['tParam'] as $val) {
-					if (! isset($tParam[$val])) {
+					if (!isset($tParam[$val])) {
 						continue 2;
 					}
 				}
-				
+
 				return $this->convertUrl($sUrl, $tParam);
 				// si la regle demande des parametres, tous presents dans les parametres passes on choisi celle-ci
 			}
@@ -61,21 +62,21 @@ class plugin_routing
 	 *
 	 * @access public
 	 * @param string $sUrl
-	 *        	url
+	 *          url
 	 */
 	public function parseUrl($sUrl)
 	{
 		$sRootScript = $_SERVER['SCRIPT_NAME'];
 		$sRootScript = str_replace(_root::getConfigVar('navigation.scriptname'), '', $sRootScript);
 		$sUrl = str_replace($sRootScript, '', $sUrl);
-		
+
 		/* LOG */
 		_root::getLog()->info('plugin_routing parseUrl(' . $sUrl . ')');
 		if (is_array($this->tRoute)) {
 			foreach ($this->tRoute as $sPattern => $tUrl) {
 				$sPattern = preg_replace('/:([^:])*:/', '([^/]*)', $sPattern);
 				$sPattern = preg_replace('/\//', '\/', $sPattern);
-				
+
 				if (preg_match_all('/^' . $sPattern . '$/', $sUrl, $tTrouve)) {
 					_root::getRequest()->loadModuleAndAction($tUrl['nav']);
 					if (isset($tUrl['tParam']) and is_array($tTrouve[1])) {
@@ -98,7 +99,7 @@ class plugin_routing
 			}
 			/* LOG */
 			_root::getLog()->info(
-				'plugin_routing regle non trouve, 
+				'plugin_routing regle non trouve,
 				utilisation de 404 loadModuleAndAction(' . $this->tRoute['404']['nav'] . ')');
 			if (_root::getConfigVar('urlrewriting.use4O4') == 1) {
 				_root::getRequest()->loadModuleAndAction($this->tRoute['404']['nav']);

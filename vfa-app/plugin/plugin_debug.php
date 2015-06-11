@@ -16,51 +16,51 @@ class plugin_debug
 	public function __construct($sMicrotime)
 	{
 		$this->iStartMicrotime = self::microtime($sMicrotime);
-		
+
 		$iEndTime = self::microtime();
 		self::$tTime[] = array(
 			'End',
 			$iEndTime
 		);
-		
+
 		$iDiff = ($iEndTime - $this->iStartMicrotime);
-		
+
 		$this->add('Time', sprintf('%0.3f', $iDiff) . 's');
-		
+
 		$this->addComplexTimes('times', self::$tTime);
-		
+
 		$this->addComplex('$_GET', print_r($_GET, 1));
-		
+
 		if (isset($_POST)) {
 			$this->addComplex('$_POST', print_r($_POST, 1));
 		}
-		
+
 		if (isset($_SESSION)) {
 			$this->addComplex('$_SESSION', print_r($_SESSION, 1));
 		}
-		
+
 		if (isset($_SERVER)) {
 			$this->addComplex('$_SERVER', print_r($_SERVER, 1));
 		}
-		
+
 		$oRequest = _root::getRequest();
-		
+
 		$this->add('Module', $oRequest->getModule());
 		$this->add('Action', $oRequest->getAction());
-		
+
 		$oFileLog = new _file(_root::getConfigVar('path.log', 'data/log/') . date('Y-m-d') . '_log.csv');
 		if ($oFileLog->exist()) {
 			$oFileLog->load();
 			$sContentLog = $oFileLog->getContent();
 			$this->addFileLog('File log', $sContentLog);
 		}
-		
+
 		$sVarIniConfig = _root::getConfigVar('model.ini.var', 'db');
 		$tClassSgbd = _root::getConfigVar($sVarIniConfig);
 		$this->addComplexIni('Connexions', array(
 			$sVarIniConfig => $tClassSgbd
 		));
-		
+
 		$tConfigSection = array(
 			'path',
 			'cache',
@@ -79,9 +79,9 @@ class plugin_debug
 		foreach ($tConfigSection as $sSection) {
 			$tConfig[$sSection] = _root::getConfigVar($sSection);
 		}
-		
+
 		$this->addComplexIni('Config', $tConfig);
-		
+
 		if (self::$tSpy) {
 			$this->addComplexSpy('Spy variables', self::$tSpy);
 		}
@@ -156,7 +156,7 @@ class plugin_debug
 	{
 		$this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
 		$this->addSep();
-		
+
 		$this->addPopupPrintr($key, $value);
 	}
 
@@ -164,9 +164,9 @@ class plugin_debug
 	{
 		$this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
 		$this->addSep();
-		
+
 		$value = $this->parseTime($value);
-		
+
 		$this->addPopup($key, $value);
 	}
 
@@ -174,9 +174,9 @@ class plugin_debug
 	{
 		$this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
 		$this->addSep();
-		
+
 		$value = $this->parseIni($value);
-		
+
 		$this->addPopup($key, $value);
 	}
 
@@ -184,9 +184,9 @@ class plugin_debug
 	{
 		$this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
 		$this->addSep();
-		
+
 		$sValue = $this->parseSpy($value);
-		
+
 		$this->addPopup($key, $sValue);
 	}
 
@@ -194,9 +194,9 @@ class plugin_debug
 	{
 		$this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
 		$this->addSep();
-		
+
 		$value = $this->parseLog($value);
-		
+
 		$this->addPopup($key, $value);
 	}
 
@@ -209,7 +209,7 @@ class plugin_debug
 	private function addPopupPrintr($key, $value)
 	{
 		$this->addHtml(
-			'<div id="popupDebug' . $key . '" 
+			'<div id="popupDebug' . $key . '"
 			style="display:none;position:absolute;left:0px;bottom:0px;border:2px solid gray;background:white">
 			<p style="text-align:right;background:#ccc;margin:0px;"><a href="#" onclick="closePopup()">Fermer</a></p>
 			<div style="height:350px;width:400px;overflow:auto;padding:10px;">
@@ -221,7 +221,7 @@ class plugin_debug
 	private function addPopup($key, $value)
 	{
 		$this->addHtml(
-			'<div id="popupDebug' . $key . '" 
+			'<div id="popupDebug' . $key . '"
 			style="display:none;position:absolute;left:0px;bottom:0px;border:2px solid gray;background:white">
 			<p style="text-align:right;background:#ccc;margin:0px;"><a href="#" onclick="closePopup()">Fermer</a></p>
 			<div style="height:350px;width:800px;overflow:auto;padding:10px;">
@@ -243,14 +243,14 @@ class plugin_debug
 	private function parseLog($value)
 	{
 		$sep = ' | ';
-		
+
 		$tLine = explode("\n", $value);
 		$sHtml = null;
-		
+
 		$iMax = count($tLine) - 1;
-		for ($i = $iMax; $i > 0; $i --) {
+		for ($i = $iMax; $i > 0; $i--) {
 			$sLine = $tLine[$i];
-			
+
 			$tCase = explode(';', $sLine, 4);
 			$sDate = null;
 			if (isset($tCase[0])) {
@@ -268,18 +268,18 @@ class plugin_debug
 			if (isset($tCase[3])) {
 				$sLog = $tCase[3];
 			}
-			
+
 			if ($sDate == null) {
 				continue;
 			}
-			
+
 			$sHtml .= '<p style="border-bottom:1px dotted gray">';
-			
+
 			$sHtml .= '<span >' . $sDate . '</span> ';
 			$sHtml .= '<span style="font-weight:bold">' . $sTime . '</span>';
-			
+
 			$sHtml .= $sep;
-			
+
 			$sHtml .= '<span style="color:';
 			if ($sType == 'info') {
 				$sHtml .= 'gray';
@@ -287,13 +287,13 @@ class plugin_debug
 				$sHtml .= 'darkblue';
 			}
 			$sHtml .= '">' . $sType . '</span>';
-			
+
 			$sHtml .= $sep;
-			
+
 			$sHtml .= $sLog;
-			
+
 			$sHtml .= '</p>';
-			
+
 			if (preg_match('/module a appeler/', $sLog)) {
 				$sHtml .= '<p>&nbsp;</p>';
 			}
@@ -310,7 +310,7 @@ class plugin_debug
 				$sHtml .= '<p><pre>' . customHtmlentities(print_r($value, 1)) . '</pre></p>';
 			}
 		}
-		
+
 		return $sHtml;
 	}
 
@@ -325,7 +325,7 @@ class plugin_debug
 				$sHtml .= '</p>';
 			}
 		}
-		
+
 		return $sHtml;
 	}
 
@@ -338,25 +338,25 @@ class plugin_debug
 			list ($sLabel, $iTime) = $tDetail;
 			$iDelta = ($iTime - $iPreviousTime);
 			$sHtml .= '<p><strong>' . $sPreviousStep . ' &gt;&gt; ' . $sLabel . '</strong> : ' . sprintf('%0.3f', $iDelta) .
-				 's</p>';
-			
+				's</p>';
+
 			$iPreviousTime = $iTime;
 			$sPreviousStep = $sLabel;
 		}
-		
+
 		$sHtml .= '<p style="border-top:1px solid gray">';
 		$sHtml .= '<strong>Total</strong> ' . sprintf('%0.3f', ($iTime - $this->iStartMicrotime)) . 's';
 		$sHtml .= '</p>';
-		
+
 		if (self::$tTimeById) {
-			
+
 			$sHtml .= '<p>&nbsp;</p>';
-			
+
 			foreach (self::$tTimeById as $sLabel => $tValue) {
-				
+
 				if (isset($tValue['end']) and isset($tValue['start'])) {
 					$iDelta = ($tValue['end'] - $tValue['start']);
-					
+
 					$sHtml .= '<p><strong>' . $sLabel . ' </strong> : ' . sprintf('%0.3f', $iDelta) . 's</p>';
 				} else {
 					$sHtml .= '<p><strong>' . $sLabel . ' </strong> : <span style="color:red">';
@@ -364,7 +364,7 @@ class plugin_debug
 				}
 			}
 		}
-		
+
 		return $sHtml;
 	}
 
@@ -374,6 +374,6 @@ class plugin_debug
 			$sMicrotime = microtime();
 		}
 		$tMicrotime = explode(" ", $sMicrotime);
-		return ((float) $tMicrotime[0] + (float) $tMicrotime[1]);
+		return ((float)$tMicrotime[0] + (float)$tMicrotime[1]);
 	}
 }

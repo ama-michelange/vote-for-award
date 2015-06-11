@@ -2,6 +2,7 @@
 /*
  *
  */
+
 /**
  *
  * @author AMA
@@ -14,9 +15,9 @@ class plugin_validation
 	 *
 	 * @access public
 	 * @param array $tErrors
-	 *        	Le tableau d'erreurs
+	 *          Le tableau d'erreurs
 	 * @param string $sField
-	 *        	Le nom du champ
+	 *          Le nom du champ
 	 * @return string La valeur de l'erreur ou une chaine vide si pas d'erreur
 	 */
 	public static function exist($tErrors, $sField)
@@ -33,9 +34,9 @@ class plugin_validation
 	 *
 	 * @access public
 	 * @param array $tErrors
-	 *        	Le tableau d'erreurs
+	 *          Le tableau d'erreurs
 	 * @param string $sField
-	 *        	Le nom du champ
+	 *          Le nom du champ
 	 * @return string La valeur de l'erreur ou une chaine vide si pas d'erreur
 	 */
 	public static function showDirect($tErrors, $sField)
@@ -52,9 +53,9 @@ class plugin_validation
 	 *
 	 * @access public
 	 * @param array $tErrors
-	 *        	Le tableau d'erreurs
+	 *          Le tableau d'erreurs
 	 * @param string $sField
-	 *        	Le nom du champ
+	 *          Le nom du champ
 	 * @return string La valeur de l'erreur ou une chaine vide si pas d'erreur
 	 */
 	public static function show($tErrors, $sField)
@@ -85,12 +86,12 @@ class plugin_validation
 	 *
 	 * @access public
 	 * @param string $sOriginalClass
-	 *        	La classe originale
+	 *          La classe originale
 	 * @param array $tErrors
-	 *        	Le tableau d'erreurs
+	 *          Le tableau d'erreurs
 	 * @param
-	 *        	array or string $sFields
-	 *        	Le (les) nom du champ
+	 *          array or string $sFields
+	 *          Le (les) nom du champ
 	 * @return string La classe du champ
 	 */
 	public static function addClassError($sOriginalClass, $tErrors, $sFields)

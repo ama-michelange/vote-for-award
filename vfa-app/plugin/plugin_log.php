@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * plugin_log classe pour loguer
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class plugin_log
 {
@@ -38,7 +39,7 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param bool $bActive
-	 *        	true/false selon
+	 *          true/false selon
 	 */
 	public function setApplication($bActif)
 	{
@@ -50,7 +51,7 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param bool $bActive
-	 *        	true/false selon
+	 *          true/false selon
 	 */
 	public function setInformation($bActif)
 	{
@@ -62,7 +63,7 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param bool $bActive
-	 *        	true/false selon
+	 *          true/false selon
 	 */
 	public function setWarning($bActif)
 	{
@@ -74,7 +75,7 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param bool $bActive
-	 *        	true/false selon
+	 *          true/false selon
 	 */
 	public function setError($bActif)
 	{
@@ -86,11 +87,11 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param string $sMessage
-	 *        	message a loguer
+	 *          message a loguer
 	 */
 	public function log($sMessage)
 	{
-		if (! $this->bAppli) {
+		if (!$this->bAppli) {
 			return null;
 		}
 		$this->writefile('log;' . $sMessage);
@@ -102,11 +103,11 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param string $sMessage
-	 *        	message a loguer
+	 *          message a loguer
 	 */
 	public function error($sMessage)
 	{
-		if (! $this->bError) {
+		if (!$this->bError) {
 			return null;
 		}
 		$this->writefile('ERROR;' . $sMessage);
@@ -118,11 +119,11 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param string $sMessage
-	 *        	message a loguer
+	 *          message a loguer
 	 */
 	public function warning($sMessage)
 	{
-		if (! $this->bWarning) {
+		if (!$this->bWarning) {
 			return null;
 		}
 		$this->writefile('Warning;' . $sMessage);
@@ -134,11 +135,11 @@ class plugin_log
 	 *
 	 * @access public
 	 * @param string $sMessage
-	 *        	message a loguer
+	 *          message a loguer
 	 */
 	public function info($sMessage)
 	{
-		if (! $this->bInfo) {
+		if (!$this->bInfo) {
 			return null;
 		}
 		$this->writefile('info;' . $sMessage);
@@ -148,22 +149,22 @@ class plugin_log
 	private function writefile($sMessage)
 	{
 		$sMessage = preg_replace('/\s+/', ' ', $sMessage);
-		
+
 		$oFileLog = new _file(_root::getConfigVar('path.log', 'data/log/') . date('Y-m-d') . '_log.csv');
 		if ($oFileLog->exist()) {
 			$oFileLog->load();
 		}
-		
+
 		$oFileLog->addContent(date('Y-m-d') . ';' . date('H:i:s') . ';' . $sMessage . "\n");
-		
+
 		try {
 			$oFileLog->save();
 		} catch (Exception $e) {
 			throw new Exception(
 				'Probleme lors de l\'ecriture du log' . "\n" . 'note:verifier les droits du repertoire ' .
-					 _root::getConfigVar('path.log', 'data/log') . "\n" . 'Exception: ' . $e->getMessage());
+				_root::getConfigVar('path.log', 'data/log') . "\n" . 'Exception: ' . $e->getMessage());
 		}
-		
+
 		$oFileLog->clean();
 	}
 }

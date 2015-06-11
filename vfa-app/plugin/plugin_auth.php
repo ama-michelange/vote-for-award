@@ -1,13 +1,15 @@
 <?php
+
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * plugin_auth classe pour gerer l'authentification
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class plugin_auth extends abstract_auth
 {
@@ -33,12 +35,12 @@ class plugin_auth extends abstract_auth
 	 */
 	public function isConnected()
 	{
-		if (! $this->_isConnected()) {
+		if (!$this->_isConnected()) {
 			return false;
 		}
-		
+
 		$this->setAccount(unserialize($_SESSION['oAccount']));
-		
+
 		// ajouter critere supp pour verification de l'authentification
 		return true;
 	}
@@ -48,11 +50,11 @@ class plugin_auth extends abstract_auth
 	 *
 	 * @access public
 	 * @param array $tElements
-	 *        	tableau respectant la structure suivante: $array[login][pass]
+	 *          tableau respectant la structure suivante: $array[login][pass]
 	 * @param string $sLogin
-	 *        	login a verifier
+	 *          login a verifier
 	 * @param string $sPass
-	 *        	mot de passe a verifier
+	 *          mot de passe a verifier
 	 * @return bool retourne true/false selong le couple login/mot de passe est correcte ou non
 	 */
 	public function checkLoginPass($tElements, $sLogin, $sPass)
@@ -65,11 +67,11 @@ class plugin_auth extends abstract_auth
 	 *
 	 * @access public
 	 * @param array $tElements
-	 *        	tableau respectant la structure suivante: $array[login][pass]
+	 *          tableau respectant la structure suivante: $array[login][pass]
 	 * @param string $sLogin
-	 *        	login a verifier
+	 *          login a verifier
 	 * @param string $sPass
-	 *        	mot de passe a verifier
+	 *          mot de passe a verifier
 	 * @return bool retourne true/false selong le couple login/mot de passe est correcte ou non
 	 */
 	public function verifLoginPass($tElements, $sLogin, $sPass)
@@ -77,7 +79,7 @@ class plugin_auth extends abstract_auth
 		if (isset($tElements[$sLogin][$sPass])) {
 			$this->_connect();
 			$this->setAccount($tElements[$sLogin][$sPass]);
-			
+
 			return true;
 		}
 		return false;

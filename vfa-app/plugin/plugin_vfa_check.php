@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Classe pour verifier un lot de valeurs (verification de formulaire par exemple)
  * @author Ama

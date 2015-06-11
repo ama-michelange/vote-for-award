@@ -226,7 +226,7 @@ class plugin_email
 				$sMsg .= $this->buildBody($n);
 				$sMsg .= $n;
 				$sMsg .= $this->buildBodyHtml($n);
-				$sMsg .= $n . '--' . $this->sWall. '--';
+				$sMsg .= $n . '--' . $this->sWall . '--';
 				break;
 		}
 

@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * plugin_check classe pour verifier un lot de valeurs (verification de formulaire par exemple)
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class plugin_xsrf
 {
@@ -26,14 +27,14 @@ class plugin_xsrf
 	 * constructeur
 	 *
 	 * @access public
-	 * @param string $sToken        	
+	 * @param string $sToken
 	 */
 	public function __construct()
 	{
 		$this->sSalt = 'fdsfA34T679hjfdsAfef';
 		$this->iLifetime = _root::getConfigVar('security.xsrf.timeout.lifetime');
 		$this->bUseSession = _root::getConfigVar('security.xsrf.session.enabled', 0);
-		
+
 		$this->sSessionVar = 'xsrfTokenArray';
 	}
 
@@ -83,20 +84,20 @@ class plugin_xsrf
 	{
 		$iTime = time();
 		$sToken = $iTime . '####' . $this->genToken($iTime);
-		
+
 		if ($this->bUseSession) {
 			$this->saveToken($iTime . '####' . $this->genToken($iTime));
 		}
-		
+
 		return $sToken;
 	}
 
 	private function saveToken($InputToken)
 	{
-		if (! isset($_SESSION[$this->sSessionVar])) {
+		if (!isset($_SESSION[$this->sSessionVar])) {
 			$_SESSION[$this->sSessionVar] = array();
 		}
-		
+
 		$_SESSION[$this->sSessionVar] = $InputToken;
 	}
 
@@ -116,7 +117,7 @@ class plugin_xsrf
 	 * verifie si le token est valide
 	 *
 	 * @access public
-	 * @param string $sInputToken        	
+	 * @param string $sInputToken
 	 * @return bool retourne true/false selon
 	 */
 	public function checkToken($sInputToken)
@@ -133,7 +134,7 @@ class plugin_xsrf
 			return false;
 		}
 		if ($this->bUseSession) {
-			if (! $this->isTokenSaved($sInputToken)) {
+			if (!$this->isTokenSaved($sInputToken)) {
 				$this->sMsg = 'msg_tokenUnknown';
 				return false;
 			} else {

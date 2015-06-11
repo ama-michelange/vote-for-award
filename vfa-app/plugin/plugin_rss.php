@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * plugin_rss classe gerant le flux rss
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class plugin_rss
 {
@@ -29,7 +30,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du fichier rss
+	 *          nom du fichier rss
 	 */
 	public function __construct($sName = null)
 	{
@@ -43,7 +44,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du fichier rss
+	 *          nom du fichier rss
 	 */
 	public function setName($sName)
 	{
@@ -55,7 +56,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param string $sTitre
-	 *        	titre du flux rss
+	 *          titre du flux rss
 	 */
 	public function setTitre($sTitre)
 	{
@@ -67,7 +68,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param string $sUrl
-	 *        	url du site
+	 *          url du site
 	 */
 	public function setUrl($sUrl)
 	{
@@ -80,7 +81,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param string $sDesc
-	 *        	description du flux rss
+	 *          description du flux rss
 	 */
 	public function setDesc($sDesc)
 	{
@@ -92,7 +93,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param string $sLang
-	 *        	langue du flux rss
+	 *          langue du flux rss
 	 */
 	public function setLang($sLang)
 	{
@@ -104,7 +105,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param string $sAdresseRss
-	 *        	adresse du flux rss
+	 *          adresse du flux rss
 	 */
 	public function setAdresseRss($sAdresseRss)
 	{
@@ -116,7 +117,7 @@ class plugin_rss
 	 *
 	 * @access public
 	 * @param array $tab
-	 *        	tableau comprenant les cles date,auteur,titre,description,link et id
+	 *          tableau comprenant les cles date,auteur,titre,description,link et id
 	 */
 	public function addNews($tab)
 	{
@@ -133,7 +134,7 @@ class plugin_rss
 		if (isset($tab['link'])) {
 			$this->news .= '<link>' . $tab['link'] . '</link>';
 		}
-		
+
 		$this->news .= '</item>';
 	}
 
@@ -150,11 +151,11 @@ class plugin_rss
 		$foot = '</rss>';
 		$atom = '<atom:link href="' . $this->sAdresseRss . '" rel="self" type="application/rss+xml" />';
 		$sRss = $head . '<channel>' . $atom . $this->header . $this->news . '</channel>' . $foot;
-		
+
 		$oFile = new _file(_root::getConfigVar('path.data') . 'xml/' . $this->sName . '.rss');
 		$oFile->setContent($sRss);
 		$oFile->save();
-		
+
 		return $sRss;
 	}
 }

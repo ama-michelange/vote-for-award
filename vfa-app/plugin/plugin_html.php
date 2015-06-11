@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * plugin_html classe pour generer de l'html
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class plugin_html
 {
@@ -17,12 +18,12 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sSrc
-	 *        	path de l'image, par defaut utilisera le path.img configure dans conf/site.php
+	 *          path de l'image, par defaut utilisera le path.img configure dans conf/site.php
 	 * @param string $sAlt
-	 *        	texte alternatif
+	 *          texte alternatif
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <img style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <img style="border:1px"...
 	 * @return string retourne le code html de l'image
 	 */
 	public function getImg($sSrc, $sAlt = null, $tOption = null)
@@ -39,10 +40,10 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sContenu
-	 *        	contenu de la div
+	 *          contenu de la div
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <div style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <div style="border:1px"...
 	 * @return string retourne le code html de la div
 	 */
 	public function getDiv($sContenu, $tOption = null)
@@ -55,17 +56,17 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ input
+	 *          nom du champ input
 	 * @param string $sValue
-	 *        	valeur du champ input
+	 *          valeur du champ input
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <input style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <input style="border:1px"...
 	 * @return string retourne le code html de l'input
 	 */
 	public function getInput($sName, $sValue = null, $tOption = null)
 	{
-		if (! isset($tOption['class'])) {
+		if (!isset($tOption['class'])) {
 			$tOption['class'] = 'input';
 		}
 		return '<input type="input" name="' . $sName . '" value="' . $sValue . '"' . $this->getOptionFromTab($tOption) . '/>';
@@ -76,19 +77,19 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ input
+	 *          nom du champ input
 	 * @param string $sValue
-	 *        	valeur du champ input
+	 *          valeur du champ input
 	 * @param bool $bChecked
-	 *        	coche ou non
+	 *          coche ou non
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <input style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <input style="border:1px"...
 	 * @return string retourne le code html de l'input radio
 	 */
 	public function getInputRadio($sName, $sValue = null, $bChecked = false, $tOption = null)
 	{
-		if (! isset($tOption['class'])) {
+		if (!isset($tOption['class'])) {
 			$tOption['class'] = 'input';
 		}
 		$sChecked = '';
@@ -104,19 +105,19 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ input
+	 *          nom du champ input
 	 * @param string $sValue
-	 *        	valeur du champ input
+	 *          valeur du champ input
 	 * @param bool $bChecked
-	 *        	coche ou non
+	 *          coche ou non
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <input style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <input style="border:1px"...
 	 * @return string retourne le code html de l'input checkbox
 	 */
 	public function getInputCheckbox($sName, $sValue = null, $bChecked = false, $tOption = null)
 	{
-		if (! isset($tOption['class'])) {
+		if (!isset($tOption['class'])) {
 			$tOption['class'] = 'input';
 		}
 		$sChecked = '';
@@ -132,19 +133,19 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ select
+	 *          nom du champ select
 	 * @param array $tSelect
-	 *        	tableau key/valeur du select (options)
+	 *          tableau key/valeur du select (options)
 	 * @param string $sValue
-	 *        	valeur du champ select
+	 *          valeur du champ select
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <input style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <input style="border:1px"...
 	 * @return string retourne le code html de l'input
 	 */
 	public function getSelect($sName, $tSelect, $sValue = null, $tOption = null)
 	{
-		if (! isset($tOption['class'])) {
+		if (!isset($tOption['class'])) {
 			$tOption['class'] = 'select';
 		}
 		$sHtml = '<select name="' . $sName . '"' . $this->getOptionFromTab($tOption) . '>';
@@ -166,19 +167,19 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ select
+	 *          nom du champ select
 	 * @param array $tSelect
-	 *        	tableau key/valeur du select (options)
+	 *          tableau key/valeur du select (options)
 	 * @param string $tValue
-	 *        	valeur du champ select (tableau)
+	 *          valeur du champ select (tableau)
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <input style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <input style="border:1px"...
 	 * @return string retourne le code html de l'input
 	 */
 	public function getSelectMultiple($sName, $tSelect, $tValue = null, $tOption = null)
 	{
-		if (! isset($tOption['class'])) {
+		if (!isset($tOption['class'])) {
 			$tOption['class'] = 'select';
 		}
 		$sHtml = '<select multiple="multiple" name="' . $sName . '[]"' . $this->getOptionFromTab($tOption) . '>';
@@ -200,17 +201,17 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ textarea
+	 *          nom du champ textarea
 	 * @param string $sValue
-	 *        	valeur du champ textarea
+	 *          valeur du champ textarea
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <textarea style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <textarea style="border:1px"...
 	 * @return string retourne le code html de l'input
 	 */
 	public function getTextarea($sName, $sValue = null, $tOption = null)
 	{
-		if (! isset($tOption['class'])) {
+		if (!isset($tOption['class'])) {
 			$tOption['class'] = 'textarea';
 		}
 		return '<textarea name="' . $sName . '"' . $this->getOptionFromTab($tOption) . '>' . $sValue . '</textarea>';
@@ -221,12 +222,12 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ date
+	 *          nom du champ date
 	 * @param string $sValue
-	 *        	valeur du champ date au format y-m-d
+	 *          valeur du champ date au format y-m-d
 	 * @param array $tOption
-	 *        	tableau contenant autant d'options a ajouter
-	 *        	array('style'=>'border:1px') >> <input style="border:1px"...
+	 *          tableau contenant autant d'options a ajouter
+	 *          array('style'=>'border:1px') >> <input style="border:1px"...
 	 * @return string retourne le code html de l'input date
 	 */
 	public function getInputDate($sName, $sValue = null, $tOption = null)
@@ -250,7 +251,7 @@ class plugin_html
 		$tOption2['class'] = 'inputDateAnnee';
 		$sOptions = $this->getOptionFromTab($tOption2);
 		$sHtml .= '<input type="input" name="' . $sName . '_annee" value="' . $sValueAnnee . '"' . $sOptions . '/>';
-		if (! isset($tOption['class'])) {
+		if (!isset($tOption['class'])) {
 			$tOption['class'] = 'inputDate';
 		}
 		return $this->getDiv($sHtml, $tOption);
@@ -261,18 +262,19 @@ class plugin_html
 	 *
 	 * @access public
 	 * @param array $tPost
-	 *        	tableau ou chercher ($_POST,$_GET)
+	 *          tableau ou chercher ($_POST,$_GET)
 	 * @param string $sName
-	 *        	nom du champ date
+	 *          nom du champ date
 	 * @return string retourne la date au format YYYY-MM-DD
 	 */
 	public function getDateFromInput($tPost, $sName)
 	{
-		if (! isset($tPost[$sName . '_annee']) or ! isset($tPost[$sName . '_mois']) or ! isset($tPost[$sName . '_jour']) or
-			 $tPost[$sName . '_annee'] == '' or $tPost[$sName . '_mois'] == '' or $tPost[$sName . '_jour'] == '') {
+		if (!isset($tPost[$sName . '_annee']) or !isset($tPost[$sName . '_mois']) or !isset($tPost[$sName . '_jour']) or
+			$tPost[$sName . '_annee'] == '' or $tPost[$sName . '_mois'] == '' or $tPost[$sName . '_jour'] == ''
+		) {
 			return null;
 		}
-		return (int) $tPost[$sName . '_annee'] . '-' . (int) $tPost[$sName . '_mois'] . '-' . (int) $tPost[$sName . '_jour'];
+		return (int)$tPost[$sName . '_annee'] . '-' . (int)$tPost[$sName . '_mois'] . '-' . (int)$tPost[$sName . '_jour'];
 	}
 
 	private function getOptionFromTab($tOption)

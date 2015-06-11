@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * plugin_check classe pour verifier un lot de valeurs (verification de formulaire par exemple)
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class plugin_valid
 {
@@ -25,7 +26,7 @@ class plugin_valid
 	 *
 	 * @access public
 	 * @param
-	 *        	array tableau a verifier ($_POST,tableau de la row...)
+	 *          array tableau a verifier ($_POST,tableau de la row...)
 	 */
 	public function __construct($tPost)
 	{
@@ -40,7 +41,7 @@ class plugin_valid
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ
+	 *          nom du champ
 	 * @return bool retourne true/false selon
 	 */
 	public function exist($sName)
@@ -57,12 +58,12 @@ class plugin_valid
 	 *
 	 * @access public
 	 * @param string $sName
-	 *        	nom du champ
+	 *          nom du champ
 	 * @return undefined retourne la valeur du champ
 	 */
 	public function getValue($sName)
 	{
-		if (! isset($this->tPost[$sName])) {
+		if (!isset($this->tPost[$sName])) {
 			return null;
 		}
 		return $this->tPost[$sName];

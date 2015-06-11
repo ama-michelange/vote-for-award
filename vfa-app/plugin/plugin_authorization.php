@@ -21,7 +21,7 @@ class plugin_authorization
 			if (false == $bInRole) {
 				if (is_array($pRole)) {
 					$size = count($pRole);
-					for ($i = 0; $i < $size; ++ $i) {
+					for ($i = 0; $i < $size; ++$i) {
 						$bInRole = $bInRole || isset($tRoles[$pRole[$i]]);
 					}
 				} else {
@@ -35,7 +35,7 @@ class plugin_authorization
 	public function enable()
 	{
 		_root::getAuth()->enable();
-		
+
 		$sModule = _root::getModule();
 		$sAction = _root::getAction();
 		$bPermit = $this->permit($sModule . '::' . $sAction);
