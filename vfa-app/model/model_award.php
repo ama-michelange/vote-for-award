@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_award
+ */
 class model_award extends abstract_model
 {
 
