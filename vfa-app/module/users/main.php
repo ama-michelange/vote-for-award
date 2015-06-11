@@ -260,8 +260,7 @@ class module_users extends abstract_module
 				$oView->oViewShowBoardGroup = $this->buildViewShowBoardGroup($oUser);
 				$oView->oViewShowParticipations = $this->buildViewShowParticipations($oUser);
 			}
-		}
-		else{
+		} else {
 			_root::redirect('users::index');
 		}
 		return $oView;

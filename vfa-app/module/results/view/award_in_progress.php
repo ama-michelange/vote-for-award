@@ -3,7 +3,8 @@
 		<h3 class="panel-title">
 			<?php if ($this->oAward) : ?>
 				<?php echo $this->oAward->toString() ?>
-				<span class="pull-right"><small>Fin du prix le</small> <?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?></span>
+				<span class="pull-right"><small>Fin du prix le
+					</small> <?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?></span>
 			<?php else : ?>
 				Aucun prix en cours ...
 			<?php endif; ?>

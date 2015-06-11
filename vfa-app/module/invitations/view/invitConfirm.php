@@ -1,10 +1,11 @@
 <form class="form-horizontal" action="" method="POST">
 	<input type="hidden" name="token" value="<?php echo $this->token ?>"/> <input type="hidden"
-																											name="phase"
-																											value="<?php echo $this->oRegistry->phase ?>"/> <input
+																																								name="phase"
+																																								value="<?php echo $this->oRegistry->phase ?>"/>
+	<input
 		type="hidden" name="type"
 		value="<?php echo $this->oRegistry->type ?>"/> <input type="hidden" name="email"
-																				value="<?php echo $this->oRegistry->email ?>"/>
+																													value="<?php echo $this->oRegistry->email ?>"/>
 	<?php if ($this->oRegistry->award_id): ?>
 		<input type="hidden" name="award_id" value="<?php echo $this->oRegistry->award_id ?>"/>
 	<?php endif; ?>
@@ -29,7 +30,7 @@
 				<div class="alert alert-warning clearfix">
 					<p><?php echo plugin_validation::show($this->tMessage, 'token') ?>
 						<a class="btn btn-sm btn-warning pull-right"
-							href="<?php echo $this->getLink(_root::getParamNav()) ?>">Fermer</a>
+							 href="<?php echo $this->getLink(_root::getParamNav()) ?>">Fermer</a>
 					</p>
 				</div>
 			</div>

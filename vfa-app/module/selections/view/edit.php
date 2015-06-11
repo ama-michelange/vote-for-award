@@ -10,7 +10,8 @@
 			<div class="panel-body">
 				<div class="alert alert-warning clearfix">
 					<p><?php echo plugin_validation::show($this->tMessage, 'token') ?>
-						<a class="btn btn-sm btn-warning pull-right" href="<?php echo $this->getLink('selections::index') ?>">Fermer</a>
+						<a class="btn btn-sm btn-warning pull-right"
+							 href="<?php echo $this->getLink('selections::index') ?>">Fermer</a>
 					</p>
 				</div>
 			</div>
@@ -20,11 +21,13 @@
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'name') ?>">
 							<label for="inputName">Nom
-								<span class="btn btn-xs btn-link" data-rel="tooltip" data-original-title="Le nom de la sélection à afficher.">
+								<span class="btn btn-xs btn-link" data-rel="tooltip"
+											data-original-title="Le nom de la sélection à afficher.">
 									<i class="glyphicon glyphicon-info-sign"></i>
 								</span>
 							</label>
-							<input class="form-control" type="text" id="inputName" name="name" value="<?php echo $this->oSelection->name ?>" autofocus />
+							<input class="form-control" type="text" id="inputName" name="name"
+										 value="<?php echo $this->oSelection->name ?>" autofocus/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'name') ?></span>
 						</div>
 					</div>
@@ -35,7 +38,8 @@
 									<i class="glyphicon glyphicon-info-sign"></i>
 								</span>
 							</label>
-							<input class="form-control" type="text" id="inputYear" name="year" value="<?php echo $this->oSelection->year ?>"/>
+							<input class="form-control" type="text" id="inputYear" name="year"
+										 value="<?php echo $this->oSelection->year ?>"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'year') ?></span>
 						</div>
 					</div>
@@ -51,7 +55,7 @@
 								class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 					<?php else: ?>
 						<a class="btn btn-default"
-							href="<?php echo $this->getLink('selections::read', array('id' => $this->oSelection->selection_id)) ?>"><i
+							 href="<?php echo $this->getLink('selections::read', array('id' => $this->oSelection->selection_id)) ?>"><i
 								class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 					<?php endif; ?>
 				</div>

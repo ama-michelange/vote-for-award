@@ -28,13 +28,11 @@
 			if ($this->oRegistry->openAccount) {
 				$collapseInAccount = ' in';
 				$btnAccount = 'style="display:none;"';
-			}
-			// Gère l'ouverture ou la fermeture du panel d'identification
+			} // Gère l'ouverture ou la fermeture du panel d'identification
 			elseif ($this->oRegistry->openLogin) {
 				$collapseInLogin = ' in';
 				$btnLogin = 'style="display:none;"';
-			}
-			// Gère l'ouverture ou la fermeture du panel Mot de passe
+			} // Gère l'ouverture ou la fermeture du panel Mot de passe
 			elseif ($this->oRegistry->openPassword) {
 				$collapseInPassword = ' in';
 				$btnPassword = 'style="display:none;"';
@@ -52,7 +50,8 @@
 							</div>
 							<div class="col-xs-10 col-sm-4 col-lg-4 pull-right">
 								<a id="btnAccount" data-toggle="collapse" data-parent="#accordion" href="#collapseAccount"
-									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnAccount ?>>Enregistrez-vous !</a>
+									 class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnAccount ?>>Enregistrez-vous
+									!</a>
 							</div>
 						</div>
 					</div>
@@ -78,7 +77,7 @@
 							</div>
 							<div class="col-xs-10 col-sm-4 col-lg-4 pull-right">
 								<a id="btnLogin" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin"
-									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnLogin ?>>
+									 class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnLogin ?>>
 									Identifiez-vous !
 								</a>
 							</div>
@@ -106,7 +105,7 @@
 							</div>
 							<div class="col-xs-10 col-sm-4 col-lg-4 pull-right">
 								<a id="btnPassword" data-toggle="collapse" data-parent="#accordion" href="#collapsePassword"
-									class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnPassword ?>>
+									 class="btn btn-default btn-lg btn-block margin-top-sm" <?php echo $btnPassword ?>>
 									Un peu d'aide ?</a>
 							</div>
 						</div>

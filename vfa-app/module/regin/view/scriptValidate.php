@@ -38,7 +38,7 @@
 
 		function pushAllButtons(p_State) {
 			var parents = $("[id^=tr_]");
-			parents.each(function(){
+			parents.each(function () {
 				var button = $(this).find(".btn-valid-on");
 				pushButton(button, p_State);
 			});

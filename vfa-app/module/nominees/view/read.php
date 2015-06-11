@@ -1,1 +1,1 @@
-<?php echo $this->oViewShow->show();?>
+<?php echo $this->oViewShow->show(); ?>

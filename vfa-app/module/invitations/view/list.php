@@ -67,13 +67,14 @@
 						</td>
 						<td>
 						<span class="label <?php echo $stateColor ?>" data-rel="tooltip"
-								data-original-title="<?php echo $stateTip ?>"><?php echo $oInvitation->showState() ?></span>
+									data-original-title="<?php echo $stateTip ?>"><?php echo $oInvitation->showState() ?></span>
 							<?php if (_root::getACL()->permit('invitations::send') &&
 								($oInvitation->state == plugin_vfa::STATE_OPEN || $oInvitation->state == plugin_vfa::STATE_REJECTED)
 							) : ?>
 								&nbsp;
-								<a rel="tooltip" data-original-title="Renvoyer l'invitation par email à <?php echo $oInvitation->email ?>"
-									href="<?php echo $this->getLink('invitations::send', array('id' => $oInvitation->getId())) ?>">
+								<a rel="tooltip"
+									 data-original-title="Renvoyer l'invitation par email à <?php echo $oInvitation->email ?>"
+									 href="<?php echo $this->getLink('invitations::send', array('id' => $oInvitation->getId())) ?>">
 									<i class="glyphicon glyphicon-envelope"></i>
 								</a>
 							<?php endif; ?>

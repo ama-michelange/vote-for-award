@@ -18,11 +18,13 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-5 col-md-4 col-lg-3 view-label">Créé</div>
-			<div class="col-sm-7 col-md-8 col-lg-9 view-value"><?php echo plugin_vfa::toStringDateShow($this->oUser->created_date) ?></div>
+			<div
+				class="col-sm-7 col-md-8 col-lg-9 view-value"><?php echo plugin_vfa::toStringDateShow($this->oUser->created_date) ?></div>
 		</div>
 		<div class="row">
 			<div class="col-sm-5 col-md-4 col-lg-3 view-label">Modifié</div>
-			<div class="col-sm-7 col-md-8 col-lg-9 view-value"><?php echo plugin_vfa::toStringDateShow($this->oUser->modified_date) ?></div>
+			<div
+				class="col-sm-7 col-md-8 col-lg-9 view-value"><?php echo plugin_vfa::toStringDateShow($this->oUser->modified_date) ?></div>
 		</div>
 	</div>
 </div>

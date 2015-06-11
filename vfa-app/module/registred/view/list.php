@@ -5,7 +5,7 @@
 			<?php echo $this->oGroup->toString() ?>
 			<?php
 			if ($this->tAwards) {
-				echo '<small>inscrits à un prix</small> '.$this->tAwards[0]->year;
+				echo '<small>inscrits à un prix</small> ' . $this->tAwards[0]->year;
 //				$i = 0;
 //				foreach ($this->tAwards as $oAward) {
 //					if ($i > 0) :   echo ', '; endif;

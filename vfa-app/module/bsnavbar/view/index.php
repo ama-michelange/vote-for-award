@@ -10,7 +10,8 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="inputIdent">Identifiant</label>
-							<input type="text" id="inputIdent" name="login" class="form-control" placeholder="Mon identifiant" required autofocus/>
+							<input type="text" id="inputIdent" name="login" class="form-control" placeholder="Mon identifiant"
+										 required autofocus/>
 						</div>
 						<div class="form-group">
 							<label for="inputPassword">Mot de passe</label>

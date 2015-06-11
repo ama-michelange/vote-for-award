@@ -39,7 +39,8 @@
 									<i class="glyphicon glyphicon-share-alt"></i>
 								</dt>
 								<dd>
-									<a href="<?php echo plugin_vfa::generateURLInvitation($this->oInvitation) ?>" target="_new">Voir l'invitation</a>
+									<a href="<?php echo plugin_vfa::generateURLInvitation($this->oInvitation) ?>" target="_new">Voir
+										l'invitation</a>
 								</dd>
 							</dl>
 						<?php endif; ?>

@@ -19,32 +19,32 @@
 			<div class="panel-heading">
 				<h5 class="panel-title">
 					Habilitations <a class="pull-right accordion-toggle" data-toggle="collapse" href="#auths"><i
-						data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
+							data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 				</h5>
 			</div>
 			<div id="auths" class="collapse in">
 				<table class="table table-striped table-condensed">
 					<thead>
-						<tr>
-							<th class="col-md-1">Modules</th>
-							<th>Actions habilitées</th>
-						</tr>
+					<tr>
+						<th class="col-md-1">Modules</th>
+						<th>Actions habilitées</th>
+					</tr>
 					</thead>
 					<tbody>
-						<?php foreach($this->tCompleteAclModules as $module => $tActions):?>
+					<?php foreach ($this->tCompleteAclModules as $module => $tActions): ?>
 						<tr class="double">
 							<td><?php echo $module ?></td>
 							<td>
-							<?php foreach($tActions as $key => $checkbox):?>
-								<?php if ($checkbox['checked']):?> 
-									<span class="label label-success"><?php echo $checkbox['action']?></span>
-								<?php else :?>
-									<span class="label label-default label-disabled"><?php echo $checkbox['action']?></span>
-								<?php endif;?>
-							<?php endforeach;?>
+								<?php foreach ($tActions as $key => $checkbox): ?>
+									<?php if ($checkbox['checked']): ?>
+										<span class="label label-success"><?php echo $checkbox['action'] ?></span>
+									<?php else : ?>
+										<span class="label label-default label-disabled"><?php echo $checkbox['action'] ?></span>
+									<?php endif; ?>
+								<?php endforeach; ?>
 							</td>
 						</tr>
-						<?php endforeach;?>
+					<?php endforeach; ?>
 					</tbody>
 				</table>
 			</div>

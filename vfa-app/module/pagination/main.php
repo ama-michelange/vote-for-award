@@ -45,23 +45,23 @@ class module_pagination extends abstract_module
 	public function setPage($iPage)
 	{
 		$this->iPage = ($iPage - 1);
-		if ($this->iPage == - 1)
+		if ($this->iPage == -1)
 			$this->iPage = 0;
 	}
 
 	public function getPageElement()
 	{
 		$tPartElement = array();
-		
+
 		$this->iMax = count($this->tElement);
-		
+
 		$iMin = $this->iPage * $this->iLimit;
 		$iPart = $iMin + $this->iLimit;
 		if ($iPart > $this->iMax) {
 			$iPart = $this->iMax;
 		}
-		
-		for ($i = $iMin; $i < $iPart; $i ++) {
+
+		for ($i = $iMin; $i < $iPart; $i++) {
 			$tPartElement[] = $this->tElement[$i];
 		}
 		return $tPartElement;
@@ -75,7 +75,7 @@ class module_pagination extends abstract_module
 		$oView->iPage = $this->iPage;
 		$oView->iMax = ceil(($this->iMax / $this->iLimit));
 		$oView->sParamPage = $this->sParamPage;
-		
+
 		return $oView;
 	}
 }

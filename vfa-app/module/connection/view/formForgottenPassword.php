@@ -10,11 +10,13 @@
 		</div>
 		<div class="panel-body">
 			<p>Saisissez l'adresse email associée à votre compte.</p>
+
 			<p>Vous recevrez un message pour saisir un nouveau mot de passe.</p>
+
 			<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'myEmail') ?>">
 				<label for="inputMyEmail">Adresse Email</label>
 				<input type="text" id="inputMyEmail" name="myEmail" class="form-control" placeholder="Votre adresse Email"
-						 value="<?php echo $this->oConnection->myEmail ?>" autocomplete="off"/>
+							 value="<?php echo $this->oConnection->myEmail ?>" autocomplete="off"/>
 				<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'myEmail') ?></span>
 			</div>
 		</div>

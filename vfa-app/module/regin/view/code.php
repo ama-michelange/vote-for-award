@@ -1,6 +1,7 @@
 <!--<form id="registry" action="--><?php //echo $this->getLink('regin::registry') ?><!--" method="POST">-->
 <form id="registry" method="POST">
 	<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
+
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
 			<h3 class="panel-title">Code</h3>
@@ -20,7 +21,7 @@
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'code') ?>">
 							<label for="inputCode">Code d'inscription</label>
 							<input class="form-control" type="text" id="inputCode" name="code"
-									 value="<?php echo $this->oRegistry->code ?>" autofocus="true"/>
+										 value="<?php echo $this->oRegistry->code ?>" autofocus="true"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'code') ?></span>
 							Saisissez le code que l'on vous a transmis pour vous inscrire.
 						</div>

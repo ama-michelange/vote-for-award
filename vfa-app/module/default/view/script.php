@@ -1,6 +1,6 @@
 <?php if ($this->errorLogin): ?>
-<script>
-	$(document).ready(function () {
+	<script>
+		$(document).ready(function () {
 //		$('#test').on('click', function (pEvent) {
 //			pEvent.preventDefault();
 			var item = $(".carousel-inner .item.active .text-center");
@@ -9,6 +9,6 @@
 			var caption = $(".carousel-inner .item.active .carousel-caption");
 			caption.html("<h3>Identifiant ou mot de passe invalide !</h3>");
 //		});
-	});
-</script>
+		});
+	</script>
 <?php endif; ?>

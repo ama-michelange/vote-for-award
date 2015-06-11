@@ -37,9 +37,10 @@
 			<dd><?php echo plugin_vfa::toStringDateShow($this->oRegin->process_end) ?></dd>
 			<dt>Processus d'inscription</dt>
 			<?php if (plugin_vfa::PROCESS_INTIME == $this->oRegin->process) : ?>
-				<dd><span class="text-warning">Inscription sans validation <?php echo $textNotValid.$textValidateur ?></span></dd>
+				<dd><span class="text-warning">Inscription sans validation <?php echo $textNotValid . $textValidateur ?></span>
+				</dd>
 			<?php else : ?>
-				<dd>Inscription validée par <?php echo $textValid.$textValidateur ?></dd>
+				<dd>Inscription validée par <?php echo $textValid . $textValidateur ?></dd>
 			<?php endif; ?>
 		</dl>
 	</div>

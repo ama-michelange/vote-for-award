@@ -16,11 +16,13 @@
 						<div class="col-sm-10 col-sm-offset-1">
 							<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'myEmail') ?>">
 								<label for="inputMyEmail">Adresse Email</label>
-								<input type="text" id="inputMyEmail" name="myEmail" class="form-control" placeholder="Votre adresse Email"
-										 value="<?php echo $this->oConnection->myEmail ?>" required autofocus autocomplete="off"/>
+								<input type="text" id="inputMyEmail" name="myEmail" class="form-control"
+											 placeholder="Votre adresse Email"
+											 value="<?php echo $this->oConnection->myEmail ?>" required autofocus autocomplete="off"/>
 								<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'myEmail') ?></span>
 							</div>
 							<p>Saisissez l'adresse email associée à votre compte.</p>
+
 							<p>Un message contenant un lien pour changer votre mot de passe va vous être envoyé.</p>
 						</div>
 					</div>

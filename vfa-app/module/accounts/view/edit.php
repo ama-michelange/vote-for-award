@@ -15,7 +15,7 @@
 				<div class="alert alert-warning clearfix">
 					<p><?php echo plugin_validation::show($this->tMessage, 'token') ?>
 						<a class="btn btn-sm btn-warning pull-right"
-							href="<?php echo $this->getLink('home::index') ?>">Fermer</a>
+							 href="<?php echo $this->getLink('home::index') ?>">Fermer</a>
 					</p>
 				</div>
 			</div>
@@ -28,13 +28,13 @@
 								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login') ?>">
 									<label for="inputLogin">Identifiant</label>
 									<input class="form-control" type="text" id="inputLogin" name="loginDisabled"
-											 value="<?php echo $this->oUser->login ?>" disabled/>
+												 value="<?php echo $this->oUser->login ?>" disabled/>
 									<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login') ?></span>
 								</div>
 								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email') ?>">
 									<label for="inputEmail">Adresse Email</label>
 									<input class="form-control" type="email" id="inputEmail" name="emailDisabled"
-											 value="<?php echo $this->oUser->email ?>" disabled/>
+												 value="<?php echo $this->oUser->email ?>" disabled/>
 									<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email') ?></span>
 								</div>
 							</div>
@@ -51,7 +51,8 @@
 										<div class="form-group">
 											<label>Groupe<?php if (count($tGroups) > 1) : echo 's'; endif; ?></label>
 											<?php foreach ($tGroups as $oGroup) : ?>
-												<input class="form-control input-multi" type="text" value="<?php echo $oGroup->group_name ?>" disabled/>
+												<input class="form-control input-multi" type="text" value="<?php echo $oGroup->group_name ?>"
+															 disabled/>
 											<?php endforeach; ?>
 										</div>
 									<?php endif; ?>
@@ -59,7 +60,8 @@
 										<div class="form-group">
 											<label>Participation<?php if (count($tAwards) > 1) : echo 's'; endif; ?></label>
 											<?php foreach ($tAwards as $oAward) : ?>
-												<input class="form-control input-multi" type="text" value="<?php echo $oAward->toString() ?>" disabled/>
+												<input class="form-control input-multi" type="text" value="<?php echo $oAward->toString() ?>"
+															 disabled/>
 											<?php endforeach; ?>
 										</div>
 									<?php endif; ?>
@@ -76,22 +78,24 @@
 								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name') ?>">
 									<label for="inputLastName">Nom</label>
 									<input class="form-control" type="text" id="inputLastName" name="last_name"
-											 value="<?php echo $this->oUser->last_name ?>"/>
+												 value="<?php echo $this->oUser->last_name ?>"/>
 									<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'last_name') ?></span>
 								</div>
-								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'first_name') ?>">
+								<div
+									class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'first_name') ?>">
 									<label for="inputFirstName">Prénom</label>
 									<input class="form-control" type="text" id="inputFirstName" name="first_name"
-											 value="<?php echo $this->oUser->first_name ?>"/>
+												 value="<?php echo $this->oUser->first_name ?>"/>
 									<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'first_name') ?></span>
 								</div>
 								<div class="row">
 									<div class="col-sm-6 col-md-6">
-										<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear') ?>">
+										<div
+											class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear') ?>">
 											<label for="inputBirthyear">Année de naissance</label>
 											<select class="form-control"
-													  id="inputBirthyear" name="birthyear"
-													  data-placeholder="Sélectionnez">
+															id="inputBirthyear" name="birthyear"
+															data-placeholder="Sélectionnez">
 												<option></option>
 												<?php foreach ($this->tSelectedYears as $year => $checked): ?>
 													<option value="<?php echo $year ?>" <?php if ($checked): echo 'selected'; endif; ?>>
@@ -99,21 +103,25 @@
 													</option>
 												<?php endforeach; ?>
 											</select>
-											<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'birthyear') ?></span>
+											<span
+												class="help-block"><?php echo plugin_validation::show($this->tMessage, 'birthyear') ?></span>
 										</div>
 									</div>
 									<div class="col-sm-6 col-md-6">
-										<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'gender') ?>">
+										<div
+											class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'gender') ?>">
 											<label>Genre</label>
 
 											<div>
 												<label class="radio-inline" for="inputHomme">
-													<input type="radio" id="inputHomme" name="gender" value="M" <?php if ('M' == $this->oUser->gender
+													<input type="radio" id="inputHomme" name="gender"
+																 value="M" <?php if ('M' == $this->oUser->gender
 													): echo 'checked'; endif; ?> />
 													Homme
 												</label>
 												<label class="radio-inline" for="inputFemme">
-													<input type="radio" id="inputFemme" name="gender" value="F" <?php if ('F' == $this->oUser->gender
+													<input type="radio" id="inputFemme" name="gender"
+																 value="F" <?php if ('F' == $this->oUser->gender
 													): echo 'checked'; endif; ?> />
 													Femme
 												</label>
@@ -170,17 +178,19 @@
 												</a>
 												<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseLogin">
 													<i data-chevron="collapse"
-														class="glyphicon glyphicon-collapse-<?php echo $upOrDownLogin ?> text-primary"></i>
+														 class="glyphicon glyphicon-collapse-<?php echo $upOrDownLogin ?> text-primary"></i>
 												</a>
 											</h4>
 										</div>
 										<div id="collapseLogin" class="panel-collapse collapse<?php echo $collapseInLogin ?>">
 											<div class="panel-body">
-												<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newLogin') ?>">
+												<div
+													class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newLogin') ?>">
 													<label for="inputNewLogin">Nouvel identifiant de connexion</label>
 													<input class="form-control" type="text" id="inputNewLogin" name="newLogin"
-															 value="<?php echo $this->oUser->newLogin ?>" autocomplete="off"/>
-													<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newLogin') ?></span>
+																 value="<?php echo $this->oUser->newLogin ?>" autocomplete="off"/>
+													<span
+														class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newLogin') ?></span>
 												</div>
 											</div>
 											<div class="panel-footer clearfix">
@@ -200,7 +210,7 @@
 												</a>
 												<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapsePassword">
 													<i data-chevron="collapse"
-														class="glyphicon glyphicon-collapse-<?php echo $upOrDownPassword ?> text-primary"></i>
+														 class="glyphicon glyphicon-collapse-<?php echo $upOrDownPassword ?> text-primary"></i>
 												</a>
 											</h4>
 										</div>
@@ -210,14 +220,15 @@
 													class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newPassword') ?>">
 													<label for="inputNewPass">Nouveau mot de passe</label>
 													<input class="form-control" type="password" id="inputNewPass" name="newPassword"
-															 value="<?php echo $this->oUser->newPassword ?>" autocomplete="off"/>
-													<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newPassword') ?></span>
+																 value="<?php echo $this->oUser->newPassword ?>" autocomplete="off"/>
+													<span
+														class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newPassword') ?></span>
 												</div>
 												<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage,
 													'confirmPassword') ?>">
 													<label for="inputNewPassConfirm">Confirmation du nouveau mot de passe</label>
 													<input class="form-control" type="password" id="inputNewPassConfirm" name="confirmPassword"
-															 value="<?php echo $this->oUser->confirmPassword ?>" autocomplete="off"/>
+																 value="<?php echo $this->oUser->confirmPassword ?>" autocomplete="off"/>
 													<span class="help-block"><?php echo plugin_validation::show($this->tMessage,
 															'confirmPassword') ?></span>
 												</div>
@@ -239,17 +250,19 @@
 												</a>
 												<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseEmail">
 													<i data-chevron="collapse"
-														class="glyphicon glyphicon-collapse-<?php echo $upOrDownEmail ?> text-primary"></i>
+														 class="glyphicon glyphicon-collapse-<?php echo $upOrDownEmail ?> text-primary"></i>
 												</a>
 											</h4>
 										</div>
 										<div id="collapseEmail" class="panel-collapse collapse<?php echo $collapseInEmail ?>">
 											<div class="panel-body">
-												<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newEmail') ?>">
+												<div
+													class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newEmail') ?>">
 													<label for="inputNewEmail">Nouvelle adresse Email</label>
 													<input class="form-control" type="email" id="inputNewEmail" name="newEmail"
-															 value="<?php echo $this->oUser->newEmail ?>"/>
-													<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newEmail') ?></span>
+																 value="<?php echo $this->oUser->newEmail ?>"/>
+													<span
+														class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newEmail') ?></span>
 												</div>
 											</div>
 											<div class="panel-footer clearfix">

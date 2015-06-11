@@ -9,7 +9,8 @@
 				<tr>
 					<th>Nom</th>
 					<th>Prénom</th>
-					<th class="col-xs-1" style="text-align:center;" data-rel="tooltip" data-original-title="Correspondant de son groupe">
+					<th class="col-xs-1" style="text-align:center;" data-rel="tooltip"
+							data-original-title="Correspondant de son groupe">
 						Corres.
 					</th>
 					<?php if ($this->__isset('showGroup')): ?>

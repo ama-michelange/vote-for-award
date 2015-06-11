@@ -16,7 +16,7 @@
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'last_name') ?>">
 							<label for="inputLastName">Nom</label>
 							<input class="form-control" type="text" id="inputLastName" name="last_name"
-									 value="<?php echo $this->oRegistry->last_name ?>" placeholder="Votre nom de famille"/>
+										 value="<?php echo $this->oRegistry->last_name ?>" placeholder="Votre nom de famille"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'last_name') ?></span>
 						</div>
 					</div>
@@ -24,7 +24,7 @@
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'first_name') ?>">
 							<label for="inputFirstName">Prénom</label>
 							<input class="form-control" type="text" id="inputFirstName" name="first_name"
-									 value="<?php echo $this->oRegistry->first_name ?>" placeholder="Votre prénom"/>
+										 value="<?php echo $this->oRegistry->first_name ?>" placeholder="Votre prénom"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'first_name') ?></span>
 						</div>
 					</div>
@@ -34,7 +34,7 @@
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email') ?>">
 							<label for="inputEmail">Email</label>
 							<input class="form-control" type="text" id="inputEmail" name="email"
-									 value="<?php echo $this->oRegistry->email ?>" placeholder="Votre email"/>
+										 value="<?php echo $this->oRegistry->email ?>" placeholder="Votre email"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email') ?></span>
 						</div>
 					</div>
@@ -42,7 +42,7 @@
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'confirmEmail') ?>">
 							<label for="inputConfirmEmail">Confirmation de l'email</label>
 							<input class="form-control" type="text" id="inputConfirmEmail" name="confirmEmail"
-									 value="<?php echo $this->oRegistry->confirmEmail ?>" placeholder="Confirmez votre email"/>
+										 value="<?php echo $this->oRegistry->confirmEmail ?>" placeholder="Confirmez votre email"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'confirmEmail') ?></span>
 						</div>
 					</div>
@@ -56,7 +56,7 @@
 							class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'birthyear') ?>">
 							<label for="inputBirthyear">Année de naissance </label>
 							<select class="form-control" id="inputBirthyear" name="birthyear"
-									  data-placeholder="Sélectionnez votre année de naissance">
+											data-placeholder="Sélectionnez votre année de naissance">
 								<option></option>
 								<?php foreach ($this->tSelectedYears as $year => $checked): ?>
 									<option value="<?php echo $year ?>" <?php if ($checked): echo 'selected'; endif; ?>>
@@ -70,6 +70,7 @@
 					<div class="col-sm-6">
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'gender') ?>">
 							<label>Genre</label>
+
 							<div>
 								<label class="radio-inline" for="inputHomme">
 									<input type="radio" id="inputHomme" name="gender" value="M"
@@ -94,7 +95,7 @@
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'login') ?>">
 							<label for="login">Identifiant</label>
 							<input class="form-control" type="text" id="login" name="login"
-									 value="<?php echo $this->oRegistry->login ?>" placeholder="Votre identifiant ou pseudo"/>
+										 value="<?php echo $this->oRegistry->login ?>" placeholder="Votre identifiant ou pseudo"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'login') ?></span>
 						</div>
 					</div>
@@ -104,12 +105,12 @@
 						<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'newPassword') ?>">
 							<label for="newPassword">Mot de passe
 							<span class="btn btn-xs btn-link" data-rel="tooltip"
-									data-original-title="Le mot de passe doit contenir entre 7 et 50 caractères">
+										data-original-title="Le mot de passe doit contenir entre 7 et 50 caractères">
 									<i class="glyphicon glyphicon-info-sign"></i>
 							</span>
 							</label>
 							<input class="form-control" type="password" id="newPassword" name="newPassword"
-									 value="<?php echo $this->oRegistry->newPassword ?>" placeholder="Votre mot de passe"/>
+										 value="<?php echo $this->oRegistry->newPassword ?>" placeholder="Votre mot de passe"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'newPassword') ?></span>
 						</div>
 					</div>
@@ -118,7 +119,8 @@
 							class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'confirmPassword') ?>">
 							<label for="confirmPassword">Confirmation du mot de passe</label>
 							<input class="form-control" type="password" id="confirmPassword" name="confirmPassword"
-									 value="<?php echo $this->oRegistry->confirmPassword ?>" placeholder="Confirmez votre mot de passe"/>
+										 value="<?php echo $this->oRegistry->confirmPassword ?>"
+										 placeholder="Confirmez votre mot de passe"/>
 							<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'confirmPassword') ?></span>
 						</div>
 					</div>

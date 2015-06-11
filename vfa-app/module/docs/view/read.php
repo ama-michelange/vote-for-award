@@ -1,3 +1,3 @@
 <div class="panel-root">
-<?php echo $this->oViewShow->show() ?>
+	<?php echo $this->oViewShow->show() ?>
 </div>

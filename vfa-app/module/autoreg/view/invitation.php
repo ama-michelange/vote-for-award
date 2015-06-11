@@ -15,7 +15,7 @@
 				<form id="toReject" action="<?php echo $this->getLink('autoreg::toReject') ?>" method="POST">
 					<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>"/>
 					<input type="hidden" name="invitation_key"
-							 value="<?php echo $this->oConfirm->invitation_key ?>"/>
+								 value="<?php echo $this->oConfirm->invitation_key ?>"/>
 					<button class="btn btn-default btn-sm" type="submit">Oui</button>
 					<button class="btn btn-info btn-lg" data-dismiss="modal">Non</button>
 				</form>
@@ -35,14 +35,16 @@
 	<div class="panel-body">
 		<h4 style="line-height: 1.7;"><?php echo $this->oConfirm->textInvit ?></h4>
 		<h4>&nbsp;</h4>
+
 		<form id="toConfirm" action="<?php echo $this->getLink('autoreg::toConfirm') ?>" method="POST">
 			<input type="hidden" name="invitation_id" value="<?php echo $this->oConfirm->invitation_id ?>"/>
 			<input type="hidden" name="invitation_key" value="<?php echo $this->oConfirm->invitation_key ?>"/>
 
 			<h1 class="text-center">
-<!--				<i class="pull-left glyphicon glyphicon-hand-right with-text"></i>-->
+				<!--				<i class="pull-left glyphicon glyphicon-hand-right with-text"></i>-->
 				Souhaitez-vous vous inscrire ?
 			</h1>
+
 			<h1 class="text-center">
 				<span
 					class="nowrap">

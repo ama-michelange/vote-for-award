@@ -6,9 +6,13 @@
 					<div class="panel-images-body">
 						<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-sm', new NavLink('docs', 'read', array('id' => $oDoc->getId()))); ?>
 						<div class="panel-images-title">
-							<p><strong><?php echo plugin_BsHtml::showNavLabel($oDoc->title, new NavLink('docs', 'read', array('id' => $oDoc->getId()))); ?></strong></p>
+							<p>
+								<strong><?php echo plugin_BsHtml::showNavLabel($oDoc->title, new NavLink('docs', 'read', array('id' => $oDoc->getId()))); ?></strong>
+							</p>
 							<?php if ($oDoc->toStringNumberProperTitle()): ?>
-								<p><small><?php echo $oDoc->toStringNumberProperTitle() ?></small></p>
+								<p>
+									<small><?php echo $oDoc->toStringNumberProperTitle() ?></small>
+								</p>
 							<?php else: ?>
 								<p>&nbsp;</p>
 							<?php endif; ?>

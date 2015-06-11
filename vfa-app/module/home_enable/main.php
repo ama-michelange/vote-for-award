@@ -40,8 +40,7 @@ class module_home_enable extends abstract_module
 		foreach ($toRegins as $oRegin) {
 			if ($oRegin->type == plugin_vfa::TYPE_BOARD) {
 				$toBoardRegins[] = $oRegin;
-			}
-			else {
+			} else {
 				$toReaderRegins[] = $oRegin;
 			}
 		}

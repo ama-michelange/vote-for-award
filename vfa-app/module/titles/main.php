@@ -7,7 +7,7 @@ class module_titles extends abstract_module
 	{
 		_root::getACL()->enable();
 		plugin_vfa::loadI18n();
-		
+
 		$this->oLayout = new _layout('tpl_bs_bar_context');
 		$this->oLayout->addModule('bsnavbar', 'bsnavbar::index');
 //		$this->oLayout->add('bsnav-top', plugin_vfa_menu::buildViewNavTopCrud());
@@ -23,13 +23,13 @@ class module_titles extends abstract_module
 	{
 		// Force l'action pour n'avoir qu'un seul test dans le menu contextuel
 		_root::getRequest()->setAction('list');
-		
+
 		$oTitleModel = new model_title();
 		$tTitles = $oTitleModel->findAll();
-		
+
 		$oView = new _view('titles::list');
 		$oView->tTitles = $tTitles;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -38,7 +38,7 @@ class module_titles extends abstract_module
 		$tMessage = null;
 		$oTitleModel = new model_title();
 		$tTitleDocs = null;
-		
+
 		$oTitle = $this->save();
 		if (null == $oTitle) {
 			$oTitle = new row_title();
@@ -46,17 +46,17 @@ class module_titles extends abstract_module
 			$tMessage = $oTitle->getMessages();
 			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs', null));
 		}
-		
+
 		$oView = new _view('titles::edit');
 		$oView->oTitle = $oTitle;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
-		
+
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Créer un titre';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -65,7 +65,7 @@ class module_titles extends abstract_module
 		$tMessage = null;
 		$tTitleDocs = null;
 		$oTitleModel = new model_title();
-		
+
 		$oTitle = $this->save();
 		if (null == $oTitle) {
 			$oTitle = $oTitleModel->findById(_root::getParam('id'));
@@ -74,16 +74,16 @@ class module_titles extends abstract_module
 			$tMessage = $oTitle->getMessages();
 			$tTitleDocs = plugin_vfa::copyValuesToKeys(_root::getParam('title_docs', null));
 		}
-		
+
 		$oView = new _view('titles::edit');
 		$oView->oTitle = $oTitle;
 		$oView->tSelectedDocs = plugin_vfa::buildOptionSelected(model_doc::getInstance()->getSelectRecent(), $tTitleDocs);
 		$oView->tMessage = $tMessage;
 		$oView->textTitle = 'Modifier un titre';
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -91,7 +91,7 @@ class module_titles extends abstract_module
 	{
 		$oView = new _view('titles::read');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
@@ -101,49 +101,49 @@ class module_titles extends abstract_module
 		$oTitle = $oTitleModel->findById(_root::getParam('id'));
 		$toDocs = $oTitle->findDocs();
 		$toAwards = $oTitle->findAwards();
-		
+
 		$oView = new _view('titles::show');
 		$oView->oTitle = $oTitle;
 		$oView->toDocs = $toDocs;
 		$oView->toAwards = $toAwards;
-		
+
 		return $oView;
 	}
 
 	public function _delete()
 	{
 		$tMessage = $this->delete();
-		
+
 		$oView = new _view('titles::delete');
 		$oView->oViewShow = $this->buildViewShow();
-		
+
 		$oView->ok = true;
 		if ($oView->oViewShow->toAwards) {
 			$oView->ok = false;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
 		$oView->token = $oPluginXsrf->getToken();
 		$oView->tMessage = $tMessage;
-		
+
 		$this->oLayout->add('work', $oView);
 	}
 
 	public function save()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			$oTitle = new row_title();
 			$oTitle->setMessages(array(
 				'token' => $oPluginXsrf->getMessage()
 			));
 			return $oTitle;
 		}
-		
+
 		$oTitleModel = new model_title();
 		$iId = _root::getParam('id', null);
 		if ($iId == null) {
@@ -208,9 +208,9 @@ class module_titles extends abstract_module
 
 	/**
 	 * Vérifie que le titre n'existe pas déjà
-	 * 
-	 * @param model_title $poTitleModel        	
-	 * @param row_title $poTitle        	
+	 *
+	 * @param model_title $poTitleModel
+	 * @param row_title $poTitle
 	 * @return boolean Vrai
 	 */
 	public function isDoublon($poTitleModel, $poTitle)
@@ -219,7 +219,7 @@ class module_titles extends abstract_module
 		$oTitleDoublon = $poTitleModel->findByTitleAndNumbers($poTitle->title, $poTitle->numbers);
 		if ((null == $oTitleDoublon) || (true == $oTitleDoublon->isEmpty())) {
 			$bDoublon = false;
-		} else 
+		} else
 			if ((null != $poTitle->getId()) && ($oTitleDoublon->getId() == $poTitle->getId())) {
 				$bDoublon = false;
 			}
@@ -228,17 +228,17 @@ class module_titles extends abstract_module
 
 	public function delete()
 	{
-		if (! _root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) { // si ce n'est pas une requete POST on ne soumet pas
 			return null;
 		}
-		
+
 		$oPluginXsrf = new plugin_xsrf();
-		if (! $oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) { // on verifie que le token est valide
 			return array(
 				'token' => $oPluginXsrf->getMessage()
 			);
 		}
-		
+
 		$oTitleModel = new model_title();
 		$iId = _root::getParam('id', null);
 		if ($iId != null) {

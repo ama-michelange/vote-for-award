@@ -3,7 +3,7 @@
 		<h3 class="panel-title">Inscription d'un lecteur
 			<?php if ($this->oRegin->type == plugin_vfa::TYPE_BOARD): ?>
 				comme Membre du Comité de sélection
-			<?php endif;?>
+			<?php endif; ?>
 		</h3>
 	</div>
 	<div class="panel-body panel-condensed">

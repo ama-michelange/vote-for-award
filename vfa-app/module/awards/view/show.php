@@ -45,7 +45,7 @@
 					<div class="panel-heading">
 						<h5 class="panel-title">Nominés
 							<a class="pull-right accordion-toggle" data-toggle="collapse" href="#selection">
-								<i	data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i>
+								<i data-chevron="collapse" class="glyphicon glyphicon-collapse-up"></i>
 							</a>
 						</h5>
 					</div>
@@ -65,7 +65,7 @@
 										<td class="td-text">
 											<?php echo plugin_BsHtml::showNavLabel($oTitle->toString(),
 												new NavLink('nominees', 'read', array('id' => $oTitle->getId(),
-													'idSelection' =>  $this->oSelection->getId()))); ?>
+													'idSelection' => $this->oSelection->getId()))); ?>
 										</td>
 									</tr>
 								<?php endforeach; ?>

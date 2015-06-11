@@ -9,6 +9,7 @@
 	<form action="" method="POST">
 		<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 		<input type="hidden" name="regin_id" value="<?php echo $this->oRegin->getId() ?>"/>
+
 		<div class="panel panel-default panel-root">
 			<div class="panel-heading">
 				<h3 class="panel-title">Inscription de lecteurs : <?php echo $this->oGroup->toString() ?></h3>
@@ -74,15 +75,15 @@
 									<tr id="tr_<?php echo $oReginUsers->getId() ?>" <?php echo $trClass ?>>
 										<td style="white-space: nowrap;">
 											<button class="btn btn-default btn-xs btn-valid-on" type="button"
-													  data-id="<?php echo $oReginUsers->getId() ?>">
+															data-id="<?php echo $oReginUsers->getId() ?>">
 												<i class="glyphicon glyphicon-ok"></i>
 											</button>
 											<button class="btn btn-default btn-xs btn-valid-question" type="button"
-													  data-id="<?php echo $oReginUsers->getId() ?>">
+															data-id="<?php echo $oReginUsers->getId() ?>">
 												<i class="glyphicon glyphicon-question-sign"></i>
 											</button>
 											<button class="btn btn-default btn-xs btn-valid-off" type="button"
-													  data-id="<?php echo $oReginUsers->getId() ?>">
+															data-id="<?php echo $oReginUsers->getId() ?>">
 												<i class="glyphicon glyphicon-remove"></i>
 											</button>
 											<input type="hidden" name="<?php echo $name ?>" value="<?php echo $oReginUsers->getId() ?>"/>

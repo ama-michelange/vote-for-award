@@ -27,7 +27,8 @@ if ($this->oViewShow->oInvitation->sent) {
 			<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 			<?php if ($this->tMessage and isset($this->tMessage['token'])): echo $this->tMessage['token']; endif; ?>
 			<div class="pull-right">
-				<a class="btn btn-default" href="<?php echo $this->getLink('invitations::read', array('id' => _root::getParam('id'))) ?>"><i
+				<a class="btn btn-default"
+					 href="<?php echo $this->getLink('invitations::read', array('id' => _root::getParam('id'))) ?>"><i
 						class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 				<?php if ($button == 0): ?>
 					<a class="btn btn-success" href="<?php echo $this->getLink('invitations::index') ?>"><i
@@ -35,7 +36,7 @@ if ($this->oViewShow->oInvitation->sent) {
 				<?php elseif ($button == 1): ?>
 					<a class="btn btn-warning" href="<?php echo $this->getLink('invitations::index') ?>"><i
 							class="glyphicon glyphicon-ok with-text"></i>Fermer</a>
-				<?php
+					<?php
 				else: ?>
 					<button class="btn btn-info" type="submit">
 						<i class="glyphicon glyphicon-envelope with-text"></i>Confirmer l'envoi

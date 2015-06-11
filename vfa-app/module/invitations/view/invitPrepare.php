@@ -27,30 +27,35 @@
 					<div class="alert alert-danger">Cette invitation existe déjà !</div>
 				<?php endif; ?>
 				<?php if (plugin_validation::exist($this->tMessage, 'registredAward')): ?>
-					<div class="alert alert-warning">Utilisateur déjà inscrit à <?php echo plugin_validation::showDirect($this->tMessage,
+					<div class="alert alert-warning">Utilisateur déjà inscrit
+						à <?php echo plugin_validation::showDirect($this->tMessage,
 							'registredAward') ?></div>
 				<?php endif; ?>
 				<div class="panel panel-info">
 					<div class="panel-body panel-condensed">
 						<?php if ($this->oRegistry->type == plugin_vfa::TYPE_RESPONSIBLE): ?>
 							<p>Préparation d'une invitation à envoyer par mail à un correspondant d'un groupe.</p>
-							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription au prix, l'appartenance au
+							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription au prix, l'appartenance
+								au
 								groupe et l'acceptation à devenir son correspondant.</p>
 						<?php elseif ($this->oRegistry->type == plugin_vfa::TYPE_BOARD): ?>
 							<p>Préparation d'une invitation à envoyer par mail à un membre du comité de sélection.</p>
-							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription à la présélection et l'appartenance au
+							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription à la présélection et
+								l'appartenance au
 								comité de sélection.</p>
-						<?php
+							<?php
 						else: ?>
 							<p>Préparation d'une invitation à envoyer par mail à un lecteur.</p>
-							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription au prix et l'appartenance au
+							<p>L'invitation envoyée contient un lien vers le site pour valider l'inscription au prix et l'appartenance
+								au
 								groupe.</p>
 						<?php endif; ?>
 					</div>
 				</div>
 				<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'email') ?>">
 					<label for="inputEmail">Adresse email du destinataire</label>
-					<input class="form-control" type="text" id="inputEmail" name="email" value="<?php echo $this->oRegistry->email ?>"/>
+					<input class="form-control" type="text" id="inputEmail" name="email"
+								 value="<?php echo $this->oRegistry->email ?>"/>
 					<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email') ?></span>
 				</div>
 				<div
@@ -62,7 +67,7 @@
 					<?php elseif ($this->countAwards == 1): ?>
 						<input type="hidden" name="award_id" value="<?php echo $this->oAward->award_id ?>"/>
 						<input class="form-control" type="text" disabled="disabled" value="<?php echo $this->oAward->toString() ?>">
-					<?php
+						<?php
 					else: ?>
 						<select class="form-control" id="inputAwards" name="awards_ids[]" size="10" multiple>
 							<?php foreach ($this->tSelectedAwards as $tAward): ?>
@@ -83,7 +88,7 @@
 					<?php elseif ($this->countGroups == 1): ?>
 						<input type="hidden" name="group_id" value="<?php echo $this->oGroup->group_id ?>"/>
 						<input class="form-control" type="text" disabled="disabled" value="<?php echo $this->oGroup->group_name ?>">
-					<?php
+						<?php
 					else: ?>
 						<select class="form-control" id="inputGroups" name="group_id" data-placeholder="Choisir">
 							<?php foreach ($this->tSelectedGroups as $tGroup): ?>

@@ -155,7 +155,7 @@ class module_votes extends abstract_module
 			}
 		}
 		// Le paramètre 'award_id' est introuvable ou non valide
-		if (null == $this->oAward){
+		if (null == $this->oAward) {
 			_root::redirect('default::index');
 		}
 	}
@@ -165,7 +165,7 @@ class module_votes extends abstract_module
 	 */
 	private function buildMenuAwardToVote($pNavBar)
 	{
-		$bar= $pNavBar->getChild('left');
+		$bar = $pNavBar->getChild('left');
 		$tItems = array();
 		if ($this->toValidReaderAwards && (count($this->toValidReaderAwards) > 0)) {
 			$t = $this->toValidReaderAwards;

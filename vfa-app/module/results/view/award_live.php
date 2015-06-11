@@ -15,18 +15,22 @@
 					<div class="row">
 						<div class="col-md-2">
 							<p>Date de fin de prix</p>
+
 							<p><?php echo $this->oAward->end_date ?></p>
 						</div>
 						<div class="col-md-2 center-block">
 							<p>Inscrits</p>
+
 							<p class="center-block"><?php echo model_award::getInstance()->countUser($this->oAward->getId()) ?></p>
 						</div>
 						<div class="col-md-2">
 							<p>Bulletins</p>
+
 							<p><?php echo model_vote::getInstance()->countAllBallots($this->oAward->getId()) ?></p>
 						</div>
 						<div class="col-md-2">
 							<p>Bulletins valides</p>
+
 							<p><?php echo model_vote::getInstance()->countValidBallots($this->oAward->getId(), $this->oAward->type) ?></p>
 						</div>
 					</div>
@@ -52,6 +56,7 @@
 									</div>
 								</div>
 								<h2><?php echo $oTitle->toString() ?></h2>
+
 								<p>Note moyenne : <?php echo $oResult->average ?><br/>
 									Nombre de votes : <?php echo $oResult->number ?></p>
 							</div>

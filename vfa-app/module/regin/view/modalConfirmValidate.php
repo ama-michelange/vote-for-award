@@ -25,10 +25,12 @@
 					</div>
 					<div class="modal-body">
 						<?php if ($this->oRegin->nbAccepted > 0) : ?>
-							<h4>Inscriptions acceptées : <?php echo $this->oRegin->nbAccepted ?> / <?php echo count($this->tReginUsers) ?></h4>
+							<h4>Inscriptions acceptées : <?php echo $this->oRegin->nbAccepted ?>
+								/ <?php echo count($this->tReginUsers) ?></h4>
 						<?php endif; ?>
 						<?php if ($this->oRegin->nbRejected > 0) : ?>
-							<h4>Inscriptions refusées : <?php echo $this->oRegin->nbRejected ?> / <?php echo count($this->tReginUsers) ?></h4>
+							<h4>Inscriptions refusées : <?php echo $this->oRegin->nbRejected ?>
+								/ <?php echo count($this->tReginUsers) ?></h4>
 						<?php endif; ?>
 					</div>
 					<div class="modal-footer">

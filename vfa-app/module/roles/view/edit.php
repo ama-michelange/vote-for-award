@@ -1,7 +1,7 @@
 <form action="" method="POST">
 	<input type="hidden" name="token" value="<?php echo $this->token ?>"/> <input type="hidden"
-																											name="role_id"
-																											value="<?php echo $this->oRole->role_id ?>"/>
+																																								name="role_id"
+																																								value="<?php echo $this->oRole->role_id ?>"/>
 
 	<div class="panel panel-info">
 		<div class="panel-heading">
@@ -12,7 +12,7 @@
 				<div class="alert alert-warning clearfix">
 					<p><?php echo plugin_validation::show($this->tMessage, 'token') ?>
 						<a class="btn btn-sm btn-warning pull-right"
-							href="<?php echo $this->getLink('roles::index') ?>">Fermer</a>
+							 href="<?php echo $this->getLink('roles::index') ?>">Fermer</a>
 					</p>
 				</div>
 			</div>
@@ -21,25 +21,28 @@
 				<div
 					class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'role_name') ?>">
 					<label for="inputName">Nom <span class="btn btn-xs btn-link" data-rel="tooltip"
-																data-original-title="Le nom du rôle"> <i class="glyphicon glyphicon-info-sign"></i>
+																					 data-original-title="Le nom du rôle"> <i
+								class="glyphicon glyphicon-info-sign"></i>
 				</span>
 					</label> <input class="form-control" type="text" id="inputName" name="role_name"
-										 value="<?php echo $this->oRole->role_name ?>"/> <span
+													value="<?php echo $this->oRole->role_name ?>"/> <span
 						class="help-block"><?php echo plugin_validation::show($this->tMessage, 'role_name') ?></span>
 				</div>
 				<div
 					class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'description') ?>">
 					<label for="inputDescription">Description <span class="btn btn-xs btn-link" data-rel="tooltip"
-																					data-original-title="La description du rôle"> <i
+																													data-original-title="La description du rôle"> <i
 								class="glyphicon glyphicon-info-sign"></i>
 				</span>
 					</label>
-					<textarea class="form-control" id="inputDescription" name="description"><?php echo $this->oRole->description ?></textarea>
+					<textarea class="form-control" id="inputDescription"
+										name="description"><?php echo $this->oRole->description ?></textarea>
 					<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'description') ?></span>
 				</div>
 				<div class="form-group">
 					<label>Habilitations <span class="btn btn-xs btn-link" data-rel="tooltip"
-														data-original-title="Les habilitations du rôle"> <i class="glyphicon glyphicon-info-sign"></i>
+																		 data-original-title="Les habilitations du rôle"> <i
+								class="glyphicon glyphicon-info-sign"></i>
 				</span> <a class="accordion-toggle" data-toggle="collapse" href="#acl"><i
 								data-chevron="collapse" class="glyphicon glyphicon-chevron-up"></i></a>
 					</label>
@@ -86,7 +89,7 @@
 								class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 					<?php else: ?>
 						<a class="btn btn-default"
-							href="<?php echo $this->getLink('roles::read', array('id' => $this->oRole->role_id)) ?>"><i
+							 href="<?php echo $this->getLink('roles::read', array('id' => $this->oRole->role_id)) ?>"><i
 								class="glyphicon glyphicon-remove with-text"></i>Annuler</a>
 					<?php endif; ?>
 					<button class="btn btn-primary" type="submit">

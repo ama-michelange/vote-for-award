@@ -25,10 +25,13 @@
 					<div class="panel-body panel-condensed">
 						<p>La permission des inscriptions permet aux lecteurs de s'inscrire au prix pour participer aux votes et le
 							cas échéant d'ouvrir un compte.</p>
+
 						<p>Lors de leur inscription, les lecteurs ont besoin d'un code d'inscription que vous allez leur founir.
 							Ce code est associé à votre groupe : CE, association, ...<br/>
-							Il sert à associer la personne qui l'utilise à votre groupe et au prix en cours lorsqu'elle ouvre un compte ou
+							Il sert à associer la personne qui l'utilise à votre groupe et au prix en cours lorsqu'elle ouvre un
+							compte ou
 							s'identifie sur le site.</p>
+
 						<p>Vous obtiendrez le code d'inscription dans l'écran suivant qu'il faudra transmettre aux participants.</p>
 					</div>
 				</div>
@@ -42,14 +45,14 @@
 								<div class="form-group">
 									<label for="inputGroup">Affectation au groupe</label>
 									<input class="form-control" type="text" id="inputGroup" name="_group"
-											 value="<?php echo $this->oGroup->toString() ?>" disabled/>
+												 value="<?php echo $this->oGroup->toString() ?>" disabled/>
 								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label for="inputPrix">Inscription au prix</label>
 									<input class="form-control" type="text" id="inputPrix" name="_prix"
-											 value="<?php echo $this->tAwards[0]->toString() ?>" disabled/>
+												 value="<?php echo $this->tAwards[0]->toString() ?>" disabled/>
 								</div>
 							</div>
 							<?php for ($i = 1; $i < count($this->tAwards); $i++) : ?>
@@ -57,7 +60,7 @@
 									<div class="form-group">
 										<label for="inputPrix">Inscription au prix</label>
 										<input class="form-control" type="text" id="inputPrix" name="_prix"
-												 value="<?php echo $this->tAwards[$i]->toString() ?>" disabled/>
+													 value="<?php echo $this->tAwards[$i]->toString() ?>" disabled/>
 									</div>
 								</div>
 							<?php endfor; ?>
@@ -71,13 +74,16 @@
 					<div class="panel-body panel-condensed">
 						<div class="row">
 							<div class="col-sm-12">
-								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'process_end') ?>">
+								<div
+									class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'process_end') ?>">
 									<label for="inputEnd">Date de fin des inscriptions</label>
+
 									<div class="row">
 										<div class="col-sm-3">
 											<input class="form-control datepicker" type="text" id="inputEnd" name="process_end"
-													 value="<?php echo plugin_vfa::toStringDateShow($this->oRegin->process_end) ?>"/>
-											<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'process_end') ?></span>
+														 value="<?php echo plugin_vfa::toStringDateShow($this->oRegin->process_end) ?>"/>
+											<span
+												class="help-block"><?php echo plugin_validation::show($this->tMessage, 'process_end') ?></span>
 										</div>
 										<div class="col-sm-9">
 											Par défaut, la date maximale des inscriptions est la date de fin du prix mais vous pouvez la
@@ -91,6 +97,7 @@
 							<div class="col-sm-12">
 								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'process') ?>">
 									<label>Validation des inscriptions</label>
+
 									<div class="row">
 										<div class="col-sm-3">
 											<label class="checkbox-inline" for="inputValidate">
@@ -101,12 +108,16 @@
 											<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'process') ?></span>
 										</div>
 										<div class="col-sm-9">
-											Par défaut, vous devez valider chaque inscription. Cette étape supplémentaire permet d'identifier les
-											participants avant de leur donner le droit de vote. C'est utile pour gérer les inscrits et les futurs
+											Par défaut, vous devez valider chaque inscription. Cette étape supplémentaire permet d'identifier
+											les
+											participants avant de leur donner le droit de vote. C'est utile pour gérer les inscrits et les
+											futurs
 											prêts,
-											par exemple, mais surtout pour éviter les doubles inscriptions : une même personne qui s'inscrit plusieurs
+											par exemple, mais surtout pour éviter les doubles inscriptions : une même personne qui s'inscrit
+											plusieurs
 											fois avec un nom différent.<br>
-											Si vous cochez <strong>Pas de validation</strong>, toutes les personnes possédant le code d'inscription
+											Si vous cochez <strong>Pas de validation</strong>, toutes les personnes possédant le code
+											d'inscription
 											pourront s'inscrire sans votre intervention. La confiance doit régner ...
 										</div>
 									</div>

@@ -202,6 +202,7 @@ class module_results extends abstract_module
 		$oView->toVotes = $toVotes;
 		$this->oLayout->add('work', $oView);
 	}
+
 	public function _recalcVotes()
 	{
 		$oAward = $this->selectArchiveAwardCompleted('43');
@@ -213,7 +214,7 @@ class module_results extends abstract_module
 			}
 		}
 
-		foreach($toVotes as $vote){
+		foreach ($toVotes as $vote) {
 			// Recherche les titres sélectionnés du prix pour remplir le bulletin de vote détaillé
 			$toVoteItems = array();
 			foreach ($toTitles as $oTitle) {
@@ -233,6 +234,7 @@ class module_results extends abstract_module
 
 		echo("TERMINE");
 	}
+
 	/**
 	 * @param $poVote row_vote
 	 * @return row_vote
@@ -280,6 +282,7 @@ class module_results extends abstract_module
 			}
 		}
 	}
+
 	/**
 	 * Renvoie le prix en cours : par défaut le prix public sinon le prix demandé.
 	 * @param null $pAwardId string Si présent renvoie le prix demandé si en cours

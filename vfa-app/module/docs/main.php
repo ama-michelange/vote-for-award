@@ -307,11 +307,11 @@ class module_docs extends abstract_module
 			case 'list':
 			case 'listThumbnail':
 			case 'listThumbnailLarge':
-			$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('docs', 'list'), 'glyphicon-list'));
-			$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('docs', 'listThumbnail'), 'glyphicon-th'));
-			$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges', new NavLink('docs', 'listThumbnailLarge'),
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Liste', new NavLink('docs', 'list'), 'glyphicon-list'));
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes', new NavLink('docs', 'listThumbnail'), 'glyphicon-th'));
+				$group->addChild(plugin_BsHtml::buildGroupedButtonItem('Vignettes Larges', new NavLink('docs', 'listThumbnailLarge'),
 					'glyphicon-th-large'));
-			break;
+				break;
 		}
 		if ($group->hasRealChildren()) {
 			$pBar->addChild(plugin_BsHtml::buildSeparator());

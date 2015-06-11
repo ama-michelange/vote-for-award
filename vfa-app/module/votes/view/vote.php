@@ -9,7 +9,7 @@
 				<div class="alert alert-warning clearfix">
 					<p><?php echo plugin_validation::show($this->tMessage, 'token') ?>
 						<a class="btn btn-sm btn-warning pull-right"
-							href="<?php echo $this->getLink('votes::index') ?>">Fermer</a>
+							 href="<?php echo $this->getLink('votes::index') ?>">Fermer</a>
 					</p>
 				</div>
 			</div>
@@ -38,9 +38,11 @@
 						}
 						?>
 						<span style="padding-right: 5px;">Fin du prix le</span>
-						<span style="padding-right: 25px;" class="panel-title"><span class="label label-primary"><?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?></span></span>
+						<span style="padding-right: 25px;" class="panel-title"><span
+								class="label label-primary"><?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?></span></span>
 						<span style="padding-right: 5px;">Votes enregistrées</span>
-						<span class="panel-title"><span class="label <?php echo $numberLabel ?>"><?php echo $nbNotes . ' / ' . $maxNotes ?></span></span>
+						<span class="panel-title"><span
+								class="label <?php echo $numberLabel ?>"><?php echo $nbNotes . ' / ' . $maxNotes ?></span></span>
 					</span>
 				</div>
 				<div class="panel-body">
@@ -68,7 +70,8 @@
 											$score = $oVoteItem->score;
 											if (!isset($score)) : $score = '-1'; endif; ?>
 											<input type="hidden" name="no_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
-													 value="<?php echo $score ?>"/>
+														 value="<?php echo $score ?>"/>
+
 											<div class="col-xs-6 col-sm-7 col-md-5 col-lg-4">
 												<h4>Vote <em class="note-help pull-right">&nbsp;</em></h4>
 											</div>
@@ -83,7 +86,8 @@
 													<button type="button" class="btn btn-default btn-note" data-select-note="4">4</button>
 													<button type="button" class="btn btn-default btn-note" data-select-note="5">5</button>
 												</div>
-												<button type="button" class="btn btn-default btn-nonote"><i class="glyphicon glyphicon-remove"></i></button>
+												<button type="button" class="btn btn-default btn-nonote"><i
+														class="glyphicon glyphicon-remove"></i></button>
 											</div>
 										</div>
 										<div class="row">
@@ -93,17 +97,17 @@
 											<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
 												<div class="vote-text"><span data-note>Votre note :</span></div>
 											</div>
-<!--											<div class="col-xs-12 col-sm-6 col-md-5">-->
-<!--												<span class="visible-xs">&nbsp;</span>-->
-<!--												<a class="btn btn-nonote btn-sm">Annuler ce vote</a>-->
-<!--											</div>-->
+											<!--											<div class="col-xs-12 col-sm-6 col-md-5">-->
+											<!--												<span class="visible-xs">&nbsp;</span>-->
+											<!--												<a class="btn btn-nonote btn-sm">Annuler ce vote</a>-->
+											<!--											</div>-->
 										</div>
 										<div class="row">
 											<div class="col-xs-12">
 												<h4>Commentaire</h4>
 												<textarea class="form-control"
-															 name="co_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
-															 rows="2"><?php echo $oVoteItem->comment ?></textarea>
+																	name="co_<?php echo $oVoteItem->title_id . '_' . $oVoteItem->vote_item_id ?>"
+																	rows="2"><?php echo $oVoteItem->comment ?></textarea>
 											</div>
 										</div>
 									</div>

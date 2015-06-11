@@ -15,8 +15,8 @@
 
 <script>
 
-$(document).ready(function () {
-	$('#modalAccount').modal({'show':true, 'keyboard':true});
-});
+	$(document).ready(function () {
+		$('#modalAccount').modal({'show': true, 'keyboard': true});
+	});
 
 </script>

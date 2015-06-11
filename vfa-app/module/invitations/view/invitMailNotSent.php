@@ -1,8 +1,8 @@
 <form class="form-horizontal" action="" method="POST">
 	<input type="hidden" name="phase" value="<?php echo $this->oRegistry->phase ?>"/> <input
 		type="hidden" name="type" value="<?php echo $this->oRegistry->type ?>"/> <input type="hidden"
-																												  name="email"
-																												  value="<?php echo $this->oRegistry->email ?>"/>
+																																										name="email"
+																																										value="<?php echo $this->oRegistry->email ?>"/>
 	<?php if ($this->oRegistry->award_id): ?>
 		<input type="hidden" name="award_id" value="<?php echo $this->oRegistry->award_id ?>"/>
 	<?php endif; ?>
@@ -18,7 +18,8 @@
 
 	<div class="panel panel-success panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Invitation prête <small>pour l'inscription d'un</small> <?php echo $this->oRegistry->toStringType() ?></h3>
+			<h3 class="panel-title">Invitation prête
+				<small>pour l'inscription d'un</small> <?php echo $this->oRegistry->toStringType() ?></h3>
 		</div>
 		<div class="panel-body panel-condensed panel-inner">
 
@@ -35,7 +36,8 @@
 				</div>
 			</div>
 			<div class="alert alert-warning">
-				<h3>L'invitation est prête mais n'a pas pu être envoyée à l'adresse <strong><?php echo $this->oRegistry->email ?></strong> !
+				<h3>L'invitation est prête mais n'a pas pu être envoyée à l'adresse
+					<strong><?php echo $this->oRegistry->email ?></strong> !
 				</h3>
 				Retentez l'envoi de l'email plus tard en accédant à l'invitation.
 			</div>
