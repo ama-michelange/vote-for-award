@@ -489,7 +489,7 @@ class module_default extends abstract_module
 						$oTitle->order = '1er';
 					} else {
 						$pos = $i + 1;
-						$oTitle->order = $pos . 'ème';
+						$oTitle->order = $pos . 'e';
 					}
 					$toAllTitles[] = $oTitle;
 				}
