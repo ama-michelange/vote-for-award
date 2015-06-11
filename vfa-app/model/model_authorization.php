@@ -59,6 +59,9 @@ class model_authorization extends abstract_model
 	}
 }
 
+/**
+ * Class row_authorization
+ */
 class row_authorization extends abstract_row
 {
 
