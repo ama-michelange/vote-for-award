@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class module_roles
+ */
 class module_roles extends abstract_module
 {
 	public function before()
