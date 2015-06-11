@@ -1,4 +1,5 @@
 <?php
+
 _root::setConfigVar('tLangue', array(
 
 	'BONJOUR' => 'Bonjour', //

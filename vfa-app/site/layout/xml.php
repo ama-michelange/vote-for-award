@@ -1,1 +1,1 @@
-<?php echo $this->load('main')?>
+<?php echo $this->load('main') ?>

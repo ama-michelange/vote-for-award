@@ -1,5 +1,5 @@
 <?php
-_root::setConfigVar('tLangueDate', 
+_root::setConfigVar('tLangueDate',
 	array(
 		'tMoisLong' => array(
 			'',
@@ -40,7 +40,7 @@ _root::setConfigVar('tLangueDate',
 			'Vendredi',
 			'Samedi'
 		)
-		,
+	,
 		'tJourCourt' => array(
 			'Dim',
 			'Lun',
@@ -50,5 +50,5 @@ _root::setConfigVar('tLangueDate',
 			'Ven',
 			'Sam'
 		)
-		
+
 	));

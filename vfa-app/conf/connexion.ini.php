@@ -1,4 +1,4 @@
-;<?php die()?>
+;<?php die() ?>
 [db]
 mysql.dsn="mysql:dbname=vfa;host=localhost"
 mysql.sgbd=mysql
@@ -6,7 +6,7 @@ mysql.hostname=localhost
 mysql.database=vfa
 mysql.username=vfa_access
 mysql.password=vfa_access
- 
+
 postgressql.dsn=
 postgressql.sgbd=postgressql
 postgressql.hostname=localhost

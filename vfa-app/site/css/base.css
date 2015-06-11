@@ -37,12 +37,12 @@ a {
 	float: left;
 }
 
-#work  th {
+#work th {
 	background: #ccc;
 	padding: 1px 2px 1px 2px;
 }
 
-#work form .textarea,#work form .input {
+#work form .textarea, #work form .input {
 	width: 100%;
 }
 

@@ -30,7 +30,6 @@
 	<!-- Fav and touch icons -->
 	<link rel="shortcut icon" href="site/ico/favicon.ico">
 
-
 </head>
 
 <body>

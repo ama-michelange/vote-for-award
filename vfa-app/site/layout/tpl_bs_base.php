@@ -45,5 +45,4 @@
 <?php echo $this->load('script') ?>
 </body>
 
-
 </html>

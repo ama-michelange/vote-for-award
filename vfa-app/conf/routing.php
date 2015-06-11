@@ -3,7 +3,7 @@ $tab = array(
 	'articles.html' => array(
 		'nav' => 'article::list'
 	)
-	,
+,
 	'articleDetail_:id:.html' => array(
 		'nav' => 'article::show',
 		'tParam' => array(
@@ -16,7 +16,7 @@ $tab = array(
 			'id'
 		)
 	),
-	
+
 	'taches' => array(
 		'nav' => 'tache::list'
 	),
@@ -39,5 +39,4 @@ $tab = array(
 	'404' => array(
 		'nav' => 'article::list'
 	)
-)
-;
+);

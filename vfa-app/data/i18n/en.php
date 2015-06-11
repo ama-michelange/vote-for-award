@@ -1,7 +1,7 @@
 <?php
-_root::setConfigVar('tLangue', 
+_root::setConfigVar('tLangue',
 	array(
-		
+
 		'BONJOUR' => 'Hello',
 		'BIENVENUE' => 'Welcome',
 		'CHOISISSEZ_LANGUE' => 'Choose your language',
