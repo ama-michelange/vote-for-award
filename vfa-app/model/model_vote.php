@@ -63,7 +63,7 @@ class model_vote extends abstract_model
 	 */
 	public function findAllByAwardId($pAwardId)
 	{
-			return $this->findMany('SELECT * FROM ' . $this->sTable . ' WHERE award_id=?', $pAwardId);
+		return $this->findMany('SELECT * FROM ' . $this->sTable . ' WHERE award_id=?', $pAwardId);
 	}
 
 	/**

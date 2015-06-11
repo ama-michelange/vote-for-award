@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_role
+ */
 class model_role extends abstract_model
 {
 
@@ -138,7 +141,7 @@ class model_role extends abstract_model
 				$this->tStringRoles = array();
 			}
 			$oRole = model_role::getInstance()->findById($pIdRole);
-			$this->tStringRoles[$pIdRole] = plugin_i18n::get('role.' . $oRole ->role_name);
+			$this->tStringRoles[$pIdRole] = plugin_i18n::get('role.' . $oRole->role_name);
 		}
 		return $this->tStringRoles[$pIdRole];
 	}

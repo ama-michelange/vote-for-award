@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_user_session
+ */
 class model_user_session
 {
 

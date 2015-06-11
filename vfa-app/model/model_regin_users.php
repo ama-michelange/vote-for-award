@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_regin_users
+ */
 class model_regin_users extends abstract_model
 {
 

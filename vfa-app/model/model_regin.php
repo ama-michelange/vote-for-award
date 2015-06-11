@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_regin
+ */
 class model_regin extends abstract_model
 {
 
@@ -69,6 +72,7 @@ class model_regin extends abstract_model
 		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE type=? and group_id=? and state=? ORDER BY created_date DESC';
 		return $this->findMany($sql, $pType, $pGroupId, $pState);
 	}
+
 	/**
 	 * @param string $pType
 	 * @param string | int $pGroupId

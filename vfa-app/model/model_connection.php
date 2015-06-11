@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_connection
+ */
 class model_connection extends abstract_model
 {
 

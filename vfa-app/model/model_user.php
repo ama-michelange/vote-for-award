@@ -428,6 +428,7 @@ class row_user extends abstract_row
 		}
 		return $tSelect;
 	}
+
 	/**
 	 * @return array
 	 */

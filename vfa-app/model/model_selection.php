@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_selection
+ */
 class model_selection extends abstract_model
 {
 

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_vote_item
+ */
 class model_vote_item extends abstract_model
 {
 

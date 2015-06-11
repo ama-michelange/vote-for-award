@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_invitation
+ */
 class model_invitation extends abstract_model
 {
 

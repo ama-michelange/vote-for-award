@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_doc
+ */
 class model_doc extends abstract_model
 {
 

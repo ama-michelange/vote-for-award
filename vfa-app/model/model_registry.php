@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class model_registry
+ */
 class model_registry extends abstract_model
 {
 
