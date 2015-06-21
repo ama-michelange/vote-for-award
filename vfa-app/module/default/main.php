@@ -486,10 +486,10 @@ class module_default extends abstract_module
 					$oTitle = $toResults[$i]->findTitle();
 					$oTitle->year = $oAward->year;
 					if ($i == 0) {
-						$oTitle->order = '1er';
+						$oTitle->order = '1<sup>er</sup>';
 					} else {
 						$pos = $i + 1;
-						$oTitle->order = $pos . 'e';
+						$oTitle->order = $pos . '<sup>e</sup>';
 					}
 					$toAllTitles[] = $oTitle;
 				}
