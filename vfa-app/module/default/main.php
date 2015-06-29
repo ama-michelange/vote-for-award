@@ -560,13 +560,6 @@ class module_default extends abstract_module
 //		 _root::getLog()->log($body);
 		$oMail->setBody($body);
 
-		// Prepare le body HTML
-		$oViewMail = new _view('default::mailReginToValidateHtml');
-		$oViewMail->oUser = $poRegistry->oUser;
-		$oViewMail->tAwards = $tAwards;
-		$body = $oViewMail->show();
-		$oMail->setBodyHtml($body);
-
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);
 		return $sent;

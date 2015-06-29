@@ -819,12 +819,6 @@ class module_regin extends abstract_module
 //		 _root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
 
-		// Prepare le body HTML
-		$oViewMail = new _view('regin::mailValidateHtml');
-		$oViewMail->tAwards = $tAwards;
-		$bodyHtml = $oViewMail->show();
-		$oMail->setBodyHtml($bodyHtml);
-
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);
 		return $sent;

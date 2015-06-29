@@ -166,11 +166,6 @@ class module_connection extends abstract_module
 		$bodyTxt = $oViewMail->show();
 		// _root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
-		// Prepare le body HTML
-		$oViewMail = new _view('connection::mailHtml');
-		$oViewMail->oInvit = $poInvitation;
-		$bodyHtml = $oViewMail->show();
-		$oMail->setBodyHtml($bodyHtml);
 
 		// Envoi le mail
 		$sent = plugin_vfa::sendEmail($oMail);
