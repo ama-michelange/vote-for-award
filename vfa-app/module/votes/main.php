@@ -110,7 +110,38 @@ class module_votes extends abstract_module
 			$oVoteItem->setTitle($oTitle);
 		}
 		$oVote->setVoteItems($toVoteItems);
+		return $this->sortBulletinVote($oVote);
+	}
+
+	private function sortBulletinVote($pVote)
+	{
+		$oVote = $pVote;
+		$toVoteItems = $oVote->getVoteItems();
+		uasort($toVoteItems, array('self', 'compareVoteItem'));
+		$oVote->setVoteItems($toVoteItems);
 		return $oVote;
+	}
+
+	private static function compareVoteItem($a, $b)
+	{
+		if (($a->score == -1) && ($b->score > -1)) {
+			return -1;
+		}
+		if (($a->score > -1) && ($b->score == -1)) {
+			return 1;
+		}
+		return self::compareTitle($a->getTitle(), $b->getTitle());
+	}
+
+	private static function compareTitle($a, $b)
+	{
+		if ($a->order_title > $b->order_title) {
+			return 1;
+		}
+		if ($a->order_title < $b->order_title) {
+			return -1;
+		}
+		return 0;
 	}
 
 	/**
