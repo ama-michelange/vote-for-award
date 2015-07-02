@@ -371,9 +371,9 @@ class module_results extends abstract_module
 			if ((null != $oAward) && (false == $oAward->isEmpty())) {
 				calcAwardResults($oAward);
 			}
-			_root::redirect('results::index', array('award_id' => $awardId));
+			_root::redirect('results::archives', array('award_id' => $awardId));
 		}
-		_root::redirect('results::index');
+		_root::redirect('results::archives');
 	}
 
 	/**
@@ -521,9 +521,9 @@ class module_results extends abstract_module
 	{
 		$tTitleIds = null;
 		// Identifiant du prix
-		$idPrix = 46;
+		$idPrix = 43;
 		// Lit les lignes du fichier
-		$lines = file('Alices-PrixBD-Resultats-2010.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$lines = file('Alices-PrixBD-Resultats-2015-ama.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 		// Converti les lignes de chaines en tableau
 		$i = 0;
@@ -593,7 +593,7 @@ class module_results extends abstract_module
 			// Utilisateur suivant
 			$nextUserId--;
 		}
-		echo "<br />\n";
+		echo "<br />TERMINER\n";
 
 	}
 
