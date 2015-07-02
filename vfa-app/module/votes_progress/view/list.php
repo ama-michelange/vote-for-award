@@ -55,7 +55,7 @@
 				<tr>
 					<th>Nom</th>
 					<th>Prénom</th>
-					<th>Votes enregistrées</th>
+					<th>Votes enregistrés</th>
 				</tr>
 				</thead>
 				<tbody>
