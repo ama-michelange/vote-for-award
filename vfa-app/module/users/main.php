@@ -31,13 +31,9 @@ class module_users extends abstract_module
 
 		$navBar->addChild(new Bar('left'));
 		$this->buildMenuUsersByGroup($navBar->getChild('left'), $oUserSession);
-//		module_registred::buildMenuRegistred($navBar->getChild('left'), $oUserSession);
-//		module_invitations::buildMenuGuests($navBar->getChild('left'), $oUserSession);
 
 		$navBar->addChild(new BarButtons('right'));
 		$bar = $navBar->getChild('right');
-		$bar->addChild(plugin_BsHtml::buildButtonItem('Liste par groupe', new NavLink('users', 'listByGroup'), 'glyphicon-list'));
-		module_invitations::buildMenuInvitations($bar, $oUserSession);
 		plugin_BsContextBar::buildDefaultContextBar($bar);
 		return $navBar;
 	}
@@ -138,15 +134,11 @@ class module_users extends abstract_module
 
 	public function _listBoardGroup()
 	{
-		/* @var $oUserSession row_user_session */
-		$oUserSession = _root::getAuth()->getUserSession();
-		$oBoardGroup = $oUserSession->getBoardGroup();
-
-		$tUsers = model_user::getInstance()->findAllByGroupId($oBoardGroup->group_id);
+		$tUsers = model_user::getInstance()->findAllByRoleName(plugin_vfa::ROLE_BOARD);
 
 		$oView = new _view('users::list');
 		$oView->tUsers = $tUsers;
-		$oView->title = $oBoardGroup->toString();
+		$oView->title = 'Comité de sélection';
 
 		$oView->showGroup = true;
 		$oView->showPersonal = true;
