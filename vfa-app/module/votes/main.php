@@ -36,7 +36,8 @@ class module_votes extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->addChild(new Bar('left'));
-		$navBar->setTitle('Voter', new NavLink('votes', 'index'), null, "myBrand");
+//		$navBar->setTitle('Voter', new NavLink('votes', 'index'), null, "myBrand");
+		$navBar->setTitle('Voter', new Link('#', null), null, "myBrand");
 		$this->buildMenuAwardToVote($navBar);
 		return $navBar;
 	}

@@ -195,7 +195,7 @@
 		function showButtonSave() {
 			var brand = $("#myBrand");
 			if (brand.hasClass("navbar-brand")) {
-				brand.text("Enregistrer votre bulletin").removeClass().addClass("btn btn-warning navbar-btn");
+				brand.text("Enregistrer").removeClass().addClass("btn btn-warning navbar-btn");
 				brand.click(function (pEvent) {
 					if (brand.data("toSave").length > 0) {
 						pEvent.preventDefault();
