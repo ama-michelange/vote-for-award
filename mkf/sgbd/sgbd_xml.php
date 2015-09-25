@@ -1,7 +1,9 @@
 <?php
+
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 class sgbd_xml extends abstract_sgbd
 {
 
@@ -13,11 +15,11 @@ class sgbd_xml extends abstract_sgbd
 	public function findMany($tSql, $sClassRow)
 	{
 		$tRows = $this->query($this->bind($tSql), $sClassRow);
-		
-		if (! $tRows) {
+
+		if (!$tRows) {
 			return null;
 		}
-		
+
 		return $tRows;
 	}
 
@@ -29,11 +31,11 @@ class sgbd_xml extends abstract_sgbd
 	public function findOne($tSql, $sClassRow)
 	{
 		$tRs = $this->query($this->bind($tSql), $sClassRow);
-		
+
 		if (empty($tRs)) {
 			return null;
 		}
-		
+
 		return $tRs[0];
 	}
 
@@ -50,55 +52,55 @@ class sgbd_xml extends abstract_sgbd
 	public function update($sTable, $tProperty, $tWhere)
 	{
 		$iId = $this->getIdFromTab($tWhere);
-		
+
 		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml';
 		$oXml = simplexml_load_file($sFile);
-		$tXml = (array) $oXml;
-		
+		$tXml = (array)$oXml;
+
 		// remove index
 		$this->removeRowFromAllIndex($sTable, $tXml);
-		
+
 		foreach ($tProperty as $sVar => $sVal) {
-			$tXml[$sVar] = (string) $sVal;
+			$tXml[$sVar] = (string)$sVal;
 		}
-		
+
 		// add in index
 		$this->addRowInAllIndex($sTable, $tXml);
-		
+
 		$this->save($tXml, $sFile);
 	}
 
 	public function insert($sTable, $tProperty)
 	{
 		$iId = $this->getMaxId($sTable);
-		
+
 		$tMax = array(
 			'max' => ($iId + 1)
 		);
-		
+
 		$tProperty['id'] = $iId;
-		
+
 		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml';
 		$this->save($tProperty, $sFile);
 		$sFileMax = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/max.xml';
 		$this->save($tMax, $sFileMax);
-		
+
 		$this->addRowInAllIndex($sTable, $tProperty);
-		
+
 		return $iId;
 	}
 
 	public function delete($sTable, $tWhere)
 	{
 		$iId = $this->getIdFromTab($tWhere);
-		
+
 		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml';
 		$oXml = simplexml_load_file($sFile);
-		$tXml = (array) $oXml;
-		
+		$tXml = (array)$oXml;
+
 		// remove index
 		$this->removeRowFromAllIndex($sTable, $tXml);
-		
+
 		unlink($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $iId . '.xml');
 	}
 
@@ -106,8 +108,8 @@ class sgbd_xml extends abstract_sgbd
 	{
 		$sFile = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/structure.xml';
 		$oXml = simplexml_load_file($sFile);
-		
-		$tXml = (array) $oXml;
+
+		$tXml = (array)$oXml;
 		return $tXml['colonne'];
 	}
 
@@ -127,43 +129,44 @@ class sgbd_xml extends abstract_sgbd
 		// traitement de la requete $sReq
 		$sReq = trim($sReq);
 		$this->_sReq = $sReq;
-		
+
 		if (substr($sReq, 0, 6) == 'SELECT') {
-			
+
 			$tReq = $this->explainSql($sReq);
-			
+
 			// count
 			$bCount = false;
 			$iCount = 0;
 			if (isset($tReq['select']) and preg_match('/COUNT\(/i', $tReq['select'])) {
 				$bCount = true;
 			}
-			
+
 			$tCritere = $this->findListCritere($tReq);
-			
+
 			$sTable = trim($tReq['from']);
-			
+
 			// UTILISATION D UN INDEX
 			$tSqlFieldEqual = array_keys($tCritere);
-			
+
 			$sIndexToUse = $this->findIndexForTable($sTable, $tSqlFieldEqual);
-			
+
 			$tObj = array();
 			// UTILISATION D UN INDEX
 			if ($sIndexToUse != '') {
 				$tObj = $this->findWithTableIndex($sClassRow, $sTable, $sIndexToUse, $tCritere);
 			} elseif ($tSqlFieldEqual == array(
-				'=id'
-			)) {
+					'=id'
+				)
+			) {
 				$sFilename = $this->_tConfig[$this->_sConfig . '.database'];
-				$sFilename .= $sTable . '/' . (string) $tCritere['=id'] . '.xml';
-				
-				$tRow = (array) simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
-				
+				$sFilename .= $sTable . '/' . (string)$tCritere['=id'] . '.xml';
+
+				$tRow = (array)simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
+
 				$oRow = new $sClassRow($tRow);
 				$tObj[] = $oRow;
 			} else {
-				
+
 				$tObj = $this->findInTableWithCritere($sClassRow, $sTable, $tCritere);
 			}
 			// count
@@ -172,7 +175,7 @@ class sgbd_xml extends abstract_sgbd
 				return array(
 					$iCount
 				);
-			} else 
+			} else
 				if (isset($tReq['order']) and $tObj != null) {
 					return $this->sortResult($tObj, $tReq);
 				} else {
@@ -183,14 +186,15 @@ class sgbd_xml extends abstract_sgbd
 
 	private function explainSql($sReq)
 	{
-		if (preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)WHERE(?<where>.*)ORDER BY(?<order>.*)/i', $sReq, $tResult, 
-			PREG_SET_ORDER) or
-			 preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)ORDER BY(?<order>.*)/i', $sReq, $tResult, PREG_SET_ORDER) or
-			 preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)WHERE(?<where>.*)/i', $sReq, $tResult, PREG_SET_ORDER) or
-			 preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)/i', $sReq, $tResult, PREG_SET_ORDER)) {
+		if (preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)WHERE(?<where>.*)ORDER BY(?<order>.*)/i', $sReq, $tResult,
+				PREG_SET_ORDER) or
+			preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)ORDER BY(?<order>.*)/i', $sReq, $tResult, PREG_SET_ORDER) or
+			preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)WHERE(?<where>.*)/i', $sReq, $tResult, PREG_SET_ORDER) or
+			preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)/i', $sReq, $tResult, PREG_SET_ORDER)
+		) {
 			if (isset($tResult[0]['where']) and preg_match('/ or /i', $tResult[0]['where'])) {
 				$this->erreur('Requete non supportee : ' . $sReq . $msg);
-			} elseif (isset($tResult[0]['order']) and ! preg_match('/\s[ASC|DESC]/i', trim($tResult[0]['order']))) {
+			} elseif (isset($tResult[0]['order']) and !preg_match('/\s[ASC|DESC]/i', trim($tResult[0]['order']))) {
 				$this->erreur('Il faut definir un sens de tri: ASC ou DESC dans la requete' . $sReq . $msg);
 			} else {
 				return $tResult[0];
@@ -203,7 +207,7 @@ class sgbd_xml extends abstract_sgbd
 			$msg .= "- SELECT liste_des_champs FROM ma_table WHERE champ=valeur \n";
 			$msg .= "- SELECT liste_des_champs FROM ma_table  \n";
 			$msg .= " la clause where accepte uniquement champ=valeur, champ!=valeur et AND \n";
-			
+
 			$this->erreur('Requete non supportee : ' . $sReq . $msg);
 		}
 	}
@@ -211,7 +215,7 @@ class sgbd_xml extends abstract_sgbd
 	private function findListCritere($tReq)
 	{
 		$tCritere = array();
-		
+
 		if (isset($tReq['where'])) {
 			if (preg_match('/ and /i', $tReq['where'])) {
 				$tWhere = preg_split('/ AND /i', $tReq['where']);
@@ -240,26 +244,26 @@ class sgbd_xml extends abstract_sgbd
 	private function sortResult($tObj, $tReq)
 	{
 		list ($sChamp, $sSens) = preg_split('/ /', trim($tReq['order']));
-		
+
 		$tTri = array();
 		$tIdObj = array();
 		foreach ($tObj as $i => $oObj) {
 			$tIdObj[$i] = $oObj;
-			$tTri[$i] = (string) $oObj->$sChamp;
+			$tTri[$i] = (string)$oObj->$sChamp;
 		}
-		
+
 		if ($sSens == 'DESC') {
 			arsort($tTri);
 		} else {
 			asort($tTri);
 		}
-		
+
 		$tOrderedObj = array();
 		$tId = array_keys($tTri);
 		foreach ($tId as $id) {
 			$tOrderedObj[] = $tIdObj[$id];
 		}
-		
+
 		return $tOrderedObj;
 	}
 
@@ -270,14 +274,15 @@ class sgbd_xml extends abstract_sgbd
 			$tFileIndex = $oDirIndex->getListDir();
 			foreach ($tFileIndex as $oFileIndex) {
 				$tFieldIndex = $this->getFieldsFromIndex($oFileIndex->getName());
-				
+
 				foreach ($tSqlFieldEqual as $sSqlFieldEqual) {
-					if ($sSqlFieldEqual[0] == '=' and ! in_array(substr($sSqlFieldEqual, 1), $tFieldIndex) or
-						 $sSqlFieldEqual[0] == '!' and in_array(substr($sSqlFieldEqual, 1), $tFieldIndex)) {
+					if ($sSqlFieldEqual[0] == '=' and !in_array(substr($sSqlFieldEqual, 1), $tFieldIndex) or
+						$sSqlFieldEqual[0] == '!' and in_array(substr($sSqlFieldEqual, 1), $tFieldIndex)
+					) {
 						continue 2;
 					}
 				}
-				
+
 				return $oFileIndex->getName();
 			}
 		}
@@ -287,34 +292,35 @@ class sgbd_xml extends abstract_sgbd
 	private function findWithTableIndex($sClassRow, $sTable, $sIndexToUse, $tCritere)
 	{
 		$sDirIndex = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndexToUse;
-		
+
 		$tFieldIndex = preg_split('/\./', $sIndexToUse);
-		
+
 		$oDirIndex = new _dir($sDirIndex);
 		$tFileIndex = $oDirIndex->getListFile();
-		
+
 		$tObj = array();
 		foreach ($tFileIndex as $oFileIndex) {
 			$sFileIndex = trim($oFileIndex->getName());
-			
+
 			$tRow = $this->getRowValueFromIndex($sFileIndex, $tFieldIndex);
-			
+
 			foreach ($tCritere as $sCritereField => $sCritereVal) {
-				
-				if (! isset($tRow[$sCritereField]) or (($sCritereVal[0] == '=' and
-					 (string) $sCritereVal != (string) '=' . $tRow[$sCritereField]) or
-					 
-					($sCritereVal[0] == '!' and (string) $sCritereVal == (string) '!' . $tRow[$sCritereField]))) {
+
+				if (!isset($tRow[$sCritereField]) or (($sCritereVal[0] == '=' and
+							(string)$sCritereVal != (string)'=' . $tRow[$sCritereField]) or
+
+						($sCritereVal[0] == '!' and (string)$sCritereVal == (string)'!' . $tRow[$sCritereField]))
+				) {
 					continue 2;
 				}
 			}
-			
+
 			$tMatchedFile = file($sDirIndex . '/' . $sFileIndex);
 			foreach ($tMatchedFile as $sMatchedFile) {
 				$sMatchedFile = trim($sMatchedFile);
 				$sFilename = $this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/' . $sMatchedFile;
-				$tRow = (array) simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
-				
+				$tRow = (array)simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
+
 				$oRow = new $sClassRow($tRow);
 				$tObj[] = $oRow;
 			}
@@ -326,7 +332,7 @@ class sgbd_xml extends abstract_sgbd
 	{
 		$oDir = new _dir($this->_tConfig[$this->_sConfig . '.database'] . $sTable);
 		$tFile = $oDir->getListFile();
-		
+
 		$tObj = array();
 		foreach ($tFile as $oFile) {
 			if (in_array($oFile->getName(), array(
@@ -335,22 +341,23 @@ class sgbd_xml extends abstract_sgbd
 			))) {
 				continue;
 			}
-			$tRow = (array) simplexml_load_file($oFile->getAdresse(), null, LIBXML_NOCDATA);
-			
+			$tRow = (array)simplexml_load_file($oFile->getAdresse(), null, LIBXML_NOCDATA);
+
 			foreach ($tCritere as $sCritereField => $sCritereVal) {
-				
-				if (! isset($tRow[$sCritereField]) or (($sCritereVal[0] == '=' and
-					 (string) $sCritereVal != (string) '=' . $tRow[$sCritereField]) or
-					 
-					($sCritereVal[0] == '!' and (string) $sCritereVal == (string) '!' . $tRow[$sCritereField]))) {
+
+				if (!isset($tRow[$sCritereField]) or (($sCritereVal[0] == '=' and
+							(string)$sCritereVal != (string)'=' . $tRow[$sCritereField]) or
+
+						($sCritereVal[0] == '!' and (string)$sCritereVal == (string)'!' . $tRow[$sCritereField]))
+				) {
 					continue 2;
 				}
 			}
-			
+
 			$oRow = new $sClassRow($tRow);
 			$tObj[] = $oRow;
 		}
-		
+
 		return $tObj;
 	}
 
@@ -366,13 +373,13 @@ class sgbd_xml extends abstract_sgbd
 
 	private function getFieldsFromIndex($sIndex)
 	{
-		$tFields = preg_split('/\./', substr($sIndex, 0, - 6)); // field.field.index
+		$tFields = preg_split('/\./', substr($sIndex, 0, -6)); // field.field.index
 		return $tFields;
 	}
 
 	private function getRowValueFromIndex($sFileIndex, $tFieldIndex)
 	{
-		$tValue = preg_split('/####/', substr($sFileIndex, 0, - 4));
+		$tValue = preg_split('/####/', substr($sFileIndex, 0, -4));
 		$tRow = array();
 		foreach ($tFieldIndex as $i => $var) {
 			$tRow[$var] = $tValue[$i];
@@ -394,12 +401,12 @@ class sgbd_xml extends abstract_sgbd
 	public function generateIndexForTable($sTable, $sIndex)
 	{
 		$tFields = $this->getFieldsFromIndex($sIndex);
-		
+
 		$oDir = new _dir($this->_tConfig[$this->_sConfig . '.database'] . $sTable);
 		$tFile = $oDir->getListFile();
-		
+
 		$tIndexContent = array();
-		
+
 		foreach ($tFile as $oFile) {
 			if ($oFile->getName() == 'structure.xml') {
 				continue;
@@ -407,9 +414,9 @@ class sgbd_xml extends abstract_sgbd
 			if ($oFile->getName() == 'max.xml') {
 				continue;
 			}
-			
-			$tRow = (array) simplexml_load_file($oFile->getAdresse(), null, LIBXML_NOCDATA);
-			
+
+			$tRow = (array)simplexml_load_file($oFile->getAdresse(), null, LIBXML_NOCDATA);
+
 			$sKey = '';
 			foreach ($tFields as $sField) {
 				$sKey .= $tRow[$sField];
@@ -417,12 +424,12 @@ class sgbd_xml extends abstract_sgbd
 			}
 			$tIndexContent[$sKey][] = $tRow['id'] . '.xml';
 		}
-		
+
 		$oDir = new _dir($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex);
 		foreach ($oDir->getListFile() as $oFile) {
 			$oFile->delete();
 		}
-		
+
 		foreach ($tIndexContent as $sKey => $tFile) {
 			$oFile = new _file(
 				$this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex . '/' . $sKey . '.csv');
@@ -445,7 +452,7 @@ class sgbd_xml extends abstract_sgbd
 	private function addRowInIndex($sTable, $tProperty, $sIndex)
 	{
 		$sFileIndex = $this->getFileIndexFromTab($sIndex, $tProperty);
-		
+
 		$oFile = new _file($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex . '/' . $sFileIndex);
 		$oFile->addContent($tProperty['id'] . '.xml');
 		$oFile->save('a');
@@ -465,11 +472,11 @@ class sgbd_xml extends abstract_sgbd
 	private function removeRowFromIndex($sTable, $tProperty, $sIndex)
 	{
 		$sFileIndex = $this->getFileIndexFromTab($sIndex, $tProperty);
-		
-		if (! file_exists($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex . '/' . $sFileIndex)) {
+
+		if (!file_exists($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex . '/' . $sFileIndex)) {
 			return;
 		}
-		
+
 		$tLine = file($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex . '/' . $sFileIndex);
 		$tContent = array();
 		foreach ($tLine as $sLine) {
@@ -479,7 +486,7 @@ class sgbd_xml extends abstract_sgbd
 			}
 			$tContent[] = $sLine;
 		}
-		
+
 		$oFile = new _file($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/index/' . $sIndex . '/' . $sFileIndex);
 		$oFile->setContent(implode("\n", $tContent));
 		$oFile->save();
@@ -510,6 +517,6 @@ class sgbd_xml extends abstract_sgbd
 	private function getMaxId($sTable)
 	{
 		$oXml = simplexml_load_file($this->_tConfig[$this->_sConfig . '.database'] . $sTable . '/max.xml');
-		return (int) $oXml->max;
+		return (int)$oXml->max;
 	}
 }

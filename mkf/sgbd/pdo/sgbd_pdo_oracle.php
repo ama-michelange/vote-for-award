@@ -1,7 +1,9 @@
 <?php
+
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 class sgbd_pdo_oracle extends abstract_sgbd_pdo
 {
 
@@ -14,11 +16,11 @@ class sgbd_pdo_oracle extends abstract_sgbd_pdo
 	{
 		$pRs = $this->query(sgbd_syntax_oracle::getListColumn($sTable));
 		$tObj = array();
-		
+
 		if (empty($pRs)) {
 			return null;
 		}
-		
+
 		while ($tRow = $pRs->fetch(PDO::FETCH_NUM)) {
 			$tObj[] = $tRow[0];
 		}
@@ -28,11 +30,11 @@ class sgbd_pdo_oracle extends abstract_sgbd_pdo
 	public function getListTable()
 	{
 		$pRs = $this->query(sgbd_syntax_oracle::getListTable());
-		
+
 		if (empty($pRs)) {
 			return null;
 		}
-		
+
 		$tObj = array();
 		while ($tRow = $pRs->fetch(PDO::FETCH_NUM)) {
 			$tObj[] = $tRow[0];
@@ -43,7 +45,7 @@ class sgbd_pdo_oracle extends abstract_sgbd_pdo
 	protected function connect()
 	{
 		if (empty($this->_pDb)) {
-			$this->_pDb = new PDO($this->_tConfig[$this->_sConfig . '.dsn'], $this->_tConfig[$this->_sConfig . '.username'], 
+			$this->_pDb = new PDO($this->_tConfig[$this->_sConfig . '.dsn'], $this->_tConfig[$this->_sConfig . '.username'],
 				$this->_tConfig[$this->_sConfig . '.password']);
 		}
 	}
