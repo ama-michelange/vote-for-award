@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * _file classe pour gerer un fichier
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class _file
 {
@@ -21,7 +22,7 @@ class _file
 	 *
 	 * @access public
 	 * @param string $sAdresse
-	 *        	l'adresse du fichier
+	 *          l'adresse du fichier
 	 */
 	public function __construct($sAdresse = null)
 	{
@@ -58,7 +59,7 @@ class _file
 	 *
 	 * @access public
 	 * @param string $sAdresse
-	 *        	adresse du fichier
+	 *          adresse du fichier
 	 */
 	public function setAdresse($sAdresse)
 	{
@@ -83,7 +84,7 @@ class _file
 	 *
 	 * @access public
 	 * @param string $sContent
-	 *        	contenu du fichier
+	 *          contenu du fichier
 	 */
 	public function setContent($sContent)
 	{
@@ -95,7 +96,7 @@ class _file
 	 *
 	 * @access public
 	 * @param string $sContent
-	 *        	contenu du fichier a ajouter
+	 *          contenu du fichier a ajouter
 	 */
 	public function addContent($sContent)
 	{
@@ -121,9 +122,9 @@ class _file
 	public function getContent()
 	{
 		$this->verif();
-		
+
 		$sFichier = file_get_contents($this->_sAdresse);
-		
+
 		return $sFichier;
 	}
 
@@ -157,7 +158,7 @@ class _file
 	public function getTab()
 	{
 		$this->verif();
-		
+
 		return file($this->_sAdresse);
 	}
 
@@ -169,7 +170,7 @@ class _file
 	public function delete()
 	{
 		$this->verif();
-		
+
 		unlink($this->_sAdresse);
 	}
 
@@ -213,15 +214,15 @@ class _file
 	 * ecrit $sContent avec l'option $sOption
 	 *
 	 * @access public
-	 * @param string $sContent        	
-	 * @param string $sOption        	
+	 * @param string $sContent
+	 * @param string $sOption
 	 */
 	public function write($sContent, $sOption = 'w')
 	{
 		if ($sContent == '') {
 			file_put_contents($this->_sAdresse, $sContent);
-		} else 
-			if (! file_put_contents($this->_sAdresse, $sContent)) {
+		} else
+			if (!file_put_contents($this->_sAdresse, $sContent)) {
 				throw new Exception('Can t write "' . $sContent . '"' . $this->_sAdresse);
 			}
 	}
@@ -242,7 +243,7 @@ class _file
 	 *
 	 * @access public
 	 * @param string $iVal
-	 *        	du chmod a faire
+	 *          du chmod a faire
 	 */
 	public function chmod($iVal = 0777)
 	{
@@ -251,7 +252,7 @@ class _file
 
 	private function verif()
 	{
-		if (! $this->exist()) {
+		if (!$this->exist()) {
 			throw new Exception($this->_sAdresse . ' n\'existe pas');
 		}
 		return true;

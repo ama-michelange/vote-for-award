@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * classe _layout pour gerer le layout
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class _layout
 {
@@ -23,12 +24,12 @@ class _layout
 	 *
 	 * @access public
 	 * @param string $sLayout
-	 *        	nom du layout a utiliser
+	 *          nom du layout a utiliser
 	 */
 	public function __construct($sLayout = null)
 	{
 		$this->_tVar = array();
-		
+
 		/* LOG */
 		_root::getLog()->info('--layout: initialisation [' . $sLayout . ']');
 		if ($sLayout == null) {
@@ -52,7 +53,7 @@ class _layout
 	 */
 	public function __get($sVar)
 	{
-		if (! array_key_exists($sVar, $this->_tVar)) {
+		if (!array_key_exists($sVar, $this->_tVar)) {
 			/* LOG */
 			_root::getLog()->error('Variable ' . $sVar . ' inexistante dans le layout ' . $this->_sLayout);
 			throw new Exception('Variable ' . $sVar . ' inexistante dans le layout ' . $this->_sLayout);
@@ -82,7 +83,7 @@ class _layout
 	 *
 	 * @access public
 	 * @param string $sLayout
-	 *        	nom du layout a utiliser
+	 *          nom du layout a utiliser
 	 */
 	public function setLayout($sLayout)
 	{
@@ -96,9 +97,9 @@ class _layout
 	 *
 	 * @access public
 	 * @param string $sPlace
-	 *        	emplacement
+	 *          emplacement
 	 * @param _tpl $oTpl
-	 *        	objet _tpl
+	 *          objet _tpl
 	 */
 	public function add($sPlace, $oTpl)
 	{
@@ -112,9 +113,9 @@ class _layout
 	 *
 	 * @access public
 	 * @param string $sPlace
-	 *        	emplacement
+	 *          emplacement
 	 * @param string $sAppel
-	 *        	appel du module module::action
+	 *          appel du module module::action
 	 */
 	public function addModule($sPlace, $sAppel)
 	{
@@ -138,7 +139,7 @@ class _layout
 	{
 		/* LOG */
 		_root::getLog()->info('-layout: affichage [' . _root::getConfigVar('path.layout') . $this->_sLayout . '.php]');
-		if (! file_exists(_root::getConfigVar('path.layout') . $this->_sLayout . '.php')) {
+		if (!file_exists(_root::getConfigVar('path.layout') . $this->_sLayout . '.php')) {
 			$tErreur = array(
 				'layout ' . $this->_sLayout . ' introuvable dans ' . _root::getConfigVar('path.layout'),
 				_root::getConfigVar('path.layout') . $this->_sLayout . '.php introuvable'
@@ -153,13 +154,13 @@ class _layout
 	 *
 	 * @access public
 	 * @return string
-	 * @param string $sPlace        	
+	 * @param string $sPlace
 	 */
 	public function load($sPlace)
 	{
 		/* LOG */
 		_root::getLog()->info('-layout: chargement/affichage place [' . $sPlace . ']');
-		if (! isset($this->_tContent[$sPlace])) {
+		if (!isset($this->_tContent[$sPlace])) {
 			return null;
 		}
 		$sLoad = '';

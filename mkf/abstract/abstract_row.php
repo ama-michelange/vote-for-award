@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * classe abstract_row
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 abstract class abstract_row
 {
@@ -138,7 +139,7 @@ abstract class abstract_row
 		if ($tId) {
 			foreach ($tId as $sVar) {
 				if (isset($this->_tProperty[$sVar])) {
-					$tWhereId[$sVar] = (int) $this->_tProperty[$sVar];
+					$tWhereId[$sVar] = (int)$this->_tProperty[$sVar];
 				}
 			}
 		}
@@ -159,7 +160,7 @@ abstract class abstract_row
 	 */
 	public function __get($sVar)
 	{
-		if (array_key_exists((string) $sVar, $this->_tProperty)) {
+		if (array_key_exists((string)$sVar, $this->_tProperty)) {
 			return $this->_tProperty[$sVar];
 		}
 		return null;
@@ -168,7 +169,7 @@ abstract class abstract_row
 	/**
 	 * force l'id de l'enregistrement
 	 *
-	 * @param undefined $uId        	
+	 * @param undefined $uId
 	 */
 	public function setId($uId)
 	{
@@ -177,9 +178,9 @@ abstract class abstract_row
 		}
 		$tColumnId = $this->getModel()->getIdTab();
 		$sColumnId = $tColumnId[0];
-		
+
 		$this->_tProperty[$sColumnId] = $uId;
-		
+
 		$this->chooseUpdate();
 	}
 

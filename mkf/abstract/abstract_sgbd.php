@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * classe abstract_sgbd
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 abstract class abstract_sgbd
 {
@@ -33,7 +34,7 @@ abstract class abstract_sgbd
 	 */
 	protected static function _getInstance($class, $sConfig)
 	{
-		if (! isset(self::$_tInstance[$class][$sConfig])) {
+		if (!isset(self::$_tInstance[$class][$sConfig])) {
 			$oSgbd = new $class();
 			$oSgbd->chooseConfig($sConfig);
 			self::$_tInstance[$class][$sConfig] = $oSgbd;
@@ -45,7 +46,7 @@ abstract class abstract_sgbd
 	 * force la classe row
 	 *
 	 * @access public
-	 * @param string $sClassRow        	
+	 * @param string $sClassRow
 	 */
 	public function setClassRow($sClassRow)
 	{
@@ -55,7 +56,7 @@ abstract class abstract_sgbd
 	/**
 	 * choisit le profile de connection
 	 *
-	 * @param string $sConfig        	
+	 * @param string $sConfig
 	 */
 	public function chooseConfig($sConfig)
 	{
@@ -65,7 +66,7 @@ abstract class abstract_sgbd
 	/**
 	 * definir le tableau de connection
 	 *
-	 * @param array $tConfig        	
+	 * @param array $tConfig
 	 */
 	public function setConfig($tConfig)
 	{
@@ -83,12 +84,12 @@ abstract class abstract_sgbd
 	/**
 	 * Fusionne la requete et ses parametres
 	 *
-	 * @param array $tReq        	
+	 * @param array $tReq
 	 */
 	public function bind($tReq)
 	{
 		$sReq = '';
-		
+
 		if (is_array($tReq)) {
 			$sReq = $tReq[0];
 			if (isset($tReq[1]) and is_array($tReq[1])) {
@@ -97,7 +98,7 @@ abstract class abstract_sgbd
 				unset($tReq[0]);
 				$tParam = array_values($tReq);
 			}
-			
+
 			foreach ($tParam as $sVal) {
 				$sVal = $this->quote($sVal);
 				$sReq = preg_replace('/[?]/', $sVal, $sReq, 1);
@@ -105,7 +106,7 @@ abstract class abstract_sgbd
 		} else {
 			return $tReq;
 		}
-		
+
 		return $sReq;
 	}
 
@@ -113,22 +114,22 @@ abstract class abstract_sgbd
 	{
 		$sCols = '';
 		$sVals = '';
-		
+
 		if ($tProperty) {
 			foreach ($tProperty as $sVar => $sVal) {
 				$sCols .= $sVar . ',';
 				$sVals .= $this->quote($sVal) . ',';
 			}
 		}
-		return '(' . substr($sCols, 0, - 1) . ') VALUES (' . substr($sVals, 0, - 1) . ') ';
+		return '(' . substr($sCols, 0, -1) . ') VALUES (' . substr($sVals, 0, -1) . ') ';
 	}
-	
+
 	// AMA : gestion de la valeur NULL
 	public function getInsertFromTab($tProperty)
 	{
 		$sCols = '';
 		$sVals = '';
-		
+
 		if ($tProperty) {
 			foreach ($tProperty as $sVar => $sVal) {
 				if (null != $sVal) {
@@ -137,7 +138,7 @@ abstract class abstract_sgbd
 				}
 			}
 		}
-		return '(' . substr($sCols, 0, - 1) . ') VALUES (' . substr($sVals, 0, - 1) . ') ';
+		return '(' . substr($sCols, 0, -1) . ') VALUES (' . substr($sVals, 0, -1) . ') ';
 	}
 
 	public function _ORI_getUpdateFromTab($tProperty)
@@ -148,9 +149,9 @@ abstract class abstract_sgbd
 				$sReq .= $sVar . '=' . $this->quote($sVal) . ',';
 			}
 		}
-		return substr($sReq, 0, - 1);
+		return substr($sReq, 0, -1);
 	}
-	
+
 	// AMA : gestion de la valeur NULL
 	public function getUpdateFromTab($tProperty)
 	{
@@ -164,7 +165,7 @@ abstract class abstract_sgbd
 				}
 			}
 		}
-		return substr($sReq, 0, - 1);
+		return substr($sReq, 0, -1);
 	}
 
 	public function setId($tId)
@@ -183,7 +184,7 @@ abstract class abstract_sgbd
 				$sWhere .= $sVar . '=' . $this->quote($sVal);
 			}
 		}
-		
+
 		return $sWhere;
 	}
 

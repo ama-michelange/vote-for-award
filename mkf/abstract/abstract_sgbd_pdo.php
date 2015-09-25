@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * classe abstract_sgbd
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 abstract class abstract_sgbd_pdo
 {
@@ -33,7 +34,7 @@ abstract class abstract_sgbd_pdo
 	 */
 	protected static function _getInstance($class, $sConfig)
 	{
-		if (! isset(self::$_tInstance[$class][$sConfig])) {
+		if (!isset(self::$_tInstance[$class][$sConfig])) {
 			$oSgbd = new $class();
 			$oSgbd->chooseConfig($sConfig);
 			self::$_tInstance[$class][$sConfig] = $oSgbd;
@@ -45,7 +46,7 @@ abstract class abstract_sgbd_pdo
 	 * force la classe row
 	 *
 	 * @access public
-	 * @param string $sClassRow        	
+	 * @param string $sClassRow
 	 */
 	public function setClassRow($sClassRow)
 	{
@@ -55,7 +56,7 @@ abstract class abstract_sgbd_pdo
 	/**
 	 * choisit le profile de connection
 	 *
-	 * @param string $sConfig        	
+	 * @param string $sConfig
 	 */
 	public function chooseConfig($sConfig)
 	{
@@ -65,7 +66,7 @@ abstract class abstract_sgbd_pdo
 	/**
 	 * definir le tableau de connection
 	 *
-	 * @param array $tConfig        	
+	 * @param array $tConfig
 	 */
 	public function setConfig($tConfig)
 	{
@@ -84,7 +85,7 @@ abstract class abstract_sgbd_pdo
 	{
 		$sCols = '';
 		$sVals = '';
-		
+
 		if ($tProperty) {
 			$tKey = array_keys($tProperty);
 			foreach ($tKey as $sVar) {
@@ -92,7 +93,7 @@ abstract class abstract_sgbd_pdo
 				$sVals .= '?,';
 			}
 		}
-		return '(' . substr($sCols, 0, - 1) . ') VALUES (' . substr($sVals, 0, - 1) . ') ';
+		return '(' . substr($sCols, 0, -1) . ') VALUES (' . substr($sVals, 0, -1) . ') ';
 	}
 
 	public function getUpdateFromTab($tProperty)
@@ -104,7 +105,7 @@ abstract class abstract_sgbd_pdo
 				$sReq .= $sVar . '=?,';
 			}
 		}
-		return substr($sReq, 0, - 1);
+		return substr($sReq, 0, -1);
 	}
 
 	public function setId($tId)
@@ -124,7 +125,7 @@ abstract class abstract_sgbd_pdo
 				$sWhere .= $sVar . '=?';
 			}
 		}
-		
+
 		return $sWhere;
 	}
 
@@ -143,7 +144,7 @@ abstract class abstract_sgbd_pdo
 		} else {
 			$sReq = $tReq;
 		}
-		
+
 		return array(
 			$sReq,
 			$tParam
@@ -153,26 +154,26 @@ abstract class abstract_sgbd_pdo
 	public function findManySimple($tSql, $sClassRow)
 	{
 		list ($sReq, $tParam) = $this->getRequestAndParam($tSql);
-		
+
 		$pRs = $this->query($sReq, $tParam);
-		
-		if (! $pRs) {
+
+		if (!$pRs) {
 			return null;
 		}
-		
+
 		return $pRs->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	public function findMany($tSql, $sClassRow)
 	{
 		list ($sReq, $tParam) = $this->getRequestAndParam($tSql);
-		
+
 		$pRs = $this->query($sReq, $tParam);
-		
-		if (! $pRs) {
+
+		if (!$pRs) {
 			return null;
 		}
-		
+
 		$tObj = array();
 		while ($tRow = $pRs->fetch(PDO::FETCH_ASSOC)) {
 			$oRow = new $sClassRow($tRow);
@@ -184,49 +185,49 @@ abstract class abstract_sgbd_pdo
 	public function findOne($tSql, $sClassRow)
 	{
 		list ($sReq, $tParam) = $this->getRequestAndParam($tSql);
-		
+
 		$pRs = $this->query($sReq, $tParam);
-		
+
 		$tRow = $pRs->fetch(PDO::FETCH_ASSOC);
-		
+
 		if (empty($tRow)) {
 			return null;
 		}
-		
+
 		$oRow = new $sClassRow($tRow);
-		
+
 		return $oRow;
 	}
 
 	public function findOneSimple($tSql, $sClassRow)
 	{
 		list ($sReq, $tParam) = $this->getRequestAndParam($tSql);
-		
+
 		$pRs = $this->query($sReq, $tParam);
-		
+
 		$oRow = $pRs->fetch(PDO::FETCH_OBJ);
-		
+
 		if (empty($oRow)) {
 			return null;
 		}
-		
+
 		return $oRow;
 	}
 
 	public function execute($tSql)
 	{
 		list ($sReq, $tParam) = $this->getRequestAndParam($tSql);
-		
+
 		return $this->query($sReq, $tParam);
 	}
 
 	public function update($sTable, $tProperty, $tWhere)
 	{
 		$sReq = 'UPDATE ' . $sTable . ' SET ' . $this->getUpdateFromTab($tProperty) . ' WHERE ' . $this->getWhereFromTab($tWhere);
-		
+
 		$tPropertyAndWhere = array_merge($tProperty, $tWhere);
 		$tParam = array_values($tPropertyAndWhere);
-		
+
 		$this->query($sReq, $tParam);
 	}
 
@@ -234,9 +235,9 @@ abstract class abstract_sgbd_pdo
 	{
 		$sReq = 'INSERT INTO ' . $sTable . ' ' . $this->getInsertFromTab($tProperty);
 		$tParam = array_values($tProperty);
-		
+
 		$this->query($sReq, $tParam);
-		
+
 		return $this->getLastInsertId();
 	}
 
@@ -244,7 +245,7 @@ abstract class abstract_sgbd_pdo
 	{
 		$sReq = 'DELETE FROM ' . $sTable . ' WHERE ' . $this->getWhereFromTab($tWhere);
 		$tParam = array_values($tWhere);
-		
+
 		$this->query($sReq, $tParam);
 	}
 

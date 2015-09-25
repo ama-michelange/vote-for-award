@@ -412,7 +412,7 @@ class _root
 			Les fichiers de type 'plugin' sont dans des fichiers plugin/plugin_CLASS.php
 			Les fichiers de type 'model' sont dans des ficheirs model/model_CLASS.php
 			Les fichiers de type 'row' sont dans des fichiers model/model_CLASS.php (meme fichier que la classe model)
- 
+
 			" . $e->getMessage();
 			self::erreurLog($sError . "\n" . $e->getTraceAsString());
 		}

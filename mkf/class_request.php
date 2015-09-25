@@ -2,12 +2,13 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * _request classe pour gerer le les requete
  *
  * @author Mika
  * @link http://mkf.mkdevs.com/
- *      
+ *
  */
 class _request
 {
@@ -25,7 +26,7 @@ class _request
 	 *
 	 * @access public
 	 * @param array $tTab
-	 *        	tableau de la requete $_GET, $_POST...
+	 *          tableau de la requete $_GET, $_POST...
 	 */
 	public function __construct()
 	{
@@ -33,14 +34,14 @@ class _request
 		if ($this->_sModule == null) {
 			$this->_sModule = _root::getConfigVar('navigation.module.default');
 		}
-		
+
 		$this->sAction = _root::getConfigVar('navigation.action.default', null);
 		if ($this->_sAction == null) {
 			$this->_sAction = _root::getConfigVar('navigation.action.default');
 		}
-		
+
 		$this->_tVar = array();
-		
+
 		$this->_bHasNavigation = false;
 	}
 
@@ -50,12 +51,12 @@ class _request
 	 * @access public
 	 * @return undefined $else
 	 * @param string $sVar
-	 *        	variable a retourner
+	 *          variable a retourner
 	 */
 	public function ORI_getParam($sVar, $else = null)
 	{
 		if (array_key_exists($sVar, $this->_tVar)) {
-			if ((int) _root::getConfigVar('security.xss.enabled') == 1) {
+			if ((int)_root::getConfigVar('security.xss.enabled') == 1) {
 				if (is_array($this->_tVar[$sVar])) {
 					return array_map('customHtmlentities', $this->_tVar[$sVar]);
 				}
@@ -68,19 +69,20 @@ class _request
 			return $else;
 		}
 	}
+
 	/**
 	 * retourne le parametre $sVar ou $else
 	 *
 	 * @access public
 	 * @return undefined $else
 	 * @param string $sVar
-	 *        	variable a retourner
+	 *          variable a retourner
 	 */
 	public function getParam($sVar, $else = null)
 	{
 		if (array_key_exists($sVar, $this->_tVar)) {
-			if ((int) _root::getConfigVar('security.xss.enabled') == 1) {
-				if (1 == (int) _root::getConfigVar('security.xss.onlyspecialchars')) {
+			if ((int)_root::getConfigVar('security.xss.enabled') == 1) {
+				if (1 == (int)_root::getConfigVar('security.xss.onlyspecialchars')) {
 					if (is_array($this->_tVar[$sVar])) {
 						return array_map('customHtmlspecialchars', $this->_tVar[$sVar]);
 					}
@@ -106,13 +108,13 @@ class _request
 	 * force une variable de request
 	 *
 	 * @access public
-	 * @param string $sVar        	
-	 * @param string $val        	
+	 * @param string $sVar
+	 * @param string $val
 	 */
 	public function setParam($sVar, $val)
 	{
 		$this->_tVar[$sVar] = $val;
-		if (! $this->hasNavigation()) {
+		if (!$this->hasNavigation()) {
 			$this->loadContext();
 		}
 	}
@@ -137,7 +139,7 @@ class _request
 	 * force une variable de navigation
 	 *
 	 * @access public
-	 * @param string $sNav        	
+	 * @param string $sNav
 	 */
 	public function setParamNav($sNav)
 	{
@@ -150,7 +152,7 @@ class _request
 	 * @access public
 	 * @return undefined $else
 	 * @param string $sVar
-	 *        	variable a retourner
+	 *          variable a retourner
 	 */
 	public function hasNavigation()
 	{
@@ -161,7 +163,7 @@ class _request
 	 * defini le module $sModule
 	 *
 	 * @access public
-	 * @param string $sModule        	
+	 * @param string $sModule
 	 */
 	public function setModule($sModule)
 	{
@@ -172,7 +174,7 @@ class _request
 	 * defini le module $sAction
 	 *
 	 * @access public
-	 * @param string $sAction        	
+	 * @param string $sAction
 	 */
 	public function setAction($sAction)
 	{
@@ -215,7 +217,7 @@ class _request
 	 * initialise module/action a partir d'une chaine module::action
 	 *
 	 * @access public
-	 * @param string $sChaine        	
+	 * @param string $sChaine
 	 */
 	public function loadModuleAndAction($sChaine)
 	{

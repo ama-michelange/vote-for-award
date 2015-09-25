@@ -2,6 +2,7 @@
 /*
  * This file is part of Mkframework. Mkframework is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License. Mkframework is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with Mkframework. If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * _request classe pour gerer le les requete
  *
@@ -24,20 +25,20 @@ class _request_ama
 	 *
 	 * @access public
 	 * @param array $tTab
-	 *        	tableau de la requete $_GET, $_POST...
+	 *          tableau de la requete $_GET, $_POST...
 	 */
 	public function __construct()
 	{
 		$this->sModule = _root::getConfigVar('navigation.module.default', null);
 		if ($this->sModule == null)
 			$this->sModule = _root::getConfigVar('navigation.module.default');
-		
+
 		$this->sAction = _root::getConfigVar('navigation.action.default', null);
 		if ($this->sAction == null)
 			$this->sAction = _root::getConfigVar('navigation.action.default');
-		
+
 		$this->tVar = array();
-		
+
 		$this->bHasNavigation = false;
 	}
 
@@ -47,13 +48,13 @@ class _request_ama
 	 * @access public
 	 * @return undefined $else
 	 * @param string $sVar
-	 *        	variable a retourner
+	 *          variable a retourner
 	 */
 	public function getParam($sVar, $else = null)
 	{
 		if (array_key_exists($sVar, $this->tVar)) {
-			if ((int) _root::getConfigVar('security.xss.enabled') == 1) {
-				if (1 == (int) _root::getConfigVar('security.xss.onlyspecialchars')) {
+			if ((int)_root::getConfigVar('security.xss.enabled') == 1) {
+				if (1 == (int)_root::getConfigVar('security.xss.onlyspecialchars')) {
 					if (is_array($this->tVar[$sVar])) {
 						return array_map('customHtmlspecialchars', $this->tVar[$sVar]);
 					}
@@ -79,13 +80,13 @@ class _request_ama
 	 * force une variable de request
 	 *
 	 * @access public
-	 * @param string $sVar        	
-	 * @param string $val        	
+	 * @param string $sVar
+	 * @param string $val
 	 */
 	public function setParam($sVar, $val)
 	{
 		$this->tVar[$sVar] = $val;
-		if (! $this->hasNavigation()) {
+		if (!$this->hasNavigation()) {
 			$this->loadContext();
 		}
 	}
@@ -110,7 +111,7 @@ class _request_ama
 	 * force une variable de navigation
 	 *
 	 * @access public
-	 * @param string $sNav        	
+	 * @param string $sNav
 	 */
 	public function setParamNav($sNav)
 	{
@@ -123,7 +124,7 @@ class _request_ama
 	 * @access public
 	 * @return undefined $else
 	 * @param string $sVar
-	 *        	variable a retourner
+	 *          variable a retourner
 	 */
 	public function hasNavigation()
 	{
@@ -134,7 +135,7 @@ class _request_ama
 	 * defini le module $sModule
 	 *
 	 * @access public
-	 * @param string $sModule        	
+	 * @param string $sModule
 	 */
 	public function setModule($sModule)
 	{
@@ -145,7 +146,7 @@ class _request_ama
 	 * defini le module $sAction
 	 *
 	 * @access public
-	 * @param string $sAction        	
+	 * @param string $sAction
 	 */
 	public function setAction($sAction)
 	{
@@ -188,7 +189,7 @@ class _request_ama
 	 * initialise module/action a partir d'une chaine module::action
 	 *
 	 * @access public
-	 * @param string $sChaine        	
+	 * @param string $sChaine
 	 */
 	public function loadModuleAndAction($sChaine)
 	{

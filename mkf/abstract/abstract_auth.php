@@ -50,7 +50,7 @@ abstract class abstract_auth
 				// on regenere un nouvel id de session
 				session_regenerate_id(true);
 			} catch (Exception $e) {
-				 // attrappe l'erreur (sur free.fr)
+				// attrappe l'erreur (sur free.fr)
 			}
 			return false;
 		} else if (_root::getConfigVar('security.xsrf.checkReferer.enabled') == 1 and isset($_SERVER['HTTP_REFERER'])) {
