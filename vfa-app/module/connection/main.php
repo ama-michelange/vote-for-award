@@ -97,7 +97,7 @@ class module_connection extends abstract_module
 					$oConnection->setMessages(array('myEmail' => array('unknown')));
 				} else {
 					$oInvit = self::saveInvitationModifyPassword($oConnection);
-					if (self::sendMail($oInvit)) {
+					if (self::sendMail($oInvit, $oUser)) {
 						$oConnection->mailSent = true;
 						$oConnection->linkWhenClose = 'default::index';
 						$oConnection->textModalMessage = 'Vous allez bientôt recevoir un message à l\'adresse "' . $oConnection->myEmail .
@@ -150,7 +150,7 @@ class module_connection extends abstract_module
 		return $key;
 	}
 
-	private static function sendMail($poInvitation)
+	private static function sendMail($poInvitation, $poUser)
 	{
 		$oMail = new plugin_email();
 		$oMail->setFrom(_root::getConfigVar('vfa-app.mail.from.label'), _root::getConfigVar('vfa-app.mail.from'));
@@ -163,6 +163,7 @@ class module_connection extends abstract_module
 		// Prepare le body TXT
 		$oViewMail = new _view('connection::mailTxt');
 		$oViewMail->oInvit = $poInvitation;
+		$oViewMail->oUser = $poUser;
 		$bodyTxt = $oViewMail->show();
 		// _root::getLog()->log($bodyTxt);
 		$oMail->setBody($bodyTxt);
