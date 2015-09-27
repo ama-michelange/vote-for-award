@@ -1,4 +1,4 @@
-Vous avez oublié votre mot de passe d'accès à votre compte "<?php echo $this->oUser->login ?>" sur <?php echo _root::getConfigVar('vfa-app.title') ?>
+Vous avez oublié votre mot de passe d'accès à votre compte "<?php echo $this->oUser->login ?>" sur <?php echo _root::getConfigVar('vfa-app.title') . "\n" ?>
 
 Rendez-vous à l'adresse suivante pour saisir un nouveau mot de passe : <?php echo plugin_vfa::generateURLInvitation($this->oInvit) . "\n" ?>
 
