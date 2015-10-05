@@ -59,17 +59,18 @@ class plugin_vfa
 	public static function pushArticle($pTitle)
 	{
 		$sTitleUp = trim(strtoupper($pTitle));
+		$lenTitleUp = strlen($sTitleUp);
 		$sTrimTitle = trim($pTitle);
 		$sTitleRet = $sTrimTitle;
 
 		if (false == empty($sTitleUp)) {
-			if (0 == substr_compare($sTitleUp, 'LES ', 0, 4)) {
+			if (($lenTitleUp > 4) && (0 == substr_compare($sTitleUp, 'LES ', 0, 4))) {
 				$sTitleRet = ucfirst(substr($sTrimTitle, 4)) . ' (' . substr($sTrimTitle, 0, 3) . ')';
-			} elseif (0 == substr_compare($sTitleUp, 'LE ', 0, 3)) {
+			} elseif (($lenTitleUp > 3) && (0 == substr_compare($sTitleUp, 'LE ', 0, 3))) {
 				$sTitleRet = ucfirst(substr($sTrimTitle, 3)) . ' (' . substr($sTrimTitle, 0, 2) . ')';
-			} elseif (0 == substr_compare($sTitleUp, 'LA ', 0, 3)) {
+			} elseif (($lenTitleUp > 3) && (0 == substr_compare($sTitleUp, 'LA ', 0, 3))) {
 				$sTitleRet = ucfirst(substr($sTrimTitle, 3)) . ' (' . substr($sTrimTitle, 0, 2) . ')';
-			} elseif ((0 == substr_compare($sTitleUp, 'L&#039;', 0, 7)) && (strlen($sTitleUp) > 7)) {
+			} elseif (($lenTitleUp > 7) && (0 == substr_compare($sTitleUp, 'L&#039;', 0, 7))) {
 				$sTitleRet = ucfirst(substr($sTrimTitle, 7)) . ' (' . substr($sTrimTitle, 0, 7) . ')';
 			}
 		}
