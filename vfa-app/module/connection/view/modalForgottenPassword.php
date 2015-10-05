@@ -1,7 +1,7 @@
 <div id="modalForgottenPassword" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form class="form-horizontal" action="" method="POST">
+			<form id="toForgottenPassword" class="form-horizontal" action="" method="POST">
 				<?php if ($this->__isset('tHidden')): ?>
 					<?php foreach ($this->tHidden as $hidName => $hidValue): ?>
 						<input type="hidden" name="<?php echo $hidName ?>" value="<?php echo $hidValue ?>"/>

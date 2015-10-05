@@ -12,8 +12,18 @@
 			<?php if ($this->oConnection->redirectOnClose): ?>
 			$('#modalMessage').on('hide.bs.modal', function (e) {
 				window.location.replace("<?php echo _root::getLinkString('default::index') ?>");
-			})
+			});
 			<?php endif; ?>
 		});
 	</script>
 <?php endif; ?>
+
+<script>
+	$(document).ready(function () {
+		$('#toForgottenPassword').on('submit', function (e) {
+			e.preventDefault();
+			$('#submitForgottenPassword').prop('disabled','disabled');
+			this.submit();
+		});
+	});
+</script>

@@ -27,6 +27,9 @@ class module_connection extends abstract_module
 
 	public function _forgotten()
 	{
+//		$keyOne = sha1('ama' . time());
+//		_root::getLog()->log('>>>>> _forgotten : ' ._root::getParam('myEmail'). ' , key:'.$keyOne);
+
 		$oConnection = $this->doForgottenPassword();
 
 		if ($oConnection->openModalMessage) {
@@ -57,6 +60,7 @@ class module_connection extends abstract_module
 		$scriptView->oConnection = $oConnection;
 		$this->oLayout->add('script', $scriptView);
 
+//		_root::getLog()->log('<<<<< _forgotten : ' . _root::getParam('myEmail'). ' , key:'.$keyOne);
 	}
 
 	private function doLogin()
@@ -85,6 +89,10 @@ class module_connection extends abstract_module
 	{
 		$oConnection = new row_connection;
 		if (_root::getRequest()->isPost()) {
+//			for ($i = 0; $i < 1999999; $i++) {
+//				$key = sha1('ama' . time());
+//			}
+
 			// Valide la saisie de l'email
 			$oConnection->action = _root::getParam('action');
 			$oConnection->myEmail = _root::getParam('myEmail');
