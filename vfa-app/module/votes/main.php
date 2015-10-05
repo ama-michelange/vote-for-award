@@ -105,8 +105,10 @@ class module_votes extends abstract_module
 			$oVoteItem = model_vote_item::getInstance()->findByVoteIdTitleId($oVote->getId(), $oTitle->getId());
 			$toVoteItems[$oTitle->getId()] = $oVoteItem;
 			if ($oVoteItem->isEmpty()) {
+				// Pas de vote associé au titre, attribution des identifiants et du score "non noté"
 				$oVoteItem->vote_id = $oVote->getId();
 				$oVoteItem->title_id = $oTitle->getId();
+				$oVoteItem->score = -1;
 			}
 			$oVoteItem->setTitle($oTitle);
 		}
