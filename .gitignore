@@ -1,8 +1,10 @@
-.idea
 .settings
 .project
+.classpath
+.idea
 *.iml
 bower_components
 node_modules
 dist
 dploy.yaml
+
