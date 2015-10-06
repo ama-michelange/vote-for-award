@@ -22,7 +22,8 @@
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
-				<button id="submitForgottenPassword" type="submit" class="btn btn-info" name="action" value="submitForgottenPassword">
+				<input type="hidden" name="action" value="submitForgottenPassword"/>
+				<button id="submitForgottenPassword" type="submit" class="btn btn-info">
 					<i class="glyphicon glyphicon-ok with-text"></i>Ok
 				</button>
 				<a id="cancelPassword" class="btn btn-default" href="<?php echo $this->getLink('default::index') ?>">
