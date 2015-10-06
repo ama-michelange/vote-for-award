@@ -20,10 +20,14 @@
 
 <script>
 	$(document).ready(function () {
-		$('#toForgottenPassword').on('submit', function (e) {
-			e.preventDefault();
-			$('#submitForgottenPassword').prop('disabled','disabled');
-			this.submit();
-		});
+//		$('#submitForgottenPassword').click (function (e) {
+//			$('#submitForgottenPassword').prop('disabled','disabled');
+//			$('#toForgottenPassword').submit();
+//		});
+//		$('#toForgottenPassword').on('submit', function (e) {
+////			e.preventDefault();
+//			$('#submitForgottenPassword').prop('disabled','disabled');
+////			$('#toForgottenPassword').submit();
+//		});
 	});
 </script>
