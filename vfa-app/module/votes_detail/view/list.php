@@ -61,14 +61,14 @@
 				</thead>
 				<tbody>
 				<?php foreach ($this->tUsers as $oUser): ?>
-					<tr>
-						<td><?php echo $oUser->last_name.' '.$oUser->first_name ?></td>
-						<?php	$oVote = $oUser->findVote($this->oAward->getId()) ?>
-						<?php foreach ($this->oAward->findTitles() as $oTitle): ?>
-							<?php $oItem = model_vote_item::getInstance()->findByVoteIdTitleId($oVote->vote_id, $oTitle->title_id)  ?>
-								<td><?php if ($oItem->score > -1) echo $oItem->score ?></td>
-						<?php endforeach; ?>
-					</tr>
+				<tr>
+					<td><?php echo $oUser->last_name . ' ' . $oUser->first_name ?></td>
+					<?php $oVote = $oUser->findVote($this->oAward->getId()) ?>
+					<?php foreach ($this->oAward->findTitles() as $oTitle): ?>
+						<?php $oItem = model_vote_item::getInstance()->findByVoteIdTitleId($oVote->vote_id, $oTitle->title_id) ?>
+						<td><?php if ($oItem->score > -1) echo $oItem->score ?></td>
+					<?php endforeach; ?>
+				</tr>
 				<?php endforeach; ?>
 				</tbody>
 			</table>
