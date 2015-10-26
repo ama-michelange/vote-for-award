@@ -93,6 +93,7 @@ class module_bsnavbar extends abstract_module
 			$tItems[] = plugin_BsHtml::buildMenuItem('Voter', new NavLink('votes', 'index'));
 		}
 		$tItems[] = plugin_BsHtml::buildMenuItem('Votes en cours', new NavLink('votes_progress', 'index'));
+		$tItems[] = plugin_BsHtml::buildMenuItem('Détail des votes', new NavLink('votes_detail', 'index'));
 
 		$tNotNullItems = array();
 		foreach ($tItems as $item) {
