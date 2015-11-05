@@ -227,12 +227,34 @@
 		max-height: 400px;
 		width: auto;
 	}
+
+	.panel-images-body img.img-min {
+		max-height: 150px;
+		width: auto;
+	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 991px) {
 	.panel-images-body img.img-max {
 		max-height: none;
 		width: 100%;
+	}
+
+	.panel-images-body img.img-min {
+		max-height: 150px;
+		width: auto;
+	}
+}
+
+@media (min-width: 992px) {
+	.panel-images-body img.img-max {
+		max-height: none;
+		width: 100%;
+	}
+
+	.panel-images-body img.img-min {
+		max-height: 150px;
+		width: auto;
 	}
 }
 
@@ -546,24 +568,117 @@
 }
 
 .vote-text {
-	font-size: 150%;
 	color: #ffffff;
-}
-
-@media (max-width: 767px) {
-	.vote-text {
-		margin-bottom: auto;
-	}
-}
-
-@media (min-width: 768px) {
-	.vote-text {
-		margin-bottom: 12px;
-	}
 }
 
 .vote-text .label-primary.label-circle {
 	background-color: #ffffff;
+}
+
+.vote-title {
+	color: #ffffff;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.vote-select {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.vote-note {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.vote-comment {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.votes-md.panel-body {
+	margin-left: -10px;
+	margin-right: -10px;
+}
+
+.votes-md .vote-panel {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.votes-md .vote-title {
+	font-size: 150%;
+}
+
+.votes-md .vote-comment {
+	display: none;
+}
+
+.votes-md .note-help {
+	padding-left: 30px;
+}
+.votes-md .panel-images {
+	margin-right: 10px;
+}
+
+@media (max-width: 479px) {
+	.votes-md .vote-panel {
+		width: 100%;
+	}
+
+	.votes-md .vote-title {
+		font-size: 120%;
+	}
+	.votes-md .panel-images {
+		margin-right: auto;
+		margin-left: auto;
+		float: none;
+	}
+	.votes-md .panel-images-body {
+		display: block;
+	}
+}
+
+@media (min-width: 767px) and (max-width: 991px) {
+	.votes-md .vote-panel {
+		float: left !important;
+		width: 50%;
+	}
+
+	.votes-md .vote-title {
+		font-size: 120%;
+	}.votes-md .panel-images {
+		 margin-right: auto;
+		 margin-left: auto;
+		 float: none;
+	 }
+	.votes-md .panel-images-body {
+		display: block;
+	}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+	.votes-md .vote-panel {
+		float: left !important;
+		width: 50%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.votes-md .vote-panel {
+		float: left !important;
+		width: 50%;
+	}
+
+	.votes-md .vote-label {
+		margin-top: 10px;
+	}
+}
+
+
+
+.votes-lg .vote-text {
+	font-size: 150%;
 }
 
 .label {
