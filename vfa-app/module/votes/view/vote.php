@@ -20,7 +20,7 @@
 			<input type="hidden" name="award_id" value="<?php echo $this->oVote->award_id ?>"/>
 			<input type="hidden" name="user_id" value="<?php echo $this->oVote->user_id ?>"/>
 			<div class="panel panel-default panel-root">
-				<div class="panel-heading">
+				<div class="panel-heading clearfix">
 					<span class="panel-title">Bulletin de vote <?php echo $this->oAward->toStringWithPrefix() ?></span>
 					<span class="pull-right">
 						<?php
