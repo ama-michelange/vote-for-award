@@ -220,23 +220,12 @@ class module_bsnavbar extends abstract_module
 				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Voir la permission en cours', new NavLink('regin', 'openedBoard'));
 			}
 		}
-
-
-//		if ($poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
-//			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscriptions ouvertes', new NavLink('regin', 'opened'));
-//			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Validation d\'inscriptions', new NavLink('regin', 'validate'));
-//		} elseif ($poUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) {
-//			$tRegins = model_regin::getInstance()
-//				->findAllByTypeByGroupIdByState(plugin_vfa::TYPE_READER, $poUserSession->getReaderGroup()->getId());
-//			if (0 == count($tRegins)) {
-//				$tMenuItems[] = new HeaderItem('Inscriptions au prix');
-//				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Créer la permission', new NavLink('regin', 'open'));
-//			} else {
-//				$tMenuItems[] = new HeaderItem('Inscriptions au prix');
-//				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Valider les inscriptions', new NavLink('regin', 'validate'));
-//				$tMenuItems[] = plugin_BsHtml::buildMenuItem('Voir la permission en cours', new NavLink('regin', 'opened'));
-//			}
-//		}
+		if ($poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$tMenuItems[] = plugin_BsHtml::buildSeparator();
+			$tMenuItems[] = new HeaderItem('Inscription d\'un correspondant d\'un groupe au prix');
+			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Créer une permission', new NavLink('regin', 'openResponsible'));
+			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Voir les permissions en cours', new NavLink('regin', 'openedResponsible'));
+		}
 		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Inscriptions', 'S\'inscrire', true));
 	}
 

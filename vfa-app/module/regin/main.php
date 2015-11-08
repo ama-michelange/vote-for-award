@@ -209,6 +209,15 @@ class module_regin extends abstract_module
 		}
 	}
 
+	public function _openResponsible()
+	{
+		_root::getRequest()->setAction('openResponsible');
+		// Vérifie si l'organisateur peut ouvrir les inscriptions
+		if ($this->verifyOkToOpenForResponsibles()) {
+			$this->doOpenForResponsibles();
+		}
+	}
+
 	public function _updateReader()
 	{
 		_root::getRequest()->setAction('updateReader');
@@ -275,7 +284,7 @@ class module_regin extends abstract_module
 	}
 
 	/**
-	 * Verifie si un responsable peut ouvrir les inscriptions.
+	 * Verifie si un organisateur peut ouvrir les inscriptions des présélections.
 	 * @return bool Si Ok pour l'ouverture
 	 */
 	private function verifyOkToOpenForBoards()
@@ -322,6 +331,30 @@ class module_regin extends abstract_module
 			$this->oGroupBoard = $toBoardGroups[0];
 		}
 		return $this->oGroupBoard;
+	}
+
+	/**
+	 * Verifie si un organisateur peut ouvrir les inscriptions d'un groupe à un prix.
+	 * @return bool Si Ok pour l'ouverture
+	 */
+	private function verifyOkToOpenForResponsibles()
+	{
+		$ok = true;
+		$oBoardGroup = $this->getGroupBoard();
+		$tInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
+		// Ouverture uniquement si un prix est en cours
+		if (0 == count($tInProgressAwards)) {
+			$ok = false;
+		}
+		if (false == $ok) {
+			$oView = new _view('regin::koToOpen');
+			$oView->text = 'Aucun prix n\'est ouvert !';
+//			$oView->oGroup = $oReaderGroup;
+//			$oView->tGroupRegistryAwards = $tGroupRegistryAwards;
+			$oView->tInProgressAwards = $tInProgressAwards;
+			$this->oLayout->add('work', $oView);
+		}
+		return $ok;
 	}
 
 	private function doOpenedForReaders()
@@ -465,6 +498,44 @@ class module_regin extends abstract_module
 			$oRegin->state = plugin_vfa::STATE_OPEN;
 			$oRegin->group_id = $oBoardGroup->getId();
 			$oRegin->awards_ids = $oBoardGroup->getAwardIds();
+
+			$oRegin->process_end = $this->buildProcessEndDate($tAwards[0])->toString();
+			$oRegin->process = plugin_vfa::PROCESS_INTIME_VALIDATE;
+		}
+
+		$oView->oRegin = $oRegin;
+		$oView->tMessage = $oRegin->getMessages();
+
+		$oView->novalidate = false;
+		if ($oRegin->process == plugin_vfa::PROCESS_INTIME) {
+			$oView->novalidate = true;
+		}
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$this->oLayout->add('work', $oView);
+	}
+// A faire
+	private function doOpenForResponsibles()
+	{
+		/* @var $oUserSession row_user_session */
+		$oUserSession = _root::getAuth()->getUserSession();
+//		$oReaderGroup = $oUserSession->getReaderGroup();
+		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
+
+		$oView = new _view('regin::openForResponsibles');
+//		$oView->oGroup = $oReaderGroup;
+		$oView->tAwards = $tAwards;
+
+		if (_root::getRequest()->isPost()) {
+//			$oRegin = $this->doSaveOpenForType($oReaderGroup, $tAwards[0], plugin_vfa::TYPE_READER);
+		} else {
+			$oRegin = new row_regin();
+			$oRegin->created_user_id = $oUserSession->getUser()->getId();
+			$oRegin->type = plugin_vfa::TYPE_RESPONSIBLE;
+			$oRegin->state = plugin_vfa::STATE_OPEN;
+//			$oRegin->group_id = $oReaderGroup->getId();
+//			$oRegin->awards_ids = $oReaderGroup->getAwardIds();
 
 			$oRegin->process_end = $this->buildProcessEndDate($tAwards[0])->toString();
 			$oRegin->process = plugin_vfa::PROCESS_INTIME_VALIDATE;
