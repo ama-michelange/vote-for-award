@@ -56,7 +56,7 @@ class module_votes extends abstract_module
 	{
 		$oVote = $this->doVerifyRequest();
 
-		$oView = new _view('votes::vote_medium');
+		$oView = new _view('votes::vote');
 		$oView->oAward = $this->oAward;
 		$oView->oVote = $oVote;
 		$oView->tMessage = $oVote->getMessages();
