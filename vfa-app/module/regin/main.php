@@ -515,6 +515,7 @@ class module_regin extends abstract_module
 		$oView->token = $oPluginXsrf->getToken();
 		$this->oLayout->add('work', $oView);
 	}
+
 // A faire
 	private function doOpenForResponsibles()
 	{
@@ -526,10 +527,13 @@ class module_regin extends abstract_module
 		$oView = new _view('regin::openForResponsibles');
 //		$oView->oGroup = $oReaderGroup;
 		$oView->tAwards = $tAwards;
+			$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(), null);
 
 		if (_root::getRequest()->isPost()) {
 //			$oRegin = $this->doSaveOpenForType($oReaderGroup, $tAwards[0], plugin_vfa::TYPE_READER);
 		} else {
+			$oView->oGroup = new row_group();
+
 			$oRegin = new row_regin();
 			$oRegin->created_user_id = $oUserSession->getUser()->getId();
 			$oRegin->type = plugin_vfa::TYPE_RESPONSIBLE;
@@ -538,7 +542,7 @@ class module_regin extends abstract_module
 //			$oRegin->awards_ids = $oReaderGroup->getAwardIds();
 
 			$oRegin->process_end = $this->buildProcessEndDate($tAwards[0])->toString();
-			$oRegin->process = plugin_vfa::PROCESS_INTIME_VALIDATE;
+			$oRegin->process = plugin_vfa::PROCESS_INTIME;
 		}
 
 		$oView->oRegin = $oRegin;
@@ -697,6 +701,9 @@ class module_regin extends abstract_module
 			if (count($tRegins) > 0) {
 				$oRegin = $tRegins[0];
 				$tReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+			} else {
+				$oRegin = new row_regin();
+				$tReginUsers = array();
 			}
 		}
 

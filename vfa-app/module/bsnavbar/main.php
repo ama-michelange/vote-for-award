@@ -222,7 +222,7 @@ class module_bsnavbar extends abstract_module
 		}
 		if ($poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
 			$tMenuItems[] = plugin_BsHtml::buildSeparator();
-			$tMenuItems[] = new HeaderItem('Inscription d\'un correspondant d\'un groupe au prix');
+			$tMenuItems[] = new HeaderItem('Inscription d\'un correspondant');
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Créer une permission', new NavLink('regin', 'openResponsible'));
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Voir les permissions en cours', new NavLink('regin', 'openedResponsible'));
 		}

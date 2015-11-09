@@ -9,7 +9,7 @@
 
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
-			<h3 class="panel-title">Permission au correspondant</h3>
+			<h3 class="panel-title">Permission pour un correspondant</h3>
 		</div>
 		<?php if (plugin_validation::exist($this->tMessage, 'token')): ?>
 			<div class="panel-body">
@@ -34,11 +34,12 @@
 						</p>
 
 						<p>Lors de cette inscription, le correspondant a besoin d'un code d'inscription que vous allez lui
-							founir.<br/>
-							Il sert à donner les droits de correspondant, de l'associer à son groupe et au prix en cours lorsqu'il
-							ouvre un compte ou s'identifie sur le site. Ce code est unique pour un groupe : CE, association, ...</p>
+							founir. Il sert à donner les droits de correspondant, de l'associer à son groupe et au prix en cours
+							lorsqu'il ouvre un compte ou s'identifie sur le site. Ce code est à usage unique pour un correspondant du
+							groupe (CE, association, ...)</p>
 
-						<p>Vous obtiendrez le code d'inscription dans l'écran suivant qu'il faudra transmettre à la personne adéquate.</p>
+						<p>Vous obtiendrez le code d'inscription dans l'écran suivant qu'il faudra transmettre à la personne
+							adéquate.</p>
 					</div>
 				</div>
 				<div class="panel panel-info">
@@ -46,31 +47,59 @@
 						<h3 class="panel-title">Caractéristique de l'inscription du correspondant</h3>
 					</div>
 					<div class="panel-body panel-condensed">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label for="inputNewGroup">Affectation au groupe</label>
-									<input class="form-control" type="text" id="inputNewGroup" name="_group"
-												 value="<?php echo $this->oGroup->toString() ?>" />
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label for="inputPrix">Inscription au prix</label>
-									<input class="form-control" type="text" id="inputPrix" name="_prix"
-												 value="<?php echo $this->tAwards[0]->toString() ?>" disabled/>
-								</div>
-							</div>
-							<?php for ($i = 1; $i < count($this->tAwards); $i++) : ?>
+						<fieldset>
+							<legend>Inscription au groupe</legend>
+							<div class="row">
 								<div class="col-sm-4">
-									<div class="form-group">
-										<label for="inputPrix">Inscription au prix</label>
-										<input class="form-control" type="text" id="inputPrix" name="_prix"
-													 value="<?php echo $this->tAwards[$i]->toString() ?>" disabled/>
+									<div
+										class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, '_groupExist') ?>">
+										<label for="inputGroupExist">Groupe existant</label>
+										<select id="inputGroupExist" class="form-control" name="_groupExist[]" size="13" multiple>
+											<?php foreach ($this->tSelectedGroups as $tGroup): ?>
+												<option value="<?php echo $tGroup[0] ?>" <?php if ($tGroup[2]): echo 'selected'; endif; ?>>
+													<?php echo $tGroup[1] ?>
+												</option>
+											<?php endforeach; ?>
+										</select>
+										<span
+											class="help-block"><?php echo plugin_validation::show($this->tMessage, '_groupExist') ?></span>
 									</div>
 								</div>
-							<?php endfor; ?>
-						</div>
+								<h1 class="col-sm-1 text-center">ou</h1>
+
+								<div class="col-sm-4">
+									<div
+										class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, '_groupNew') ?>">
+										<label for="inputGroupNew">Nouveau groupe à créer</label>
+										<input class="form-control" type="text" id="inputGroupNew" name="_groupNew"
+													 value="<?php echo $this->oGroup->toString() ?>"/>
+											<span
+												class="help-block"><?php echo plugin_validation::show($this->tMessage, '_groupNew') ?></span>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+						<fieldset>
+							<legend>Inscription au prix</legend>
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<!--										<label for="inputPrix">Inscription au prix</label>-->
+										<input class="form-control" type="text" id="inputPrix" name="_prix"
+													 value="<?php echo $this->tAwards[0]->toString() ?>" disabled/>
+									</div>
+								</div>
+								<?php for ($i = 1; $i < count($this->tAwards); $i++) : ?>
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label for="inputPrix">Inscription au prix</label>
+											<input class="form-control" type="text" id="inputPrix" name="_prix"
+														 value="<?php echo $this->tAwards[$i]->toString() ?>" disabled/>
+										</div>
+									</div>
+								<?php endfor; ?>
+							</div>
+						</fieldset>
 					</div>
 				</div>
 				<div class="panel panel-info">
@@ -94,37 +123,6 @@
 										<div class="col-sm-9">
 											Par défaut, la date maximale des inscriptions est la date de fin du prix mais vous pouvez la
 											réduire à votre convenance.
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'process') ?>">
-									<label>Validation des inscriptions</label>
-
-									<div class="row">
-										<div class="col-sm-3">
-											<label class="checkbox-inline" for="inputValidate">
-												<input type="checkbox" id="inputValidate" name="novalidate" value="true"
-													<?php if (true == $this->novalidate): echo 'checked'; endif; ?> />
-												Pas de validation
-											</label>
-											<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'process') ?></span>
-										</div>
-										<div class="col-sm-9">
-											Par défaut, vous devez valider chaque inscription. Cette étape supplémentaire permet d'identifier
-											les
-											participants avant de leur donner le droit de vote. C'est utile pour gérer les inscrits et les
-											futurs
-											prêts,
-											par exemple, mais surtout pour éviter les doubles inscriptions : une même personne qui s'inscrit
-											plusieurs
-											fois avec un nom différent.<br>
-											Si vous cochez <strong>Pas de validation</strong>, toutes les personnes possédant le code
-											d'inscription
-											pourront s'inscrire sans votre intervention. La confiance doit régner ...
 										</div>
 									</div>
 								</div>
