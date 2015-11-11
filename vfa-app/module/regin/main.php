@@ -191,6 +191,17 @@ class module_regin extends abstract_module
 		$this->doOpenedForBoards();
 	}
 
+	public function _openedResponsible()
+	{
+		_root::getRequest()->setAction('openedResponsible');
+		$id = _root::getParam('id', null);
+		if ($id) {
+			$this->doOpenedForAResponsible($id);
+		} else {
+			$this->doOpenedForResponsibles();
+		}
+	}
+
 	public function _openReader()
 	{
 		_root::getRequest()->setAction('openReader');
@@ -340,7 +351,6 @@ class module_regin extends abstract_module
 	private function verifyOkToOpenForResponsibles()
 	{
 		$ok = true;
-		$oBoardGroup = $this->getGroupBoard();
 		$tInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
 		// Ouverture uniquement si un prix est en cours
 		if (0 == count($tInProgressAwards)) {
@@ -349,8 +359,6 @@ class module_regin extends abstract_module
 		if (false == $ok) {
 			$oView = new _view('regin::koToOpen');
 			$oView->text = 'Aucun prix n\'est ouvert !';
-//			$oView->oGroup = $oReaderGroup;
-//			$oView->tGroupRegistryAwards = $tGroupRegistryAwards;
 			$oView->tInProgressAwards = $tInProgressAwards;
 			$this->oLayout->add('work', $oView);
 		}
@@ -398,6 +406,28 @@ class module_regin extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
+	private function doOpenedForAResponsible($pIdRegin)
+	{
+		$oRegin = model_regin::getInstance()->findById($pIdRegin);
+
+		$oView = new _view('regin::openedForAResponsible');
+		$oView->oRegin = $oRegin;
+		if (false == $oRegin->isEmpty()) {
+			$oView->tAwards = $oRegin->findAwards();
+			$oView->oViewShow = $this->makeViewShowForResponsible($oRegin);
+			$this->oLayout->idRegin = $oRegin->getId();
+		}
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function doOpenedForResponsibles()
+	{
+		$tRegins = model_regin::getInstance()->findAllByTypeByState(plugin_vfa::TYPE_RESPONSIBLE);
+		$oView = new _view('regin::openedForResponsibles');
+		$oView->tRegins = $tRegins;
+		$this->oLayout->add('work', $oView);
+	}
+
 	private function makeViewShowForReaders($poRegin = null)
 	{
 		if ($poRegin) {
@@ -434,6 +464,24 @@ class module_regin extends abstract_module
 		$oView->oRegin = $oRegin;
 		$oView->tAwards = $oBoardGroup->findAwards();
 		$oView->oGroup = $oBoardGroup;
+
+		$this->oLayout->idRegin = $oRegin->getId();
+
+		return $oView;
+	}
+
+	private function makeViewShowForResponsible($poRegin = null)
+	{
+		if ($poRegin) {
+			$oRegin = $poRegin;
+		} else {
+			$oRegin = model_regin::getInstance()->findById(_root::getParam('id'));
+		}
+
+		$oView = new _view('regin::show');
+		$oView->oRegin = $oRegin;
+		$oView->tAwards = $oRegin->findAwards();
+		$oView->oGroup = $oRegin->findGroup();
 
 		$this->oLayout->idRegin = $oRegin->getId();
 
@@ -516,30 +564,26 @@ class module_regin extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
-// A faire
 	private function doOpenForResponsibles()
 	{
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
-//		$oReaderGroup = $oUserSession->getReaderGroup();
-		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
+		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, plugin_vfa::TYPE_AWARD_READER);
 
 		$oView = new _view('regin::openForResponsibles');
-//		$oView->oGroup = $oReaderGroup;
 		$oView->tAwards = $tAwards;
-			$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(), null);
+		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(plugin_vfa::ROLE_READER), null);
+		$oView->oGroup = new row_group();
 
 		if (_root::getRequest()->isPost()) {
-//			$oRegin = $this->doSaveOpenForType($oReaderGroup, $tAwards[0], plugin_vfa::TYPE_READER);
+			$oRegin = $this->doSaveOpenForType(null, $tAwards[0], plugin_vfa::TYPE_RESPONSIBLE);
 		} else {
-			$oView->oGroup = new row_group();
-
 			$oRegin = new row_regin();
 			$oRegin->created_user_id = $oUserSession->getUser()->getId();
 			$oRegin->type = plugin_vfa::TYPE_RESPONSIBLE;
 			$oRegin->state = plugin_vfa::STATE_OPEN;
-//			$oRegin->group_id = $oReaderGroup->getId();
-//			$oRegin->awards_ids = $oReaderGroup->getAwardIds();
+			$oRegin->group_id = '';
+			$oRegin->awards_ids = plugin_vfa::getIds($tAwards);
 
 			$oRegin->process_end = $this->buildProcessEndDate($tAwards[0])->toString();
 			$oRegin->process = plugin_vfa::PROCESS_INTIME;
@@ -966,6 +1010,7 @@ class module_regin extends abstract_module
 		} else {
 			$oRegin->process = plugin_vfa::PROCESS_INTIME_VALIDATE;
 		}
+
 		// Valide la date de fin des inscriptions
 		$endDateValide = false;
 		$today = plugin_vfa::today();
@@ -982,17 +1027,31 @@ class module_regin extends abstract_module
 				$oRegin->setMessages(array('process_end' => array('isDateAfterKO')));
 			}
 		}
+		// Gestion du groupe et des cas particuliers d'une permission d'inscription de responsable
+		$oGroup = $poGroup;
+		$prefixCode = null;
+		if ((null == $oGroup) && ($pType == plugin_vfa::TYPE_RESPONSIBLE)) {
+			$idGroup = _root::getParam('_group', null);
+			if (null == $idGroup) {
+				$oRegin->setMessages(array('_group' => array('required-group')));
+				return $oRegin;
+			}
+			$oGroup = model_group::getInstance()->findById($idGroup);
+			$prefixCode = "COR";
+			$oRegin->group_id = $idGroup;
+			$oRegin->process = plugin_vfa::PROCESS_INTIME;
+		}
 		// Sauvegarde
 		if ($endDateValide && $oRegin->isValid()) {
 			if (null == _root::getParam('code', null)) {
 				// Génération du code d'inscription
-				$code = plugin_vfa::generateRegistrationCode($poAward->year, $poGroup->toString());
+				$code = plugin_vfa::generateRegistrationCode($poAward->year, $oGroup->toString(), $prefixCode);
 				$oRegin->code = $code;
 				$oRegin->save();
 				// Vérifie les doublons de code (rarissime)
 				$founds = model_regin::getInstance()->findAllByCode($code);
 				while (count($founds) > 1) {
-					$code = plugin_vfa::generateRegistrationCode($poAward->year, $poGroup->toString());
+					$code = plugin_vfa::generateRegistrationCode($poAward->year, $oGroup->toString(), $prefixCode);
 					$oRegin->code = $code;
 					$oRegin->save();
 					$founds = model_regin::getInstance()->findAllByCode($code);
@@ -1000,12 +1059,16 @@ class module_regin extends abstract_module
 			} else {
 				$oRegin->save();
 			}
+			// redirection
 			switch ($pType) {
 				case plugin_vfa::TYPE_BOARD:
 					_root::redirect('regin::openedBoard');
 					break;
 				case plugin_vfa::TYPE_READER:
 					_root::redirect('regin::openedReader');
+					break;
+				case plugin_vfa::TYPE_RESPONSIBLE:
+					_root::redirect('regin::openedResponsible', array('id' => $oRegin->getId()));
 					break;
 				default:
 					_root::redirect('regin::opened');

@@ -75,7 +75,10 @@ _root::setConfigVar('tLangue', array(
 	'noneCS.groups' => 'Aucun groupe de comité de sélection trouvé !', //
 
 	'registry.code.unknown' => 'Code d\'inscription inconnu !', //
-	'registry.code.invalid' => 'Ce code d\'inscription n\'est plus valide !' //
+	'registry.code.invalid' => 'Ce code d\'inscription n\'est plus valide !', //
+
+	'required-group' => 'Le groupe est obligatoire, soit vous le sélectionnez, soit vous en créez un nouveau !', //
+
 
 ));
 

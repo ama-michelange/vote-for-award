@@ -158,9 +158,17 @@ class model_group extends abstract_model
 		}
 	}
 
-	public function getSelect()
+	/**
+	 * @param string | null $pRolename
+	 * @return array
+	 */
+	public function getSelect($pRolename = null)
 	{
-		$tab = $this->findAll();
+		if ($pRolename) {
+			$tab = $this->findAllByRoleName($pRolename);
+		} else {
+			$tab = $this->findAll();
+		}
 		$tSelect = array();
 		foreach ($tab as $oRow) {
 			$tSelect[$oRow->group_id] = $oRow->group_name;

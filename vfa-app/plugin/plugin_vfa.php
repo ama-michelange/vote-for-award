@@ -558,23 +558,34 @@ class plugin_vfa
 	 * Génère un code d'inscription.
 	 * @param $pYear
 	 * @param $pName
+	 * @param $pPrefix
 	 * @return string
 	 */
-	public static function generateRegistrationCode($pYear, $pName)
+	public static function generateRegistrationCode($pYear, $pName, $pPrefix = null)
 	{
+		$lenName = 9;
 		$time = time();
 		$year = substr($pYear, 0, 4);
-		$gname = trim(substr($pName, 0, 9));
+		$prefix = '';
+		if ($pPrefix) {
+			$prefix = trim(substr($pPrefix, 0, 3));
+		}
+		$gname = trim(substr($pName, 0, $lenName));
 		$gname = implode(explode(' ', $gname));
 		if ($time % 2 == 0) {
 			$gname = strtoupper($gname);
 		} else {
 			$gname = strtolower($gname);
 		}
-		$fcode = $year . $gname . substr($time, -2);
-		$sha = sha1($fcode . rand(0, $time));
-		$code = $fcode . substr($sha, -5);
+		$fcode = $prefix . $year . $gname . substr($time, -2);
 
+		while (strlen($fcode) > 15) {
+			$lenName--;
+			$fcode = $prefix . $year . substr($gname, 0, $lenName) . substr($time, -2);
+		}
+		$sha = sha1($fcode . rand(0, $time));
+		$code = $fcode . substr($sha, strlen($fcode)-20);
+//		var_dump(strlen($code));
 //		var_dump($code);
 		return $code;
 	}
@@ -755,5 +766,22 @@ class plugin_vfa
 	public static function cryptPassword($pPassword)
 	{
 		return sha1($pPassword . _root::getConfigVar('security.salt'));
+	}
+
+	/**
+	 * Renvoi les identifiants du tableau d'abstract_row sous forme de chaine séparé par une virgule
+	 * @param array of abstract_row $pArrayRows
+	 * @return string
+	 */
+	public static function getIds($pArrayRows)
+	{
+		$ids = '';
+		foreach ($pArrayRows as $row) {
+			if (strlen($ids) > 0) {
+				$ids .= ',';
+			}
+			$ids .= $row->getId();
+		}
+		return $ids;
 	}
 }

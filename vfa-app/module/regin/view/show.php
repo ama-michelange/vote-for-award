@@ -14,6 +14,11 @@
 			$textValidateur = 'organisateur';
 			$textValid = 'l\'';
 			$textNotValid = 'de l\'';
+		}	elseif (plugin_vfa::TYPE_RESPONSIBLE == $this->oRegin->type) {
+			$textPour = 'Inscription d\'un correspondant';
+			$textValidateur = 'organisateur';
+			$textValid = 'l\'';
+			$textNotValid = 'de l\'';
 		} else {
 			$textPour = 'Inscription de lecteurs';
 			$textValidateur = 'correspondant';

@@ -4,8 +4,8 @@
 	<input type="hidden" name="code" value="<?php echo $this->oRegin->code ?>"/>
 	<input type="hidden" name="state" value="<?php echo $this->oRegin->state ?>"/>
 	<input type="hidden" name="created_user_id" value="<?php echo $this->oRegin->created_user_id ?>"/>
-	<!--	<input type="hidden" name="awards_ids" value="--><?php //echo $this->oRegin->awards_ids ?><!--"/>-->
-	<!--	<input type="hidden" name="group_id" value="--><?php //echo $this->oRegin->group_id ?><!--"/>-->
+	<input type="hidden" name="awards_ids" value="<?php echo $this->oRegin->awards_ids ?>"/>
+	<input type="hidden" name="group_id" value="<?php echo $this->oRegin->group_id ?>"/>
 
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
@@ -25,11 +25,11 @@
 					<div class="panel-body panel-condensed">
 						<p>Cette permission permet à la personne qui l'utilise :
 						<ul>
-							<li>De devenir <strong>Correspondant</strong>, c'est à dire, de gérer le prix, d'inscrire les lecteurs
-								pour participer aux votes, ...
+							<li>De devenir <strong>Correspondant</strong>, c'est à dire de gérer le prix et de créer la permission
+								d'inscription des lecteurs de son groupe pour participer aux votes
 							</li>
 							<li>De s'inscrire au prix pour participer aux votes</li>
-							<li>Et le cas échéant d'ouvrir un compte</li>
+							<li>Et le cas échéant d'ouvrir un compte sur ce site</li>
 						</ul>
 						</p>
 
@@ -47,59 +47,53 @@
 						<h3 class="panel-title">Caractéristique de l'inscription du correspondant</h3>
 					</div>
 					<div class="panel-body panel-condensed">
-						<fieldset>
-							<legend>Inscription au groupe</legend>
-							<div class="row">
-								<div class="col-sm-4">
-									<div
-										class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, '_groupExist') ?>">
-										<label for="inputGroupExist">Groupe existant</label>
-										<select id="inputGroupExist" class="form-control" name="_groupExist[]" size="13" multiple>
-											<?php foreach ($this->tSelectedGroups as $tGroup): ?>
-												<option value="<?php echo $tGroup[0] ?>" <?php if ($tGroup[2]): echo 'selected'; endif; ?>>
-													<?php echo $tGroup[1] ?>
-												</option>
-											<?php endforeach; ?>
-										</select>
+						<div class="row">
+							<div class="col-sm-4">
+								<div
+									class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, '_group') ?>">
+									<label for="inputGroup">Affectation au groupe</label>
+									<select id="inputGroup" class="form-control" name="_group" size="13">
+										<?php foreach ($this->tSelectedGroups as $tGroup): ?>
+											<option value="<?php echo $tGroup[0] ?>" <?php if ($tGroup[2]): echo 'selected'; endif; ?>>
+												<?php echo $tGroup[1] ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
 										<span
-											class="help-block"><?php echo plugin_validation::show($this->tMessage, '_groupExist') ?></span>
-									</div>
-								</div>
-								<h1 class="col-sm-1 text-center">ou</h1>
-
-								<div class="col-sm-4">
-									<div
-										class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, '_groupNew') ?>">
-										<label for="inputGroupNew">Nouveau groupe à créer</label>
-										<input class="form-control" type="text" id="inputGroupNew" name="_groupNew"
-													 value="<?php echo $this->oGroup->toString() ?>"/>
-											<span
-												class="help-block"><?php echo plugin_validation::show($this->tMessage, '_groupNew') ?></span>
-									</div>
+											class="help-block"><?php echo plugin_validation::show($this->tMessage, '_group') ?></span>
 								</div>
 							</div>
-						</fieldset>
-						<fieldset>
-							<legend>Inscription au prix</legend>
-							<div class="row">
+							<div class="col-sm-1 form-group text-center">
+								<label>&nbsp;</label>
+								<p>ou</p>
+							</div>
+							<div class="col-sm-5 form-group">
+								<label>&nbsp;</label>
+								<p>
+									<a class="btn btn-default btn" href="<?php echo $this->getLink('groups::create') ?>">
+										<i class="glyphicon glyphicon-plus-sign with-text"></i>Création d'un nouveau groupe
+									</a>
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label for="inputPrix">Inscription au prix</label>
+									<input class="form-control" type="text" id="inputPrix" name="_prix"
+												 value="<?php echo $this->tAwards[0]->toString() ?>" disabled/>
+								</div>
+							</div>
+							<?php for ($i = 1; $i < count($this->tAwards); $i++) : ?>
 								<div class="col-sm-4">
 									<div class="form-group">
-										<!--										<label for="inputPrix">Inscription au prix</label>-->
+										<label for="inputPrix">Inscription au prix</label>
 										<input class="form-control" type="text" id="inputPrix" name="_prix"
-													 value="<?php echo $this->tAwards[0]->toString() ?>" disabled/>
+													 value="<?php echo $this->tAwards[$i]->toString() ?>" disabled/>
 									</div>
 								</div>
-								<?php for ($i = 1; $i < count($this->tAwards); $i++) : ?>
-									<div class="col-sm-4">
-										<div class="form-group">
-											<label for="inputPrix">Inscription au prix</label>
-											<input class="form-control" type="text" id="inputPrix" name="_prix"
-														 value="<?php echo $this->tAwards[$i]->toString() ?>" disabled/>
-										</div>
-									</div>
-								<?php endfor; ?>
-							</div>
-						</fieldset>
+							<?php endfor; ?>
+						</div>
 					</div>
 				</div>
 				<div class="panel panel-info">
@@ -132,7 +126,7 @@
 					<div class="panel-footer clearfix">
 						<div class="pull-right">
 							<button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-ok with-text"></i>Ok</button>
-							<a class="btn btn-default" href="<?php echo $this->getLink('regin::opened') ?>">
+							<a class="btn btn-default" href="<?php echo $this->getLink('regin::openedResponsible') ?>">
 								<i class="glyphicon glyphicon-remove with-text"></i>Annuler
 							</a>
 						</div>

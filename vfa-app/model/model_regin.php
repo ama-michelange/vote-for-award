@@ -63,6 +63,17 @@ class model_regin extends abstract_model
 
 	/**
 	 * @param string $pType
+	 * @param string $pState
+	 * @return row_regin[]
+	 */
+	public function findAllByTypeByState($pType, $pState = plugin_vfa::STATE_OPEN)
+	{
+		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE type=? and state=? ORDER BY created_date DESC';
+		return $this->findMany($sql, $pType, $pState);
+	}
+
+	/**
+	 * @param string $pType
 	 * @param string | int $pGroupId
 	 * @param string $pState
 	 * @return row_regin[]
