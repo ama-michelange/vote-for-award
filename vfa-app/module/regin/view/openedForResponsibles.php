@@ -1,8 +1,6 @@
 <div class="panel panel-default panel-root">
 	<div class="panel-heading">
-		<h3 class="panel-title">Titre
-<!--			--><?php //echo $this->title ?>
-		</h3>
+		<h3 class="panel-title">Inscription des correspondants</h3>
 	</div>
 
 	<?php if ($this->tRegins): ?>
@@ -10,11 +8,12 @@
 			<table class="table table-striped table-hover table-condensed">
 				<thead>
 				<tr>
-					<th>Destinataire</th>
-					<th>Etat</th>
-					<th>Type</th>
-					<th>Prix</th>
+					<th>Code</th>
 					<th>Groupe</th>
+					<th>Prix</th>
+					<th>Limite</th>
+					<th>Etat</th>
+					<!--					<th>Type</th>-->
 				</tr>
 				</thead>
 				<tbody>
@@ -36,20 +35,12 @@
 					}
 					switch ($oRegin->state) {
 						case plugin_vfa::STATE_OPEN:
-							$stateColor = 'label-warning';
-							$stateTip = 'L\'invitation est ouverte mais l\'email n\'a pas été envoyé à ' . $oRegin->email;
-							break;
-						case plugin_vfa::STATE_SENT:
 							$stateColor = 'label-info';
-							$stateTip = 'L\'invitation a été envoyé par email';
+							$stateTip = 'L\'invitation est ouverte. Le correspondant ne l\'a pas encore utilisée';
 							break;
 						case plugin_vfa::STATE_ACCEPTED:
 							$stateColor = 'label-success';
 							$stateTip = $oRegin->email . ' a accepté l\'invitation.';
-							break;
-						case plugin_vfa::STATE_REJECTED:
-							$stateColor = 'label-danger';
-							$stateTip = 'Le destinataire, ' . $oRegin->email . ',  a refusé l\'invitation.';
 							break;
 						default:
 							$stateColor = '';
@@ -59,29 +50,16 @@
 					?>
 					<tr>
 						<td>
-							<?php if (_root::getACL()->permit('invitations::read')): ?>
-								<a href="<?php echo $this->getLink('invitations::read', array('id' => $oRegin->getId())) ?>">
-									<?php echo wordwrap($oRegin->email, 36, ' ', true) ?>
-								</a>
-							<?php else: ?>
-								<?php echo wordwrap($oRegin->email, 36, ' ', true) ?>
-							<?php endif; ?>
+							<a href="<?php echo $this->getLink('regin::openedResponsible', array('id' => $oRegin->getId())) ?>">
+								<?php echo $oRegin->code ?>
+							</a>
 						</td>
 						<td>
-						<span class="label <?php echo $stateColor ?>" data-rel="tooltip"
-									data-original-title="<?php echo $stateTip ?>"><?php echo $oRegin->showState() ?></span>
-							<?php if (_root::getACL()->permit('invitations::send') &&
-								($oRegin->state == plugin_vfa::STATE_OPEN || $oRegin->state == plugin_vfa::STATE_REJECTED)
-							) : ?>
-								&nbsp;
-								<a rel="tooltip"
-									 data-original-title="Renvoyer l'invitation par email à <?php echo $oRegin->email ?>"
-									 href="<?php echo $this->getLink('invitations::send', array('id' => $oRegin->getId())) ?>">
-									<i class="glyphicon glyphicon-envelope"></i>
-								</a>
-							<?php endif; ?>
+							<?php
+							$oGroup = $oRegin->findGroup();
+							echo $oGroup->group_name;
+							?>
 						</td>
-						<td><span class="<?php echo $typeColor ?>"><?php echo $oRegin->showType() ?></span></td>
 						<td>
 							<?php
 							$tAwards = $oRegin->findAwards();
@@ -95,11 +73,10 @@
 							}
 							?>
 						</td>
+						<td><?php echo plugin_vfa::toStringDateShow($oRegin->process_end) ?></span></td>
 						<td>
-							<?php
-							$oGroup = $oRegin->findGroup();
-							echo $oGroup->group_name;
-							?>
+							<span class="label <?php echo $stateColor ?>" data-rel="tooltip"
+										data-original-title="<?php echo $stateTip ?>"><?php echo $oRegin->showState() ?></span>
 						</td>
 					</tr>
 				<?php endforeach; ?>
@@ -108,7 +85,12 @@
 		</div>
 	<?php else: ?>
 		<div class="panel-body">
-			<h4>Aucune Regin !</h4>
+			<h4>Aucune permission d'inscriptions en cours</h4>
+
+			<p>Pour créer une permission d'inscriptions pour un correspondant
+				<i class="glyphicon glyphicon-hand-right with-left-text with-text"></i>
+				<a class="btn btn-default" href="<?php echo $this->getLink('regin::openResponsible') ?>">Créer</a>
+			</p>
 		</div>
 	<?php endif; ?>
 </div>

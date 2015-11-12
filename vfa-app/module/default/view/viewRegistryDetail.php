@@ -1,8 +1,12 @@
 <div class="panel panel-default panel-root">
 	<div class="panel-heading">
-		<h3 class="panel-title">Inscription d'un lecteur
-			<?php if ($this->oRegin->type == plugin_vfa::TYPE_BOARD): ?>
-				comme Membre du Comité de sélection
+		<h3 class="panel-title">Inscription
+			<?php if ($this->oRegin->type == plugin_vfa::TYPE_READER): ?>
+				d'un lecteur
+			<?php elseif ($this->oRegin->type == plugin_vfa::TYPE_BOARD): ?>
+				d'un lecteur comme membre du Comité de sélection
+			<?php elseif ($this->oRegin->type == plugin_vfa::TYPE_RESPONSIBLE): ?>
+				d'un correspondant du groupe <strong><?php echo $this->oGroup->toString() ?></strong>
 			<?php endif; ?>
 		</h3>
 	</div>

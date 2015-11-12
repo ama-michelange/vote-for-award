@@ -68,7 +68,7 @@ class model_regin extends abstract_model
 	 */
 	public function findAllByTypeByState($pType, $pState = plugin_vfa::STATE_OPEN)
 	{
-		$sql = 'SELECT * FROM' . ' ' . $this->sTable . ' WHERE type=? and state=? ORDER BY created_date DESC';
+		$sql = 'SELECT * FROM vfa_regin WHERE type=? and state=? ORDER BY code';
 		return $this->findMany($sql, $pType, $pState);
 	}
 
@@ -176,6 +176,7 @@ class row_regin extends abstract_row
 		switch ($this->type) {
 			case plugin_vfa::TYPE_BOARD:
 			case plugin_vfa::TYPE_READER:
+			case plugin_vfa::TYPE_RESPONSIBLE:
 				if ($this->state == plugin_vfa::STATE_OPEN) {
 					if ((plugin_vfa::PROCESS_INTIME == $this->process) || (plugin_vfa::PROCESS_INTIME_VALIDATE == $this->process)) {
 						$processEnd = plugin_vfa::toDateFromSgbd($this->process_end);

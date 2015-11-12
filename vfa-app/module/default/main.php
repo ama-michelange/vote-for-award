@@ -202,6 +202,9 @@ class module_default extends abstract_module
 			case plugin_vfa::TYPE_BOARD:
 				$this->doRegistryBoard($poRegistry);
 				break;
+			case plugin_vfa::TYPE_RESPONSIBLE:
+				$this->doRegistryResponsible($poRegistry);
+				break;
 		}
 	}
 
@@ -232,6 +235,17 @@ class module_default extends abstract_module
 			// Sauvegarde pour validation
 			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
 			$this->sendMailReginToValid($poRegistry, false);
+		}
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistryResponsible($poRegistry)
+	{
+		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
+			// Associe le groupe de même rôle et les prix à l'utilisateur
+			$this->saveGroupAwardsToUser($poRegistry, plugin_vfa::ROLE_RESPONSIBLE);
 		}
 	}
 
@@ -380,6 +394,7 @@ class module_default extends abstract_module
 		switch ($poRegistry->oRegin->type) {
 			case plugin_vfa::TYPE_READER:
 			case plugin_vfa::TYPE_BOARD:
+			case plugin_vfa::TYPE_RESPONSIBLE:
 				$view = new _view('default::modalEndRegistry');
 				break;
 		}

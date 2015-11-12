@@ -65,6 +65,14 @@ class module_regin extends abstract_module
 			case 'validateBoard':
 				$navBar->setTitle('Valider les inscriptions', new NavLink('regin', 'validateBoard'));
 				break;
+			case 'openResponsible':
+				$navBar->setTitle('Créer la permission', new NavLink('regin', 'openResponsible'));
+				break;
+			case 'openedResponsible':
+			case 'updateResponsible':
+			case 'deleteResponsible':
+				$navBar->setTitle('Permission en cours', new NavLink('regin', 'openedResponsible'));
+				break;
 		}
 
 		$this->buildMenuRight($navBar);
@@ -109,6 +117,25 @@ class module_regin extends abstract_module
 						new NavLink('regin', 'updateBoard', $tParams), 'glyphicon-edit'));
 					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Supprimer',
 						new NavLink('regin', 'deleteBoard', $tParams), 'glyphicon-trash'));
+				}
+				break;
+			case 'openedResponsible':
+			case 'updateResponsible':
+			case 'deleteResponsible':
+				if ($this->oLayout->__isset('idRegin')) {
+					$tParams = array('id' => $this->oLayout->idRegin);
+				} else {
+					$tParams = array('id' => _root::getParam('id'));
+				}
+				if ($tParams['id']) {
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Liste',
+						new NavLink('regin', 'openedResponsibleList'), 'glyphicon-list'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail',
+						new NavLink('regin', 'openedResponsible', $tParams), 'glyphicon-eye-open'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier',
+						new NavLink('regin', 'updateResponsible', $tParams), 'glyphicon-edit'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Supprimer',
+						new NavLink('regin', 'deleteResponsible', $tParams), 'glyphicon-trash'));
 				}
 				break;
 		}
@@ -191,6 +218,11 @@ class module_regin extends abstract_module
 		$this->doOpenedForBoards();
 	}
 
+	public function _openedResponsibleList()
+	{
+		$this->_openedResponsible();
+	}
+
 	public function _openedResponsible()
 	{
 		_root::getRequest()->setAction('openedResponsible');
@@ -239,6 +271,12 @@ class module_regin extends abstract_module
 	{
 		_root::getRequest()->setAction('updateBoard');
 		$this->updateForBoards();
+	}
+
+	public function _updateResponsible()
+	{
+		_root::getRequest()->setAction('updateResponsible');
+		$this->updateForResponsible();
 	}
 
 	public function _validateReader()
@@ -306,6 +344,7 @@ class module_regin extends abstract_module
 		// Ouverture uniquement si un prix est en cours
 		if (0 == count($tInProgressAwards)) {
 			$ok = false;
+			$tGroupRegistryAwards = null;
 		} else {
 			// Sauve la présélection automatiquement qd elle existe
 			$tGroupRegistryAwards = model_group::getInstance()->findAllRegistryInProgressAwards($oBoardGroup->getId());
@@ -568,7 +607,7 @@ class module_regin extends abstract_module
 	{
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
-		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, plugin_vfa::TYPE_AWARD_READER);
+		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, true);
 
 		$oView = new _view('regin::openForResponsibles');
 		$oView->tAwards = $tAwards;
@@ -658,6 +697,45 @@ class module_regin extends abstract_module
 				$oRegin->awards_ids = $oBoardGroup->getAwardIds();
 			}
 		}
+
+		$oView->oRegin = $oRegin;
+		$oView->tMessage = $oRegin->getMessages();
+
+		$oView->novalidate = false;
+		if ($oRegin->process == plugin_vfa::PROCESS_INTIME) {
+			$oView->novalidate = true;
+		}
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function updateForResponsible()
+	{
+		/* @var $oUserSession row_user_session */
+//		$oUserSession = _root::getAuth()->getUserSession();
+//		$oReaderGroup = $oUserSession->getReaderGroup();
+//		$tAwards = $oReaderGroup->findAwards();
+
+		$oView = new _view('regin::update');
+
+		if (_root::getRequest()->isPost()) {
+			$oRegin = $this->doSaveOpenForType(null, null, plugin_vfa::TYPE_RESPONSIBLE);
+		} else {
+			$oRegin = model_regin::getInstance()->findById(_root::getParam('id'));
+			if ($oRegin->isEmpty()) {
+				_root::redirect('default::index');
+			}
+		}
+		$oView->oGroup = model_group::getInstance()->findById($oRegin->group_id);
+
+		$tIdAwards = explode(',', $oRegin->awards_ids);
+		$tAwards = array();
+		foreach ($tIdAwards as $id) {
+			$tAwards[] = model_award::getInstance()->findById($id);
+		}
+		$oView->tAwards = $tAwards;
 
 		$oView->oRegin = $oRegin;
 		$oView->tMessage = $oRegin->getMessages();
@@ -1011,11 +1089,18 @@ class module_regin extends abstract_module
 			$oRegin->process = plugin_vfa::PROCESS_INTIME_VALIDATE;
 		}
 
+		/// Prix encore inconnu
+		$oAward = $poAward;
+		if (null == $oAward) {
+			$tIdAwards = explode(',', $oRegin->awards_ids);
+			$oAward = model_award::getInstance()->findById($tIdAwards[0]);
+		}
+
 		// Valide la date de fin des inscriptions
 		$endDateValide = false;
 		$today = plugin_vfa::today();
 		$today->addDay(-1);
-		$maxEnd = $this->buildProcessEndDate($poAward);
+		$maxEnd = $this->buildProcessEndDate($oAward);
 		$maxEnd->addDay(1);
 		$processEnd = new plugin_date($oRegin->process_end);
 		if (plugin_vfa::afterDate($processEnd, $today) && plugin_vfa::beforeDate($processEnd, $maxEnd)) {
@@ -1033,8 +1118,12 @@ class module_regin extends abstract_module
 		if ((null == $oGroup) && ($pType == plugin_vfa::TYPE_RESPONSIBLE)) {
 			$idGroup = _root::getParam('_group', null);
 			if (null == $idGroup) {
-				$oRegin->setMessages(array('_group' => array('required-group')));
-				return $oRegin;
+				if (null == $oRegin->group_id) {
+					$oRegin->setMessages(array('_group' => array('required-group')));
+					return $oRegin;
+				} else {
+					$idGroup = $oRegin->group_id;
+				}
 			}
 			$oGroup = model_group::getInstance()->findById($idGroup);
 			$prefixCode = "COR";
@@ -1045,13 +1134,16 @@ class module_regin extends abstract_module
 		if ($endDateValide && $oRegin->isValid()) {
 			if (null == _root::getParam('code', null)) {
 				// Génération du code d'inscription
-				$code = plugin_vfa::generateRegistrationCode($poAward->year, $oGroup->toString(), $prefixCode);
+				var_dump($oAward->year);
+				var_dump($oGroup->toString());
+				var_dump($prefixCode);
+				$code = plugin_vfa::generateRegistrationCode($oAward->year, $oGroup->toString(), $prefixCode);
 				$oRegin->code = $code;
 				$oRegin->save();
 				// Vérifie les doublons de code (rarissime)
 				$founds = model_regin::getInstance()->findAllByCode($code);
 				while (count($founds) > 1) {
-					$code = plugin_vfa::generateRegistrationCode($poAward->year, $oGroup->toString(), $prefixCode);
+					$code = plugin_vfa::generateRegistrationCode($oAward->year, $oGroup->toString(), $prefixCode);
 					$oRegin->code = $code;
 					$oRegin->save();
 					$founds = model_regin::getInstance()->findAllByCode($code);
@@ -1178,6 +1270,46 @@ class module_regin extends abstract_module
 			$oRegin->delete();
 		}
 		_root::redirect('regin::openedBoard');
+	}
+
+	public function _deleteResponsible()
+	{
+		_root::getRequest()->setAction('deleteResponsible');
+		$tMessage = $this->deleteResponsible();
+
+		$oView = new _view('regin::delete');
+		$oView->oViewShow = $this->makeViewShowForResponsible();
+
+		$oPluginXsrf = new plugin_xsrf();
+		$oView->token = $oPluginXsrf->getToken();
+		$oView->tMessage = $tMessage;
+
+		$this->oLayout->add('work', $oView);
+	}
+
+	private function deleteResponsible()
+	{
+		// si ce n'est pas une requete POST on ne soumet pas
+		if (!_root::getRequest()->isPost()) {
+			return null;
+		}
+
+		$oPluginXsrf = new plugin_xsrf();
+		// on verifie que le token est valide
+		if (!$oPluginXsrf->checkToken(_root::getParam('token'))) {
+			return array('token' => $oPluginXsrf->getMessage());
+		}
+
+		$iId = _root::getParam('id', null);
+		if ($iId != null) {
+			$oRegin = model_regin::getInstance()->findById($iId);
+			$toReginUsers = model_regin_users::getInstance()->findAllByReginId($oRegin->getId());
+			foreach ($toReginUsers as $oReginUser) {
+				$oReginUser->delete();
+			}
+			$oRegin->delete();
+		}
+		_root::redirect('regin::openedResponsible');
 	}
 
 	/**

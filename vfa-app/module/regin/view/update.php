@@ -7,6 +7,25 @@
 	<input type="hidden" name="awards_ids" value="<?php echo $this->oRegin->awards_ids ?>"/>
 	<input type="hidden" name="group_id" value="<?php echo $this->oRegin->group_id ?>"/>
 
+	<?php
+	$showValidation = true;
+	switch ($this->oRegin->type) {
+		case plugin_vfa::TYPE_BOARD:
+			$titleType = 'du membre du comité de sélection';
+			break;
+		case plugin_vfa::TYPE_RESPONSIBLE:
+			$titleType = 'd\'un correspondant';
+			$showValidation = false;
+			break;
+		case plugin_vfa::TYPE_READER:
+			$titleType = 'du lecteur';
+			break;
+		default:
+			$titleType = '';
+			break;
+	}
+	?>
+
 	<div class="panel panel-info panel-root">
 		<div class="panel-heading">
 			<h3 class="panel-title">Modification de la permission : <?php echo $this->oRegin->code ?></h3>
@@ -23,7 +42,7 @@
 			<div class="panel-body panel-condensed">
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title">Caractéristique de l'inscription du lecteur</h3>
+						<h3 class="panel-title">Caractéristique de l'inscription <?php echo $titleType ?></h3>
 					</div>
 					<div class="panel-body panel-condensed">
 						<div class="row">
@@ -88,6 +107,7 @@
 								</div>
 							</div>
 						</div>
+						<?php if ($showValidation) : ?>
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="<?php echo plugin_validation::addClassError('form-group', $this->tMessage, 'process') ?>">
@@ -119,6 +139,7 @@
 								</div>
 							</div>
 						</div>
+						<?php endif; ?>
 					</div>
 					<div class="panel-footer clearfix">
 						<div class="pull-right">
