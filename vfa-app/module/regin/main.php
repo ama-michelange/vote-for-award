@@ -122,21 +122,26 @@ class module_regin extends abstract_module
 			case 'openedResponsible':
 			case 'updateResponsible':
 			case 'deleteResponsible':
+				$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('regin', 'openedResponsibleList'), 'glyphicon-list'));
+				$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Créer', new NavLink('regin', 'openResponsible'), 'glyphicon-plus-sign'));
+
 				if ($this->oLayout->__isset('idRegin')) {
 					$tParams = array('id' => $this->oLayout->idRegin);
 				} else {
 					$tParams = array('id' => _root::getParam('id'));
 				}
 				if ($tParams['id']) {
-					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Liste',
-						new NavLink('regin', 'openedResponsibleList'), 'glyphicon-list'));
-					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail',
-						new NavLink('regin', 'openedResponsible', $tParams), 'glyphicon-eye-open'));
-					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier',
-						new NavLink('regin', 'updateResponsible', $tParams), 'glyphicon-edit'));
-					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Supprimer',
-						new NavLink('regin', 'deleteResponsible', $tParams), 'glyphicon-trash'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Détail', new NavLink('regin', 'openedResponsible', $tParams), 'glyphicon-eye-open'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Modifier', new NavLink('regin', 'updateResponsible', $tParams), 'glyphicon-edit'));
+					$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Supprimer', new NavLink('regin', 'deleteResponsible', $tParams), 'glyphicon-trash'));
 				}
+				break;
+			case 'openResponsible':
+				$tItems[] = plugin_BsHtml::buildMenuItem('Créer', new NavLink('groups', 'create'), 'glyphicon-plus-sign');
+				$tItems[] = plugin_BsHtml::buildMenuItem('Liste', new NavLink('groups', 'index'), 'glyphicon-list');
+				$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Groupes'));
+
+				$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Liste', new NavLink('regin', 'openedResponsible'), 'glyphicon-list'));
 				break;
 		}
 	}
@@ -610,23 +615,27 @@ class module_regin extends abstract_module
 		$tAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, true);
 
 		$oView = new _view('regin::openForResponsibles');
-		$oView->tAwards = $tAwards;
-		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(plugin_vfa::ROLE_READER), null);
-		$oView->oGroup = new row_group();
+//		$oView->tAwards = $tAwards;
+//		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(plugin_vfa::ROLE_READER), null);
+//		$oView->oGroup = new row_group();
 
 		if (_root::getRequest()->isPost()) {
-			$oRegin = $this->doSaveOpenForType(null, $tAwards[0], plugin_vfa::TYPE_RESPONSIBLE);
+			$oRegin = $this->doSaveOpenForType(null, null, plugin_vfa::TYPE_RESPONSIBLE);
 		} else {
 			$oRegin = new row_regin();
 			$oRegin->created_user_id = $oUserSession->getUser()->getId();
 			$oRegin->type = plugin_vfa::TYPE_RESPONSIBLE;
 			$oRegin->state = plugin_vfa::STATE_OPEN;
-			$oRegin->group_id = '';
-			$oRegin->awards_ids = plugin_vfa::getIds($tAwards);
-
-			$oRegin->process_end = $this->buildProcessEndDate($tAwards[0])->toString();
+//			$oRegin->group_id = '';
+//			$oRegin->awards_ids = plugin_vfa::getIds($tAwards);
+//
+			$date = plugin_vfa::today();
+			$date->addMonth(2);
+			$oRegin->process_end = $date->toString();
 			$oRegin->process = plugin_vfa::PROCESS_INTIME;
 		}
+		$oView->tSelectedGroups = plugin_vfa::buildOptionSelected(model_group::getInstance()->getSelect(plugin_vfa::ROLE_READER), $oRegin->group_id);
+		$oView->oGroup = new row_group();
 
 		$oView->oRegin = $oRegin;
 		$oView->tMessage = $oRegin->getMessages();
@@ -1088,10 +1097,35 @@ class module_regin extends abstract_module
 		} else {
 			$oRegin->process = plugin_vfa::PROCESS_INTIME_VALIDATE;
 		}
-
-		/// Prix encore inconnu
+		// Gestion du groupe et des cas particuliers d'une permission d'inscription de responsable
+		$oGroup = $poGroup;
+		$prefixCode = null;
+		if ((null == $oGroup) && ($pType == plugin_vfa::TYPE_RESPONSIBLE)) {
+			$idGroup = _root::getParam('group_id', null);
+			if (null == $idGroup) {
+				if (null == $oRegin->group_id) {
+					$oRegin->setMessages(array('group_id' => array('required-group')));
+					return $oRegin;
+				} else {
+					$idGroup = $oRegin->group_id;
+				}
+			}
+			$oGroup = model_group::getInstance()->findById($idGroup);
+			$prefixCode = "COR";
+			$oRegin->group_id = $idGroup;
+			$oRegin->process = plugin_vfa::PROCESS_INTIME;
+		}
+		/// Prix encore inconnu du cas particuliers d'une permission d'inscription de responsable
 		$oAward = $poAward;
 		if (null == $oAward) {
+			if (null == $oRegin->awards_ids) {
+				$tAwards = $oGroup->findAwards();
+				if (count($tAwards) == 0) {
+					$oRegin->setMessages(array('group_id' => array('required-award')));
+					return $oRegin;
+				}
+				$oRegin->awards_ids = plugin_vfa::getIds($tAwards);
+			}
 			$tIdAwards = explode(',', $oRegin->awards_ids);
 			$oAward = model_award::getInstance()->findById($tIdAwards[0]);
 		}
@@ -1112,24 +1146,7 @@ class module_regin extends abstract_module
 				$oRegin->setMessages(array('process_end' => array('isDateAfterKO')));
 			}
 		}
-		// Gestion du groupe et des cas particuliers d'une permission d'inscription de responsable
-		$oGroup = $poGroup;
-		$prefixCode = null;
-		if ((null == $oGroup) && ($pType == plugin_vfa::TYPE_RESPONSIBLE)) {
-			$idGroup = _root::getParam('_group', null);
-			if (null == $idGroup) {
-				if (null == $oRegin->group_id) {
-					$oRegin->setMessages(array('_group' => array('required-group')));
-					return $oRegin;
-				} else {
-					$idGroup = $oRegin->group_id;
-				}
-			}
-			$oGroup = model_group::getInstance()->findById($idGroup);
-			$prefixCode = "COR";
-			$oRegin->group_id = $idGroup;
-			$oRegin->process = plugin_vfa::PROCESS_INTIME;
-		}
+
 		// Sauvegarde
 		if ($endDateValide && $oRegin->isValid()) {
 			if (null == _root::getParam('code', null)) {

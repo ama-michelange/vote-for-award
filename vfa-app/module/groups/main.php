@@ -27,6 +27,14 @@ class module_groups extends abstract_module
 	{
 		$navBar = plugin_BsHtml::buildNavBar();
 		$navBar->setTitle('Groupes', new NavLink('groups', 'index'));
+		switch (_root::getAction()) {
+			case 'index':
+				$navBar->addChild(new Bar('left'));
+				$tItems[] = plugin_BsHtml::buildMenuItem('Liste', new NavLink('regin', 'openedResponsible'), 'glyphicon-list');
+				$tItems[] = plugin_BsHtml::buildMenuItem('Créer', new NavLink('regin', 'openResponsible'), 'glyphicon-plus-sign');
+				$navBar->getChild('left')->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Inscription Correspondant'));
+				break;
+		}
 		$navBar->addChild(new BarButtons('right'));
 		plugin_BsContextBar::buildDefaultContextBar($navBar->getChild('right'));
 		return $navBar;
@@ -73,7 +81,7 @@ class module_groups extends abstract_module
 		if ($this->allTypes) {
 			$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tRoles);
 		}
-		$tInProgressAwards = model_award::getInstance()->findAllInProgress();
+		$tInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
 		$tInProgressSelect = plugin_vfa::toSelect($tInProgressAwards, 'award_id', null, 'toString');
 		$tAwards = $oGroup->findAwards();
 		$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'toString');
@@ -111,7 +119,7 @@ class module_groups extends abstract_module
 			$oView->tSelectedRoles = plugin_vfa::buildOptionSelected(model_role::getInstance()->getSelectAll(), $tRoles);
 		}
 
-		$tInProgressAwards = model_award::getInstance()->findAllInProgress();
+		$tInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER);
 		$tInProgressSelect = plugin_vfa::toSelect($tInProgressAwards, 'award_id', null, 'toString');
 		$tAwards = $oGroup->findAwards();
 		$tSelect = plugin_vfa::toSelect($tAwards, 'award_id', null, 'toString');

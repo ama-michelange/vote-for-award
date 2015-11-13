@@ -246,6 +246,8 @@ class module_default extends abstract_module
 		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
 			// Associe le groupe de même rôle et les prix à l'utilisateur
 			$this->saveGroupAwardsToUser($poRegistry, plugin_vfa::ROLE_RESPONSIBLE);
+			// Supprime l'inscription ... elle ne sert qu'une fois
+			$poRegistry->oRegin->delete();
 		}
 	}
 
