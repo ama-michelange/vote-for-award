@@ -37,6 +37,11 @@
 												 value="<?php echo $this->oUser->email ?>" disabled/>
 									<span class="help-block"><?php echo plugin_validation::show($this->tMessage, 'email') ?></span>
 								</div>
+								<?php if ($this->oUser->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) : ?>
+									<div>
+										<span class="glyphicon glyphicon-check"></span> Correspondant
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
 

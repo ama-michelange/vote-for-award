@@ -31,6 +31,10 @@
 					</dd>
 					<dt>Affectation</dt>
 					<dd><?php echo $this->oGroup->toString() ?></dd>
+					<?php if ($this->oRegin->type == plugin_vfa::TYPE_RESPONSIBLE): ?>
+						<dt>Correspondant</dt>
+						<dd><span class="glyphicon glyphicon-check"></span></dd>
+					<?php endif; ?>
 				</dl>
 			</div>
 			<div class="col-sm-6 col-md-6">

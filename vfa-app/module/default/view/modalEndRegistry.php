@@ -24,6 +24,10 @@
 					<dl class="dl-horizontal">
 						<dt>Groupe</dt>
 						<dd><?php echo $this->oRegistry->oRegin->findGroup()->toString() ?></dd>
+						<?php if ($this->oRegistry->oUser->isInRole(plugin_vfa::ROLE_RESPONSIBLE)) : ?>
+							<dt>Correspondant</dt>
+							<dd><span class="glyphicon glyphicon-check"></span></dd>
+						<?php endif; ?>
 					</dl>
 					<?php if (plugin_vfa::PROCESS_INTIME == $this->oRegistry->oRegin->process)  : ?>
 						<h4>Inscription</h4>
