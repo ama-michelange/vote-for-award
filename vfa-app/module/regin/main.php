@@ -1151,9 +1151,6 @@ class module_regin extends abstract_module
 		if ($endDateValide && $oRegin->isValid()) {
 			if (null == _root::getParam('code', null)) {
 				// Génération du code d'inscription
-				var_dump($oAward->year);
-				var_dump($oGroup->toString());
-				var_dump($prefixCode);
 				$code = plugin_vfa::generateRegistrationCode($oAward->year, $oGroup->toString(), $prefixCode);
 				$oRegin->code = $code;
 				$oRegin->save();
