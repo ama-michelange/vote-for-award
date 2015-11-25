@@ -225,6 +225,11 @@ class module_bsnavbar extends abstract_module
 			$tMenuItems[] = new HeaderItem('Inscription d\'un correspondant');
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Créer une permission', new NavLink('regin', 'openResponsible'));
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Voir les permissions en cours', new NavLink('regin', 'openedResponsible'));
+			$tMenuItems[] = plugin_BsHtml::buildSeparator();
+		}
+		if ($poUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE) || $poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+			$tMenuItems[] = new HeaderItem('Aide');
+			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Processus global', new NavLink('regin', 'help'));
 		}
 		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Inscriptions', 'S\'inscrire', true));
 	}

@@ -73,6 +73,9 @@ class module_regin extends abstract_module
 			case 'deleteResponsible':
 				$navBar->setTitle('Permission en cours', new NavLink('regin', 'openedResponsible'));
 				break;
+			case 'help':
+				$navBar->setTitle('Aide', new NavLink('regin', 'help'));
+				break;
 		}
 
 		$this->buildMenuRight($navBar);
@@ -211,6 +214,7 @@ class module_regin extends abstract_module
 		}
 	}
 
+
 	public function _openedReader()
 	{
 		_root::getRequest()->setAction('openedReader');
@@ -294,6 +298,12 @@ class module_regin extends abstract_module
 	{
 		_root::getRequest()->setAction('validateBoard');
 		$this->validateForBoards();
+	}
+
+	public function _help()
+	{
+		$oView = new _view('regin::help');
+		$this->oLayout->add('work', $oView);
 	}
 
 	/**
