@@ -74,6 +74,28 @@ class module_home_enable extends abstract_module
 		$oView->toUserRegistredAwards = $oUserSession->getValidAwards();
 		$oView->toInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, true);
 
+		$tHelp = array();
+		if (_root::getACL()->permit('help::registryGlobalProcess')) {
+			$tHelp[] = array('Processus global d\'inscription', 'help::registryGlobalProcess');
+		}
+		if (_root::getACL()->permit('help::registryGroup')) {
+			$tHelp[] = array('Inscription d\'un groupe', 'help::registryGroup');
+		}
+		if (_root::getACL()->permit('help::registryReader')) {
+			$tHelp[] = array('Inscription des lecteurs', 'help::registryReader');
+		}
+		$oView->tHelp = $tHelp;
+
+//		if ($oUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE) || $oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+//			$tHelp[] = array('Processus global d\'inscription', 'help', 'registryGlobalProcess');
+//			if ($oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+//				$tHelp[] = array('Inscription d\'un groupe', 'help', 'registryGroup');
+//			}
+//			if ($oUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE) || $oUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
+//				$tHelp[] = array('Inscription des lecteurs', 'help', 'registryReader');
+//			}
+//		}
+
 		$this->oLayout->add('work', $oView);
 	}
 

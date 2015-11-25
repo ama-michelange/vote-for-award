@@ -93,4 +93,21 @@
 			</div>
 		</div>
 	<?php endif; ?>
+	<?php if (count($this->tHelp) > 0) : ?>
+		<div class="col-md-4">
+			<div class="panel panel-info">
+				<div class="panel-heading"><h3 class="panel-title">Aide</h3></div>
+				<div class="panel-body panel-condensed">
+					<ul class="list-group">
+						<?php foreach ($this->tHelp as $help) : ?>
+							<li class="list-group-item">
+								<a href="<?php echo $this->getLink($help[1]) ?>">
+									<?php echo($help[0]) ?></a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
 </div>

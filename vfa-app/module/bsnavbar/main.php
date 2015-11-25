@@ -75,6 +75,7 @@ class module_bsnavbar extends abstract_module
 		$this->buildMenuAwards($bar);
 		$this->buildMenuReader($bar);
 		$this->buildMenuRegistrations($bar, $oUserSession);
+		$this->buildMenuHelp($bar);
 		$this->buildMenuAdmin($bar);
 
 		$bar = $pNavBar->getChild('right');
@@ -225,13 +226,20 @@ class module_bsnavbar extends abstract_module
 			$tMenuItems[] = new HeaderItem('Inscription d\'un correspondant');
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Créer une permission', new NavLink('regin', 'openResponsible'));
 			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Voir les permissions en cours', new NavLink('regin', 'openedResponsible'));
-			$tMenuItems[] = plugin_BsHtml::buildSeparator();
-		}
-		if ($poUserSession->isInRole(plugin_vfa::ROLE_RESPONSIBLE) || $poUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $poUserSession->isInRole(plugin_vfa::ROLE_OWNER)) {
-			$tMenuItems[] = new HeaderItem('Aide');
-			$tMenuItems[] = plugin_BsHtml::buildMenuItem('Processus global', new NavLink('regin', 'help'));
 		}
 		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Inscriptions', 'S\'inscrire', true));
+	}
+
+	/**
+	 * @param Bar $pItems
+	 */
+	private function buildMenuHelp($pItems)
+	{
+		$tMenuItems = array();
+		$tMenuItems[] = plugin_BsHtml::buildMenuItem('Processus global d\'inscription', new NavLink('help', 'registryGlobalProcess'));
+		$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscription d\'un groupe', new NavLink('help', 'registryGroup'));
+		$tMenuItems[] = plugin_BsHtml::buildMenuItem('Inscription des lecteurs', new NavLink('help', 'registryReader'));
+		$pItems->addChild(plugin_BsHtml::buildDropdownMenuItem($tMenuItems, 'Aide', null, true));
 	}
 
 	public function buildView()
