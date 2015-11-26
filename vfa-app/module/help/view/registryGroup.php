@@ -52,19 +52,30 @@
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h4 class="panel-title text-info">Gestion des permissions</h4>
+				<h4 class="panel-title text-info">Gestion des permissions et des correspondants</h4>
 			</div>
 			<div class="panel-body panel-condensed">
 				<p>Actions possibles pour gérer les inscriptions des correspondants</p>
+
+				<p>Permissions</p>
 				<ul>
 					<li>Visualisation de la liste des permissions d'inscription en cours pour les correspondants : menu <kbd>Inscriptions
 							/ Inscription d'un
 							correspondant / Voir les permissions en cours</kbd> <br>
 						Cette liste contient toutes les permissions non encore utilisées par les correspondants
 					</li>
-					<li>Visualisation d'une permission : à partir de la liste des permissions, cliquez sur une permission pour voir son détail</li>
+					<li>Visualisation d'une permission : à partir de la liste des permissions, cliquez sur une permission pour
+						voir son détail
+					</li>
 					<li>Modification d'une permission : à partir du détail d'une permission, bouton <kbd>Modifier</kbd></li>
 					<li>Suppression d'une permission : à partir du détail d'une permission, bouton <kbd>Supprimer</kbd></li>
+				</ul>
+				<p>Correspondants</p>
+				<ul>
+					<li>Visualisation de la liste des correspondants inscrits à un prix en cours : menu <kbd>Lecteurs</kbd> puis
+						menu <kbd>Autres inscrits / Correspondants</kbd><br>
+						Cette liste contient tous les correspondants inscrits au prix en cours
+					</li>
 				</ul>
 			</div>
 		</div>
