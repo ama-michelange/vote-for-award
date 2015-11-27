@@ -22,7 +22,7 @@
 		} else {
 			$textPour = 'Inscription de lecteurs';
 			$textValidateur = 'correspondant';
-			$textValid = 'le';
+			$textValid = 'le ';
 			$textNotValid = 'du ';
 		}
 		?>
