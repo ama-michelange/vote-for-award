@@ -1404,6 +1404,9 @@ class module_regin extends abstract_module
 			case plugin_vfa::TYPE_BOARD:
 				$this->doRegistryBoard($poRegistry);
 				break;
+			case plugin_vfa::TYPE_RESPONSIBLE:
+				$this->doRegistryResponsible($poRegistry);
+				break;
 		}
 	}
 
@@ -1442,6 +1445,23 @@ class module_regin extends abstract_module
 			// Sauvegarde pour validation
 			model_regin::getInstance()->saveReginUser($poRegistry->oRegin->getId(), $poRegistry->oUser->getId());
 			module_default::sendMailReginToValid($poRegistry, false);
+		}
+	}
+
+	/**
+	 * @param row_registry $poRegistry
+	 */
+	private function doRegistryResponsible($poRegistry)
+	{
+		if (plugin_vfa::PROCESS_INTIME == $poRegistry->oRegin->process) {
+			// Associe le groupe de même rôle et les prix à l'utilisateur
+			$this->saveGroupAwardsToUser($poRegistry, plugin_vfa::ROLE_RESPONSIBLE);
+			// Supprime l'inscription ... elle ne sert qu'une fois
+			$poRegistry->oRegin->delete();
+			// Met à jour la session
+			$oUserSession = _root::getAuth()->getUserSession();
+			$oUserSession->setUser($poRegistry->oUser);
+			_root::getAuth()->setUserSession($oUserSession);
 		}
 	}
 
