@@ -55,7 +55,7 @@
 								<li>Identifié comme <strong>Correspondant</strong> de ce groupe</li>
 								<li>Inscrit au prix en cours : il peut voter</li>
 							</ul>
-							Attention : le code de type "Corrrespondant" est à usage unique
+							Attention : le code de type "Correspondant" est à usage unique
 						</small>
 					</div>
 				</div>

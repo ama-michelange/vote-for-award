@@ -41,7 +41,7 @@
 						<ul>
 							<li>Sélectionnez le groupe : champ <kbd>Affectation au groupe</kbd></li>
 							<li>Modifiez la date max si nécessaire : champ <kbd>Date maximale d'inscription</kbd></li>
-							<li>Une fois validé, vous obtenez le code d'inscription pour le correpondant dans l'écran suivant</li>
+							<li>Une fois validé, vous obtenez le code d'inscription pour le correspondant dans l'écran suivant</li>
 						</ul>
 					</li>
 

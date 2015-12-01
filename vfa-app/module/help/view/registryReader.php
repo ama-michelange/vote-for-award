@@ -17,7 +17,9 @@
 					<li>Vous envoyez le code par mail à vos lecteurs</li>
 					<li>Ils s'incrivent tous sur le site avec ce même code</li>
 					<li>Vous accédez régulièrement au site pour valider l'inscription de chaque lecteur</li>
-					<li>Une fois leur inscription validée, les lecteurs sont affectés dans votre groupe, inscrits au prix et peuvent voter</li>
+					<li>Une fois leur inscription validée, les lecteurs sont affectés dans votre groupe, inscrits au prix et
+						peuvent voter
+					</li>
 				</ol>
 			</div>
 		</div>
@@ -41,12 +43,12 @@
 						<ul>
 							<li>Le champ <kbd>Date de fin des inscriptions</kbd> vous permet de diminuer la durée d'utilisation du
 								code
-								d'inscription. Passé cette date, les insciptions ne sont plus possibles avec ce code
+								d'inscription. Passé cette date, les inscriptions ne sont plus possibles avec ce code
 							</li>
 							<li>Le bouton coche <kbd>Validation des inscriptions / Pas de validation</kbd> vous permet de ne pas
-								valider
-								chaque inscription de lecteur lorsqu'il est coché. Les lecteurs pouront ainsi voter dès leur inscription<br>
-								Attention : dans ce cas, vous ne controlez plus qui s'inscrit. Si vous utilisez cette option,
+								valider chaque inscription de lecteur lorsqu'il est coché. Les lecteurs pourront ainsi voter dès leur
+								inscription<br>
+								Attention : dans ce cas, vous ne contrôlez plus qui s'inscrit. Si vous utilisez cette option,
 								transmettez directement le code d'inscription à chaque lecteur
 							</li>
 						</ul>
@@ -102,7 +104,8 @@
 				</ul>
 				<p>Lecteurs</p>
 				<ul>
-					<li>Visualisation de la liste des lecteurs inscrits au prix en cours : menu <kbd>Lecteurs / Inscrits</kbd></li>
+					<li>Visualisation de la liste des lecteurs inscrits au prix en cours : menu <kbd>Lecteurs / Inscrits</kbd>
+					</li>
 					<li>Visualisation de la liste des personnes de mon groupe : menu <kbd>Lecteurs / Mon groupe</kbd></li>
 				</ul>
 			</div>
