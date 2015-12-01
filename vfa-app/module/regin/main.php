@@ -1419,8 +1419,7 @@ class module_regin extends abstract_module
 			// Associe le groupe de même rôle et les prix à l'utilisateur
 			$this->saveGroupAwardsToUser($poRegistry->oRegin, $poRegistry->oUser, plugin_vfa::ROLE_READER);
 			// Met à jour la session
-			$oUserSession = _root::getAuth()->getUserSession();
-			$oUserSession->setUser($poRegistry->oUser);
+			$oUserSession = model_user_session::getInstance()->create($poRegistry->oUser);
 			_root::getAuth()->setUserSession($oUserSession);
 		} else {
 			// Sauvegarde pour validation
@@ -1438,8 +1437,7 @@ class module_regin extends abstract_module
 			// Associe le groupe de même rôle et les prix à l'utilisateur
 			$this->saveGroupAwardsToUser($poRegistry->oRegin, $poRegistry->oUser, plugin_vfa::ROLE_BOARD);
 			// Met à jour la session
-			$oUserSession = _root::getAuth()->getUserSession();
-			$oUserSession->setUser($poRegistry->oUser);
+			$oUserSession = model_user_session::getInstance()->create($poRegistry->oUser);
 			_root::getAuth()->setUserSession($oUserSession);
 		} else {
 			// Sauvegarde pour validation
@@ -1459,12 +1457,8 @@ class module_regin extends abstract_module
 			// Supprime l'inscription ... elle ne sert qu'une fois
 			$poRegistry->oRegin->delete();
 			// Met à jour la session
-//			$oUserSession = _root::getAuth()->getUserSession();
 			$oUserSession = model_user_session::getInstance()->create($poRegistry->oUser);
-//			$oUserSession->setUser($poRegistry->oUser);
 			_root::getAuth()->setUserSession($oUserSession);
-
-//			_root::getAuth()->connect($oUserSession);
 		}
 	}
 
