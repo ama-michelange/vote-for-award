@@ -886,16 +886,23 @@ class module_regin extends abstract_module
 		$rejected = _root::getParam('rejected');
 		$oRegin->nbAccepted = 0;
 		$oRegin->nbRejected = 0;
+		$nbMax = 0;
 		foreach ($tReginUsers as $oReginUser) {
-			if ((null != $accepted) && (true == in_array($oReginUser->getId(), $accepted))) {
-				$oReginUser->accepted = 1;
-				$oRegin->nbAccepted++;
-			} else if ((null != $rejected) && (true == in_array($oReginUser->getId(), $rejected))) {
-				$oReginUser->accepted = -1;
-				$oRegin->nbRejected++;
-			} else {
+			// Controle le nombre max de sélection pour maitriser les mails en copie
+			if ($nbMax >= 10) {
 				$oReginUser->accepted = 0;
+			} else {
+				if ((null != $accepted) && (true == in_array($oReginUser->getId(), $accepted))) {
+					$oReginUser->accepted = 1;
+					$oRegin->nbAccepted++;
+				} else if ((null != $rejected) && (true == in_array($oReginUser->getId(), $rejected))) {
+					$oReginUser->accepted = -1;
+					$oRegin->nbRejected++;
+				} else {
+					$oReginUser->accepted = 0;
+				}
 			}
+			$nbMax++;
 		}
 		$oRegin->openModalConfirm = false;
 		if ('toConfirm' == _root::getParam('action')) {
