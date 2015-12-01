@@ -1459,9 +1459,12 @@ class module_regin extends abstract_module
 			// Supprime l'inscription ... elle ne sert qu'une fois
 			$poRegistry->oRegin->delete();
 			// Met à jour la session
-			$oUserSession = _root::getAuth()->getUserSession();
-			$oUserSession->setUser($poRegistry->oUser);
+//			$oUserSession = _root::getAuth()->getUserSession();
+			$oUserSession = model_user_session::getInstance()->create($poRegistry->oUser);
+//			$oUserSession->setUser($poRegistry->oUser);
 			_root::getAuth()->setUserSession($oUserSession);
+
+//			_root::getAuth()->connect($oUserSession);
 		}
 	}
 
