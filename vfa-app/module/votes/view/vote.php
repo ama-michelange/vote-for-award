@@ -54,7 +54,7 @@
 										<div class="panel-images panel-images-col">
 											<div class="panel-images-body">
 												<?php foreach ($oVoteItem->getTitle()->findDocs() as $oDoc): ?>
-													<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-max', null, true); ?>
+													<?php echo plugin_BsHtml::showNavImage($oDoc->image, $oDoc->toString(), 'img-max', new Link($oDoc->url,array('target'=>'resume')), true); ?>
 												<?php endforeach; ?>
 											</div>
 										</div>

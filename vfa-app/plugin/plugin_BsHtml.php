@@ -311,6 +311,16 @@ class plugin_BsHtml
 				$ret .= '<a href="';
 				$ret .= $pLink->getLink();
 				$ret .= '"';
+				$props = $pLink->getProperties();
+				if (isset($props)) {
+					foreach ($props as $key => $value) {
+						$ret .= ' ';
+						$ret .= $key;
+						$ret .= '="';
+						$ret .= $value;
+						$ret .= '"';
+					}
+				}
 				$ret .= '>';
 			}
 			$ret .= '<img class="';
