@@ -974,6 +974,7 @@ class module_regin extends abstract_module
 	 */
 	private function registryAllUsers($poRegin, $pRole)
 	{
+//		sleep(5);
 		$tAcceptedReginUsers = array();
 		$tRejectedReginUsers = array();
 		//var_dump($poRegin);

@@ -74,6 +74,9 @@
 
 		<?php if ($this->oRegin->openModalConfirm): ?>
 		$('#modalConfirmValidate').modal({'show': true, 'keyboard': true, 'backdrop': 'static'});
+		$('#formConfirmValidate').submit(function () {
+			$('#submitConfirm').prop('disabled', 'disabled');
+		});
 		<?php endif; ?>
 
 	});

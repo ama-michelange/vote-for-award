@@ -2,7 +2,7 @@
 	<div id="modalConfirmValidate" class="modal fade" tabindex="-1">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="" method="POST">
+				<form id="formConfirmValidate" action="" method="POST">
 					<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 					<input type="hidden" name="regin_id" value="<?php echo $this->oRegin->getId() ?>"/>
 					<?php foreach ($this->tReginUsers as $oReginUsers): ?>
@@ -34,7 +34,8 @@
 						<?php endif; ?>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-info" name="action" value="toConfirm">
+						<input type="hidden" name="action" value="toConfirm"/>
+						<button  id="submitConfirm" type="submit" class="btn btn-info">
 							<i class="glyphicon glyphicon-ok with-text"></i>Confirmer
 						</button>
 						<button class="btn btn-default" data-dismiss="modal">
