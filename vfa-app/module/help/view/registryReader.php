@@ -11,13 +11,13 @@
 				<ol>
 
 					<li>Il faut permettre aux lecteurs du groupe, désirant participer au prix, d'ouvrir un compte sur le site avec
-						un code d'inscription que vous générer<br>Ce code, sésame donnant la permission de s'inscrire, permet
-						d'affecter les lecteurs dans votre groupe et de les inscrire au prix en cours
+						un code d'inscription que vous générez<br>Ce code, sésame donnant la permission de s'inscrire, permet
+						d'affecter les lecteurs à votre groupe et de les inscrire au prix en cours
 					</li>
 					<li>Vous envoyez le code par mail à vos lecteurs</li>
 					<li>Ils s'incrivent tous sur le site avec ce même code</li>
 					<li>Vous accédez régulièrement au site pour valider l'inscription de chaque lecteur</li>
-					<li>Une fois leur inscription validée, les lecteurs sont affectés dans votre groupe, inscrits au prix et
+					<li>Une fois leur inscription validée, les lecteurs sont affectés à votre groupe, inscrits au prix et
 						peuvent voter
 					</li>
 				</ol>
@@ -83,7 +83,9 @@
 							</li>
 						</ul>
 					</li>
-					<li>Validez vos décisions : bouton <kbd>Ok</kbd></li>
+					<li>Validez vos décisions, bouton <kbd>Ok</kbd>, puis dans la boite de confirmation <kbd>Confirmer</kbd> ou
+						<kbd>Annuler</kbd><br/>Attention, pour des raisons techniques, vous ne pourrez pas valider plus de 10 inscriptions à la fois
+					</li>
 				</ol>
 			</div>
 		</div>

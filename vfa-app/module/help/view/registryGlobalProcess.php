@@ -13,7 +13,7 @@
 						<ol>
 							<li>Affecte le prix en cours au groupe qui souhaite participer</li>
 							<li>Génère un code d'inscription de type "Correspondant" pour ce groupe</li>
-							<li>Envoi le code d'inscription généré à la personne désignée comme correspondant du groupe</li>
+							<li>Envoie le code d'inscription généré à la personne désignée comme correspondant du groupe</li>
 						</ol>
 					</div>
 					<div class="col-sm-5">
@@ -38,7 +38,7 @@
 							<li>Une fois inscrit, génère un code d'inscription de type "Lecteur" pour tous les participants de son
 								groupe
 							</li>
-							<li>Envoi le code d'inscription généré à chaque lecteur</li>
+							<li>Envoie le code d'inscription généré à chaque lecteur</li>
 							<li>Valide l'inscription de chaque lecteur sur le site</li>
 						</ol>
 					</div>
