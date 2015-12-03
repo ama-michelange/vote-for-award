@@ -1,3 +1,12 @@
+.pub-block {
+	margin-bottom: 20px;
+	width: 450px;
+}
+
+.pub-block p {
+	margin: 0;
+}
+
 .pub-images {
 	background-color: white;
 	padding: 10px;
@@ -6,10 +15,12 @@
 	-webkit-transition: all 0.2s ease-in-out;
 	transition: all 0.2s ease-in-out;
 }
-#default .pub-images {
-	/*border: 6px solid #4E5D72;*/
-	/*border-radius: 24px;*/
 
+.pub-images #bdfugue {
+	width: 250px;
+}
+
+#default .pub-images {
 	border-right: 2px solid rgba(0, 0, 0, 0.6);
 	border-left: 2px solid rgba(0, 0, 0, 0.2);
 	border-bottom: 2px solid rgba(0, 0, 0, 0.6);
@@ -20,21 +31,78 @@
 	transition: all 0.2s ease-in-out;
 }
 
-@media (min-width: 400px) {
+@media (min-width: 1200px) {
+	#default .pub-block {
+		width: 530px;
+	}
+
+	#default .pub-alices {
+		position: relative;
+		height: 170px;
+		width: 253px;
+	}
+
+	#default #alices {
+		position: absolute;
+		bottom: 0;
+		left: 20px;
+	}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+
+	#default .pub-block {
+		width: 450px;
+	}
+
+	#default .pub-alices {
+		position: relative;
+		height: 165px;
+		width: 253px;
+	}
+
+	#default #alices {
+		position: absolute;
+		bottom: 0;
+		left: 20px;
+	}
+}
+
+@media (min-width: 400px) and (max-width: 991px) {
 	.pub-block {
 		width: 350px;
 	}
+
+	#default .pub-block {
+		width: 450px;
+	}
+
+	#default .pub-alices {
+		position: relative;
+		height: 67px;
+		width: 253px;
+	}
+
+	#default #alices {
+		position: absolute;
+		bottom: 0;
+		left: 20px;
+	}
+
 	.pub-images #bdfugue {
 		width: 250px;
 	}
 }
+
 @media (max-width: 399px) {
 	.pub-block {
 		width: 250px;
 	}
+
 	.pub-images #bdfugue {
 		width: 200px;
 	}
+
 	.pub-images #alices {
 		width: 150px;
 	}
