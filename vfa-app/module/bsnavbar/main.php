@@ -139,7 +139,9 @@ class module_bsnavbar extends abstract_module
 			$item->addChild(plugin_BsHtml::buildMenuItem('Sélection ' . $toInProgressAwards[0]->year,
 				new NavLink('results', 'awardInProgress')));
 		}
-		$item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire', new NavLink('results', 'live')));
+		$item->addChildSeparator();
+		$item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire général', new NavLink('results', 'live')));
+		$item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire groupe', new NavLink('results', 'liveGroup')));
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Résultat du dernier prix', new NavLink('results', 'last')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Archives', new NavLink('results', 'archives')));

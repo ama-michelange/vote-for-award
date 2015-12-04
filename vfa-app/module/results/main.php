@@ -16,6 +16,7 @@ class module_results extends abstract_module
 
 
 		$this->oUser = $oUserSession->getUser();
+		$this->oReaderGroup = $oUserSession->getReaderGroup();
 		$this->toValidAwards = $oUserSession->getValidAwards();
 		$this->toValidBoardAwards = 0;
 		$this->toValidReaderAwards = 0;
@@ -153,6 +154,24 @@ class module_results extends abstract_module
 		$this->oLayout->add('work', $oView);
 	}
 
+	public function _liveGroup()
+	{
+		$toResults = null;
+		$oAward = $this->selectAwardInProgress(_root::getParam('award_id'));
+		$oGroup = $this->selectGroup(_root::getParam('group_id'));
+		if (null == $oGroup || $oGroup->isEmpty()) {
+			$oAward = null;
+		}
+		if (null != $oAward) {
+			$toResults = $this->calcAwardGroupResults($oAward, $oGroup);
+		}
+		$oView = new _view('results::award_live');
+		$oView->oAward = $oAward;
+		$oView->oGroup = $oGroup;
+		$oView->toResults = $toResults;
+		$this->oLayout->add('work', $oView);
+	}
+
 	public function _last()
 	{
 		$toResults = null;
@@ -284,6 +303,23 @@ class module_results extends abstract_module
 	}
 
 	/**
+	 * Renvoie le groupe : par défaut le groupe de l'utilisateur sinon le groupe demandé.
+	 * @param null $pGroupId string Si présent renvoie le groupe demandé
+	 * @return null|row_group Le groupe de l'utilisateur ou le groupe demandé
+	 */
+	private function selectGroup($pGroupId = null)
+	{
+		$oGroup = $this->oReaderGroup;
+		if (null != $pGroupId) {
+			$oGroup = model_group::getInstance()->findById($pGroupId);
+			if ((null != $oGroup) && ($oGroup->isEmpty())) {
+				$oGroup = $this->oReaderGroup;
+			}
+		}
+		return $oGroup;
+	}
+
+	/**
 	 * Renvoie le prix en cours : par défaut le prix public sinon le prix demandé.
 	 * @param null $pAwardId string Si présent renvoie le prix demandé si en cours
 	 * @return null|row_award Le prix en cours ou null si non trouvé ou si non en cours
@@ -312,6 +348,7 @@ class module_results extends abstract_module
 		}
 		return $oAward;
 	}
+
 
 	/**
 	 * Renvoie le dernier prix public terminé.
@@ -420,6 +457,20 @@ class module_results extends abstract_module
 			}
 		}
 
+		return $toResults;
+	}
+
+	/**
+	 * @param $poAward row_award
+	 * @param $poGroup row_group
+	 * @return row_vote_result[]
+	 */
+	private function calcAwardGroupResults($poAward, $poGroup)
+	{
+		// Calcule les résulats des votes du prix
+		$toResults = model_vote_result::getInstance()->calcResultGroupVotes($poAward, $poGroup);
+		// Tri par moyenne descendante
+		usort($toResults, array("row_vote_result", "cmpAverageDesc"));
 		return $toResults;
 	}
 

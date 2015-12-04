@@ -1,14 +1,25 @@
 <div class="panel panel-default panel-root">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			<?php if ($this->oAward) : ?>
+			<?php if (isset($this->oAward)) : ?>
 				<?php echo $this->oAward->toString() ?>
+				<?php if (isset($this->oGroup)) : ?>
+					: <?php echo $this->oGroup->toString() ?>
+				<?php endif; ?>
 			<?php else : ?>
 				Aucun prix en cours ...
 			<?php endif; ?>
 		</h3>
 	</div>
-	<?php if ($this->oAward) : ?>
+	<?php
+	$idGroup = null;
+	if (isset($this->oGroup)) {
+		$idGroup = $this->oGroup->getId();
+	}
+	?>
+
+	<?php if (isset($this->oAward)) : ?>
+
 		<div class="panel-body">
 			<div class="panel panel-inner panel-info">
 				<div class="panel-body">
@@ -21,17 +32,18 @@
 						<div class="col-md-2 center-block">
 							<p>Inscrits</p>
 
-							<p class="center-block"><?php echo model_award::getInstance()->countUser($this->oAward->getId()) ?></p>
+							<p
+								class="center-block"><?php echo model_award::getInstance()->countUser($this->oAward->getId(), $idGroup) ?></p>
 						</div>
 						<div class="col-md-2">
 							<p>Bulletins</p>
 
-							<p><?php echo model_vote::getInstance()->countAllBallots($this->oAward->getId()) ?></p>
+							<p><?php echo model_vote::getInstance()->countAllBallots($this->oAward->getId(), $idGroup) ?></p>
 						</div>
 						<div class="col-md-2">
 							<p>Bulletins valides</p>
 
-							<p><?php echo model_vote::getInstance()->countValidBallots($this->oAward->getId(), $this->oAward->type) ?></p>
+							<p><?php echo model_vote::getInstance()->countValidBallots($this->oAward->getId(), $this->oAward->type, $idGroup) ?></p>
 						</div>
 					</div>
 				</div>

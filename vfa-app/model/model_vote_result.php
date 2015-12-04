@@ -89,6 +89,53 @@ class model_vote_result extends abstract_model
 		return $toVoteResults;
 	}
 
+	/**
+	 * @param $poAward row_award
+	 * @param $poGroup row_group
+	 * @return row_vote_result[]
+	 */
+	public function calcResultGroupVotes($poAward, $poGroup)
+	{
+		if (!isset($poAward) || $poAward->isEmpty()) {
+			return null;
+		}
+		$idAward = $poAward->award_id;
+		if (!isset($poGroup) || $poGroup->isEmpty()) {
+			return null;
+		}
+		$idGroup = $poGroup->group_id;
+
+		$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER;
+		if ($poAward->type == plugin_vfa::TYPE_AWARD_BOARD) {
+			$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_BOARD;
+		}
+
+		$sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score) FROM vfa_votes, vfa_vote_items, vfa_user_groups' .
+			' WHERE (vfa_votes.award_id = ' . $idAward . ') AND (vfa_votes.number >= ' . $minNbVote . ')' .
+			' AND (vfa_votes.vote_id = vfa_vote_items.vote_id) AND (vfa_vote_items.score > -1)' .
+			' AND (vfa_votes.user_id = vfa_user_groups.user_id) AND (vfa_user_groups.group_id = ' . $idGroup . ')' .
+			' GROUP BY vfa_vote_items.title_id';
+		// var_dump($sql);
+		$res = $this->execute($sql);
+
+		$toVoteResults = array();
+		while ($row = mysql_fetch_row($res)) {
+			// var_dump($row);
+			//	printf("TITLE_ID : %d,  Count : %d,  Sum : %d, Moy : %f </br>", $row[0], $row[1], $row[2], $row[2] / $row[1]);
+			$oVoteResult = new row_vote_result();
+			$oVoteResult->award_id = $idAward;
+			$oVoteResult->title_id = $row[0];
+			$oVoteResult->number = $row[1];
+			$oVoteResult->score = $row[2];
+			$oVoteResult->average = $row[2] / $row[1];
+			$oVoteResult->modified = plugin_vfa::dateTimeSgbd();
+			$toVoteResults[] = $oVoteResult;
+		}
+		mysql_free_result($res);
+
+		return $toVoteResults;
+	}
+
 }
 
 class row_vote_result extends abstract_row
@@ -146,5 +193,13 @@ class row_vote_result extends abstract_row
 			return $this->tMessages;
 		}
 		return $this->getListError();
+	}
+
+	static function cmpAverageDesc($a, $b)
+	{
+		if ($a->average == $b->average) {
+			return 0;
+		}
+		return ($a->average > $b->average) ? -1 : +1;
 	}
 }
