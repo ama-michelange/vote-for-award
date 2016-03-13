@@ -80,6 +80,8 @@ _root::setConfigVar('tLangue', array(
 	'required-group' => 'Le groupe est obligatoire, soit vous le sélectionnez, soit vous en créez un nouveau !', //
 	'required-award' => 'Ce groupe ne possède aucun prix en cours. Ajoutez un prix à ce groupe !', //
 
+	'isDateBeforeKO.process_end' => 'La date est trop grande, le prix se termine avant !', //
+
 
 ));
 
