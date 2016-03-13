@@ -119,7 +119,7 @@
 			<p class="pull-right">
 				<a href="https://www.facebook.com/bdfuguegrenoble" target="partner2">
 					<img id="bdfugue"
-							 src="site/images/LogoBdFugueGrenoble.jpg"
+							 src="site/img/LogoBdFugueGrenoble.jpg"
 							 alt="Logo BD Fugue Grenoble"></a></p>
 
 			<p class="pull-left"><a href="http://www.alices.fr/" target="partner1">
