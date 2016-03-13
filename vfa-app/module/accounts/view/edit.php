@@ -1,4 +1,4 @@
-<form action="" method="POST" autocomplete="off">
+<form id="toFormAccount" action="" method="POST" autocomplete="off">
 	<input type="hidden" name="token" value="<?php echo $this->token ?>"/>
 	<input type="hidden" name="user_id" value="<?php echo $this->oUser->user_id ?>"/>
 	<input type="hidden" name="login" value="<?php echo $this->oUser->login ?>"/>
@@ -272,7 +272,7 @@
 											</div>
 											<div class="panel-footer clearfix">
 												<div class="pull-right">
-													<button class="btn btn-primary btn-sm" type="submit" name="submit" value="saveEmail">
+													<button id="submitSaveEmail" class="btn btn-primary btn-sm" type="submit" name="submit" value="saveEmail">
 														<i class="glyphicon glyphicon-ok with-text"></i>Changer
 													</button>
 												</div>

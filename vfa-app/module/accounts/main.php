@@ -79,6 +79,9 @@ class module_accounts extends abstract_module
 		$oView->tSelectedYears = plugin_vfa::buildSelectedBirthYears($oUser->birthyear);
 
 		$this->oLayout->add('work', $oView);
+
+		$scriptView = new _view('accounts::scriptEdit');
+		$this->oLayout->add('script', $scriptView);
 	}
 
 

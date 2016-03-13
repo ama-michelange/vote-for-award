@@ -28,7 +28,7 @@
 		</div>
 		<div class="panel-footer clearfix">
 			<div class="pull-right">
-				<button type="submit" class="btn btn-info" name="action" value="toIdentify">
+				<button id="submitIdentify" type="submit" class="btn btn-info" name="action" value="toIdentify">
 					<i class="glyphicon glyphicon-ok with-text"></i>S'identifier
 				</button>
 				<a id="cancelLogin" class="btn btn-default"><i class="glyphicon glyphicon-remove with-text"></i>Annuler</a>

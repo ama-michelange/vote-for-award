@@ -330,14 +330,6 @@ class module_default extends abstract_module
 		$oView->token = $oPluginXsrf->getToken();
 
 
-		// FIXME A supprimer
-//		$poRegistry->oUser = model_user::getInstance()->findById(5);
-//		$poRegistry->oRegin = model_regin::getInstance()->findById(20);
-//		$poRegistry->oRegin->process = plugin_vfa::PROCESS_INTIME;
-//		$poRegistry->createAccount=true;
-		// FIXME A supprimer
-
-
 		$oView->oRegistry = $poRegistry;
 		$oView->oRegin = $poRegistry->oRegin;
 		$oView->tMessage = $poRegistry->getMessages();

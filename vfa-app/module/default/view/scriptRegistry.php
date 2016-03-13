@@ -99,5 +99,12 @@
 			}
 		}
 
+		$('#toIdentify').submit(function () {
+			$('#submitIdentify').addClass('hidden');
+		});
+		$('#toRegistry').submit(function () {
+			$('#submitAccount').addClass('hidden');
+		});
+
 	});
 </script>
