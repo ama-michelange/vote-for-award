@@ -48,6 +48,10 @@ class module_results extends abstract_module
 		} else if (_root::getAction() == 'live') {
 			$navBar->setTitle('Classement intermédiaire', new NavLink('results', 'live'));
 			$this->buildMenuAwardLiveResults($navBar->getChild('left'));
+		} else if (_root::getAction() == 'liveGroup') {
+			$navBar->setTitle('Classement intermédiaire Groupe', new NavLink('results', 'liveGroup'));
+			$this->buildMenuGroupLiveGroupResults($navBar->getChild('left'));
+			$this->buildMenuAwardLiveGroupResults($navBar->getChild('left'));
 		} else if (_root::getAction() == 'last') {
 			$navBar->setTitle('Résultat du dernier prix', new NavLink('results', 'last'));
 		} else if (_root::getAction() == 'archives') {
@@ -92,6 +96,46 @@ class module_results extends abstract_module
 				new NavLink('results', 'live', array('award_id' => $award->award_id)));
 		}
 		$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres classements', 'Autre classement', true));
+	}
+
+	/**
+	 * @param Bar $pBar
+	 */
+	private function buildMenuAwardLiveGroupResults($pBar)
+	{
+		$groupId = _root::getParam('group_id');
+		if ($groupId) {
+			$tItems = array();
+			$tAwards = model_award::getInstance()->findAllByGroupId($groupId);
+			foreach ($tAwards as $award) {
+				if (plugin_vfa::TYPE_AWARD_READER == $award->type) {
+					$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
+						new NavLink('results', 'liveGroup', array('group_id' => $groupId, 'award_id' => $award->award_id)));
+				}
+			}
+			if (count($tItems) > 1) {
+				$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres classements', 'Autre classement', true));
+			}
+		}
+	}
+
+	/**
+	 * @param NavBar $pNavBar
+	 */
+	private function buildMenuGroupLiveGroupResults($pBar)
+	{
+		$oUserSession = _root::getAuth()->getUserSession();
+		if ($oUserSession->isInRole(plugin_vfa::ROLE_OWNER) || $oUserSession->isInRole(plugin_vfa::ROLE_ORGANIZER) || $oUserSession->isInRole(plugin_vfa::ROLE_BOOKSELLER)) {
+			$tItems = array();
+			$tGroups = model_group::getInstance()->findAll();
+			foreach ($tGroups as $group) {
+				if ($group->getId() != $this->oReaderGroup->getId()) {
+					$tItems[] = plugin_BsHtml::buildMenuItem($group->toString(),
+						new NavLink('results', 'liveGroup', array('group_id' => $group->group_id)));
+				}
+			}
+			$pBar->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Autres groupes', null, true, true));
+		}
 	}
 
 	/**

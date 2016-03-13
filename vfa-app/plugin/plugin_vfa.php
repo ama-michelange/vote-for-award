@@ -16,6 +16,7 @@ class plugin_vfa
 	const CATEGORY_VALIDATE = 'VALIDATE';
 
 	const ROLE_BOARD = 'board';
+	const ROLE_BOOKSELLER = 'bookseller';
 	const ROLE_ORGANIZER = 'organizer';
 	const ROLE_OWNER = 'owner';
 	const ROLE_READER = 'reader';
