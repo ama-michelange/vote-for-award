@@ -361,6 +361,232 @@ class module_votes extends abstract_module
 		}
 	}
 
+	public function _recup_file_uservote()
+	{
+		$go = _root::getParam('go');
+		if ($go == "__go_go__") {
+			$this->recuperer_file_uservote('Alices-StmGre-votes-2016-ama.csv', 41, 50);
+		} else {
+			$this->voir_file_uservote('Alices-StmGre-votes-2016-ama.csv', 41, 50);
+		}
+	}
+
+	private function recuperer_file_uservote($pFilename, $pIdGroup, $pIdAward)
+	{
+		$tLineOne = null;
+		// Identifiant du prix
+		$idPrix = $pIdAward;
+		// Lit les lignes du fichier
+		$lines = file($pFilename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+		// Converti les lignes de chaines en tableau
+		$i = 0;
+		$tTitleIds = null;
+		$tBulletins = array();
+		$tUsers = array();
+		foreach ($lines as $line_num => $line) {
+			if ($i == 0) {
+				$tLineOne = explode(';', $line);
+				$tTitleIds = array_slice($tLineOne, 4);
+			} else {
+				$lineScores = explode(';', $line);
+				$tBulletins[] = array_slice($lineScores, 4);
+				$tUsers[] = array_slice($lineScores, 0, 4);
+			}
+			$i++;
+		}
+
+
+		// Parcours tous les utilisateurs
+		for ($iLine = 0; $iLine < count($tUsers); $iLine++) {
+			$lineUser = $tUsers[$iLine];
+			$oUser = $this->findOrCreateUser($lineUser, $pIdGroup, $pIdAward);
+
+		}
+
+
+//
+//		// Parcours tous les bulletins
+//		for ($iLine = 0; $iLine < count($tBulletins); $iLine++) {
+//			$lineScores = $tBulletins[$iLine];
+//			// Calcule les éléments du bulettin : nb vote et moyenne
+//			$cpt = 0;
+//			$sum = 0;
+//			for ($i = 0; $i < count($lineScores); $i++) {
+//				$len = strlen(trim($lineScores[$i]));
+//				// Vérifie qu'une valeur est présente
+//				if ($len > 0) {
+//					$cpt++;
+//					$sum += $lineScores[$i];
+//				} else {
+//					// Force une valeur négative comme dans le formulaire
+//					$lineScores[$i] = -1;
+//				}
+//			}
+//			$average = 0;
+//			if ($cpt > 0) {
+//				$average = $sum / $cpt;
+//			}
+//			// Création du vote pour l'utilisateur
+//			$oVote = new row_vote();
+//			$oVote->award_id = $idPrix;
+//			$oVote->user_id = $nextUserId;
+//			$oVote->number = $cpt;
+//			$oVote->average = $average;
+//			$oVote->created = plugin_vfa::dateTimeSgbd();
+//			$oVote->modified = $oVote->created;
+//			$oVote->save();
+//
+//			for ($i = 0; $i < count($lineScores); $i++) {
+//				$note = $lineScores[$i];
+//				// Vérifie la note
+//				if (($note < -1) || ($note > 5)) {
+//					$note = -1;
+//				}
+//				// Création du vote pour le titre
+//				$oVoteItem = new row_vote_item();
+//				$oVoteItem->vote_id = $oVote->getId();
+//				$oVoteItem->title_id = $tTitleIds[$i];
+//				$oVoteItem->score = $note;
+//				$oVoteItem->created = plugin_vfa::dateTimeSgbd();
+//				$oVoteItem->modified = $oVoteItem->created;
+//				$oVoteItem->save();
+//			}
+//			// Utilisateur suivant
+//			$nextUserId--;
+//		}
+		echo "<br />TERMINER\n";
+
+	}
+
+	private function findOrCreateUser($pLineUser, $pIdGroup, $pIdAward)
+	{
+		$oUser = model_user::getInstance()->findByLogin($pLineUser[2]);
+		if ($oUser->isEmpty()) {
+			$oUser = new row_user();
+			$oUser->created_date = plugin_vfa::dateTimeSgbd();
+			$oUser->login = $pLineUser[2];
+			$oUser->last_name = $pLineUser[0];
+			$oUser->first_name = $pLineUser[1];
+			$oUser->email = $pLineUser[3];
+
+			$oGroup = model_group::getInstance()->findById($pIdGroup);
+			$tUserGroups = array();
+			$tUserGroups[] = $oGroup->group_id;
+			$tUserRoles = array();
+			$tUserRoles[] = $oGroup->role_id_default;
+			$tUserAwards = array();
+			$tUserAwards[] = $pIdAward;
+
+			$oUser->save();
+			model_user::getInstance()->saveUserRoles($oUser->user_id, $tUserRoles);
+			model_user::getInstance()->saveUserGroups($oUser->user_id, $tUserGroups);
+			model_user::getInstance()->saveUserAwards($oUser->user_id, $tUserAwards);
+
+			$aa = $oUser->toString();
+			echo "CREATE : $aa<br />";
+
+		} else {
+			$aa = $oUser->toString();
+			echo "Found : $aa<br />";
+		}
+		echo "<br />";
+		return $oUser;
+	}
+
+	private function voir_file_uservote($pFilename, $pIdGroup, $pIdAward)
+	{
+		$tLineOne = null;
+		// Identifiant du prix
+		$idPrix = $pIdAward;
+		// Lit les lignes du fichier
+		$lines = file($pFilename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+		// Converti les lignes de chaines en tableau
+		$i = 0;
+		$tTitleIds = null;
+		$tBulletins = array();
+		$tUsers = array();
+		foreach ($lines as $line_num => $line) {
+			if ($i == 0) {
+				$tLineOne = explode(';', $line);
+				$tTitleIds = array_slice($tLineOne, 4);
+			} else {
+				$lineScores = explode(';', $line);
+				$tBulletins[] = array_slice($lineScores, 4);
+				$tUsers[] = array_slice($lineScores, 0, 4);
+			}
+			$i++;
+		}
+
+		$oPrix = model_award::getInstance()->findById($pIdAward);
+		$prixString = $oPrix->toString();
+		echo "<h1>$prixString</h1>";
+
+		$oGroupe = model_group::getInstance()->findById($pIdGroup);
+		$groupeString = $oGroupe->toString();
+
+		echo "<table class='table table-striped table-hover'>";
+		echo "<tr>";
+		echo "<td>ID</td>";
+		echo "<td>Titre</td>";
+		echo "</tr>";
+		for ($iLine = 0; $iLine < count($tTitleIds); $iLine++) {
+			echo "<tr>";
+			echo "<td>$tTitleIds[$iLine]</td>";
+			$oTitre = model_title::getInstance()->findById($tTitleIds[$iLine]);
+			echo "<td>$oTitre->title</td>";
+			echo "</tr>";
+		}
+		echo "</table>";
+
+		echo "<table class='table table-striped table-hover'>";
+		echo "<tr>";
+		echo "<th></th>";
+		echo "<th colspan='17'>Bulletins des utilisateur du groupe $groupeString</th>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<th></th>";
+		echo "<th>Nom</th>";
+		echo "<th>Prenom</th>";
+		echo "<th>Login</th>";
+		echo "<th>Email</th>";
+		for ($iLine = 0; $iLine < count($tTitleIds); $iLine++) {
+			echo "<th>$tTitleIds[$iLine]</th>";
+		}
+		echo "</tr>";
+
+		for ($iLine = 0; $iLine < count($tUsers); $iLine++) {
+			echo "<tr>";
+			echo "<td>$iLine</td>";
+			$lineUser = $tUsers[$iLine];
+			for ($i = 0; $i < count($lineUser); $i++) {
+				if ($i == 2) {
+					$oUser = model_user::getInstance()->findByLogin($lineUser[$i]);
+					if ($oUser->isEmpty()) {
+						echo "<td>$lineUser[$i]</td>";
+					} else {
+						echo "<td class='success'>$lineUser[$i]</td>";
+					}
+				} else {
+					echo "<td>$lineUser[$i]</td>";
+				}
+			}
+			$lineScores = $tBulletins[$iLine];
+			for ($i = 0; $i < count($lineScores); $i++) {
+				echo "<td>$lineScores[$i]</td>";
+			}
+			echo "</tr>";
+		}
+		echo "</table>";
+
+		$params = array();
+		$params['go'] = "__go_go__";
+		$aaa = _root::getLinkString("votes::recup_file_uservote", $params);
+
+		echo "<a class='btn btn-block btn-warning' href='$aaa'>Go</a>";
+	}
 
 }
 
