@@ -256,7 +256,7 @@ class module_votes extends abstract_module
 			$oVote->modified = plugin_vfa::dateTimeSgbd();
 		}
 
-		// Extrait les pamètres de la requête et les convertit en row_vote_item
+		// Extrait les paramètres de la requête et les convertit en row_vote_item
 		$toVoteItems = $this->extractParamsToVoteItems();
 		$oVote->setVoteItems($toVoteItems);
 		// Calcule le nombre de vote valide
@@ -339,10 +339,11 @@ class module_votes extends abstract_module
 
 	/**
 	 * @param $poVote row_vote
-	 * @return void
+	 * @return boolean Vrai si une des notes a été créée ou modifiée
 	 */
 	private function saveVote($poVote)
 	{
+		$modify = false;
 		$poVote->save();
 		$toVoteItems = $poVote->getVoteItems();
 		foreach ($toVoteItems as $oVoteItem) {
@@ -352,13 +353,16 @@ class module_votes extends abstract_module
 				if (($oVoteItem->score != $last->score) || (strcmp($oVoteItem->comment, $last->comment) != 0)) {
 					$oVoteItem->modified = plugin_vfa::dateTimeSgbd();
 					$oVoteItem->update();
+					$modify = true;
 				}
 			} else {
 				$oVoteItem->created = plugin_vfa::dateTimeSgbd();
 				$oVoteItem->modified = $oVoteItem->created;
 				$oVoteItem->save();
+				$modify = true;
 			}
 		}
+		return $modify;
 	}
 
 	public function _recup_file_uservote()
@@ -397,68 +401,100 @@ class module_votes extends abstract_module
 		}
 
 
-		// Parcours tous les utilisateurs
+		// Parcours tous les utilisateurs et bulletins
 		for ($iLine = 0; $iLine < count($tUsers); $iLine++) {
 			$lineUser = $tUsers[$iLine];
 			$oUser = $this->findOrCreateUser($lineUser, $pIdGroup, $pIdAward);
-
+			$oVote = $this->findOrBuildVote($oUser, $pIdAward);
+			$oVote = $this->fillVote($oVote, $tTitleIds, $tBulletins[$iLine]);
+			// Sauvegarde
+			if ($this->saveVote($oVote)) {
+				echo "<span style='padding-left: 20px;'>MODIFY</span>";
+			}
+			echo "<br />";
 		}
-
-
-//
-//		// Parcours tous les bulletins
-//		for ($iLine = 0; $iLine < count($tBulletins); $iLine++) {
-//			$lineScores = $tBulletins[$iLine];
-//			// Calcule les éléments du bulettin : nb vote et moyenne
-//			$cpt = 0;
-//			$sum = 0;
-//			for ($i = 0; $i < count($lineScores); $i++) {
-//				$len = strlen(trim($lineScores[$i]));
-//				// Vérifie qu'une valeur est présente
-//				if ($len > 0) {
-//					$cpt++;
-//					$sum += $lineScores[$i];
-//				} else {
-//					// Force une valeur négative comme dans le formulaire
-//					$lineScores[$i] = -1;
-//				}
-//			}
-//			$average = 0;
-//			if ($cpt > 0) {
-//				$average = $sum / $cpt;
-//			}
-//			// Création du vote pour l'utilisateur
-//			$oVote = new row_vote();
-//			$oVote->award_id = $idPrix;
-//			$oVote->user_id = $nextUserId;
-//			$oVote->number = $cpt;
-//			$oVote->average = $average;
-//			$oVote->created = plugin_vfa::dateTimeSgbd();
-//			$oVote->modified = $oVote->created;
-//			$oVote->save();
-//
-//			for ($i = 0; $i < count($lineScores); $i++) {
-//				$note = $lineScores[$i];
-//				// Vérifie la note
-//				if (($note < -1) || ($note > 5)) {
-//					$note = -1;
-//				}
-//				// Création du vote pour le titre
-//				$oVoteItem = new row_vote_item();
-//				$oVoteItem->vote_id = $oVote->getId();
-//				$oVoteItem->title_id = $tTitleIds[$i];
-//				$oVoteItem->score = $note;
-//				$oVoteItem->created = plugin_vfa::dateTimeSgbd();
-//				$oVoteItem->modified = $oVoteItem->created;
-//				$oVoteItem->save();
-//			}
-//			// Utilisateur suivant
-//			$nextUserId--;
-//		}
 		echo "<br />TERMINER\n";
-
 	}
 
+	/**
+	 * @param row_vote $poVote
+	 * @param int[] $ptTitleIds
+	 * @param int[] $ptLineScores
+	 */
+	private function fillVote($poVote, $ptTitleIds, $ptLineScores)
+	{
+		$lineNotes = array();
+		for ($i = 0; $i < count($ptLineScores); $i++) {
+			$len = strlen(trim($ptLineScores[$i]));
+			// Vérifie qu'une valeur est présente
+			if ($len > 0) {
+				$lineNotes[] = $ptLineScores[$i];
+			} else {
+				// Force une valeur négative comme dans le formulaire
+				$lineNotes[] = -1;
+			}
+			if ($i == 0) {
+				echo "<span style='padding-left: 20px;'>Notes : </span>";
+			} else {
+				echo ", ";
+			}
+			echo "$lineNotes[$i] ";
+		}
+
+		echo "<br />";
+		echo "<span style='padding-left: 20px;'></span>";
+		$toVoteItemsSrc = $poVote->getVoteItems();
+		$toVoteItemsDst = array();
+
+		for ($i = 0; $i < count($ptTitleIds); $i++) {
+			if ($i > 0) {
+				echo ", ";
+			}
+			echo "$ptTitleIds[$i] = $lineNotes[$i]";
+			$oVoteItem = $this->searchVoteItem($toVoteItemsSrc, $ptTitleIds[$i]);
+			if (null == $oVoteItem) {
+				$oVoteItem = new row_vote_item();
+				$oVoteItem->title_id = $ptTitleIds[$i];
+			}
+			$oVoteItem->score = $lineNotes[$i];
+			$toVoteItemsDst[] = $oVoteItem;
+		}
+		$poVote->setVoteItems($toVoteItemsDst);
+		// Calcule le nombre de vote valide
+		$this->calcVote($poVote);
+
+		$nb = $poVote->number;
+		$ave = $poVote->average;
+		echo "<span style='padding-left: 20px;'>Nombre : $nb</span>";
+		echo "<span style='padding-left: 20px;'>Moyenne : $ave</span>";
+
+		echo "<br />";
+		return $poVote;
+	}
+
+	/**
+	 * @param row_vote_item[] $ptoVoteItems
+	 * @param $pTitleId
+	 * @return row_vote_item or null
+	 */
+	private function searchVoteItem($ptoVoteItems, $pTitleId)
+	{
+		if (null != $ptoVoteItems) {
+			foreach ($ptoVoteItems as $oVoteItem) {
+				if ($oVoteItem->title_id == $pTitleId) {
+					return $oVoteItem;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param array $pLineUser
+	 * @param int $pIdGroup
+	 * @param int $pIdAward
+	 * @return row_user
+	 */
 	private function findOrCreateUser($pLineUser, $pIdGroup, $pIdAward)
 	{
 		$oUser = model_user::getInstance()->findByLogin($pLineUser[2]);
@@ -490,8 +526,32 @@ class module_votes extends abstract_module
 			$aa = $oUser->toString();
 			echo "Found : $aa<br />";
 		}
-		echo "<br />";
+//		echo "<br />";
 		return $oUser;
+	}
+
+	/**
+	 * @param row_user $poUser
+	 * @param int $pIdAward
+	 * @return row_vote
+	 */
+	private function findOrBuildVote($poUser, $pIdAward)
+	{
+		$oVote = model_vote::getInstance()->findByUserIdAwardId($poUser->getId(), $pIdAward);
+		if ($oVote->isEmpty()) {
+			echo "<span style='padding-left: 20px;'>Pas de bulletin dispo</span><br/>";
+			$oVote = new row_vote();
+			$oVote->award_id = $pIdAward;
+			$oVote->user_id = $poUser->getId();
+			$oVote->created = plugin_vfa::dateTimeSgbd();
+			$oVote->modified = $oVote->created;
+			$oVote->number = 0;
+			$oVote->average = 0.0;
+		} else {
+			$oVote->modified = plugin_vfa::dateTimeSgbd();
+			$oVote->setVoteItems($oVote->findVoteItems());
+		}
+		return $oVote;
 	}
 
 	private function voir_file_uservote($pFilename, $pIdGroup, $pIdAward)
