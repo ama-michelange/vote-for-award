@@ -116,7 +116,7 @@
 								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_BALLOT) ?></dd>
 							</dl>
 							<dl class="col-md-3 text-center">
-								<dt>Lecteurs participants</dt>
+								<dt>Lecteurs inscrits</dt>
 								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_REGISTRED) ?></dd>
 							</dl>
 							<dl class="col-md-3 text-center">
