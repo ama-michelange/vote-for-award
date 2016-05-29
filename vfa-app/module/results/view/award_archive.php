@@ -107,20 +107,20 @@
 					<div class="panel-heading">Statistiques</div>
 					<div class="panel-body">
 						<div class="row">
-							<dl class="col-md-2 text-center">
+							<dl class="col-md-3 text-center">
 								<dt>Bulletins valides</dt>
 								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_BALLOT_VALID) ?></dd>
 							</dl>
-							<dl class="col-md-2 text-center">
+							<dl class="col-md-3 text-center">
 								<dt>Bulletins reçus</dt>
 								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_BALLOT) ?></dd>
 							</dl>
-							<dl class="col-md-2 text-center">
-								<dt>Lecteurs inscrits</dt>
+							<dl class="col-md-3 text-center">
+								<dt>Lecteurs participants</dt>
 								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_REGISTRED) ?></dd>
 							</dl>
-							<dl class="col-md-2 text-center">
-								<dt>Groupes inscrits</dt>
+							<dl class="col-md-3 text-center">
+								<dt>Groupes participants</dt>
 								<dd><?php echo model_vote_stat::getInstance()->extract($this->toStats, plugin_vfa::CODE_NB_GROUP) ?></dd>
 							</dl>
 						</div>

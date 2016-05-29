@@ -73,7 +73,8 @@ class model_vote_stat extends abstract_model
 		if ($oOldStat->isEmpty()) {
 			$poNewStat->save();
 		} else {
-			$poNewStat->update();
+			$oOldStat->num_int = $poNewStat->num_int ;
+			$oOldStat->update();
 		}
 	}
 

@@ -400,7 +400,6 @@ class module_votes extends abstract_module
 			$i++;
 		}
 
-
 		// Parcours tous les utilisateurs et bulletins
 		for ($iLine = 0; $iLine < count($tUsers); $iLine++) {
 			$lineUser = $tUsers[$iLine];
@@ -413,7 +412,57 @@ class module_votes extends abstract_module
 			}
 			echo "<br />";
 		}
+
+
+		$oAward = model_award::getInstance()->findById($pIdAward);
+		$this->calcAwardStats($oAward);
+
 		echo "<br />TERMINER\n";
+	}
+
+	/**
+	 * @param $poAward row_award
+	 * @return row_vote_stat[]
+	 */
+	private function calcAwardStats($poAward)
+	{
+		echo "Statistiques<br />";
+
+		// Nombre de bulletin de votes
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_BALLOT;
+		$oStat->num_int = model_vote::getInstance()->countAllBallots($poAward->getId());
+		$nb = $oStat->num_int;
+		echo "Nombre de bulletins = $nb<br />";
+		model_vote_stat::getInstance()->saveStat($oStat);
+
+		// Nombre de bulletin de votes valides
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_BALLOT_VALID;
+		$oStat->num_int = model_vote::getInstance()->countValidBallots($poAward->getId(), $poAward->type);
+		$nb = $oStat->num_int;
+		echo "Nombre de bulletins valides = $nb<br />";
+		model_vote_stat::getInstance()->saveStat($oStat);
+
+		// Nombre de lecteurs inscrits au prix
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_REGISTRED;
+		$oStat->num_int = model_award::getInstance()->countUser($poAward->getId());
+		$nb = $oStat->num_int;
+		echo "Nombre d'utilisateurs = $nb<br />";
+		model_vote_stat::getInstance()->saveStat($oStat);
+
+		// Nombre de groupes inscrits au prix
+		$oStat = new row_vote_stat();
+		$oStat->award_id = $poAward->getId();
+		$oStat->code = plugin_vfa::CODE_NB_GROUP;
+		$oStat->num_int = model_award::getInstance()->countGroup($poAward->getId());
+		$nb = $oStat->num_int;
+		echo "Nombre de groupes = $nb<br />";
+		model_vote_stat::getInstance()->saveStat($oStat);
 	}
 
 	/**
