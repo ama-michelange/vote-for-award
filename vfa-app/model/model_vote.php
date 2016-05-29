@@ -80,6 +80,18 @@ class model_vote extends abstract_model
 	/**
 	 * @param $pAwardId
 	 * @param $pGroupId
+	 * @return row_vote[]
+	 */
+	public function findAllByAwardIdGroupId($pAwardId, $pGroupId)
+	{
+		$sql = 'SELECT * FROM vfa_votes,vfa_users,vfa_user_groups WHERE vfa_votes.award_id=?' .
+			' AND vfa_votes.user_id=vfa_users.user_id AND vfa_votes.user_id=vfa_user_groups.user_id AND vfa_user_groups.group_id=? ORDER BY vfa_users.login';
+		return $this->findMany($sql, $pAwardId, $pGroupId);
+	}
+
+	/**
+	 * @param $pAwardId
+	 * @param $pGroupId
 	 * @return int
 	 */
 	public function countAllBallots($pAwardId, $pGroupId = null)
