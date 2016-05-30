@@ -137,9 +137,9 @@ class model_award extends abstract_model
 			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
 		}
 		$andPublic = '';
-		if (null != $pPublic) {
+		if (null !== $pPublic) {
 			$p = 1;
-			if (false == $pPublic) {
+			if (false === $pPublic) {
 				$p = 0;
 			}
 			$andPublic = ' AND (vfa_awards.public =  ' . $p . ')';
@@ -157,12 +157,12 @@ class model_award extends abstract_model
 	public function findAllCompleted($pPublic = null, $pType = plugin_vfa::TYPE_AWARD_READER)
 	{
 		$andPublic = '';
-		if (null != $pPublic) {
+		if (null !== $pPublic) {
 			$p = 1;
-			if (false == $pPublic) {
+			if (false === $pPublic) {
 				$p = 0;
 			}
-			$andPublic = ' AND (vfa_awards.public =  ' . $p . ')';
+			$andPublic = ' AND (vfa_awards.public = ' . $p . ')';
 		}
 		$andType = '';
 		if (null != $pType) {
@@ -171,6 +171,31 @@ class model_award extends abstract_model
 		$sql = 'SELECT * FROM vfa_awards WHERE (? > vfa_awards.end_date)' . $andPublic . $andType .
 			' ORDER BY vfa_awards.public DESC, vfa_awards.type, vfa_awards.year DESC, vfa_awards.name';
 		return $this->findMany($sql, plugin_vfa::dateSgbd());
+	}
+
+	/**
+	 * @param boolean|null $pPublic
+	 * @param string|null $pType
+	 * @return row_award[]
+	 */
+	public function findAllCompletedByGroup($pIdGroup, $pPublic = null, $pType = plugin_vfa::TYPE_AWARD_READER)
+	{
+		$andPublic = '';
+		if (null !== $pPublic) {
+			$p = 1;
+			if (false === $pPublic) {
+				$p = 0;
+			}
+			$andPublic = ' AND (vfa_awards.public = ' . $p . ')';
+		}
+		$andType = '';
+		if (null != $pType) {
+			$andType = ' AND (vfa_awards.type = \'' . $pType . '\')';
+		}
+		$sql = 'SELECT * FROM vfa_awards, vfa_group_awards WHERE (vfa_group_awards.group_id = ?) AND (vfa_group_awards.award_id = vfa_awards.award_id)' .
+			' AND (? > vfa_awards.end_date)' . $andPublic . $andType .
+			' ORDER BY vfa_awards.public DESC, vfa_awards.type, vfa_awards.year DESC, vfa_awards.name';
+		return $this->findMany($sql, $pIdGroup, plugin_vfa::dateSgbd());
 	}
 
 	/**
@@ -215,8 +240,9 @@ class model_award extends abstract_model
 	public function countGroup($pAwardId)
 	{
 		$ret = 0;
-		$sql = 'SELECT count(DISTINCT vfa_user_groups.group_id) FROM vfa_user_groups, vfa_user_awards' .
-			' WHERE (vfa_user_awards.award_id = ?) AND (vfa_user_awards.user_id = vfa_user_groups.user_id)';
+		$sql = 'SELECT count(DISTINCT vfa_group_awards.group_id) FROM vfa_group_awards, vfa_user_groups' .
+			' WHERE (vfa_group_awards.award_id = ?) AND (vfa_group_awards.group_id = vfa_user_groups.group_id)';
+
 		$res = $this->execute($sql, $pAwardId);
 		while ($row = mysql_fetch_row($res)) {
 			$ret = $row[0];
