@@ -55,6 +55,9 @@ class module_results extends abstract_module
 		} else if (_root::getAction() == 'last') {
 			$navBar->setTitle('Résultat du dernier prix', new NavLink('results', 'last'));
 			$this->buildMenuAwardLast($navBar);
+		} else if (_root::getAction() == 'lastGroup') {
+			$navBar->setTitle('Résultat du dernier prix', new NavLink('results', 'last'));
+			$this->buildMenuAwardLastGroup($navBar);
 		} else if (_root::getAction() == 'archives') {
 			$navBar->setTitle('Archives', new NavLink('results', 'archives'));
 			$this->buildMenuAwardArchive($navBar);
@@ -159,7 +162,9 @@ class module_results extends abstract_module
 				$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
 					new NavLink('results', 'last', array('award_id' => $award->award_id)));
 			}
-			$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Mes Autres prix', 'Mon Autre prix', true));
+			if (count($tItems) > 1) {
+				$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Mes Autres prix', 'Mon Autre prix', true));
+			}
 		}
 
 		// Memo du groupe visualisé par défaut
@@ -169,14 +174,52 @@ class module_results extends abstract_module
 			$this->currentIdGroup = -1;
 		}
 
-		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Mon groupe',
-			new NavLink('results', 'lastGroup', array('award_id' => $this->currentIdAward, 'group_id' => $this->currentIdGroup))));
-
+		if ($this->currentIdGroup != -1) {
+			$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildMenuItem('Mon groupe',
+				new NavLink('results', 'lastGroup', array('award_id' => $this->currentIdAward, 'group_id' => $this->currentIdGroup))));
+		}
 		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Export global',
 			new NavLink('results', 'exportVotes', array('award_id' => $this->currentIdAward))));
+	}
 
-		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Export groupe',
-			new NavLink('results', 'exportVotesGroup', array('award_id' => $this->currentIdAward, 'group_id' => $this->currentIdGroup))));
+	/**
+	 * @param NavBar $pNavBar
+	 */
+	private function buildMenuAwardLastGroup($pNavBar)
+	{
+		// Memo du groupe visualisé par défaut
+		if (!$this->oReaderGroup->isEmpty()) {
+			$this->currentIdGroup = $this->oReaderGroup->getId();
+		} else {
+			$this->currentIdGroup = -1;
+		}
+
+		if (false == $this->oReaderGroup->isEmpty()) {
+			$tItems = array();
+
+			$lastPublic = $this->selectLastAwardCompleted();
+			if (false == $lastPublic->isEmpty()) {
+				$tItems[] = plugin_BsHtml::buildMenuItem($lastPublic->toString(),
+					new NavLink('results', 'lastGroup', array('award_id' => $lastPublic->award_id, 'group_id' => $this->currentIdGroup)));
+			}
+			$tAwards = model_award::getInstance()->findAllCompletedByGroup($this->oReaderGroup->getId(), false);
+			foreach ($tAwards as $award) {
+				$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
+					new NavLink('results', 'lastGroup', array('award_id' => $award->award_id, 'group_id' => $this->currentIdGroup)));
+			}
+			if (count($tItems) > 1) {
+				$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Mes Autres prix', 'Mon Autre prix', true));
+			}
+		}
+
+
+		$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildMenuItem('Global',
+			new NavLink('results', 'last', array('award_id' => $this->currentIdAward))));
+
+		if ($this->currentIdGroup != -1) {
+			$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Export groupe',
+				new NavLink('results', 'exportVotesGroup', array('award_id' => $this->currentIdAward, 'group_id' => $this->currentIdGroup))));
+		}
 	}
 
 	/**
@@ -301,7 +344,6 @@ class module_results extends abstract_module
 				}
 			}
 		}
-
 		if (null != $oAward) {
 			$toResults = $this->calcAwardResults($oAward);
 			$toStats = model_vote_stat::getInstance()->findAllByIdAward($oAward->getId());
@@ -319,8 +361,22 @@ class module_results extends abstract_module
 	public function _lastGroup()
 	{
 		$toResults = null;
-		$oAward = $this->selectArchiveAwardCompleted(_root::getParam('award_id'));
+		$oAward = $this->selectLastAwardCompleted(_root::getParam('award_id'));
+		// Si un identifiant exite en param, vérifie que le prix associé est dans la même année que le dernier prix public
+		$idAward = _root::getParam('award_id');
+		if (null !== $idAward) {
+			if ($idAward !== $oAward->getId()) {
+				$tAwards = $this->selectPrivateAwardWithSameYear($oAward);
+				foreach ($tAwards as $award) {
+					if ($idAward == $award->getId()) {
+						$oAward = $award;
+					}
+				}
+			}
+		}
+
 		$oGroup = $this->selectGroup(_root::getParam('group_id'));
+
 		if (null == $oGroup || $oGroup->isEmpty()) {
 			$oAward = null;
 		}
@@ -331,7 +387,11 @@ class module_results extends abstract_module
 		$oView->oAward = $oAward;
 		$oView->oGroup = $oGroup;
 		$oView->toResults = $toResults;
+//		$oView->toStats = null;
 		$this->oLayout->add('work', $oView);
+
+		// Memo du prix visualisé pour la construction du menu
+		$this->currentIdAward = $oAward->getId();
 	}
 
 	public function _archives()

@@ -53,7 +53,7 @@ xsrf.timeout.lifetime=900
 xsrf.session.enabled=0
 xss.enabled=1
 xss.onlyspecialchars=1
-salt=oncleBen
+salt=
 
 [log]
 class=plugin_log
