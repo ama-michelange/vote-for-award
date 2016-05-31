@@ -146,6 +146,22 @@ class module_results extends abstract_module
 	 */
 	private function buildMenuAwardLast($pNavBar)
 	{
+		if (false == $this->oReaderGroup->isEmpty()) {
+			$tItems = array();
+
+			$lastPublic = $this->selectLastAwardCompleted();
+			if (false == $lastPublic->isEmpty()) {
+				$tItems[] = plugin_BsHtml::buildMenuItem($lastPublic->toString(),
+					new NavLink('results', 'last', array('award_id' => $lastPublic->award_id)));
+			}
+			$tAwards = model_award::getInstance()->findAllCompletedByGroup($this->oReaderGroup->getId(), false);
+			foreach ($tAwards as $award) {
+				$tItems[] = plugin_BsHtml::buildMenuItem($award->toString(),
+					new NavLink('results', 'last', array('award_id' => $award->award_id)));
+			}
+			$pNavBar->getChild('left')->addChild(plugin_BsHtml::buildDropdownMenuItem($tItems, 'Mes Autres prix', 'Mon Autre prix', true));
+		}
+
 		// Memo du groupe visualisé par défaut
 		if (!$this->oReaderGroup->isEmpty()) {
 			$this->currentIdGroup = $this->oReaderGroup->getId();
@@ -271,7 +287,21 @@ class module_results extends abstract_module
 	public function _last()
 	{
 		$toResults = null;
+		// Cherche le dernier prix public
 		$oAward = $this->selectLastAwardCompleted();
+		// Si un identifiant exite en param, vérifie que le prix associé est dans la même année que le dernier prix public
+		$idAward = _root::getParam('award_id');
+		if (null !== $idAward) {
+			if ($idAward !== $oAward->getId()) {
+				$tAwards = $this->selectPrivateAwardWithSameYear($oAward);
+				foreach ($tAwards as $award) {
+					if ($idAward == $award->getId()) {
+						$oAward = $award;
+					}
+				}
+			}
+		}
+
 		if (null != $oAward) {
 			$toResults = $this->calcAwardResults($oAward);
 			$toStats = model_vote_stat::getInstance()->findAllByIdAward($oAward->getId());
@@ -505,6 +535,22 @@ class module_results extends abstract_module
 			$oAward = $tAwards[0];
 		}
 		return $oAward;
+	}
+
+	/**
+	 * Renvoie le dernier prix public terminé.
+	 * @return null|row_award
+	 */
+	public static function selectPrivateAwardWithSameYear($poAward)
+	{
+		$retAwards = array();
+		$tAwards = model_award::getInstance()->findAllCompleted(false);
+		foreach ($tAwards as $oAward) {
+			if ($oAward->year === $poAward->year) {
+				$retAwards[] = $oAward;
+			}
+		}
+		return $retAwards;
 	}
 
 	/**

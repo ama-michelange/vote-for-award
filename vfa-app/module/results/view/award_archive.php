@@ -6,6 +6,10 @@
 			<?php else : ?>
 				Aucun prix ...
 			<?php endif; ?>
+
+			<?php if (isset($this->oGroup)) : ?>
+				- <?php echo $this->oGroup->toString() ?>
+			<?php endif; ?>
 		</h3>
 	</div>
 	<?php if ($this->oAward) : ?>
@@ -102,7 +106,7 @@
 				<?php endfor; ?>
 
 			</div>
-			<?php if (_root::getACL()->isInRole(plugin_vfa::ROLE_BOARD)) : ?>
+			<?php if (isset($this->toStats) && _root::getACL()->isInRole(plugin_vfa::ROLE_BOARD)) : ?>
 				<div class="panel panel-inner panel-info">
 					<div class="panel-heading">Statistiques</div>
 					<div class="panel-body">

@@ -30,7 +30,7 @@ session.timeout.lifetime=1800
 [acl]
 ;class=plugin_gestionuser
 class=plugin_authorization
-modules=accounts,awards,docs,groups,home_enable,nominees,regin,registred,results,selections,roles,users,votes,votes_progress
+modules=accounts,awards,docs,groups,help,home_enable,nominees,regin,registred,results,selections,roles,users,votes,votes_detail,votes_progress
 
 [navigation]
 scriptname=index.php
@@ -53,12 +53,12 @@ xsrf.timeout.lifetime=900
 xsrf.session.enabled=0
 xss.enabled=1
 xss.onlyspecialchars=1
-salt=
+salt=oncleBen
 
 [log]
 class=plugin_log
-error=0
-warning=0
+error=1
+warning=1
 application=1
 information=0
 
