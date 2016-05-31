@@ -146,17 +146,18 @@ class module_results extends abstract_module
 	 */
 	private function buildMenuAwardLast($pNavBar)
 	{
-		$tItems = array();
-
-		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Export global',
-			new NavLink('results', 'exportVotes', array('award_id' => $this->currentIdAward))));
-
 		// Memo du groupe visualisé par défaut
 		if (!$this->oReaderGroup->isEmpty()) {
 			$this->currentIdGroup = $this->oReaderGroup->getId();
 		} else {
 			$this->currentIdGroup = -1;
 		}
+
+		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Mon groupe',
+			new NavLink('results', 'lastGroup', array('award_id' => $this->currentIdAward, 'group_id' => $this->currentIdGroup))));
+
+		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Export global',
+			new NavLink('results', 'exportVotes', array('award_id' => $this->currentIdAward))));
 
 		$pNavBar->getChild('right')->addChild(plugin_BsHtml::buildButtonItem('Export groupe',
 			new NavLink('results', 'exportVotesGroup', array('award_id' => $this->currentIdAward, 'group_id' => $this->currentIdGroup))));
@@ -283,6 +284,24 @@ class module_results extends abstract_module
 
 		// Memo du prix visualisé pour la construction du menu
 		$this->currentIdAward = $oAward->getId();
+	}
+
+	public function _lastGroup()
+	{
+		$toResults = null;
+		$oAward = $this->selectArchiveAwardCompleted(_root::getParam('award_id'));
+		$oGroup = $this->selectGroup(_root::getParam('group_id'));
+		if (null == $oGroup || $oGroup->isEmpty()) {
+			$oAward = null;
+		}
+		if (null != $oAward) {
+			$toResults = $this->calcAwardGroupResults($oAward, $oGroup);
+		}
+		$oView = new _view('results::award_archive');
+		$oView->oAward = $oAward;
+		$oView->oGroup = $oGroup;
+		$oView->toResults = $toResults;
+		$this->oLayout->add('work', $oView);
 	}
 
 	public function _archives()
