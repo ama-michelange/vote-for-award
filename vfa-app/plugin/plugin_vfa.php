@@ -550,11 +550,11 @@ class plugin_vfa
     public static function generateURLBase()
     {
         $url = 'http';
-        if (self::isSsl()){
+        if (self::isSsl()) {
             $url .= 's';
         }
         $url .= '://' . $_SERVER['SERVER_NAME'] . _root::getConfigVar('path.base');
-        _root::getLog()->log('generateURLBase : ' . $url);
+//        _root::getLog()->log('generateURLBase : ' . $url);
         return $url;
     }
 
@@ -565,7 +565,7 @@ class plugin_vfa
     {
         $url = self::generateURLBase();
         $url .= _root::getLink('autoreg::index', array('id' => $poInvitation->invitation_id, 'key' => $poInvitation->invitation_key), false);
-        _root::getLog()->log('generateURLInvitation : ' . $url);
+//        _root::getLog()->log('generateURLInvitation : ' . $url);
         return $url;
     }
 
