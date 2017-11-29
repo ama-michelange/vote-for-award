@@ -545,13 +545,27 @@ class plugin_vfa
     }
 
     /**
+     * Génère l'URL de base du site.
+     */
+    public static function generateURLBase()
+    {
+        $url = 'http';
+        if (self::isSsl()){
+            $url .= 's';
+        }
+        $url .= '://' . $_SERVER['SERVER_NAME'] . _root::getConfigVar('path.base');
+        _root::getLog()->log('generateURLBase : ' . $url);
+        return $url;
+    }
+
+    /**
      * Génère l'URL d'une invitation.
      */
     public static function generateURLInvitation($poInvitation)
     {
-        $url = 'http://' . $_SERVER['SERVER_NAME'] . _root::getConfigVar('path.base');
+        $url = self::generateURLBase();
         $url .= _root::getLink('autoreg::index', array('id' => $poInvitation->invitation_id, 'key' => $poInvitation->invitation_key), false);
-        // _root::getLog()->log('generateURLInvitation : ' . $url);
+        _root::getLog()->log('generateURLInvitation : ' . $url);
         return $url;
     }
 
@@ -769,7 +783,11 @@ class plugin_vfa
         return sha1($pPassword . _root::getConfigVar('security.salt'));
     }
 
-    public static function is_ssl()
+    /**
+     * Indicateur de requête SSL.
+     * @return bool Renvoie vrai si le serveur est utilisé en SSL
+     */
+    public static function isSsl()
     {
         if (isset($_SERVER['HTTPS'])) {
             if ('on' == strtolower($_SERVER['HTTPS']))

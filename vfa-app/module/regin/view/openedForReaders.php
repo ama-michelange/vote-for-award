@@ -37,8 +37,7 @@
 				identifiez-vous avec
 				l'identifiant et le mot de passe de votre compte.</p>
 
-			<?php $url = 'http://' . $_SERVER['SERVER_NAME'] . _root::getConfigVar('path.base'); ?>
-			<p>Adresse du site de vote : <a href="<?php echo $url ?>"><?php echo $url ?></a></p>
+			<p>Adresse du site de vote : <a href="<?php echo plugin_vfa::generateURLBase() ?>"><?php echo plugin_vfa::generateURLBase() ?></a></p>
 
 			<p>Bonne lecture et bon vote</p>
 		</div>

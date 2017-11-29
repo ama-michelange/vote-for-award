@@ -122,8 +122,8 @@
 							 src="site/img/LogoBdFugueGrenoble.jpg"
 							 alt="Logo BD Fugue Grenoble"></a></p>
 
-			<p class="pull-left"><a href="http://www.alices.fr/" target="partner1">
-					<img id="alices" src="http://www.alices.fr/commun/modeles/commun/structure/img/logo-alices.gif"
+			<p class="pull-left"><a href="https://www.alices-interce.fr/" target="partner1">
+					<img id="alices" src="https://www.alices-interce.fr/commun/modeles/commun/structure/img/logo-alices.gif"
 							 alt="Logo Alices"></a></p>
 		</div>
 	</div>
