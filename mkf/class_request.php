@@ -203,9 +203,22 @@ class _request
 		return $this->_sAction;
 	}
 
-	private function loadContext()
+	private function ORI_loadContext()
 	{
 		if ($this->getParam(_root::getConfigVar('navigation.var'), null) !== null) {
+			$this->loadModuleAndAction($this->getParam(_root::getConfigVar('navigation.var')));
+		} else {
+			$this->setModule(_root::getConfigVar('navigation.module.default'));
+			$this->setAction(_root::getConfigVar('navigation.action.default'));
+		}
+	}
+
+	private function loadContext()
+	{
+		if (_root::getConfigVar('navigation.maintenance')) {
+			$this->setModule(_root::getConfigVar('navigation.module.maintenance'));
+			$this->setAction(_root::getConfigVar('navigation.action.maintenance'));
+		} else if ($this->getParam(_root::getConfigVar('navigation.var'), null) !== null) {
 			$this->loadModuleAndAction($this->getParam(_root::getConfigVar('navigation.var')));
 		} else {
 			$this->setModule(_root::getConfigVar('navigation.module.default'));
