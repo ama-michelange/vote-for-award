@@ -43,6 +43,10 @@ class _request
 		$this->_tVar = array();
 
 		$this->_bHasNavigation = false;
+		if (_root::getConfigVar('navigation.maintenance')) {
+			$this->_sModule = _root::getConfigVar('navigation.module.maintenance');
+			$this->_sAction = _root::getConfigVar('navigation.action.maintenance');
+		}
 	}
 
 	/**
@@ -215,6 +219,7 @@ class _request
 
 	private function loadContext()
 	{
+
 		if (_root::getConfigVar('navigation.maintenance')) {
 			$this->setModule(_root::getConfigVar('navigation.module.maintenance'));
 			$this->setAction(_root::getConfigVar('navigation.action.maintenance'));
