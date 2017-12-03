@@ -1,6 +1,6 @@
 <div class="well well-sm">
 	<h1 class="text-center">Bureau de votes
-		<small class="text-nowrap">du Prix de la BD INTER CE</small>
+		<small class="text-nowrap">du Prix de la BD ALICES</small>
 	</h1>
 </div>
 <div class="row">

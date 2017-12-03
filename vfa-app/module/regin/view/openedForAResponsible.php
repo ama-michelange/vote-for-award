@@ -16,7 +16,7 @@
 			</h3>
 		</div>
 		<div id="sampleMail" class="panel-body collapse">
-			<p>Le Prix de la BD INTER CE <?php echo $this->tAwards[0]->year ?> est ouvert.</p>
+			<p>Le Prix de la BD ALICES <?php echo $this->tAwards[0]->year ?> est ouvert.</p>
 
 			<p>Pour débuter le prix, rendez-vous sur le site de vote ci-dessous et utilisez le code d'inscription suivant
 				: <?php echo $this->oRegin->code ?><br>(via le menu : <strong>S'inscrire</strong> ou <strong>Inscriptions /
