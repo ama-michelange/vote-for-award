@@ -25,8 +25,8 @@
 
 			<p>Si c'est la première fois que vous vous inscrivez à un prix sur ce site, ouvrez un compte. Sinon
 				identifiez-vous avec l'identifiant et le mot de passe de votre compte.</p>
-            
-			<p>Adresse du site de vote : <a href="<?php echo $url ?>"><?php echo plugin_vfa::generateURLBase() ?></a></p>
+
+			<p>Adresse du site de vote : <a href="<?php echo plugin_vfa::generateURLBase() ?>"><?php echo plugin_vfa::generateURLBase() ?></a></p>
 
 			<p>Bon prix</p>
 		</div>
