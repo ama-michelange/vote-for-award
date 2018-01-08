@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <base href="<?php echo plugin_vfa::generateURLBase() ?>">
     <meta charset="utf-8">
 	<title><?php echo _root::getConfigVar('vfa-app.title') ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
