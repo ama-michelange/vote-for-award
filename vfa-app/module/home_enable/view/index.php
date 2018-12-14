@@ -88,6 +88,12 @@
 							<a href="<?php echo $this->getLink('results::awardInProgress') ?>">
 								Sélection <?php echo $this->toInProgressAwards[0]->year ?></a>
 						</li>
+                        <li class="list-group-item">
+							<a href="<?php echo 'site/doc/prix-bd-2019-affiche.pdf' ?>">Affiche 2019</a>
+						</li>
+                        <li class="list-group-item">
+                            <a href="<?php echo 'site/doc/prix-bd-2019-plaquette.pdf' ?>">Plaquette 2019</a>
+                        </li>
 					</ul>
 				</div>
 			</div>
