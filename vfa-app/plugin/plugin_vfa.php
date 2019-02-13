@@ -580,26 +580,39 @@ class plugin_vfa
     {
         $lenName = 9;
         $time = time();
-        $year = substr($pYear, 0, 4);
+        $year = mb_substr($pYear, 0, 4);
         $prefix = '';
         if ($pPrefix) {
-            $prefix = trim(substr($pPrefix, 0, 3));
+            $prefix = trim(mb_substr($pPrefix, 0, 3));
         }
-        $gname = self::stripAccents(trim(substr($pName, 0, $lenName)));
+        $groupname = mb_strtoupper(self::stripAccents(trim($pName)));
+        $aGnames = explode(' ', $groupname);
+        if (count($aGnames)) {
+            if ('BIBLI' == mb_substr($aGnames[0], 0, 5)) {
+                $aGnames[0] = 'BIB';
+                $groupname = implode($aGnames);
+            } elseif ('MEDIA' == mb_substr($aGnames[0], 0, 5)) {
+                $aGnames[0] = 'MED';
+                $groupname = implode($aGnames);
+            }
+        }
+        $groupname = preg_replace('#[^[:alpha:]]#u', '', $groupname);
+
+        $gname = self::stripAccents(trim(mb_substr($groupname, 0, $lenName)));
         $gname = implode(explode(' ', $gname));
         if ($time % 2 == 0) {
-            $gname = strtoupper($gname);
+            $gname = mb_strtoupper($gname);
         } else {
-            $gname = strtolower($gname);
+            $gname = mb_strtolower($gname);
         }
-        $fcode = $prefix . $year . $gname . substr($time, -2);
+        $fcode = $prefix . $year . $gname . mb_substr($time, -2);
 
-        while (strlen($fcode) > 15) {
+        while (mb_strlen($fcode) > 15) {
             $lenName--;
-            $fcode = $prefix . $year . substr($gname, 0, $lenName) . substr($time, -2);
+            $fcode = $prefix . $year . mb_substr($gname, 0, $lenName) . mb_substr($time, -2);
         }
         $sha = sha1($fcode . rand(0, $time));
-        $code = $fcode . substr($sha, strlen($fcode) - 20);
+        $code = $fcode . mb_substr($sha, mb_strlen($fcode) - 20);
 //		var_dump(strlen($code));
 //		var_dump($code);
         return $code;
