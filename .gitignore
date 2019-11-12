@@ -8,3 +8,10 @@ node_modules
 dist
 dploy.yaml
 
+/vfa-app/data/log/
+/vfa-app/site/doc/
+/vfa-app/**/*.sql
+/vfa-app/**/*.zip
+/.htaccess
+/vfa-ng/
+/vfa-serv/
