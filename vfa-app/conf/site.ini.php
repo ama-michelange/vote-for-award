@@ -38,6 +38,9 @@ var=:nav
 module.default=default
 action.default=index
 layout.erreur=site/layout/erreurprod.php
+maintenance=0
+module.maintenance=maintenance
+action.maintenance=index
 
 [urlrewriting]
 enabled=0
@@ -60,7 +63,7 @@ class=plugin_log
 error=1
 warning=1
 application=1
-information=0
+information=1
 
 [check]
 class=plugin_vfa_check
@@ -87,15 +90,16 @@ img=data/img/
 i18n=data/i18n/
 cache=data/cache/
 layout=site/layout/
-base=/vfa/vfa-app/
+base=:7777/vfa/vfa-app/
 
 [model]
 ini.var=db
 
 [vfa-app]
-title=Vote For Award
-mail.from=alicesaward@free.fr
-mail.from.label=Alices Award
+title=Alice et Clochette - Prix BD
+mail.from=admin@alice-et-clochette.fr
+mail.from.label=Alice et Clochette - Prix BD
 mail.enabled=0
 invitation.access.enabled=1
+db=pdoMysql
 

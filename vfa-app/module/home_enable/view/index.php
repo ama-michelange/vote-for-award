@@ -1,6 +1,8 @@
 <div class="well well-sm">
-	<h1 class="text-center">Bureau de votes
-		<small class="text-nowrap">du Prix de la BD ALICES</small>
+	<h1 class="text-center">
+		<small class="text-nowrap">Alice et Clochette</small>
+		<span class="text-nowrap">Bureau de votes</span>
+		<small class="text-nowrap">Prix de la BD</small>
 	</h1>
 </div>
 <div class="row">

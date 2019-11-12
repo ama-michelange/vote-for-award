@@ -2,8 +2,7 @@
 	<div class="col-md-6">
 		<div class="jumbotron">
 			<h1 class="text-center margin-bottom-max">Bureau de votes
-				<small class="text-nowrap">du Prix de la BD</small>
-				<small class="text-nowrap">ALICES</small>
+				<small class="text-nowrap">Prix de la BD</small>
 			</h1>
 		</div>
 	</div>
