@@ -19,7 +19,7 @@
 	<link href="site/assets/css/datepicker.css" rel="stylesheet">
 	<link href="site/select2/select2.css" rel="stylesheet">
 	<link href="site/select2/select2-bootstrap.css" rel="stylesheet">
-	<link href="site/css/bs-apps-slate-3.3.2.css" rel="stylesheet">
+	<link href="site/css/bs-apps-slate-3.3.2-1.css" rel="stylesheet">
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
