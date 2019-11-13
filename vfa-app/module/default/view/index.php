@@ -1,13 +1,16 @@
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-8">
 		<div class="jumbotron">
+            <a href="https://www.alice-et-clochette.fr/" target="aec">
+                <img id="aec" src="https://www.alice-et-clochette.fr/img/aec-white.svg" style="width: 100%;"
+                     alt="Logo Alice et Clochette"></a>
 			<h1 class="text-center margin-bottom-max">Bureau de votes
 				<small class="text-nowrap">Prix de la BD</small>
 			</h1>
 		</div>
 	</div>
 <!--	<div class="col-md-1 text-center">avec</div>-->
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<div id="default">
 			<div class="center-block pub-block">
 				<div class="clearfix pub-images">

@@ -24,7 +24,7 @@
 }
 .pub-block {
 	margin-bottom: 20px;
-	width: 450px;
+	width: 320px;
 }
 
 .pub-block p {
@@ -57,7 +57,7 @@
 
 @media (min-width: 1200px) {
 	#default .pub-block {
-		width: 530px;
+		width: 320px;
 	}
 
 	#default .pub-alices {
@@ -76,7 +76,7 @@
 @media (min-width: 992px) and (max-width: 1199px) {
 
 	#default .pub-block {
-		width: 450px;
+		width: 320px;
 	}
 
 	#default .pub-alices {
@@ -94,11 +94,11 @@
 
 @media (min-width: 400px) and (max-width: 991px) {
 	.pub-block {
-		width: 350px;
+		width: 320px;
 	}
 
 	#default .pub-block {
-		width: 450px;
+		width: 320px;
 	}
 
 	#default .pub-alices {
@@ -130,6 +130,22 @@
 	.pub-images #alices {
 		width: 150px;
 	}
+}
+
+.aec img {
+    width: 50%;
+}
+
+@media (max-width: 991px) {
+    .aec img {
+        width: 75%;
+    }
+}
+
+@media (max-width: 498px) {
+    .aec img {
+        width: 100%;
+    }
 }
 
 .panel-images {
