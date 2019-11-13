@@ -40,7 +40,9 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-bsnavbar">
                 <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
-            <img src="https://www.alice-et-clochette.fr/img/ac.svg" class="navbar-brand navbar-logo">
+            <a href="https://www.alice-et-clochette.fr/" target="aec">
+                <img src="https://www.alice-et-clochette.fr/img/ac.svg" class="navbar-brand navbar-logo">
+            </a>
             <?php echo $this->oNavBar->toHtmlTitle(); ?>
         </div>
         <div class="navbar-collapse collapse navbar-bsnavbar">
