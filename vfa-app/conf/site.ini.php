@@ -96,7 +96,7 @@ base=:7777/vfa/vfa-app/
 ini.var=db
 
 [vfa-app]
-title=Alice et Clochette - Prix BD
+title=Prix BD
 mail.from=admin@alice-et-clochette.fr
 mail.from.label=Alice et Clochette - Prix BD
 mail.enabled=0
