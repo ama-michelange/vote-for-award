@@ -94,10 +94,10 @@
                                 Sélection <?php echo $this->toInProgressAwards[0]->year ?></a>
                         </li>
                         <li class="list-group-item">
-                            <a href="<?php echo 'site/doc/prix-bd-2019-affiche.pdf' ?>">Affiche 2019</a>
+                            <a href="<?php echo 'https://www.alice-et-clochette.fr/doc/bd/prix-bd-2020-affiche.pdf' ?>" target="bd-affiche">Affiche 2020</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="<?php echo 'site/doc/prix-bd-2019-plaquette.pdf' ?>">Plaquette 2019</a>
+                            <a href="<?php echo 'https://www.alice-et-clochette.fr/doc/bd/prix-bd-2020-flyer.pdf' ?>" target="bd-flyer">Plaquette 2020</a>
                         </li>
                     </ul>
                 </div>
