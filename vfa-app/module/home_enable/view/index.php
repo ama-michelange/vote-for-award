@@ -1,7 +1,7 @@
 <div class="well well-sm">
     <p class="aec text-center">
         <a href="https://www.alice-et-clochette.fr/" target="aec">
-            <img id="aec" src="https://www.alice-et-clochette.fr/img/aec-white.svg" alt="Logo Alice et Clochette"></a>
+            <img id="aec" src="https://www.alice-et-clochette.fr/assets/img/aec-white.svg" alt="Logo Alice et Clochette"></a>
     </p>
     <h1 class="text-center">
         <span class="text-nowrap">Bureau de votes</span>

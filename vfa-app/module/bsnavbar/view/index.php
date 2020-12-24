@@ -41,7 +41,7 @@
                 <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
             <a href="https://www.alice-et-clochette.fr/" target="aec">
-                <img src="https://www.alice-et-clochette.fr/img/ac.svg" class="navbar-brand navbar-logo">
+                <img src="https://www.alice-et-clochette.fr/assets/img/ac.svg" class="navbar-brand navbar-logo">
             </a>
             <?php echo $this->oNavBar->toHtmlTitle(); ?>
         </div>
