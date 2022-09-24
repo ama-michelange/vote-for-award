@@ -636,11 +636,11 @@ class module_autoreg extends abstract_module
 				break;
 			case plugin_vfa::TYPE_READER:
 				$tInscription['Rôle'] = 'Lecteur';
-				$poConfirm->titleInvit = 'Inscription pour voter au Prix de la BD ALICES';
+				$poConfirm->titleInvit = 'Inscription pour voter au Prix Alice et Clochette';
 				break;
 			case plugin_vfa::TYPE_RESPONSIBLE:
 				$tInscription['Rôle'] = 'Correspondant, Lecteur';
-				$poConfirm->titleInvit = 'Inscription pour devenir Correspondant de votre groupe et voter au Prix de la BD ALICES';
+				$poConfirm->titleInvit = 'Inscription pour devenir Correspondant de votre groupe et voter au Prix Alice et Clochette';
 				break;
 		}
 

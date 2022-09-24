@@ -96,9 +96,9 @@ base=:7777/vfa/vfa-app/
 ini.var=db
 
 [vfa-app]
-title=Prix BD
+title=Alice et Clochette - Bureau de vote
 mail.from=admin@alice-et-clochette.fr
-mail.from.label=Alice et Clochette - Prix BD
+mail.from.label=Alice et Clochette - Bureau de vote
 mail.enabled=0
 invitation.access.enabled=1
 db=pdoMysql

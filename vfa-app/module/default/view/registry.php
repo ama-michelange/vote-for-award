@@ -1,8 +1,3 @@
-<!--<div class="well well-sm">-->
-<!--	<h1 class="text-center margin-bottom-max">Bureau de votes-->
-<!--		<small class="text-nowrap">du Prix de la BD ALICES</small>-->
-<!--	</h1>-->
-<!--</div>-->
 <?php if (plugin_validation::exist($this->tMessage, 'token')): ?>
 	<div class="alert alert-warning clearfix">
 		<p>

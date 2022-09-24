@@ -47,7 +47,7 @@ class module_bsnavbar extends abstract_module
 
 	private function buildDefaultBar($pNavBar)
 	{
-		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
+		$pNavBar->setTitle('Accueil', new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
 		$bar->addChild(new MenuItem('S\'inscrire', new NavLink('default', 'code')));
 
@@ -63,7 +63,7 @@ class module_bsnavbar extends abstract_module
 		/* @var $oUserSession row_user_session */
 		$oUserSession = _root::getAuth()->getUserSession();
 
-		$pNavBar->setTitle(_root::getConfigVar('vfa-app.title'), new NavLink('default', 'index'));
+		$pNavBar->setTitle('Accueil', new NavLink('default', 'index'));
 		$bar = $pNavBar->getChild('left');
 
 //		$toValidAwards = $oUserSession->getValidAwards();

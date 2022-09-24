@@ -559,7 +559,7 @@ class module_default extends abstract_module
 		$tAwards = $poRegistry->oRegin->findAwards();
 
 		// Sujet
-		$oMail->setSubject('[PrixBD' . $tAwards[0]->year . '] Inscription à valider : ' . $poRegistry->oUser->toStringPublic());
+		$oMail->setSubject('[PrixAeC' . $tAwards[0]->year . '] Inscription à valider : ' . $poRegistry->oUser->toStringPublic());
 
 		// Prepare le body TXT
 		$oViewMail = new _view('default::mailReginToValidateTxt');

@@ -1029,7 +1029,7 @@ class module_regin extends abstract_module
 		$tAwards = $poRegin->findAwards();
 
 		// Sujet
-		$oMail->setSubject('[PrixBD' . $tAwards[0]->year . '] Votre inscription est validée');
+		$oMail->setSubject('[PrixAeC' . $tAwards[0]->year . '] Votre inscription est validée');
 		// Prepare le body TXT
 		$oViewMail = new _view('regin::mailValidateTxt');
 		$oViewMail->tAwards = $tAwards;

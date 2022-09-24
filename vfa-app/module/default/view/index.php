@@ -5,7 +5,7 @@
                 <img id="aec" src="https://www.alice-et-clochette.fr/assets/img/aec-white.svg" style="width: 100%;"
                      alt="Logo Alice et Clochette"></a>
 			<h1 class="text-center margin-bottom-max">Bureau de votes
-				<small class="text-nowrap">Prix de la BD</small>
+				<small class="text-nowrap">Alice et Clochette</small>
 			</h1>
 		</div>
 	</div>

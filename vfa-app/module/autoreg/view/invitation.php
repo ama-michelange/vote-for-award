@@ -25,7 +25,7 @@
 </div>
 <div class="well well-sm">
 	<h1 class="text-center margin-bottom-max">Bureau de votes
-		<small class="text-nowrap">du Prix de la BD ALICES</small>
+		<small class="text-nowrap">Alice et Clochette</small>
 	</h1>
 </div>
 <div class="panel panel-info">

@@ -26,7 +26,7 @@
 			</h3>
 		</div>
 		<div id="sampleMail" class="panel-body collapse">
-			<p>Le Prix de la BD ALICES <?php echo $this->tAwards[0]->year ?> a débuté.</p>
+			<p>L'inscription <?php echo $this->tAwards[0]->toStringWithPrefix() ?> a débuté.</p>
 
 			<p>Pour vous inscrire, rendez-vous sur le site de vote ci-dessous et utilisez le code d'inscription suivant
 				: <?php echo $this->oRegin->code ?><br>(via le menu : <strong>S'inscrire</strong> ou <strong>Inscriptions /
