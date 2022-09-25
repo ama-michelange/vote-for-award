@@ -5,7 +5,6 @@
     </p>
     <h1 class="text-center">
         <span class="text-nowrap">Bureau de votes</span>
-        <small class="text-nowrap">Alice et Clochette</small>
     </h1>
 </div>
 <div class="row">
