@@ -88,10 +88,12 @@
                 <div class="panel-heading"><h3 class="panel-title">Voir</h3></div>
                 <div class="panel-body panel-condensed">
                     <ul class="list-group">
-                        <li class="list-group-item">
-                            <a href="<?php echo $this->getLink('results::awardInProgress') ?>">
-                                Sélection <?php echo $this->toInProgressAwards[0]->year ?></a>
-                        </li>
+                         <?php foreach ($this->toInProgressAwards as $oAward) : ?>
+                            <li class="list-group-item">
+                                <a href="<?php echo $this->getLink('results::awardInProgress', array('award_id' => $oAward->getId())) ?>">
+                                    Sélection <?php echo($oAward->toStringName()) ?></a>
+                            </li>
+                         <?php endforeach; ?>
                     </ul>
                 </div>
             </div>

@@ -72,7 +72,7 @@ class module_bsnavbar extends abstract_module
 //		}
 
 		$this->buildMenuVotes($bar, $oUserSession);
-		$this->buildMenuAwards($bar);
+		$this->buildMenuAwards($bar, $oUserSession);
 		$this->buildMenuReader($bar);
 		$this->buildMenuRegistrations($bar, $oUserSession);
 		$this->buildMenuHelp($bar);
@@ -131,17 +131,33 @@ class module_bsnavbar extends abstract_module
 		}
 	}
 
-	private function buildMenuAwards($pItems)
+	private function buildMenuAwards($pItems, $poUserSession)
 	{
 		$item = new DropdownMenuItem('Prix');
 		$toInProgressAwards = model_award::getInstance()->findAllInProgress(plugin_vfa::TYPE_AWARD_READER, true);
 		if (count($toInProgressAwards) > 0) {
-			$item->addChild(plugin_BsHtml::buildMenuItem('Sélection ' . $toInProgressAwards[0]->year,
-				new NavLink('results', 'awardInProgress')));
+		    if (count($toInProgressAwards) > 1) {
+    			$item->addChild(plugin_BsHtml::buildMenuItem('Sélection ' . $toInProgressAwards[0]->toStringName(),
+	    			new NavLink('results', 'awardInProgress', array('award_id' => $toInProgressAwards[0]->award_id))));
+		        $item->addChild(plugin_BsHtml::buildMenuItem('Sélection ' . $toInProgressAwards[1]->toStringName(),
+                				new NavLink('results', 'awardInProgress', array('award_id' => $toInProgressAwards[1]->award_id))));
+		    }
+		    else {
+    			$item->addChild(plugin_BsHtml::buildMenuItem('Sélection ' . $toInProgressAwards[0]->year,
+	    			new NavLink('results', 'awardInProgress')));
+		    }
 		}
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire général', new NavLink('results', 'live')));
-		$item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire groupe', new NavLink('results', 'liveGroup')));
+
+		if ($poUserSession->isInRole(plugin_vfa::ROLE_READER)) {
+		    $idGroup = $poUserSession->getReaderGroup()->getId();
+		    $item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire groupe', new NavLink('results', 'liveGroup', array('group_id' => $idGroup))));
+		}
+		else {
+		    $item->addChild(plugin_BsHtml::buildMenuItem('Classement intermédiaire groupe', new NavLink('results', 'liveGroup')));
+		}
+
 		$item->addChildSeparator();
 		$item->addChild(plugin_BsHtml::buildMenuItem('Résultat du dernier prix', new NavLink('results', 'last')));
 		$item->addChild(plugin_BsHtml::buildMenuItem('Archives', new NavLink('results', 'archives')));

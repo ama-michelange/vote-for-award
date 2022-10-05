@@ -281,7 +281,8 @@ class module_results extends abstract_module
 
 	public function _awardInProgress()
 	{
-		$oAward = $this->selectAwardInProgress();
+		// $oAward = $this->selectAwardInProgress();
+		$oAward = $this->selectAwardInProgress(_root::getParam('award_id'));
 		$toTitles = null;
 		$this->oAwardInProgress = null;
 		if (null != $oAward) {
