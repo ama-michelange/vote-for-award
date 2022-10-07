@@ -40,7 +40,8 @@ class module_results extends abstract_module
 		$navBar->addChild(new Bar('right'));
 		if (_root::getAction() == 'awardInProgress') {
 			try {
-				$navBar->setTitle('Sélection ' . $this->oAwardInProgress->year, new NavLink('results', 'awardInProgress'));
+			    $tParams = array('award_id' => $this->oAwardInProgress->getId());
+				$navBar->setTitle('Sélection ' . $this->oAwardInProgress->year, new NavLink('results', 'awardInProgress', $tParams));
 				$this->buildMenuAwardInProgress($navBar->getChild('right'));
 			} catch (Exception $e) {
 				// $this->oAwardInProgress n'existe pas ! Rien à faire
@@ -281,8 +282,9 @@ class module_results extends abstract_module
 
 	public function _awardInProgress()
 	{
-		// $oAward = $this->selectAwardInProgress();
+// 	    _root::getLog()->log("AMA AWARD_ID: " . _root::getParam('award_id'));
 		$oAward = $this->selectAwardInProgress(_root::getParam('award_id'));
+// 		_root::getLog()->log("AMA _awardInProgress AWARD: " . $oAward->toString());
 		$toTitles = null;
 		$this->oAwardInProgress = null;
 		if (null != $oAward) {
@@ -561,12 +563,14 @@ class module_results extends abstract_module
 	public static function selectAwardInProgress($pAwardId = null)
 	{
 		$oAward = null;
+// 		_root::getLog()->log("AMA selectAwardInProgress $pAwardId: " . $pAwardId);
 		if (null != $pAwardId) {
 			$oAward = model_award::getInstance()->findById($pAwardId);
+// 			_root::getLog()->log("AMA selectAwardInProgress AWARD: " . $oAward->toString());
 			if ((null != $oAward) && ($oAward->isEmpty())) {
 				$oAward = null;
 			}
-			if (null != $oAward) {
+			if (null == $oAward) {
 				$endDate = plugin_vfa::toDateFromSgbd($oAward->end_date);
 				$today = plugin_vfa::today();
 				if (false == plugin_vfa::beforeDate($today, $endDate)) {
