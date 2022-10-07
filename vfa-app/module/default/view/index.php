@@ -1,27 +1,25 @@
 <div class="row">
-	<div class="col-md-8">
-		<div class="jumbotron">
-            <a href="https://www.alice-et-clochette.fr/" target="aec">
-                <img id="aec" src="https://www.alice-et-clochette.fr/assets/img/aec-white.svg" style="width: 100%;"
-                     alt="Logo Alice et Clochette"></a>
-			<h1 class="text-center margin-bottom-max">Bureau de votes</h1>
-		</div>
-	</div>
-<!--	<div class="col-md-1 text-center">avec</div>-->
-	<div class="col-md-4">
-		<div id="default">
-			<div class="center-block pub-block">
-				<div class="clearfix pub-images">
-					<p class="pull-left">avec</p>
-					<p class="pull-right">
-						<a href="https://www.facebook.com/bdfuguegrenoble" target="partner2">
-							<img id="bdfugue"
-									 src="site/img/LogoBdFugueGrenoble.jpg"
-									 alt="Logo BD Fugue Grenoble"></a></p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="jumbotron">
+        <a href="https://www.alice-et-clochette.fr/" target="aec">
+            <img id="aec" src="https://www.alice-et-clochette.fr/assets/img/aec-white.svg" style="width: 100%;"
+                 alt="Logo Alice et Clochette"></a>
+        <h1 class="text-center margin-bottom-max">Bureau de votes</h1>
+    </div>
+</div>
+<div class="row">
+    <div id="default">
+        <div class="center-block pub-block">
+            <div class="clearfix pub-images">
+                <p class="pull-left">avec</p>
+                <p class="pull-right">
+                    <a href="https://www.facebook.com/bdfuguegrenoble" target="partner2">
+                        <img id="bdfugue" src="site/img/LogoBdFugueGrenoble.jpg" alt="Logo BD Fugue Grenoble"></a></p>
+                <p class="pull-right">
+                    <a href="http://www.lanouvellederive.com/" target="partner2">
+                        <img id="lanouvellederive" src="site/img/logo_la-nouvelle-derive-vote.jpg"></a></p>
+            </div>
+        </div>
+    </div>
 </div>
 <?php if (count($this->toTitles) > 0) : ?>
 	<div id="myCarousel" class="carousel slide" data-ride="carousel">

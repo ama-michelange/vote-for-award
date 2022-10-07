@@ -124,9 +124,11 @@
         <div class="clearfix pub-images">
             <p class="pull-right">
                 <a href="https://www.facebook.com/bdfuguegrenoble" target="partner2">
-                    <img id="bdfugue"
-                         src="site/img/LogoBdFugueGrenoble.jpg"
+                    <img id="bdfugue" src="site/img/LogoBdFugueGrenoble.jpg"
                          alt="Logo BD Fugue Grenoble"></a></p>
+            <p class="pull-right">
+                <a href="http://www.lanouvellederive.com/" target="partner2">
+                    <img id="lanouvellederive" src="site/img/logo_la-nouvelle-derive-vote.jpg"></a></p>
         </div>
     </div>
 </div>
