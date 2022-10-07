@@ -1,3 +1,12 @@
+<div class="well well-sm">
+    <p class="aec text-center">
+        <a href="https://www.alice-et-clochette.fr/" target="aec">
+            <img id="aec" src="https://www.alice-et-clochette.fr/assets/img/aec-white.svg" alt="Logo Alice et Clochette"></a>
+    </p>
+    <h1 class="text-center">
+        <span class="text-nowrap">Bureau de votes</span>
+    </h1>
+</div>
 <div class="row">
     <div class="col-md-12 panel-info">
         <div class="panel-body jumbotron">
@@ -8,33 +17,6 @@
             <p class="text-center">
                 <small>Merci ;-)</small>
             </p>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="jumbotron">
-            <h1 class="text-center margin-bottom-max">Bureau de votes
-                <small class="text-nowrap">Alice et Clochette</small>
-            </h1>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div id="default">
-            <div class="center-block pub-block">
-                <div class="clearfix pub-images">
-                    <p class="pull-left">avec</p>
-                    <p class="pull-right">
-                        <a href="https://www.facebook.com/bdfuguegrenoble" target="partner2">
-                            <img id="bdfugue"
-                                 src="site/img/LogoBdFugueGrenoble.jpg"
-                                 alt="Logo BD Fugue Grenoble"></a></p>
-
-                    <p class="pub-alices pull-left"><a href="https://www.alices-interce.fr/" target="partner1">
-                            <img id="alices" src="https://www.alices-interce.fr/commun/modeles/commun/structure/img/logo-alices.gif"
-                                 alt="Logo Alices"></a></p>
-                </div>
-            </div>
         </div>
     </div>
 </div>
