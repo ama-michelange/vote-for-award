@@ -18,7 +18,7 @@
 					</div>
 					<div class="col-sm-5">
 						<small>
-							<p>L'organisateur du prix est ALICES.</p>
+							<p>L'organisateur du prix est <b>Alice et Clochette</b>.</p>
 
 							<p>Un groupe est un comité d'entreprise, une association, ...</p>
 						</small>
