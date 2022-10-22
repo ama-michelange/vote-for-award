@@ -363,6 +363,16 @@ class row_award extends abstract_row
 		return $s;
 	}
 
+	public function getCategory()
+	{
+	    $ret = plugin_vfa::CATEGORY_AWARD_BD;
+		$s = substr($this->name, 0, 5);
+        if (strcasecmp($s, plugin_vfa::CATEGORY_AWARD_LIVRE) == 0) {
+            $ret = plugin_vfa::CATEGORY_AWARD_LIVRE;
+        }
+		return $ret;
+	}
+
 	public function getTypeString()
 	{
 		switch ($this->type) {

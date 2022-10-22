@@ -31,6 +31,9 @@ class plugin_vfa
     const TYPE_AWARD_BOARD = 'PSBD';
     const TYPE_AWARD_READER = 'PBD';
 
+    const CATEGORY_AWARD_LIVRE = 'LIVRE';
+    const CATEGORY_AWARD_BD = 'BD';
+
     const STATE_OPEN = 'OPEN';
     const STATE_CLOSE = 'CLOSE';
     const STATE_SENT = 'SENT';
@@ -41,7 +44,8 @@ class plugin_vfa
     const PROCESS_INTIME = 'INTIME';
     const PROCESS_INTIME_VALIDATE = 'INTIME_VALIDATE';
 
-    const MIN_NB_VOTE_AWARD_READER = 7;
+    const MIN_NB_VOTE_AWARD_READER_BD = 7;
+    const MIN_NB_VOTE_AWARD_READER_LIVRE = 5;
     const MIN_NB_VOTE_AWARD_BOARD = 1;
 
     const CODE_NB_BALLOT = 'NbBallot';

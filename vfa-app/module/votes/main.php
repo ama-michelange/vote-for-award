@@ -441,7 +441,7 @@ class module_votes extends abstract_module
 		$oStat = new row_vote_stat();
 		$oStat->award_id = $poAward->getId();
 		$oStat->code = plugin_vfa::CODE_NB_BALLOT_VALID;
-		$oStat->num_int = model_vote::getInstance()->countValidBallots($poAward->getId(), $poAward->type);
+		$oStat->num_int = model_vote::getInstance()->countValidBallots($poAward->getId(), $poAward->type, $this->oAward->getCategory());
 		$nb = $oStat->num_int;
 		echo "Nombre de bulletins valides = $nb<br />";
 		model_vote_stat::getInstance()->saveStat($oStat);

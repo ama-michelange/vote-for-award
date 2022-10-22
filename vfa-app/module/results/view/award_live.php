@@ -43,7 +43,7 @@
 						<div class="col-md-2">
 							<p>Bulletins valides</p>
 
-							<p><?php echo model_vote::getInstance()->countValidBallots($this->oAward->getId(), $this->oAward->type, $idGroup) ?></p>
+							<p><?php echo model_vote::getInstance()->countValidBallots($this->oAward->getId(), $this->oAward->type, $this->oAward->getCategory(), $idGroup) ?></p>
 						</div>
 					</div>
 				</div>

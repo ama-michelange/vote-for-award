@@ -14,7 +14,7 @@
 				$nbInscrit = model_award::getInstance()->countUser($this->oAward->getId(), $this->oGroup->getId());
 				$nbBull = model_vote::getInstance()->countAllBallots($this->oAward->getId(), $this->oGroup->getId());
 				$nbValidBull = model_vote::getInstance()
-					->countValidBallots($this->oAward->getId(), $this->oAward->type, $this->oGroup->getId());
+					->countValidBallots($this->oAward->getId(), $this->oAward->type, $this->oAward->getCategory(), $this->oGroup->getId());
 				$part = 0.0;
 				$partValid = 0.0;
 				if ($nbInscrit > 0) {

@@ -118,12 +118,16 @@ class model_vote extends abstract_model
 	 * @param $pAwardType
 	 * @return int
 	 */
-	public function countValidBallots($pAwardId, $pAwardType, $pGroupId = null)
+	public function countValidBallots($pAwardId, $pAwardType, $pAwardCategory = plugin_vfa::CATEGORY_AWARD_BD, $pGroupId = null)
 	{
 		$ret = 0;
-		$min = plugin_vfa::MIN_NB_VOTE_AWARD_READER;
-		IF ($pAwardType == plugin_vfa::TYPE_AWARD_BOARD) {
+		$min = plugin_vfa::MIN_NB_VOTE_AWARD_READER_BD;
+		if ($pAwardType == plugin_vfa::TYPE_AWARD_BOARD) {
 			$min = plugin_vfa::MIN_NB_VOTE_AWARD_BOARD;
+		} else {
+		    if ($pAwardCategory == plugin_vfa::CATEGORY_AWARD_LIVRE) {
+		        $min = plugin_vfa::MIN_NB_VOTE_AWARD_READER_LIVRE;
+		    }
 		}
 		if (null == $pGroupId) {
 			$sql = 'SELECT count(*) FROM vfa_votes WHERE(award_id = ?) AND (number >= ' . $min . ')';

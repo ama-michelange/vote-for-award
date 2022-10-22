@@ -60,10 +60,14 @@ class model_vote_result extends abstract_model
 		}
 
 		$idAward = $poAward->award_id;
-		$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER;
+		$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER_BD;
 		if ($poAward->type == plugin_vfa::TYPE_AWARD_BOARD) {
 			$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_BOARD;
-		}
+		} else {
+            if ($poAward->getCategory() == plugin_vfa::CATEGORY_AWARD_LIVRE) {
+                $minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER_LIVRE;
+         	}
+        }
 
 		$sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score) FROM vfa_votes, vfa_vote_items' .
 			' WHERE (vfa_votes.award_id = ' . $idAward . ') AND (vfa_votes.number >= ' . $minNbVote . ')' .
@@ -105,10 +109,14 @@ class model_vote_result extends abstract_model
 		}
 		$idGroup = $poGroup->group_id;
 
-		$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER;
+		$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER_BD;
 		if ($poAward->type == plugin_vfa::TYPE_AWARD_BOARD) {
 			$minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_BOARD;
-		}
+		} else {
+            if ($poAward->getCategory() == plugin_vfa::CATEGORY_AWARD_LIVRE) {
+                $minNbVote = plugin_vfa::MIN_NB_VOTE_AWARD_READER_LIVRE;
+         	}
+        }
 
 		$sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score) FROM vfa_votes, vfa_vote_items, vfa_user_groups' .
 			' WHERE (vfa_votes.award_id = ' . $idAward . ') AND (vfa_votes.number >= ' . $minNbVote . ')' .
