@@ -690,7 +690,7 @@ class module_results extends abstract_module
 				}
 			}
 		}
-		// Calcule les résulats des votes du prix
+		// Calcule les résultats des votes du prix
 		if (true == $calc) {
 			$toCalcResults = model_vote_result::getInstance()->calcResultVotes($poAward);
 			// Sauvegarde les résultats des votes
@@ -700,7 +700,7 @@ class module_results extends abstract_module
 		// Vérifie s'il faut calculer les stats
 		$endDate = plugin_vfa::toDateTime(plugin_vfa::toDateFromSgbd($poAward->end_date));
 		$now = plugin_vfa::now();
-		// Si le prix est termminé
+		// Si le prix est terminé
 		if (true == plugin_vfa::afterDateTime($now, $endDate)) {
 			// Recherche une stat du prix
 			$oVoteStat = model_vote_stat::getInstance()->findByIdAwardCode($poAward->getId(), plugin_vfa::CODE_NB_REGISTRED);

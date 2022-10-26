@@ -34,7 +34,7 @@
 							<div class="col-sm-3 col-md-2 view-label">Fin le</div>
 							<div class="col-sm-9 col-md-10 view-value">
 								<?php echo plugin_vfa::toStringDateShow($this->oAward->end_date) ?>
-								<span class="text-muted text-nobold">à minuit</span>
+								<span class="text-muted text-nobold">à 23:59:59</span>
 							</div>
 						</div>
 					</div>
