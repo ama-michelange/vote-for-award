@@ -401,3 +401,21 @@ FROM vfa_awards, vfa_group_awards
 WHERE (vfa_group_awards.award_id = vfa_awards.award_id)
 			AND (vfa_group_awards.group_id = 3)
 ORDER BY vfa_awards.public DESC, vfa_awards.year DESC, vfa_awards.name;
+
+
+SELECT
+    vfa_titles.title,
+	vfa_vote_items.title_id,
+	count(*),
+	sum(vfa_vote_items.score),
+	(sum(vfa_vote_items.score) / count(*)) as ama_avg
+FROM vfa_votes, vfa_vote_items, vfa_titles
+WHERE (vfa_votes.award_id = 88)
+    AND (vfa_votes.number >= 7)
+	AND (vfa_votes.vote_id = vfa_vote_items.vote_id)
+	AND (vfa_vote_items.score > -1)
+    AND (vfa_titles.title_id = vfa_vote_items.title_id)
+GROUP BY vfa_vote_items.title_id
+ORDER BY ama_avg DESC;
+
+

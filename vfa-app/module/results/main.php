@@ -901,4 +901,21 @@ class module_results extends abstract_module
 		echo "<br />TERMINER\n";
 
 	}
+
+	public function _amaStats()
+	{
+	    echo "<h1>Ama Statistiques</h1>";
+	    $awardId = _root::getParam('award_id');
+	    if (null == $awardId) {
+	        echo "<p>Pas de prix !</p>";
+	    }
+        else {
+            $oAward = model_award::getInstance()->findById($awardId);
+            if ($oAward != null) {
+                echo "<p>"; echo $oAward->toString(); echo "</p>";
+            }
+
+        }
+	    echo "<p>TERMINER</p>";
+	}
 }
