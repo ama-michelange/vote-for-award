@@ -25,7 +25,9 @@ class model_stats extends abstract_model
     const AGE_BETWEEN_20_30 = "AGE_BETWEEN_20_30";
     const AGE_BETWEEN_30_40 = "AGE_BETWEEN_30_40";
     const AGE_BETWEEN_40_50 = "AGE_BETWEEN_40_50";
-    const AGE_OVER_50 = "AGE_OVER_50";
+    const AGE_BETWEEN_50_60 = "AGE_BETWEEN_50_60";
+    const AGE_OVER_60 = "AGE_OVER_60";
+    const AGE_UNKNOWN = "AGE_UNKNOWN";
 
     /**
      * @return model_stats
@@ -59,8 +61,12 @@ class model_stats extends abstract_model
             new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_BETWEEN_30_40)),
             new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_BETWEEN_40_50)),
             new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_BETWEEN_40_50)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_OVER_50)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_OVER_50)),
+            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_BETWEEN_50_60)),
+            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_BETWEEN_50_60)),
+            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_OVER_60)),
+            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_OVER_60)),
+            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_UNKNOWN)),
+            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_UNKNOWN)),
         );
     }
 
@@ -196,8 +202,12 @@ class model_stats extends abstract_model
             $andAge = " AND ((" . $year . " - vfa_users.birthyear) >= 30) AND ((" . $year . " - vfa_users.birthyear) < 40)";
         } elseif ($age == self::AGE_BETWEEN_40_50) {
             $andAge = " AND ((" . $year . " - vfa_users.birthyear) >= 40) AND ((" . $year . " - vfa_users.birthyear) < 50)";
-        } elseif ($age == self::AGE_OVER_50) {
-            $andAge = " AND ((" . $year . " - vfa_users.birthyear) >= 50)";
+        } elseif ($age == self::AGE_BETWEEN_50_60) {
+            $andAge = " AND ((" . $year . " - vfa_users.birthyear) >= 50) AND ((" . $year . " - vfa_users.birthyear) < 60)";
+        } elseif ($age == self::AGE_OVER_60) {
+            $andAge = " AND ((" . $year . " - vfa_users.birthyear) >= 60)";
+        } elseif ($age == self::AGE_UNKNOWN) {
+            $andAge = " AND (vfa_users.birthyear IS NULL)";
         }
         return $andAge;
     }

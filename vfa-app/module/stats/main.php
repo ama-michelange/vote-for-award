@@ -19,7 +19,7 @@ class module_stats extends abstract_module
         $year = _root::getParam('year');
         $html = $this->buildRankingStats($year);
         $oView = new _view('stats::list');
-        $oView->title = 'Statistiques et classements';
+        $oView->title = 'Statistiques et classements '.$year;
         $oView->showHtml = $html;
         $this->oLayout->add('work', $oView);
     }
