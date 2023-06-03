@@ -30,7 +30,7 @@ session.timeout.lifetime=1800
 [acl]
 ;class=plugin_gestionuser
 class=plugin_authorization
-modules=accounts,awards,docs,groups,help,home_enable,nominees,regin,registred,results,selections,roles,users,votes,votes_detail,votes_progress
+modules=accounts,awards,docs,groups,help,home_enable,nominees,regin,registred,results,selections,stats,roles,users,votes,votes_detail,votes_progress
 
 [navigation]
 scriptname=index.php
