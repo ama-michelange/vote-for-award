@@ -3,7 +3,7 @@
 class model_stats extends abstract_model
 {
 
-    protected $sClassRow = 'row_stats_ranking';
+    protected $sClassRow = 'RowStatistics';
 
     protected $sTable = 'vfa_awards';
 
@@ -13,6 +13,7 @@ class model_stats extends abstract_model
 
     const RANKING = "RANKING";
     const PARTICIPATION = "PARTICIPATION";
+    const ALL_GROUPS = "ALL_GROUPS";
     const REGISTERED = "REGISTERED";
     const BALLOTS = "BALLOTS";
     const VALID_BALLOTS = "VALID_BALLOTS";
@@ -39,50 +40,87 @@ class model_stats extends abstract_model
 
     /**
      * @param $poAward row_award
-     * @return row_stats[]
+     * @return RowStatistics[]
      */
     public function calcAllStatistics($poAward)
     {
-        return array(
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_MALE)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_MALE)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_FEMALE)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_FEMALE)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_UNKNOWN)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_UNKNOWN)),
+        $oAwardForStat = new AwardForStatistic($poAward, $this->findAllGroupsByAwardsWithRegisteredUsers($poAward->getId()));
 
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_UNDER_20)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_UNDER_20)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_BETWEEN_20_30)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_BETWEEN_20_30)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_BETWEEN_30_40)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_BETWEEN_30_40)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_BETWEEN_40_50)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_BETWEEN_40_50)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_BETWEEN_50_60)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_BETWEEN_50_60)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_OVER_60)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_OVER_60)),
-            new row_stats(self::PARTICIPATION, $this->calcParticipation($poAward, self::GENDER_ALL, self::AGE_UNKNOWN)),
-            new row_stats(self::RANKING, $this->calcRanking($poAward, self::GENDER_ALL, self::AGE_UNKNOWN)),
-        );
+        $ret = array();
+        // Global stats
+        $ret = array_merge($ret, $this->calcStatistics($oAwardForStat));
+        // Groups stats
+//        foreach ($oAwardForStat->getGroups() as $oGroup) {
+//            $ret = array_merge($ret, $this->calcStatistics($oAwardForStat, $oGroup));
+//        }
+
+        return $ret;
     }
 
     /**
-     * @param $poAward row_award
-     * @return row_stats_ranking[]
+     * @param AwardForStatistic $oAwardForStat
+     * @return array
      */
-    public function calcRanking($poAward, $gender = self::GENDER_ALL, $age = self::AGE_ALL)
+    public function calcStatistics(AwardForStatistic $oAwardForStat, $poGroup = null)
     {
-        if (!isset($poAward) || $poAward->isEmpty()) {
-            return null;
+        return array(
+            // Global
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_ALL, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipationGroups($oAwardForStat)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_ALL, $poGroup)),
+
+            // By Gender
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_MALE, self::AGE_ALL, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_MALE, self::AGE_ALL, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_FEMALE, self::AGE_ALL, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_FEMALE, self::AGE_ALL, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_UNKNOWN, self::AGE_ALL, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_UNKNOWN, self::AGE_ALL, $poGroup)),
+            // By Age
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_UNDER_20, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_UNDER_20, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_20_30, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_20_30, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_30_40, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_30_40, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_40_50, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_40_50, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_50_60, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_BETWEEN_50_60, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_OVER_60, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_OVER_60, $poGroup)),
+            new RowStatistics(self::PARTICIPATION, $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_UNKNOWN, $poGroup)),
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_UNKNOWN, $poGroup)),
+        );
+    }
+
+    public function calcParticipationGroups(AwardForStatistic $oAwardForStat)
+    {
+        $retGroups = array();
+        foreach ($oAwardForStat->getGroups() as $oGroup) {
+            $arrayGroups = $this->calcParticipation($oAwardForStat, self::GENDER_ALL, self::AGE_ALL, $oGroup);
+            $retGroups = array_merge($retGroups, $arrayGroups);
         }
 
-        $idAward = $poAward->award_id;
-        $year = $poAward->year;
-        $minNbVote = $this->buildMinNbVote($poAward);
+//        var_dump($ret);
+//        echo "<br> COUNT retGroups: ", count($retGroups);
+
+        return $retGroups;
+    }
+
+    /**
+     * @param $poAwardForStat AwardForStatistic
+     * @return RowRankingStatistic[]
+     */
+    public function calcRanking($poAwardForStat, $gender = self::GENDER_ALL, $age = self::AGE_ALL, $poGroup = null)
+    {
+        $oAward = $poAwardForStat->getAward();
+        if (!isset($oAward) || $oAward->isEmpty()) {
+            return null;
+        }
+        $idAward = $oAward->award_id;
+        $year = $oAward->year;
+        $minNbVote = $this->buildMinNbVote($oAward);
 
         $andGenre = $this->buildAndGenre($gender);
         $andAge = $this->buildAndAge($age, $year);
@@ -105,12 +143,13 @@ class model_stats extends abstract_model
             $rank++;
             // var_dump($row);
             //	printf("TITLE_ID : %d,  Count : %d,  Sum : %d, Moy : %f </br>", $row[0], $row[1], $row[2], $row[2] / $row[1]);
-            $oRank = new row_stats_ranking();
+            $oRank = new RowRankingStatistic();
             $oRank->setType(self::RANKING);
             $oRank->setRank($rank);
             $oRank->setGender($gender);
             $oRank->setAge($age);
             $oRank->setAward(model_award::getInstance()->findById($idAward));
+            $oRank->setGroup($poGroup);
             $oRank->setTitle(model_title::getInstance()->findById($row[0]));
             $oRank->setNbVotes($row[1]);
             $oRank->setAverage(number_format($row[3], 5, ',', ''));
@@ -121,51 +160,59 @@ class model_stats extends abstract_model
         return $toRanking;
     }
 
+
     /**
-     * @param $poAward row_award
-     * @return row_stats_participation[]
+     * @param $poAwardForStat AwardForStatistic
+     * @return RowParticipationStatistic[]
      */
-    public function calcParticipation($poAward, $gender = self::GENDER_ALL, $age = self::AGE_ALL)
+    public function calcParticipation($poAwardForStat, $gender = self::GENDER_ALL, $age = self::AGE_ALL, $poGroup = null)
     {
-        if (!isset($poAward) || $poAward->isEmpty()) {
+        $oAward = $poAwardForStat->getAward();
+        if (!isset($oAward) || $oAward->isEmpty()) {
             return null;
         }
-
-        $idAward = $poAward->award_id;
-        $year = $poAward->year;
+        $idAward = $oAward->award_id;
+        $year = $oAward->year;
 
         $andGenre = $this->buildAndGenre($gender);
         $andAge = $this->buildAndAge($age, $year);
 
+        $fromGroup = "";
+        $andGroup = "";
+        if ($poGroup != null) {
+            $fromGroup = ", vfa_user_groups";
+            $andGroup = " AND (vfa_user_groups.user_id = vfa_users.user_id) AND vfa_user_groups.group_id = " . $poGroup->getId();
+        }
+
+
         // Registered
         $sql = "SELECT count(*)," . " AVG(" . $year . " - vfa_users.birthyear)," .
             " MIN(" . $year . " - vfa_users.birthyear)," . " MAX(" . $year . " - vfa_users.birthyear)" .
-            " FROM vfa_user_awards, vfa_users" .
+            " FROM vfa_user_awards, vfa_users" . $fromGroup .
             " WHERE vfa_user_awards.award_id = " . $idAward .
-            $andGenre . $andAge .
-            " AND (vfa_user_awards.user_id = vfa_users.user_id)";
-        // echo "<br>"; var_dump($sql);
-        $toArray[] = $this->exec_sql_participation($sql, self::REGISTERED, $gender, $age, $idAward);
+            " AND (vfa_user_awards.user_id = vfa_users.user_id)".
+            $andGenre . $andAge . $andGroup;
+        $toArray[] = $this->exec_sql_participation($sql, self::REGISTERED, $gender, $age, $poAwardForStat, $poGroup);
 
         // Ballots count
         $sql = "SELECT count(*), AVG(" . $year . " - vfa_users.birthyear)," .
             " MIN(" . $year . " - vfa_users.birthyear)," . " MAX(" . $year . " - vfa_users.birthyear)" .
-            " FROM vfa_votes, vfa_users" .
+            " FROM vfa_votes, vfa_users" . $fromGroup .
             " WHERE vfa_votes.award_id = " . $idAward .
             " AND (vfa_votes.user_id = vfa_users.user_id)" .
-            $andGenre . $andAge;
-        $toArray[] = $this->exec_sql_participation($sql, self::BALLOTS, $gender, $age, $idAward);
+            $andGenre . $andAge . $andGroup;
+        $toArray[] = $this->exec_sql_participation($sql, self::BALLOTS, $gender, $age, $poAwardForStat, $poGroup);
 
         // Valid Ballots count
-        $minNbVote = $this->buildMinNbVote($poAward);
+        $minNbVote = $this->buildMinNbVote($oAward);
         $sql = "SELECT count(*), AVG(" . $year . " - vfa_users.birthyear)," .
             " MIN(" . $year . " - vfa_users.birthyear)," . " MAX(" . $year . " - vfa_users.birthyear)" .
-            " FROM vfa_votes, vfa_users" .
+            " FROM vfa_votes, vfa_users" .$fromGroup.
             " WHERE vfa_votes.award_id = " . $idAward .
             ' AND (vfa_votes.number >= ' . $minNbVote . ')' .
             " AND (vfa_votes.user_id = vfa_users.user_id)" .
-            $andGenre . $andAge;
-        $toArray[] = $this->exec_sql_participation($sql, self::VALID_BALLOTS, $gender, $age, $idAward);
+            $andGenre . $andAge. $andGroup;
+        $toArray[] = $this->exec_sql_participation($sql, self::VALID_BALLOTS, $gender, $age, $poAwardForStat, $poGroup);
         return $toArray;
     }
 
@@ -213,33 +260,38 @@ class model_stats extends abstract_model
     }
 
     /**
-     * @param $sql
-     * @param $gender
-     * @param $age
-     * @param $idAward
-     * @return row_stats_participation
+     * @param $sql string
+     * @param $gender string
+     * @param $age int
+     * @param $poAwardForStat AwardForStatistic
+     * @param $poGroup row_group
+     * @return RowParticipationStatistic
      */
-    public function exec_sql_participation($sql, $cat, $gender, $age, $idAward)
+    public function exec_sql_participation($sql, $cat, $gender, $age, $poAwardForStat, $poGroup = null)
     {
         // echo "<p>SQL</p>", "<p>"; var_dump($sql); echo "</p>";
         $res = $this->execute($sql);
         // echo "<p>RESULT</p>", "<p>"; var_dump($res); echo "</p>";
 
+//        echo "<br>exec_sql_participation A";
         $toArray = array();
         while ($row = mysql_fetch_row($res)) {
-            $oItem = new row_stats_participation();
+            $oItem = new RowParticipationStatistic();
             $oItem->setType(self::PARTICIPATION);
             $oItem->setCategory($cat);
             $oItem->setGender($gender);
             $oItem->setAge($age);
-            $oItem->setAward(model_award::getInstance()->findById($idAward));
-            $oItem->setCount($row[0]);
+            $oItem->setAward($poAwardForStat->getAward());
+            $oItem->setGroup($poGroup);
+            $oItem->setGroupsCount($poAwardForStat->getGroupsCount());
+            $oItem->setUsersCount($row[0]);
             $oItem->setAverageAge(number_format($row[1], 1, ',', ''));
             $oItem->setMinAge($row[2]);
             $oItem->setMaxAge($row[3]);
             $toArray[] = $oItem;
         }
         mysql_free_result($res);
+//        echo "<br>exec_sql_participation B";
         return $toArray[0];
     }
 
@@ -259,9 +311,81 @@ class model_stats extends abstract_model
         }
         return $minNbVote;
     }
+
+    /**
+     * @param $pIdAward
+     * @return row_group[]
+     */
+    public function findAllGroupsByAwardsWithRegisteredUsers($pIdAward)
+    {
+        $sql = "SELECT DISTINCT vfa_user_groups.group_id" .
+            " FROM vfa_user_groups, vfa_user_awards, vfa_groups" .
+            " WHERE vfa_user_awards.award_id = " . $pIdAward .
+            " AND (vfa_user_awards.user_id = vfa_user_groups.user_id)" .
+            " AND (vfa_user_groups.group_id = vfa_groups.group_id)" .
+            // Uniquement les groupes de rôle READER
+            " AND (vfa_groups.role_id_default = 7)" .
+            " ORDER BY vfa_groups.group_name";
+        $res = $this->execute($sql);
+
+        $tGroupId = array();
+        while ($row = mysql_fetch_row($res)) {
+            $tGroupId[] = $row[0];
+        }
+        mysql_free_result($res);
+
+        $toGroups = array();
+
+        foreach ($tGroupId as $groupId) {
+            $oGroup = model_group::getInstance()->findById($groupId);
+            $toGroups[] = $oGroup;
+        }
+
+        return $toGroups;
+    }
+
 }
 
-class row_stats
+class AwardForStatistic
+{
+    public function __construct($poAward, $ptoGroup)
+    {
+        $this->setAward($poAward);
+        $this->setGroups($ptoGroup);
+    }
+
+    public function getAward()
+    {
+        return $this->award;
+    }
+
+    public function setAward($value)
+    {
+        $this->award = $value;
+    }
+
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    public function setGroups($value)
+    {
+        $this->groups = $value;
+        if (!isset($this->groups)) {
+            $this->groups = array();
+        }
+    }
+
+    public function getGroupsCount()
+    {
+        return count($this->getGroups());
+    }
+
+
+}
+
+class RowStatistics extends RowTyped
 {
     public function __construct($type, $stats)
     {
@@ -269,16 +393,9 @@ class row_stats
         $this->setStats($stats);
     }
 
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($value)
-    {
-        $this->type = $value;
-    }
-
+    /**
+     * @return RowParticipationStatistic|RowRankingStatistic
+     */
     public function getStats()
     {
         return $this->stats;
@@ -290,7 +407,7 @@ class row_stats
     }
 }
 
-class row_stats_ranking
+class RowTyped
 {
     public function getType()
     {
@@ -301,15 +418,46 @@ class row_stats_ranking
     {
         $this->type = $value;
     }
+}
 
-    public function getRank()
+class RowCommonStatistic extends RowTyped
+{
+    public function getAward()
     {
-        return $this->rank;
+        return $this->award;
     }
 
-    public function setRank($value)
+    public function setAward($value)
     {
-        $this->rank = $value;
+        $this->award = $value;
+    }
+
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    public function setGroup($value)
+    {
+        $this->group = $value;
+    }
+
+    public function getGroupId()
+    {
+        $ret = model_stats::ALL_GROUPS;
+        if ($this->group != null) {
+            $ret = $this->getGroup()->getId();
+        }
+        return $ret;
+    }
+
+    public function getGroupName()
+    {
+        $ret = "";
+        if ($this->group != null) {
+            $ret = $this->getGroup()->toString();
+        }
+        return $ret;
     }
 
     public function getGender()
@@ -331,6 +479,19 @@ class row_stats_ranking
     {
         $this->age = $value;
     }
+}
+
+class RowRankingStatistic extends RowCommonStatistic
+{
+    public function getRank()
+    {
+        return $this->rank;
+    }
+
+    public function setRank($value)
+    {
+        $this->rank = $value;
+    }
 
     public function getTitle()
     {
@@ -340,16 +501,6 @@ class row_stats_ranking
     public function setTitle($value)
     {
         $this->title = $value;
-    }
-
-    public function getAward()
-    {
-        return $this->award;
-    }
-
-    public function setAward($value)
-    {
-        $this->award = $value;
     }
 
     public function getNbVotes()
@@ -374,18 +525,8 @@ class row_stats_ranking
 
 }
 
-class row_stats_participation
+class RowParticipationStatistic extends RowCommonStatistic
 {
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($value)
-    {
-        $this->type = $value;
-    }
-
     public function getCategory()
     {
         return $this->category;
@@ -396,44 +537,24 @@ class row_stats_participation
         $this->category = $value;
     }
 
-    public function getGender()
+    public function getUsersCount()
     {
-        return $this->gender;
+        return $this->users_count;
     }
 
-    public function setGender($value)
+    public function setUsersCount($value)
     {
-        $this->gender = $value;
+        $this->users_count = $value;
     }
 
-    public function getAge()
+    public function getGroupsCount()
     {
-        return $this->age;
+        return $this->groups_count;
     }
 
-    public function setAge($value)
+    public function setGroupsCount($value)
     {
-        $this->age = $value;
-    }
-
-    public function getAward()
-    {
-        return $this->award;
-    }
-
-    public function setAward($value)
-    {
-        $this->award = $value;
-    }
-
-    public function getCount()
-    {
-        return $this->count;
-    }
-
-    public function setCount($value)
-    {
-        $this->count = $value;
+        $this->groups_count = $value;
     }
 
     public function getAverageAge()
@@ -465,5 +586,4 @@ class row_stats_participation
     {
         $this->max_age = $value;
     }
-
 }

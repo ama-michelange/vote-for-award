@@ -1,4 +1,4 @@
-<div class="panel panel-default panel-root">
+<div class="panel panel-default panel-root" style="font-size: 10px">
     <div class="panel-heading">
         <h3 class="panel-title"><?php echo $this->title ?></h3>
     </div>
