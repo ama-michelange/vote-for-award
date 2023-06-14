@@ -50,9 +50,9 @@ class model_stats extends abstract_model
         // Global stats
         $ret = array_merge($ret, $this->calcStatistics($oAwardForStat));
         // Groups stats
-//        foreach ($oAwardForStat->getGroups() as $oGroup) {
-//            $ret = array_merge($ret, $this->calcStatistics($oAwardForStat, $oGroup));
-//        }
+        foreach ($oAwardForStat->getGroups() as $oGroup) {
+            $ret = array_merge($ret, $this->calcOnlyRanking($oAwardForStat, $oGroup));
+        }
 
         return $ret;
     }
@@ -94,6 +94,14 @@ class model_stats extends abstract_model
         );
     }
 
+    public function calcOnlyRanking(AwardForStatistic $oAwardForStat, $poGroup = null)
+    {
+        return array(
+            // Global
+            new RowStatistics(self::RANKING, $this->calcRanking($oAwardForStat, self::GENDER_ALL, self::AGE_ALL, $poGroup))
+        );
+    }
+
     public function calcParticipationGroups(AwardForStatistic $oAwardForStat)
     {
         $retGroups = array();
@@ -125,13 +133,22 @@ class model_stats extends abstract_model
         $andGenre = $this->buildAndGenre($gender);
         $andAge = $this->buildAndAge($age, $year);
 
+        $fromGroup = "";
+        $andGroup = "";
+        if ($poGroup != null) {
+            $fromGroup = ", vfa_user_groups";
+            $andGroup = " AND (vfa_user_groups.user_id = vfa_users.user_id) AND vfa_user_groups.group_id = " . $poGroup->getId();
+        }
+
+
+
         $sql = 'SELECT vfa_vote_items.title_id, count(*), sum(vfa_vote_items.score), FORMAT(sum(vfa_vote_items.score) / count(*),5) as ama_avg' .
-            ' FROM vfa_votes, vfa_vote_items, vfa_users' .
+            ' FROM vfa_votes, vfa_vote_items, vfa_users' . $fromGroup .
             ' WHERE (vfa_votes.award_id = ' . $idAward . ')' .
             ' AND (vfa_votes.number >= ' . $minNbVote . ')' .
             ' AND (vfa_votes.vote_id = vfa_vote_items.vote_id) AND (vfa_vote_items.score > -1)' .
             ' AND (vfa_votes.user_id = vfa_users.user_id)' .
-            $andGenre . $andAge .
+            $andGenre . $andAge . $andGroup.
             ' GROUP BY vfa_vote_items.title_id' .
             ' ORDER BY ama_avg DESC';
         // var_dump($sql);
@@ -190,7 +207,7 @@ class model_stats extends abstract_model
             " MIN(" . $year . " - vfa_users.birthyear)," . " MAX(" . $year . " - vfa_users.birthyear)" .
             " FROM vfa_user_awards, vfa_users" . $fromGroup .
             " WHERE vfa_user_awards.award_id = " . $idAward .
-            " AND (vfa_user_awards.user_id = vfa_users.user_id)".
+            " AND (vfa_user_awards.user_id = vfa_users.user_id)" .
             $andGenre . $andAge . $andGroup;
         $toArray[] = $this->exec_sql_participation($sql, self::REGISTERED, $gender, $age, $poAwardForStat, $poGroup);
 
@@ -207,11 +224,11 @@ class model_stats extends abstract_model
         $minNbVote = $this->buildMinNbVote($oAward);
         $sql = "SELECT count(*), AVG(" . $year . " - vfa_users.birthyear)," .
             " MIN(" . $year . " - vfa_users.birthyear)," . " MAX(" . $year . " - vfa_users.birthyear)" .
-            " FROM vfa_votes, vfa_users" .$fromGroup.
+            " FROM vfa_votes, vfa_users" . $fromGroup .
             " WHERE vfa_votes.award_id = " . $idAward .
             ' AND (vfa_votes.number >= ' . $minNbVote . ')' .
             " AND (vfa_votes.user_id = vfa_users.user_id)" .
-            $andGenre . $andAge. $andGroup;
+            $andGenre . $andAge . $andGroup;
         $toArray[] = $this->exec_sql_participation($sql, self::VALID_BALLOTS, $gender, $age, $poAwardForStat, $poGroup);
         return $toArray;
     }
